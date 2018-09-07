@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//DN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="place">
+<!-- resultType은 vo에 있는것을 가져오는것을 말함/ resultMap은 db에 있는걸 바로 가져올때. jsp에 쏴줄땐 대문자로 적음 -->
+
+	<insert id="placeInsert" parameterType="place">
+		insert into place
+		values
+		(seq_place_no.nextval,#{userId},#{plaArea},#{plaCategory},#{plaName},#{orImg},#{reImg},#{plaPhone},#{plaAddr}
+		,#{plaTime},#{plaContent},#{plaKeyword},null,null,default,default,null)
+		<selectKey keyProperty="plaNo" resultType="_int" order="AFTER">
+		 SELECT SEQ_PLACE_NO.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+	<insert id="insertAttach" parameterType="placeAttach">
+		insert into PLA_ATTACHMENT(ATTACHMENTNO,PLANO,ORIMG,REIMG) values(SEQ_PLAATTACH_NO.nextval,#{plaNo},#{orImg},#{reImg})
+	</insert>
+	
+	<insert id="insertMenu" parameterType="placeMenu">
+		insert into pla_menu(MENUNO,PLANO,MENUNAME,MENUPRICE) values(seq_placemenu_no.nextval,#{plaNo},#{menuName},#{menuPrice})
+	</insert>
+	
+	
+</mapper>

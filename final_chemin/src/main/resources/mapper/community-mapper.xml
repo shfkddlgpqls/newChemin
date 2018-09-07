@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//DN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="community">
+<!-- resultType은 vo에 있는것을 가져오는것을 말함/ resultMap은 db에 있는걸 바로 가져올때. jsp에 쏴줄땐 대문자로 적음 -->
+	<resultMap type="map" id="communityMap"></resultMap>
+	<select id="communityList" resultMap="communityMap">
+		select * from community order by communitydate desc
+	</select>
+	<resultMap type="map" id="attachmentMap"></resultMap>
+	<select id="attachmentList" resultMap="attachmentMap">
+		select * from attachment 
+	</select>
+	<insert id="communityWriteEnd" parameterType="community">
+		INSERT INTO COMMUNITY(COMMUNITYNO,CATEGORY,TITLE,WRITER,CONTENT,COMMUNITYDATE,HASHTAG)
+		VALUES (seq_communityno.nextval,#{community_category},#{community_title},#{community_writer},#{community_content},default,#{community_hashTag})
+		<selectKey keyProperty="community_no" resultType="_int" order="AFTER">
+			select seq_communityno.currval from dual
+		</selectKey>
+	</insert>
+	<insert id="insertAttachment" parameterType="attachment">
+		INSERT INTO ATTACHMENT (ATTACHMENTNO,COMMUNITYNO,ORIGINALFILENAME,RENAMEDFILENAME) VALUES (seq_attachmentno.nextval,#{community_no},#{original_filename},#{renamed_filename})
+		<selectKey keyProperty="attachment_no" resultType="_int" order="AFTER">
+			select seq_attachmentno.currval from dual
+		</selectKey>
+	</insert>
+	<resultMap type="map" id="fileMap"></resultMap>
+	<select id="selectFileCount" resultMap="fileMap">
+		SELECT COMMUNITYNO, COUNT(*) AS COUNT FROM ATTACHMENT GROUP BY COMMUNITYNO
+	</select> 
+	<!-- <update id="updateLikeCount" parameterType="_int">
+		update community set likecount=likecount+1 where communityno=#{community_no}
+	</update> -->
+	<resultMap type="map" id="commentMap"></resultMap>
+	<select id="selectComment" resultMap="commentMap">
+		SELECT * FROM COMMUNITY_COMMENT WHERE COMMUNITYNO=#{communityno} ORDER BY COMMUNITYDATE DESC
+	</select>
+	<insert id="commentWrite" parameterType="comment">
+		INSERT INTO COMMENT(COMMENTNO, COMMUNITYNO,WRITER,CONTENT,COMMENTDATE)
+		VALUES (seq_community_comment.nextval,#{community_no},#{writer},#{content},sysdate)
+		<selectKey keyProperty="comment_no" resultType="_int" order="AFTER">
+			select seq_community_commentno.currval from dual
+		</selectKey>
+	</insert>
+</mapper>
+

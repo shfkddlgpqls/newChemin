@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ac">
+	<resultMap type="map" id="acmap"></resultMap>
+
+ 	<insert id="insertIn" parameterType="AcBook">
+		INSERT INTO ACBOOK VALUES(seq_ac_no.nextval,#{userId},#{acDate},#{typeNum},#{exCode},#{cateNum},#{acCost},#{memo})
+	</insert>
+	<insert id="insertEx">
+		INSERT INTO ACBOOK VALUES(seq_ac_no.nextval,#{userId},#{acDate},#{typeNum},#{exCode},#{cateNum},#{acCost},#{memo})
+	</insert>
+
+
+	<select id="selectEb" resultMap="acmap">
+		SELECT DISTINCT TO_CHAR(ACDATE,'yyyy-MM-dd')AS ACDATE, TYPENUM, SUM(ACCOST)
+		OVER(PARTITION BY TO_CHAR(ACDATE,'yyyy-MM-dd'),TYPENUM) AS ACALL
+		FROM ACBOOK
+		ORDER BY ACDATE DESC
+	</select>
+
+
+	<select id="selectPageList"	resultMap="acmap">
+		SELECT ACNO, USERID, TO_CHAR(ACDATE,('yyyy-MM-dd hh:mm:ss'))AS ACDATE, T.TYPENUM, T.TYPENAME, E.EXCODE, E.EXNAME, C.CATENUM, C.CATENAME, ACCOST, MEMO
+		FROM ACBOOK A, AC_TYPE T, AC_CATEGORY C, AC_EXTYPE E
+		WHERE T.TYPENUM=A.TYPENUM AND C.CATENUM=A.CATENUM AND E.EXCODE=A.EXCODE
+		ORDER BY ACDATE DESC
+	</select>
+
+	<select id="selectTotalCount" resultType="_int">
+		SELECT COUNT(*) FROM ACBOOK
+	</select>
+	
+	<select id="selectDailySum" resultMap="acmap">
+		SELECT TO_CHAR(A.ACDATE,'MM/dd')ACDATE, A.USERID, A.TYPENUM, C.CATENAME, A.ACCOST
+		, SUM(A.ACCOST)OVER(PARTITION BY A.TYPENUM ORDER BY A.ACDATE ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)CUMAL_SUM
+		FROM ACBOOK A, AC_CATEGORY C
+		WHERE A.CATENUM=C.CATENUM AND A.TYPENUM='201' AND USERID='stella226' AND TO_CHAR(A.ACDATE,'MM')='09'
+		ORDER BY A.ACDATE ASC
+	</select>
+	
+	<!--일일누적저축현황 -->
+ 	<select id="selectSaveList" resultMap="acmap">
+		SELECT TO_CHAR(A.ACDATE,'MM/dd')AS ACDATE
+		, SUM(ACCOST) OVER(PARTITION BY C.TYPENUM ORDER BY A.ACDATE ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)CUMAL_SAV
+		FROM ACBOOK A, AC_CATEGORY C
+		WHERE A.CATENUM=C.CATENUM AND C.CATENAME='저축'
+		ORDER BY A.ACDATE ASC
+	</select>
+	
+	<select id="selectExGrade" resultMap="acmap">
+		SELECT DISTINCT TYPENUM, SUM(ACCOST)
+		OVER(PARTITION BY TYPENUM)VSCOST
+		FROM ACBOOK
+	</select>
+	
+	
+	<select id="monthlyDispenditure" resultMap="acmap">
+		SELECT DISTINCT C.CATENAME, SUM(A.ACCOST)
+		OVER(PARTITION BY C.CATENUM)CATESUM
+		FROM ACBOOK A, AC_CATEGORY C
+		WHERE A.CATENUM=C.CATENUM AND A.TYPENUM='201' AND TO_CHAR(A.ACDATE,('yyyy-MM'))='2018-09'
+		ORDER BY CATESUM DESC
+	</select>
+<!--총 리스트 뽑아오기	
+	<select id="selectList" resultMap="acmap">
+		SELECT ACNO, USERID, TO_CHAR(ACDATE,('yyyy-MM-dd hh:mm:ss'))AS ACDATE, T.TYPENUM, T.TYPENAME, E.EXCODE, E.EXNAME, C.CATENUM, C.CATENAME, ACCOST, MEMO
+		FROM ACBOOK A, AC_TYPE T, AC_CATEGORY C, AC_EXTYPE E
+		WHERE T.TYPENUM=A.TYPENUM AND C.CATENUM=A.CATENUM AND E.EXCODE=A.EXCODE
+		ORDER BY ACDATE DESC
+	</select>	
+	
+	날짜검색:상세정보출력
+	<select id="acSelectList" parameterType="string" resultMap="acmap">
+		SELECT * FROM ACBOOK WHERE ACDATE=#{acDate}	
+	</select> -->
+</mapper>

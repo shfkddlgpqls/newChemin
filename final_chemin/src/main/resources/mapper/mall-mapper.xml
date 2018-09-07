@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mall">
+
+	<resultMap type="map" id="mallMap"></resultMap>
+	
+	<!-- 카테고리별 상품 리스트 -->
+	<select id="selectCateList" parameterType="map" resultType="product">
+		select * from product 
+		where 1=1
+		<if test="ctype!=null and ctype!=''">
+			and cno=#{cno}
+		</if>
+		<if test="searchData!=null and searchData!=''">
+			and pname like '%'||#{searchData}||'%'
+		</if>
+		<if test="lowValue!=null and lowValue!=''">
+			and price <![CDATA[>=]]> #{lowValue}
+		</if>
+		<if test="highValue!=null and highValue!=''">
+			and price <![CDATA[<=]]> #{highValue}
+		</if>
+		<if test="stype_h!=null and stype_h!=''">
+			order by sales desc
+		</if>
+		<if test="stype_n!=null and stype_n!=''">
+			order by pdate desc
+		</if>
+		<if test="stype_lv!=null and stype_lv!=''">
+			order by price
+		</if>
+		<if test="stype_hv!=null and stype_hv!=''">
+			order by price desc
+		</if>
+	</select>
+	
+	<!-- 총 상품 개수 -->
+	<select id="selectCateCount" parameterType="map" resultType="_int">
+		select count(*) from product
+		where 1=1
+		<if test="ctype!=null and ctype!=''">
+			and cno=#{cno}
+		</if>
+	</select>
+	
+	<!-- pno로 상품 가져오기 -->
+	<select id="selectProduct" parameterType="_int" resultType="product">
+		select * from product
+		where pno=#{pno}
+	</select>
+	
+	<!-- 장바구니의 상품 가져오기 (존재여부 확인) -->
+	<select id="selectCartItem" parameterType="map" resultType="cart">
+		select * from cart
+		where pno=#{pno} and userId=#{userId} and payYn='N'
+	</select>
+	
+	<!-- 장바구니 추가 -->
+	<insert id="insertCart" parameterType="map">
+		insert into cart
+		values(cart_seq.nextval, #{userId}, #{orderNo}, #{pno}, #{amount}, default, #{totalPrice}, default)
+	</insert>
+
+	<!-- 오래된 장바구니 데이터 삭제 -->
+	<delete id="deleteOldCart">
+		delete from cart where payYn='N' and cDate <![CDATA[<=]]> to_char(sysdate-7,'YYYYMMDD')
+	</delete>
+	
+	<!-- 장바구니 데이터 가져오기 -->
+	<select id="selectCartList" parameterType="string" resultMap="mallMap">
+		select * from cart join product using(pno) where userId=#{userId} and payYn='N'
+	</select>
+
+</mapper>
+

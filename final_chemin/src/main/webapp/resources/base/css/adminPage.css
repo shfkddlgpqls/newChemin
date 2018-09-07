@@ -1,0 +1,23 @@
+.adminAtag:visited
+{
+  color:black;
+}
+    
+.adminAtag:hover
+{
+ 	color : #4374D9;
+}
+    
+ /*관리자페이지*/
+.admin
+{
+   padding-top: 10rem;
+  padding-bottom: calc(10rem - 56px);
+   background: linear-gradient(to right, #dd5e89, #f7bb97); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  /*  background: linear-gradient(to right, #b993d6, #8ca6db); W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background-position: center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}   

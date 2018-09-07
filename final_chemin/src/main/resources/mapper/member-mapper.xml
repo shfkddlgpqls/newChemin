@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="member">
+ <insert id="insertMember">
+ 		INSERT INTO MEMBER_INFO VALUES (#{userId},#{password},#{userName},#{gender},#{email},#{phone},#{address},#{hobby, typeHandler=strArr})
+ 	</insert>
+ 	<resultMap type="member" id="memberMap">
+ 		<result column="userid" property="userId"/>
+ 		<result column="userpw" property="password"/>
+ 		<result column="username" property="userName"/>
+ 		<result column="gender" property="gender"/>
+ 		<result column="userbirth" property="birthDay"/>
+ 		<result column="useremail" property="email"/>
+ 		<result column="userphone" property="phone"/>
+ 		<!--  하비typeHandler="strArr" -->
+ 		<result column="userhobby" property="hobby"/>
+ 		<result column="originalimg" property="originalImg"/>
+ 		<result column="renameimage" property="renameImage"/>
+ 	</resultMap>
+ 	<select id="selectOne" resultMap="memberMap" parameterType="string">
+ 		SELECT * FROM MEMBER_INFO WHERE USERID=#{userId} 	
+ 	</select>
+ 	<update id="updateMember" parameterType="member">
+ 		UPDATE MEMBER_INFO SET USERNAME=#{userName},gender=#{gender},age=#{age},email=#{email},address=#{address},hobby=#{hobby,typeHandler=strArr} where userid=#{userId}
+ 	</update>
+</mapper>
