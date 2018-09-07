@@ -204,8 +204,10 @@ function fn_delete(){
 	
 }
 
-function fn_reMsg(){
-	
+function fn_reMsg(msg){
+	$("#reMsg_modal").modal('show');
+	var plaMsg = $(msg).data("msg");
+	alert(plaMsg);
 }
 </script>
 <!-- 마이페이지 css-->
@@ -284,7 +286,7 @@ function fn_reMsg(){
 				     <input type="button" class="btn btn-success"  style="float:right;margin-right:1%" value="승인완료"/>
 				     </c:if>
 				     <c:if test="${p.PLASTATUS == 'R'}">
-				     <button type="button" class="btn btn-danger"  style="float:right;margin-right:1%" onclick="fn_reMsg()" data-msg='$(p.)'>
+				     <button type="button" class="btn btn-danger"  style="float:right;margin-right:1%" onclick="fn_reMsg(this)" data-msg='${p.PLAREMSG}'>
 				     	<i class="material-icons" style="font-size:1.2em">unsubscribe</i><span>승인거절</span>
 				     </button>
 				     </c:if>
@@ -403,6 +405,38 @@ function fn_reMsg(){
 		  </div>
 		  </div>
 		  <!-- 리뷰하기 모달 끝 -->
+		  
+		  
+		  <div class="modal fade" id="reMsg_modal">
+		    <div class="modal-dialog modal-dialog-centered">
+		      <div class="modal-content">
+		      
+		        <!-- Modal Header -->
+		        <div class="modal-header">
+		          <h4 class="modal-title text-center">승인 거절 이유</h4>
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        </div>
+		        
+		        <!-- Modal body -->
+		        <div class="modal-body">
+		          <div class="row">
+		           <div class="col-md-1"></div>
+		        	<div class="col-md-10">
+		        	  <div style="border:1px solid black;width:100%;height:20%">
+		        	  
+		        	  </div>
+		        	</div>
+		     		<div class="col-md-1"></div>
+				  </div>
+			    </div>
+		        <!-- Modal footer -->
+		        <div class="modal-footer" id="footer">
+		      		<button type="button" class="btn btn-info" data-dismiss="modal">확인</button>
+		        </div>
+		    </div>
+		  </div>
+		  </div>
+		  <!-- 승인 거절 메세지 모달 끝 -->
 </section>
 
 	<div class="text-center">
