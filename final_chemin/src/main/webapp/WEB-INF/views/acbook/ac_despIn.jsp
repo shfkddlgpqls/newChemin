@@ -4,53 +4,59 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set value="${pageContext.request.contextPath}" var="path" />
 
-<!-- BootStrap -->
-<link rel="stylesheet" href="<c:url value= "/resources/vendor/bootstrap/css/bootstrap.css"/>">
-<!-- DatetimePicker -->
-<link rel="stylesheet" href="<c:url value="/resources/vendor/acbook/css/bootstrap-datetimepicker.min.css" />">
-<!-- acMain -->
-<link rel="stylesheet" href="<c:url value= "/resources/vendor/acbook/css/acMain.css"/>">
+<!-- ProgressBar: ac_inputIn -->
+<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/pgBar.css"/>">
+<!-- ProgressBar: ac_inputIn -->
+<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/ac_navBar.css"/>">
+<!-- Fullcalendar: ac_calenndar: ? -->
+<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/bootstrap-datetimepicker.css"/>">
+<!--DatePicker: ac_inputIn-->
+<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/bootstrap-datetimepicker.min.css"/>">
 <!-- header -->
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <!-- sideBar -->
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
-
+<style>
+#newMain {
+	background-color: rgba(236, 240, 241);
+}
+.
+</style>
 <!-- Main Start -->
-<div class="col-md-10 col-sm-8 main-content">
-	<div class="innerpage-container">
+<div class="col-md-10 col-sm-8 main-content" id='newMain'>
+<br><br>
+	<div class="innerpage-container-fluid">
 
 		<div class="container sell-your-phone">
 			<!-- MultiStep Form -->
 			<!-- multistep form -->
 				<h2 class="text-center">
-					한눈에 파악해보는 나의  재정 현황!<br> 지금,만들어볼까요?
+					한눈에 파악해보는 나의  재정 현황! 플레리북이 함께합니다.<br> 지금,만들어볼까요?
 				</h2>
 				<form id="msform" action="acbook/insertExpenditure.do" method="post">
 				<!-- progressbar -->
 
 				<ul id="progressbar">
-					<li class="active">지출</li>
+					<li class="active">플레리북 입력</li>
 					<li>날짜</li>
-					<li>수단</li>
+					<li>수입</li>
+					<li>지출</li>
 					<li>항목</li>
+					<li>수단</li>
 					<li>금액</li>
 					<li>메모</li>
-					<li>확인</li>
-					<li>저장</li>
 				</ul>
 				<!-- fieldsets -->
 				
-				<div class="clearfix">
-							<!-- 테스트용 히든데이터!! -->
-					<!-- <fieldset class="brand-section"> -->
-					<fieldset class="brand-section">
-						<h3>지출을 입력하여 편하게 확인해봅시당</h3>
+				<div class="clearfix" style="width:100%;height:100%;display:block;object-fit:contain;">
+					<fieldset class="section">
+						<h3>플레리북</h3>
 							<button type="button" class="next next-btn">Next</button>
 					</fieldset>
 					<fieldset>
 						<h3>날짜를 입력하세요</h3>
 							<div style="overflow:hidden;" class="container-fluid">
-						        <div class="row">
+						        <div class="container-fluid">
 						             <input type="text" id="dtp" name="acDate">
 						        </div>
 							</div>
@@ -59,32 +65,32 @@
 					<fieldset>
 						<h3>결제수단을 입력하세요</h3>
 						<button type="button" class="next phone-bx" id="exCode" value="M">
-							<img src="${path}/resources/vendor/acbook/images/M.png" width="80px" height="80px"><span>현금</span>
+							<img src="${path}/resources/acbook/images/M1.png" width="80px" height="80px">
 						</button>
 						<button type="button" class="next phone-bx" id="exCode" value="C">
-							<img src="${path}/resources/vendor/acbook/images/C.png" width="80px" height="80px"><span>카드</span>
+							<img src="${path}/resources/acbook/images/C.png" width="80px" height="80px"><span>카드</span>
 						</button>
 					</fieldset>
 					<fieldset>
 						<h3>항목을 입력하세요</h3>
 						<button type="button" class="next phone-bx" id="cateNum" value="201_1">
-							<img src="${path}/resources/vendor/acbook/images/101_1.png" width="80px" height="80px"><span>식비</span>
+							<img src="${path}/resources/acbook/images/101_1.png" width="80px" height="80px"><span>식비</span>
 						</button>
 					<button type="button" class="next phone-bx" id="cateNum" value="201_2">
-							<img src="${path}/resources/vendor/acbook/images/101_1.png" width="80px" height="80px"><span>교통비</span>
+							<img src="${path}/resources/acbook/images/101_2.png" width="80px" height="80px"><span>교통비</span>
 						</button>
 					<button type="button" class="next phone-bx" id="cateNum" value="201_3">
-							<img src="${path}/resources/vendor/acbook/images/101_1.png" width="80px" height="80px"><span>문화생활</span>
+							<img src="${path}/resources/acbook/images/101_2.png" width="80px" height="80px"><span>문화생활</span>
 						</button>
 					<button type="button" class="next phone-bx" id="cateNum" value="201_4">
-							<img src="${path}/resources/vendor/acbook/images/101_1.png" width="80px" height="80px"><span>생필품</span>
+							<img src="${path}/resources/acbook/images/101_2.png" width="80px" height="80px"><span>생필품</span>
 						</button>
 					<button type="button" class="next phone-bx" id="cateNum" value="201_5">
-							<img src="${path}/resources/vendor/acbook/images/101_1.png" width="80px" height="80px"><span>의류</span>
+							<img src="${path}/resources/acbook/images/101_2.png" width="80px" height="80px"><span>의류</span>
 						</button>
 
 						<button type="button" class="next phone-bx" id="cateNum" value="201_6">
-							<img src="${path}/resources/vendor/acbook/images/101_2.png" width="80px" height="80px"><span>미용</span>
+							<img src="${path}/resources/acbook/images/101_2.png" width="80px" height="80px"><span>미용</span>
 						</button>
 						<button type="button" class="next phone-bx" id="cateNum" value="201_7">
 							<img src="${path}/resources/vendor/acbook/images/101_3.png" width="80px" height="80px"><span>의료건강</span>
@@ -135,6 +141,7 @@
 						<input type="hidden" id="cateNum" name="cateNum">
 						<input type="submit" id="testtest" class="next next-btn" />
 					</fieldset>
+					</div>
 				</form>
 			<!-- /.MultiStep Form -->
 
@@ -146,11 +153,7 @@
 </div>
 <!-- Side Bar Div End -->
 <!-- jQurery -->
-<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="<c:url value="/resources/vendor/acbook/js/moment.js"/>"></script>
-<script src="<c:url value="/resources/vendor/acbook/js/transition.js"/>"></script>
-<script src="<c:url value="/resources/vendor/acbook/js/collapse.js"/>"></script>
-<script src="<c:url value="/resources/vendor/acbook/js/bootstrap-datetimepicker.min.js"/>"></script>
+
 <script type="text/javascript">
 
 $('#dtp').datetimepicker(

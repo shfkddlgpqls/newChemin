@@ -4,7 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set value="${pageContext.request.contextPath}" var="path" />
 <!-- ProgressBar: ac_inputIn -->
-<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/acMain.css"/>">
+<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/pgBar.css"/>">
 <!-- ProgressBar: ac_inputIn -->
 <link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/ac_navBar.css"/>">
 <!-- Fullcalendar: ac_calenndar: ? -->

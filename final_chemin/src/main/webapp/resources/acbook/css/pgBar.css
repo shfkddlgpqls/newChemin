@@ -1,0 +1,426 @@
+@charset "UTF-8";
+/*form styles*/
+#msform {
+	width: 73%;
+	margin: 50px auto;
+	text-align: center;
+	position: relative;
+	font-family: 'Open Sans', sans-serif;
+}
+#msform fieldset {
+	background: white;
+    border: 0 none;
+    border-radius: 3px;
+    padding: 20px 30px;
+    box-sizing: border-box;
+    width: 100%;
+    margin: auto;
+    position: relative;
+}
+
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+	display: none;
+}
+/*inputs*/
+#msform input, #msform textarea {
+	font-family: 'Open Sans', sans-serif !important;
+    padding: 15px 15px 15px 0px;
+    border-bottom: 1px solid #0743a7 !important;
+    border: 0px;
+    border-radius: 0px;
+    margin-bottom: 10px;
+    width: 70%;
+    box-sizing: border-box;
+    font-family: montserrat;
+    color: #0743a7;
+    font-size: 13px;
+    outline: 0;
+}
+/*buttons*/
+#msform .action-button {
+	width: 100px;
+	background: #0743a7;
+	font-weight: bold;
+	color: white;
+	border: 0 none;
+	border-radius: 1px;
+	cursor: pointer;
+	padding: 10px 5px;
+	margin: 10px 5px;
+	border:0px !important;
+}
+#msform .action-button:hover, #msform .action-button:focus {
+	box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
+}
+/*headings*/
+.fs-title {
+	font-size: 15px;
+	text-transform: uppercase;
+	color: #2C3E50;
+	margin-bottom: 10px;
+}
+.fs-subtitle {
+	font-weight: normal;
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 20px;
+}
+.margin-h
+{
+	margin-top:8%;
+	margin-bottom:25px;
+}
+.margin-g
+{
+	margin-top:9%;
+	margin-bottom:22px;
+}
+.bottom
+{
+	margin-bottom:10px;
+}
+.issue
+{
+	margin-left:37%;
+	padding-top:10px;
+}
+.brand-no
+{
+	padding-top:17px !important;
+}
+/*progressbar*/
+#progressbar {
+	margin-bottom: 30px;
+	overflow: hidden;
+	counter-reset: step;
+}
+#progressbar li {
+	list-style-type: none;
+    font-size: 13px;
+    width: 12%;
+    float: left;
+    position: relative;
+    color: #a4a2bc;
+	z-index:999;
+}
+#progressbar li:before {
+	content: counter(step);
+    counter-increment: step;
+    width: 35px;
+    line-height: 35px;
+    display: block;
+    font-size: 16px;
+    color: #333;
+    background: #c4c4c4;
+    border-radius: 20px;
+    margin: 0 auto 5px auto;
+	z-index:7;
+	color: #c4c4c4;
+}
+/*progressbar connectors*/
+#progressbar li:after {
+	content: '';
+    width: 100%;
+    height: 2px;
+    background: #c4c4c4;
+    position: absolute;
+    left: -38%;
+    top: 17px;
+}
+#progressbar li:first-child:after {
+	content: none; 
+}
+
+#progressbar li.active:before, #progressbar li.active:after {
+    background: #23c2f3 !important;
+    color: #08a4a7;
+	z-index: -1;
+    
+}
+#progressbar li.active:before{
+    background: #23c2f3;
+    color: #fff;
+    background-position: 50%;
+	}
+/*custom css */
+.sell-your-phone{
+	min-height:600px;
+	clear:both;
+
+}
+.sell-your-phone h2{
+font-size: 36px;
+margin-bottom: 50px;
+color: #000;
+font-weight:bold;
+}
+
+.sell-your-phone h3{
+     color: #0743a7;
+    font-size: 26px;
+    
+}
+
+
+.phone-bx {
+    vertical-align: top;
+    width: 15%!important;
+    background: inherit!important;
+    border: solid 1px #ececec !important;
+    font-weight: normal;
+    color: #000000!important;
+    border: 0 none;
+    border-radius: 0px;
+    cursor: pointer;
+    padding: 10px 35px 10px 35px!important;
+    margin: 10px 5px;
+    font-size: 14px;
+    height: 100px;
+	border-radius:8px;
+}
+.phone-bx span{
+	display:none;
+}
+.phone-bx:hover span{
+	display:block;
+}
+.phone-bx:hover{
+    border: solid 1px #3ec2f3 !important;
+	border-radius:8px;	
+}
+.phone-bx img{
+margin: 80px auto;
+}
+.brand-bxa
+{
+	margin-left:7%;
+}
+.pad
+{
+	margin-left:8%;
+}
+.vlume-dft
+{
+	padding-top:19px !important;
+}
+.model-name {
+	width: 25%;
+    background: inherit!important;
+    border: solid 1px #c4c4c4 !important;
+    font-weight: normal;
+    color: #000000!important;
+    border: 0 none;
+    border-radius: 0px;
+    cursor: pointer;
+    padding: 10px 34px 10px 34px!important;
+    margin: 10px 5px;
+    font-size: 18px;
+	border-radius:8px;
+}
+.model-name:hover{
+    border: solid 1px #3ec2f3 !important;	
+}
+
+	.phone-condition{
+	font-size: 15px!important;
+	}
+
+	.phone-condition strong{
+	 text-transform: uppercase;
+    letter-spacing: 1px;
+	}
+		
+.model-color{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 0px !important;
+	cursor: pointer;
+	margin-bottom:15px;
+}
+
+.cl-bx{
+background-color: inherit !important;
+border: none;
+margin-right: 55px;
+}
+
+.previous{
+font-family: 'Open Sans', sans-serif;
+background: initial!important;
+color: #000000!important;
+}
+.previous:hover{
+ box-shadow: none !important;
+}
+
+.sell-form label{
+	width: 70%;
+    text-align: left;
+    font-size: 10px;
+    font-weight: bold;
+    color: #0743a7;
+    margin-bottom: 0px;
+	}
+	
+	.next-btn{
+	width: 50%;
+    padding: 11px 20px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 18px;
+    background-color: #f5631c;
+    border: none;
+    margin-top: 20px;
+	cursor:pointer;
+	}
+	
+	#msform input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #0743a7;
+    opacity: 1; /* Firefox */
+}
+
+	#msform input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+		color: #0743a7;
+	}
+	
+	#msform input::-ms-input-placeholder { /* Microsoft Edge */
+		color: #0743a7;
+	}
+	
+	.sell-price{
+	font-size: 40px;
+    color: #fb641b;
+	}
+
+/*end custom CSS */
+
+
+/* The container */
+.asscee-sec {
+    position: relative;
+    padding-left: 29px;
+    margin-right: 30px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width: 20%;
+    border: solid 1px #ccc;
+    padding: 9px;
+	min-height: 62px;
+	float:left;
+	border-radius:8px;
+}
+
+.asscee-sec input[type=checkbox]{
+    width: 100% !important;
+}
+
+/* Hide the browser's default checkbox */
+.asscee-sec input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+       position: absolute;
+    top: 9px;
+    left: -18px;
+    height: 35px;
+    width: 35px;
+    background-color: #eee;
+    font-size: 24px;
+    border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.asscee-sec:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.asscee-sec input:checked ~ .checkmark {
+    background-color: #3ec2f3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.asscee-sec input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.asscee-sec .checkmark:after {
+   left: 14px;
+    top: 12px;
+    width: 8px;
+    height: 14px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.as-singl{
+line-height: 35px;
+}
+.brand-section
+{
+	max-height:300px;
+	overflow-y:scroll;
+}
+.brand-section::-webkit-scrollbar {
+   width: 8px;
+   height: 8px;
+}
+
+
+/* Track */
+.brand-section::-webkit-scrollbar-track {
+   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+   -webkit-border-radius: 10px;
+   border-radius: 10px;
+}
+
+/* Handle */
+.brand-section::-webkit-scrollbar-thumb {
+   -webkit-border-radius: 10px;
+   border-radius: 10px;
+  background:#08457e;
+   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+.name
+{
+	margin-left:7%;
+}
+
+@media (max-width: 500px){
+#msform {
+width: 100%;
+}
+.brand-bxa
+{
+	margin-left:0px;
+}
+.model-name {
+  width: 100%;
+}
+.asscee-sec{
+ width: 100%;
+}
+	
+}
+}

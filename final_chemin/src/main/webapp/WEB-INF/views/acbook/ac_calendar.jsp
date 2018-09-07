@@ -17,6 +17,10 @@
 <link rel="stylesheet" href="<c:url value= "/resources/acbook/css/fullcalendar.print.css"/>">
 <!-- Fullcalendar: ac_calendar: ? -->
 <link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/ac_calendar.css"/>">
+<!-- Fullcalendar: ac_calenndar: ? -->
+<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/bootstrap-datetimepicker.css"/>">
+<!--DatePicker: ac_inputIn-->
+<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/bootstrap-datetimepicker.min.css"/>">
 
 <style>
 #calendar {
@@ -135,7 +139,7 @@ body {
 					</div>
 					</div>
 				</div>
-						<div class="center"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block" onclick="modal_view">상세창</button></div>			
+						<div class="center"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block" onclick="modal_view();">상세창</button></div>			
 	            </div>
 			</div>
 			</div>           
@@ -150,8 +154,140 @@ body {
 </div>
 </div>
 <!-- Side Bar Div End -->
-
+<!-- line modal -->
+<div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+		<h3 class="modal-title" id="lineModalLabel">Free Fluri Account Profile</h3>
+			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+		</div>
+		<div class="modal-body">
+			
+            <!-- content goes here -->
+			<form>
+              <div class="form-group">
+              	<label>날짜</label>
+			       <input type="text" id='acDate' name="acDate">
+				</div>
+              <div class="form-group">              	
+                <label>구분</label>
+                <select id='typeNum' name='typeNum'>
+				  <option value="">선택</option>
+				  <option value="101">수입</option>
+				  <option value="201">지출</option>
+                </select>
+              </div>
+              <div class="form-group">
+              <label>항목</label>
+                <select id='cateNum1' name='cateNum'>
+				  <option value=''>선택</option>
+				  <option value="101_1">월급 </option>
+				  <option value="101_2">용돈</option>
+  				  <option value="101_3">기타</option>
+                </select>
+                <select id='cateNum2' name='cateNum'>
+				  <option value=''>선택</option>
+				  <option value="201_1">식비</option>
+				  <option value="201_2">교통비</option>
+  				  <option value="201_3">문화생활</option>
+   				  <option value="201_4">생필품</option>
+   				  <option value="201_5">의류</option>
+   				  <option value="201_6">미용</option>
+				  <option value="201_7">의료건강</option>
+  				  <option value="201_8">교육</option>
+   				  <option value="201_9">전화요금</option>
+   				  <option value="201_10">경조사비</option>
+				  <option value="201_11">공과금</option>
+  				  <option value="201_12">카드대금</option>
+   				  <option value="201_13">저축</option>
+   				  <option value="201_14">기타</option>  				    				  
+                </select>
+              </div>
+              <div id='form-group'>
+              <label>금액</label>
+              <input type='number' id='acCost' name='acCost'> 				
+ 				<select id='exCode' name='exCode'>
+				  <option value=''>선택</option>
+				  <option value="M">현금</option>
+				  <option value="C">카드</option>
+				</select>
+              </div>
+              <div id='form-group'>
+              <label>메모</label>
+              <textarea id='memo' name='memo' cols=30, rows=3></textarea>
+              </div>
+            </form>
+		</div>
+		<div class="modal-footer">
+			<div class="btn-group btn-group-justified" role="group" aria-label="group button">
+				<div class="btn-group" role="group">
+					<button type="button" class="btn btn-default" data-dismiss="modal"  role="button">Close</button>
+				</div>
+				<div class="btn-group btn-delete hidden" role="group">
+					<button type="button" id="updateAcMem" class="btn btn-default btn-hover-red" data-dismiss="modal"  role="button" onclick="updateAcMem();">Update</button>
+				</div>
+				<div class="btn-group" role="group">
+					<button type="button" id="saveImage" class="btn btn-default btn-hover-green" data-action="save" role="button">Delete</button>
+				</div>
+			</div>
+		</div>
+	</div>
+  </div>
+</div>
+<!-- 모달테스트 -->
 <!-- 날짜검색시 리스트 출력 -->
+<script>
+function updateAcMem(){
+	
+}
+</script>
+<script>
+function modal_view(){
+	$.ajax({
+		url:"${pageContext.request.contextPath}/acbook/acSelectPageList.do",
+		type:"get",
+		dataType:"json",
+		success:function(data){
+			console.log("success (MemData) onload")
+			console.log(data);
+			console.log(data.model.list[3].ACCOST);
+			if(data!=null){
+			$('#acDate').val(data.model.list[3].ACDATE);
+			$('#typeNum').val(data.model.list[3].TYPENUM);
+			
+
+			if(data.model.list[3].TYPENUM=='101'){
+ 				$('#cateNum2').hide();
+ 				$('#exCode').hide();
+				
+				$('#cateNum1').val(data.model.list[2].CATENUM);
+				
+				$('#acCost').val(data.model.list[2].ACCOST);
+				$('#memo').text(data.model.list[2].MEMO);
+			}else{
+				$('#cateNum1').remove();
+				
+				$('#cateNum2').val(data.model.list[3].CATENUM);
+				$('#exCode').val(data.model.list[3].EXCODE);
+				$('#acCost').val(data.model.list[3].ACCOST);
+				$('#memo').text(data.model.list[3].MEMO);	
+			}
+		}
+			
+		}
+	})
+}
+</script>
+<script type="text/javascript">
+$('#dtp').datetimepicker(
+		{
+    inline: true,
+    sideBySide: true,
+    format: 'YYYY-MM-DD HH:mm:ss',
+    }
+		);
+</script>
 <script>
 $(function(){
 	fn_list(1);
@@ -187,7 +323,7 @@ function fn_list(cPage){
 					html+="<td>"+data.model.list[i].TYPENAME+"</td>";
 					html+="<td>"+data.model.list[i].CATENAME+"</td>";
 					html+="<td>"+data.model.list[i].ACCOST+"</td>";
-					html+="<td><button data-toggle='modal' data-target='#squarespaceModal' class='btn btn-primary center-block' onclick='modal_view'>상세창</button></td></tr>";
+					html+="<td><button data-toggle='modal' data-target='#squarespaceModal' class='btn btn-primary center-block' onclick='modal_view();'>상세창</button></td></tr>";
 				}
 				$("#tbl-cal").html(html).show();
 				

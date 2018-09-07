@@ -1,113 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set value="${pageContext.request.contextPath}" var="path" />
 <!-- jQurery -->
-
 <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
-
+<!-- ProgressBar: ac_inputIn -->
+<link rel="stylesheet" 	href="<c:url value="/resources/acbook/css/acMain.css"/>">
 <!-- header -->
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <!-- sideBar -->
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
-<style>
-/* div{
-overflow:hidden;
-height:auto;
-border: 1px solid black;
-padding:0;
-} */
-.card-content{
-margin:5%;
-object-fit:contain;
-width: 100%;
-height: 100%;
-}
-/* 메인 배경색 */
-#newMain {
-	background-color: rgba(236, 240, 241);
-}
-/* 예산 수입 지출 */
-.acTop1{
-    border: 1px;
-    width:100%;
-    height:15%;
-    border-radius: 5px;
-    padding:2%;
-	margin: 0;
-	margin-top:1%;
-	margin-bottom:0;
-	color:white;
-	text-align:right;
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
-}
-.aclayout{
-	border: 1px solid white;
-	display:block;
-	padding:3%;
-	text-align:center;
-	background-color:white;
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
-	margin:0%;
-	object-fit:contain;
-	width: 100%;
-	height: 40%;
-}
-#acid{
-	border: 1px;
-	width: 100%;
-	heigth: 100%;
-	margin: 0;
-	margin-top:2%;
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
-}
-#userprofile{
-	border: 1px;
-	width: 100%;
-	heigth: 50%;
-	margin: 0;
-	margin-top:1%;
-}
-#yesan {
-	background-color:Orange;
-}
-#income {
-	background-color:MediumSeaGreen;
-}
-#dispenditure {
-	background-color:salmon;
-	 /* #ab47bc; 보라색*/
-	}
-#settings{
-	background-color: rgb(0,222,242);
-}
-/* 레프트포인트보더 */
-#despDesc{
-	border: 1px solid #ffffff;
-	border-left:5px solid indigo;
-	border-radius:2%;
-	display:block;
-	background-color:white;
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
-}
-/* 카드 흰색폰트 */
-p.font1{
-	font-size:15px;
-	font-weight:normal;
-	text-align:left;
-	color:white;
-	margin:2px;
-}
-hr{
-margin:0;
-}
-</style>
+
 <!-- Main Start -->
 <div class="col-md-10 col-sm-8 main-content">
-
-
 
 	<!-- 여기서부터입력 -->
 <!------ Include the above in your HEAD tag ---------->
