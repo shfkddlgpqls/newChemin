@@ -5,7 +5,7 @@
 <c:set value="${pageContext.request.contextPath}" var="path" />
 
 <!-- ProgressBar: ac_inputIn -->
-<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/pgBar.css"/>">
+<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/pgBar.css?var3"/>">
 <!-- ProgressBar: ac_inputIn -->
 <link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/ac_navBar.css"/>">
 <!-- Fullcalendar: ac_calenndar: ? -->
@@ -16,12 +16,7 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <!-- sideBar -->
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
-<style>
-#newMain {
-	background-color: rgba(236, 240, 241);
-}
-.
-</style>
+
 <!-- Main Start -->
 <div class="col-md-10 col-sm-8 main-content" id='newMain'>
 <br><br>
@@ -49,82 +44,97 @@
 				<!-- fieldsets -->
 				
 				<div class="clearfix" style="width:100%;height:100%;display:block;object-fit:contain;">
-					<fieldset class="section">
-						<h3>플레리북</h3>
-							<button type="button" class="next next-btn">Next</button>
+					<fieldset>
+						<h3>가계 타입을 선택하세요</h3>
+						<button type="button" class="next phone-bx" id="typeNum" value="101">
+							<img src="${path}/resources/acbook/images/101.png"><span>수입</span>
+						</button>
+						<button type="button" class="next phone-bx" id="typeNum" value="201">
+							<img src="${path}/resources/acbook/images/201.png"><span>지출</span>
+						</button>
 					</fieldset>
 					<fieldset>
 						<h3>날짜를 입력하세요</h3>
 							<div style="overflow:hidden;" class="container-fluid">
 						        <div class="container-fluid">
-						             <input type="text" id="dtp" name="acDate">
+						             <input type="text" id="dtp" name="acDate" style="line-height:5px;margin:0px;padding:0px;width:0px;"size="10px">
 						        </div>
 							</div>
 							<button type="button" class="next next-btn">Next</button>
-					</fieldset>
-					<fieldset>
-						<h3>결제수단을 입력하세요</h3>
-						<button type="button" class="next phone-bx" id="exCode" value="M">
-							<img src="${path}/resources/acbook/images/M1.png" width="80px" height="80px">
+					</fieldset>										
+					<fieldset id='cateNum1'>
+						<h3>항목을 입력하세요</h3>
+						<button type="button" class="next phone-bx" id="cateNum" value="101_1">
+							<img src="${path}/resources/acbook/images/101_1.png"><span>월급</span>
 						</button>
-						<button type="button" class="next phone-bx" id="exCode" value="C">
-							<img src="${path}/resources/acbook/images/C.png" width="80px" height="80px"><span>카드</span>
+						<button type="button" class="next phone-bx" id="cateNum" value="101_2">
+							<img src="${path}/resources/acbook/images/101_2.png"><span>용돈</span>
+						</button>
+							<button type="button" class="next phone-bx" id="cateNum" value="101_3">
+							<img src="${path}/resources/acbook/images/101_3.png"><span>기타</span>
 						</button>
 					</fieldset>
-					<fieldset>
+					<fieldset id='cateNum2'>
 						<h3>항목을 입력하세요</h3>
 						<button type="button" class="next phone-bx" id="cateNum" value="201_1">
-							<img src="${path}/resources/acbook/images/101_1.png" width="80px" height="80px"><span>식비</span>
+							<img src="${path}/resources/acbook/images/201_1.png"><span>식비</span>
 						</button>
-					<button type="button" class="next phone-bx" id="cateNum" value="201_2">
-							<img src="${path}/resources/acbook/images/101_2.png" width="80px" height="80px"><span>교통비</span>
+						<button type="button" class="next phone-bx" id="cateNum" value="201_2">
+							<img src="${path}/resources/acbook/images/201_2.png"><span>교통비</span>
 						</button>
-					<button type="button" class="next phone-bx" id="cateNum" value="201_3">
-							<img src="${path}/resources/acbook/images/101_2.png" width="80px" height="80px"><span>문화생활</span>
+						<button type="button" class="next phone-bx" id="cateNum" value="201_3">
+							<img src="${path}/resources/acbook/images/201_3.png"><span>문화생활</span>
 						</button>
-					<button type="button" class="next phone-bx" id="cateNum" value="201_4">
-							<img src="${path}/resources/acbook/images/101_2.png" width="80px" height="80px"><span>생필품</span>
+						<button type="button" class="next phone-bx" id="cateNum" value="201_4">
+							<img src="${path}/resources/acbook/images/201_4.png"><span>생필품</span>
 						</button>
-					<button type="button" class="next phone-bx" id="cateNum" value="201_5">
-							<img src="${path}/resources/acbook/images/101_2.png" width="80px" height="80px"><span>의류</span>
+						<button type="button" class="next phone-bx" id="cateNum" value="201_5">
+							<img src="${path}/resources/acbook/images/201_5.png"><span>의류</span>
 						</button>
-
 						<button type="button" class="next phone-bx" id="cateNum" value="201_6">
-							<img src="${path}/resources/acbook/images/101_2.png" width="80px" height="80px"><span>미용</span>
+							<img src="${path}/resources/acbook/images/201_6.png"><span>미용</span>
 						</button>
 						<button type="button" class="next phone-bx" id="cateNum" value="201_7">
-							<img src="${path}/resources/vendor/acbook/images/101_3.png" width="80px" height="80px"><span>의료건강</span>
+							<img src="${path}/resources/acbook/images/201_7.png"><span>의료건강</span>
 						</button>
-					<button type="button" class="next phone-bx" id="cateNum" value="201_8">
-							<img src="${path}/resources/vendor/acbook/images/101_1.png" width="80px" height="80px"><span>교육</span>
+						<button type="button" class="next phone-bx" id="cateNum" value="201_8">
+							<img src="${path}/resources/acbook/images/201_8.png"><span>교육</span>
 						</button>
-					<button type="button" class="next phone-bx" id="cateNum" value="201_9">
-							<img src="${path}/resources/vendor/acbook/images/101_1.png" width="80px" height="80px"><span>전화요금</span>
+						<button type="button" class="next phone-bx" id="cateNum" value="201_9">
+							<img src="${path}/resources/acbook/images/201_9.png"><span>전화요금</span>
 						</button>
-					<button type="button" class="next phone-bx" id="cateNum" value="201_10">
-							<img src="${path}/resources/vendor/acbook/images/101_1.png" width="80px" height="80px"><span>경조사비</span>
+						<button type="button" class="next phone-bx" id="cateNum" value="201_10">
+							<img src="${path}/resources/acbook/images/201_10.png"><span>경조사비</span>
 						</button>
-					<button type="button" class="next phone-bx" id="cateNum" value="201_11">
-							<img src="${path}/resources/vendor/acbook/images/101_1.png" width="80px" height="80px"><span>공과금</span>
+						<button type="button" class="next phone-bx" id="cateNum" value="201_11">
+							<img src="${path}/resources/acbook/images/201_11.png"><span>공과금</span>
 						</button>
-					<button type="button" class="next phone-bx" id="cateNum" value="201_12">
-							<img src="${path}/resources/vendor/acbook/images/101_1.png" width="80px" height="80px"><span>카드대금</span>
+						<button type="button" class="next phone-bx" id="cateNum" value="201_12">
+							<img src="${path}/resources/acbook/images/201_12.png"><span>카드대금</span>
 						</button>
-					<button type="button" class="next phone-bx" id="cateNum" value="201_13">
-							<img src="${path}/resources/vendor/acbook/images/101_1.png" width="80px" height="80px"><span>저축</span>
+						<button type="button" class="next phone-bx" id="cateNum" value="201_13">
+							<img src="${path}/resources/acbook/images/201_13.png"><span>저축</span>
 						</button>
-					<button type="button" class="next phone-bx" id="cateNum" value="201_14">
-							<img src="${path}/resources/vendor/acbook/images/101_1.png" width="80px" height="80px"><span>기타</span>
+						<button type="button" class="next phone-bx" id="cateNum" value="201_14">
+							<img src="${path}/resources/acbook/images/201_14.png"><span>기타</span>
 						</button>
-					<button type="button" class="next phone-bx" id="cateNum" value="201_15">
-							<img src="${path}/resources/vendor/acbook/images/101_1.png" width="80px" height="80px"><span>기타</span>
-						</button>
-					
+						<button type="button" class="next phone-bx" id="cateNum" value="201_15">
+							<img src="${path}/resources/acbook/images/201_15.png"><span>기타</span>
+						</button>				
 					</fieldset>
 					<fieldset>
 						<h3>금액을 입력하세요</h3>
-							<input type="number" name="acCost" placeholder="금액 입력" value="" required/>
+							<input type="number" name="acCost" placeholder="금액 입력(숫자만 입력 가능합니다)" value="" required style="line-height:30px;margin:0px;padding:0px;text-align:center;width=20px;font-size:30px;"/>
 							<button type="button" class="next next-btn">Next</button>
+					</fieldset>
+					<fieldset id='exCode2'>
+						<h3>결제수단을 입력하세요</h3>
+						<button type="button" class="next phone-bx" id="exCode" value="M">
+							<img src="${path}/resources/acbook/images/M1.png"><span>현금</span>
+						</button>
+						<button type="button" class="next phone-bx" id="exCode" value="C">
+							<img src="${path}/resources/acbook/images/C.png"><span>카드</span>
+						</button>
 					</fieldset>
 					<fieldset>
 						<h3>함께 남길 메모를 입력하세요.</h3>
@@ -135,10 +145,10 @@
 						<h3>정보가 모두 입력되었습니다. 보내시겠습니까?</h3>
 						<div id="testArea"></div>
 						<!-- 테스트용 데이터 userId -->
-						<input type="hidden" id="userId" name = "userId" value="hello">
-						<input type="hidden" id="exCode" name="exCode">
-						<input type="hidden" name="typeNum" value="201">
-						<input type="hidden" id="cateNum" name="cateNum">
+						<input type="hidden" id="userId" name = "userId" value="stella226">
+						<input type="hidden" name="exCode" value="">
+						<input type="hidden" name="typeNum" value="">
+						<input type="hidden" name="cateNum" value="">
 						<input type="submit" id="testtest" class="next next-btn" />
 					</fieldset>
 					</div>
@@ -166,40 +176,52 @@ $('#dtp').datetimepicker(
 
 </script>
 <script>
-$(document).on('click','#exCode',function(){
-	var a = $('input:hidden[name=exCode]').val($(this).attr("value"));
-})
+$(document).on('click','#typeNum', function () {
+	
+	var b= $('input:hidden[name=typeNum]').val($(this).attr("value"));
+	
+	if(b.val()=='101'){
+		$("#cateNum2").remove();
+		$("#exCode2").remove();
+		var a = $('input:hidden[name=exCode]').val("-");	
+	}else{
+		$("#cateNum1").remove();
+	}
+});
 $(document).on('click','#cateNum', function () {
 	var b= $('input:hidden[name=cateNum]').val($(this).attr("value"));
-/* 	alert(b.val()); */	
+});
+$(document).on('click','#exCode',function(){
+	
+	var a = $('input:hidden[name=exCode]').val($(this).attr("value"));	
 });
 </script>
+
 <script>
-var current_fs, next_fs, previous_fs; //fieldsets
-var left, opacity, scale; //fieldset properties which we will animate
-var animating; //flag to prevent quick multi-click glitches
+var current_fs, next_fs, previous_fs;
+var left, opacity, scale;
+var animating;
 
 $(".next").click(function(){
-	if(animating) return false;
-	animating = true;
+		
+		if(animating) return false;
+		animating = true;
+
+		current_fs = $(this).parent();
+		next_fs = $(this).parent().next();
+
 	
-	current_fs = $(this).parent();
-	next_fs = $(this).parent().next();
-	
-	//activate next step on progressbar using the index of next_fs
 	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 	
-	//show the next fieldset
 	next_fs.show(); 
-	//hide the current fieldset with style
+	
 	current_fs.animate({opacity: 0}, {
 		step: function(now, mx) {
-			//as the opacity of current_fs reduces to 0 - stored in "now"
-			//1. scale current_fs down to 80%
+			
 			scale = 1 - (1 - now) * 0.2;
-			//2. bring next_fs from the right(50%)
+			
 			left = (now * 50)+"%";
-			//3. increase opacity of next_fs to 1 as it moves in
+		
 			opacity = 1 - now;
 			current_fs.css({
         'transform': 'scale('+scale+')',
@@ -212,7 +234,6 @@ $(".next").click(function(){
 			current_fs.hide();
 			animating = false;
 		}, 
-		//this comes from the custom easing plugin
 		easing: 'easeInOutBack'
 	});
 });
@@ -224,20 +245,18 @@ $(".previous").click(function(){
 	current_fs = $(this).parent();
 	previous_fs = $(this).parent().prev();
 	
-	//de-activate current step on progressbar
 	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
 	
-	//show the previous fieldset
+	
 	previous_fs.show(); 
-	//hide the current fieldset with style
+
 	current_fs.animate({opacity: 0}, {
 		step: function(now, mx) {
-			//as the opacity of current_fs reduces to 0 - stored in "now"
-			//1. scale previous_fs from 80% to 100%
+			
 			scale = 0.8 + (1 - now) * 0.2;
-			//2. take current_fs to the right(50%) - from 0%
+			
 			left = ((1-now) * 50)+"%";
-			//3. increase opacity of previous_fs to 1 as it moves in
+			
 			opacity = 1 - now;
 			current_fs.css({'left': left});
 			previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
@@ -247,7 +266,6 @@ $(".previous").click(function(){
 			current_fs.hide();
 			animating = false;
 		}, 
-		//this comes from the custom easing plugin
 		easing: 'easeInOutBack'
 	});
 });

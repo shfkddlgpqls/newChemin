@@ -10,13 +10,13 @@
 <!-- sideBar -->
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
 <!-- Side Bar -->
-<link rel="stylesheet" href="<c:url value= "/resources/acbook/css/bootstrap.min.css"/>">
+<link rel="stylesheet" href="<c:url value= "/resources/acbook/css/bootstrap.min.css?var1"/>">
 <!-- Side Bar -->
-<link rel="stylesheet" href="<c:url value= "/resources/acbook/css/fullcalendar.css"/>">
+<link rel="stylesheet" href="<c:url value= "/resources/acbook/css/fullcalendar.css?var1"/>">
 <!-- Side Bar -->
-<link rel="stylesheet" href="<c:url value= "/resources/acbook/css/fullcalendar.print.css"/>">
+<link rel="stylesheet" href="<c:url value= "/resources/acbook/css/fullcalendar.print.css?var1"/>">
 <!-- Fullcalendar: ac_calendar: ? -->
-<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/ac_calendar.css"/>">
+<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/ac_calendar.css?var1"/>">
 <!-- Fullcalendar: ac_calenndar: ? -->
 <link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/bootstrap-datetimepicker.css"/>">
 <!--DatePicker: ac_inputIn-->
@@ -168,7 +168,7 @@ body {
 			<form>
               <div class="form-group">
               	<label>날짜</label>
-			       <input type="text" id='acDate' name="acDate">
+			       <input type="text" id='acDate' name="acDate" readonly>
 				</div>
               <div class="form-group">              	
                 <label>구분</label>

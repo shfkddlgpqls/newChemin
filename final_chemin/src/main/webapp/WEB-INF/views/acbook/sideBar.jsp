@@ -8,6 +8,8 @@
 <link rel="stylesheet" href="<c:url value= "/resources/acbook/css/sideBar.css"/>">	
 <!-- ProgressBar: ac_inputIn -->
 <link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/ac_navBar.css"/>">
+<!-- ProgressBar: ac_inputIn -->
+<link rel="stylesheet" type="text/css" href="${path}/resources/acbook/css/acMain.css"/>
 
 
 <!------ Include the above in your HEAD tag ---------->
@@ -27,9 +29,9 @@
                 </ul>
                 <br>
                 <ul class="list">
-                    <h5><strong>Input</strong></h5>
-                    <li><a class="a_tags" href="${path}/ac_inputIn.do">Income</a></li>
-                    <li><a class="a_tags" href="${path}/ac_dsepIn.do">Expenditure</a></li>
+                    <h5><strong>My FluriBook</strong></h5>
+                    <li><a class="a_tags" href="${path}/ac_insertAc.do">Do Fluri</a></li>
+                    <li><a class="a_tags" href="${path}/ac_calendar.do">See Fluri</a></li>
                 </ul>
 
                 <br>

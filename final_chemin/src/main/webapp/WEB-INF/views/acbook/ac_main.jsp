@@ -5,19 +5,19 @@
 <c:set value="${pageContext.request.contextPath}" var="path" />
 <!-- jQurery -->
 <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
-<!-- ProgressBar: ac_inputIn -->
-<link rel="stylesheet" 	href="<c:url value="/resources/acbook/css/acMain.css"/>">
 <!-- header -->
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <!-- sideBar -->
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
-
+<!-- ProgressBar: ac_inputIn -->
+<link rel="stylesheet" type="text/css" href="${path}/resources/acbook/css/acMain.css"/>
 <!-- Main Start -->
 <div class="col-md-10 col-sm-8 main-content">
 
 	<!-- 여기서부터입력 -->
 <!------ Include the above in your HEAD tag ---------->
 <div class="container-fluid" id="newMain">
+<br><br>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="row">

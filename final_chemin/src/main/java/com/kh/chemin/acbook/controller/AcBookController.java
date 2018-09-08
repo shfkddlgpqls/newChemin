@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
@@ -25,7 +24,6 @@ import com.kh.chemin.acbook.model.service.AcBookService;
 import com.kh.chemin.acbook.model.vo.AcBook;
 
 
-@SessionAttributes(value = { "memberLoggedIn" })
 @Controller
 public class AcBookController extends HttpServlet{
 	private Logger logger = LoggerFactory.getLogger(AcBookController.class);
@@ -40,14 +38,9 @@ public class AcBookController extends HttpServlet{
 		return "acbook/ac_main";		
 	}
 	
-	@RequestMapping("ac_inputIn.do")
+	@RequestMapping("ac_insertAc.do")
 	public String ac_inputIn() {
-		return "acbook/ac_inputIn";
-	}
-
-	@RequestMapping("ac_dsepIn.do")
-	public String ac_despIn() {
-		return "acbook/ac_despIn";
+		return "acbook/ac_insertAc";
 	}
 
 	@RequestMapping("ac_calendar.do")

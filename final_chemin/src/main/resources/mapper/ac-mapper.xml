@@ -17,7 +17,7 @@
 		ORDER BY ACDATE DESC
 	</select>
 
-
+	<!-- calendar.jsp:load datalist -->
 	<select id="selectPageList"	resultMap="acmap">
 		SELECT ACNO, USERID, TO_CHAR(ACDATE,('yyyy-MM-dd hh:mm:ss'))AS ACDATE, T.TYPENUM, T.TYPENAME, E.EXCODE, E.EXNAME, C.CATENUM, C.CATENAME, ACCOST, MEMO
 		FROM ACBOOK A, AC_TYPE T, AC_CATEGORY C, AC_EXTYPE E
