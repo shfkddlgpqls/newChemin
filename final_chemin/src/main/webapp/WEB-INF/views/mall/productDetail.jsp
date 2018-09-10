@@ -11,6 +11,32 @@
     <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/mall.css">
      <script src="<c:url value="/resources/base/js/productDetail.js" />"></script>
 
+<style>
+
+.starR1{
+    background: url('http://miuu227.godohosting.com/images/icon/ico_review.png') no-repeat -52px 0;
+    background-size: auto 100%;
+    width: 15px;
+    height: 30px;
+    float:left;
+    text-indent: -9999px;
+    cursor: pointer;
+}
+.starR2{
+    background: url('http://miuu227.godohosting.com/images/icon/ico_review.png') no-repeat right 0;
+    background-size: auto 100%;
+    width: 15px;
+    height: 30px;
+    float:left;
+    text-indent: -9999px;
+    cursor: pointer;
+}
+.starR1.on{background-position:0 0;}
+.starR2.on{background-position:-15px 0;}
+
+</style>
+
+
 <!--  <script type="text/javascript">  
         $(document).ready(function(){
             $("#review tr:odd").addClass("odd");
@@ -25,15 +51,21 @@
         });
     </script>        
  -->
- 
  <script>
+ 
+ //별점
+$('.starRev span').click(function(){
+  $(this).parent().children('span').removeClass('on');
+  $(this).addClass('on').prevAll('span').addClass('on');
+  return false;
+});
  
  // 상품 정보를 장바구니에 넘기기 위해서 해당 상품 정보 전달 
  $(function () 
 {
-	 fn_qna(1); 
-	 fn_review(1);	
-	 
+    fn_qna(1); 
+ //   fn_review(1);   
+    
     $(".cart").click(function(){
        var amount =  $("#quantity_value").text();  
        var pno = $("#pNo").val();
@@ -50,7 +82,7 @@
                 swal
                 ({
                    title: "["+pName+"] 추가",
-                    text: "장바구니에 상품이 담겼습니다. 확인하러 go?!",
+                    text: "장바구니 상품은 7일간 보관됩니다.\n확인하러 go?!",
                     icon: "success",
                     buttons: true,
                     dangerMode: true,
@@ -63,13 +95,13 @@
                    }
                 });
              } else if(data==0){
-                swal("["+pName+"] 추가 실패", "장바구니에 상품 추가를 실패하였습니다.(로그인 후 이용하세용)", "error");
+                swal("["+pName+"] 추가 실패", "장바구니에 상품 추가를 실패하였습니다.\n로그인 후 이용하세용", "error");
              } else {
                 /* 상품이 이미 들어있는 경우 */
                 swal
                 ({
                    title: "["+pName+"] 존재",
-                    text: "장바구니에 상품이 이미 존재합니다. 확인하러 go?!",
+                    text: "장바구니에 상품이 이미 존재합니다.\n확인하러 go?!",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
@@ -223,13 +255,91 @@
    
    function fn_qna(cPage) 
    {
-		//pno > var로 받기 ajax 	
+		//pno > var로 받기 
+	   var pno = $("#pNo").val(); 
+	   //userId > var로 받기
+	   var userId = $("#userId").val();
+		
+	   $.ajax({
+		    url:"${path}/mall/qnaPage.do",
+		    data:{pno:pno,cPage:cPage},
+		    dataType:"json",    
+		    success : function(data) 
+		    {
+				
+				 console.log(data.list); 
+			
+				if(data!=null)
+				{
+					var num = data.length-1;
+					var qnaPageBar = data[num]; 
+					
+									
+					//왜 여기에다가 -1을 하는걸까
+					for(var i=0; i<data.list.length;i++)
+					{
+			
+						/* var date = new Date(JSON.Stringify(data[i].qnaDate));
+						date.setFullYear(data[i].qnaDate.month);
+						date.setMonth(data[i].qnaDate.month);
+						date.setMonth(data[i].qnaDate.month);
+						date.setMonth(data[i].qnaDate.month);  */
+						
+						//alert(data[i].qnaDate);
+						//alert(date);
+					
+						//화면 추가해주기
+						if(i==0){
+							qnaList.innerHTML="<tr><td class='text-center'>"+data.list[i].qnaNo+"</td>"+
+							"<td class='text-center'><a onclick='fn_inputPw(this); return false;' data-no='${product.pno }' >"+data.list[i].qnaTitle+"</a></td>"+
+							"<td class='text-center'>"+data.list[i].qnaContent+"</td>"+
+							"<td class='text-center'></td>"+
+							"<td class='text-center'>"+data.list[i].userId+"</td>"+
+							"<td class='text-center'>"+data.list[i].qnaDate+"</td>"+
+							"<td class='text-center'>"+data.list[i].qnaState+"</td>"+
+							"<td class='text-center'>"+data.list[i].qnaPw+"</td></tr>"
+						}else{
+							qnaList.innerHTML+="<tr><td class='text-center'>"+data.list[i].qnaNo+"</td>"+
+							"<td class='text-center'><a onclick='fn_inputPw(this); return false;' data-no='${product.pno }' >"+data.list[i].qnaTitle+"</a></td>"+
+							"<td class='text-center'>"+data.list[i].qnaContent+"</td>"+
+							"<td class='text-center'></td>"+
+							"<td class='text-center'>"+data.list[i].userId+"</td>"+
+							"<td class='text-center'>"+data.list[i].qnaDate+"</td>"+
+							"<td class='text-center'>"+data.list[i].qnaState+"</td>"+
+							"<td class='text-center'>"+data.list[i].qnaPw+"</td></tr>"
+						}
+						/* view = 
+						view += "<td class='text-center'>"+data.list[i].qna_cate_no+"</td>";
+						view += "<td class='text-center'><a onclick='fn_inputPw(this); return false;' data-no='${product.pno }' >"+data.list[i].qnaTitle+"</a></td>";
+						view += "<td class='text-center'>"+data.list[i].qnaContent+"</td>";
+						view += "<td class='text-center'></td>";
+						view += "<td class='text-center'>"+data.list[i].userId+"</td>";
+						view += "<td class='text-center'>"+data.list[i].qnaDate+"</td>";
+						view += "<td class='text-center'>"+data.list[i].qnaState+"</td>";
+						view += "<td class='text-center'>"+data.list[i].qnaPw+"</td></tr>"; */
+					
+					}	
+				}
+				else
+				{
+					view += "<td class='text-center'>아무것도 없어요</td>";
+				}
+			
+				$("#qnaPageBar").html(qnaPageBar);	
+				
+		    },
+		    
+		    error:function(jxhr,textStatus,error)
+		    {
+                 console.log("mainMall ajax 실패 : "+jxhr+" "+textStatus+" "+error); 
+			}		   
+	   });
    }
    
-   function fn_review(cPage)
+   /* function fn_review(cPage)
    {
 	
-   }
+   } */
   
  </script>
  
@@ -321,6 +431,14 @@
       <h2>Review</h2>   
          <h7>실제로 이 제품을 구입한 고객님들의 후기입니다.</h7>
       </div>
+      	
+      	<div class="starRev">
+			<span class="starR on">별1</span>
+			<span class="starR">별2</span>
+			<span class="starR">별3</span>
+			<span class="starR">별4</span>
+			<span class="starR">별5</span>
+  	   </div>					
 
          <div class="table-responsive">
                 <table id="review" class="table">
@@ -341,7 +459,8 @@
                       <td>너무 맛있어요</td>
                       <td>원숭이</td>
                       <td>
-
+						
+							
                       </td>
                       <td>2018-08-24</td>
                       <td><button type="button" class="btn btn-danger">삭제</button></td>   
@@ -397,9 +516,10 @@
                     </tr>
                   </thead>
                   
-                  <tbody>
+                  <tbody id="qnaList">
+                  	
                   
-                   <c:forEach items="${qList }" var="q">
+                   <%-- <c:forEach items="${qList }" var="q">
 	                    <tr>
 	                      <td class="text-center">${q.QNANO }</td>
 	                      <td class="text-center">
@@ -460,7 +580,7 @@
                       <td class="text-center"><button type="button" class="btn btn-danger">삭제</button></td>    -->
                    
                     </tr>
-                    </c:forEach>
+                    </c:forEach> --%>
              
                     
                  </tbody>
@@ -469,30 +589,12 @@
           </table>
           </div>
           
-          <div class="text-center">
-         
-          <button type="button" class="btn btn-default" onclick="fn_insertDetails();" style="margin-left:90%">글 쓰기</button>
-            <ul class="pagination justify-content-center" >
-               <li class="page-item">
-                  <a href="#" class="page-link" aria-label="Previous">
-                     <span aria-hidden="true">&laquo;</span>
-                  </a>
-               </li>
-               
-               <li class="page-item"><a href="#" class="page-link">1</a></li>
-               <li class="page-item"><a href="#" class="page-link">2</a></li>
-               <li class="page-item"><a href="#" class="page-link">3</a></li>
-               <li class="page-item active"><a href="#" class="page-link">4</a></li>
-               <li class="page-item"><a href="#" class="page-link">5</a></li>
-               
-               <li class="page-item">
-               <a href="#" class="page-link" aria-label="Next">
-               <span aria-hidden="true">&raquo;</span>
-               </a>
-               </li>
-            </ul>
-            
-           </div>   
+          <!-- 페이징바 -->
+          
+          <div class="row justify-content-center" id="qnaPageBar">
+         </div>
+          
+             
         </div>
         
         

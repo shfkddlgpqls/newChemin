@@ -1,5 +1,7 @@
 package com.kh.chemin.map.model.dao;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +13,5 @@ public interface PlaceDao {
 	int placeInsert(SqlSessionTemplate sqlSession, Place place);
 	int insertMenu(SqlSessionTemplate sqlSession, PlaceMenu m);
 	int insertAttach(SqlSessionTemplate sqlSession, PlaceAttachment a);
+	List<Place> placeList(SqlSessionTemplate sqlSession);
 }

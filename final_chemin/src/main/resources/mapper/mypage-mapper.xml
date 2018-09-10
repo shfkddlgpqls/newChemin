@@ -20,4 +20,25 @@
 	<delete id="placeDelete" parameterType="_int">
 		delete place where PLANO = #{plaNo}
 	</delete>
+	
+	<select id="placeSelect" parameterType="_int" resultType="place">
+		select * from place where PLANO = #{plaNo}
+	</select>
+	
+	<update id="placeUpdate" parameterType="place">
+		update place set PLAAREA=#{plaArea}, PLACATEGORY=#{plaCategory}, PLANAME=#{plaName}, 
+		ORIMG=#{orImg}, REIMG=#{reImg}, PLAPHONE=#{plaPhone}, PLAADDR=#{plaAddr}, PLATIME=#{plaTime},
+		PLACONTENT=#{plaContent}, PLAKEYWORD=#{plaKeyword}, PLADATE=default, PLASTATUS='N' where PLANO=#{plaNo} 
+		<selectKey keyProperty="plaNo" resultType="_int" order="AFTER">
+		 SELECT SEQ_PLACE_NO.CURRVAL FROM DUAL
+		</selectKey>
+	</update>
+	
+	<update id="updateMenu" parameterType="placeMenu">
+		update pla_menu set MENUNAME=#{menuName}, MENUPRICE=#{menuPrice} where PLANO=#{plaNo}
+	</update>
+	
+	<update id="updateAttach" parameterType="placeAttach">
+		update pla_attachment set ORIMG=#{orImg}, REIMG=#{reImg}, ATTACHDATE =sysdate where PLANO=#{plaNo}
+	</update>
 </mapper>

@@ -32,4 +32,24 @@ public class MypageDaoImpl implements MypageDao {
 		return sqlSession.delete("mypage.placeDelete",plaNo);
 	}
 
+	@Override
+	public Place placeSelect(SqlSessionTemplate sqlSession, int plaNo) {
+		return sqlSession.selectOne("mypage.placeSelect", plaNo);
+	}
+
+	@Override
+	public int placeUpdate(SqlSessionTemplate sqlSession, Place place) {
+		return sqlSession.update("mypage.placeUpdate",place);
+	}
+
+	@Override
+	public int updateMenu(SqlSessionTemplate sqlSession, PlaceMenu m) {
+		return sqlSession.update("mypage.updateMenu",m);
+	}
+
+	@Override
+	public int updateAttach(SqlSessionTemplate sqlSession, PlaceAttachment a) {
+		return sqlSession.update("mypage.updateAttach",a);
+	}
+
 }
