@@ -8,4 +8,6 @@ import com.kh.chemin.map.model.vo.PlaceMenu;
 
 public interface PlaceService {
 	int placeInsert(Place place,List<PlaceMenu> menuList,List<PlaceAttachment> attList);
+	List<Place> placeList();
+
 }

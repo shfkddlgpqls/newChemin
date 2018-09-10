@@ -86,9 +86,9 @@ border:1px solid black;
 tr{
 height:50px;
 }
+
 </style>
 <script>
-
 function fn_modal(obj){	
 	var plaNo = $(obj).data("no");
 	var userId = $(obj).data("userId"); 
@@ -144,7 +144,8 @@ function fn_modal(obj){
 		data:{plaNo:plaNo},
 		dataType:"json",
 		success:function(data)
-		{		
+		{	
+			console.log(data.menuList)
 				//상세보기 화면 캐러셀 사진 부분
 				attachmain.innerHTML='<div class="carousel-item active" id="attachmentOne">';
 				attachmentOne.innerHTML='<div class="row" id="subattachOne">';
@@ -179,7 +180,19 @@ function fn_modal(obj){
 			    attachmentOne.innerHTML+='</div>';
 		    	attachmain.innerHTML+='</div>';
 		    	//상세보기 화면 캐러셀 사진 부분 끝
+		    	
+		    	for(i=0; i<data.menuList.length; i++){
+		    		if(i==0){
+		    			plaPrice.innerHTML= data.menuList[i].menuName +"&nbsp;&nbsp;-&nbsp;&nbsp;"+data.menuList[i].menuPrice+"원";
+		    		}else {
+		    				/* $('#price').after('<tr><td></td><td></td><td>'+data.menuList[i].menuName +"&nbsp;&nbsp;&nbsp;&nbsp;"+data.menuList[i].menuPrice+'</td></tr>'); */
+		    			
+		    				/* price.outerHTML += '<tr><td></td><td></td><td>'+data.menuList[i].menuName +"&nbsp;&nbsp;&nbsp;&nbsp;"+data.menuList[i].menuPrice+'원</td></tr>'; */
+	
+		    			plaPrice.innerHTML+= ',&nbsp;&nbsp;'+data.menuList[i].menuName +"&nbsp;&nbsp;-&nbsp;&nbsp;"+data.menuList[i].menuPrice+"원";
+		    		}
 		    		
+		    } 		
 		}
 	})
 
@@ -201,13 +214,16 @@ function fn_delete(){
 		    
 		  }
 		});
-	
 }
 
 function fn_reMsg(msg){
 	$("#reMsg_modal").modal('show');
-	var plaMsg = $(msg).data("msg");
-	alert(plaMsg);
+	msgContent.innerHTML = $(msg).data("msg"); 
+}
+
+function fn_update(){
+	var plaNo = $('[name=subNo]').val();
+	location.href = "${path}/mypage/myPlaceSelect.do?plaNo="+plaNo;
 }
 </script>
 <!-- 마이페이지 css-->
@@ -350,11 +366,13 @@ function fn_reMsg(msg){
 		        	   	  	<td>: </td>
 		        	   	  	<td id="plaTime"></td>
 		        	   	  </tr>
-		        	   	   <tr>
+		        	   	   <tr class="price" id="price">
 		        	   	  	<td>가격정보</td>
 		        	   	  	<td>: </td>
-		        	   	  	<td id="plaPrice">아메리카노 2500원</td>
+		        	   	  	<td id="plaPrice"></td>
 		        	   	  </tr>
+		        	   	 <div id="priceDiv">
+		        	   	 </div>
 		        	   	  <tr>
 		        	   	  	<td>소개글</td>
 		        	   	  	<td>: </td>
@@ -396,7 +414,7 @@ function fn_reMsg(msg){
 			    </div>
 		        <!-- Modal footer -->
 		        <div class="modal-footer">
-		          <button type="button" class="btn btn-success">수정</button>
+		          <button type="button" class="btn btn-success" onclick="fn_update()">수정</button>
 		          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="fn_delete()">삭제</button>
 		        </div>
 		        
@@ -406,7 +424,7 @@ function fn_reMsg(msg){
 		  </div>
 		  <!-- 리뷰하기 모달 끝 -->
 		  
-		  
+		  <!--승인 거절 메세지 모달  -->
 		  <div class="modal fade" id="reMsg_modal">
 		    <div class="modal-dialog modal-dialog-centered">
 		      <div class="modal-content">
@@ -422,7 +440,7 @@ function fn_reMsg(msg){
 		          <div class="row">
 		           <div class="col-md-1"></div>
 		        	<div class="col-md-10">
-		        	  <div style="border:1px solid black;width:100%;height:20%">
+		        	  <div id="msgContent" style="border:1px solid black;width:100%;height:20%">
 		        	  
 		        	  </div>
 		        	</div>

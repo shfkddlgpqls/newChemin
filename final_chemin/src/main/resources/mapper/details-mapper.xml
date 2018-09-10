@@ -22,7 +22,12 @@
 	   
 	<!-- 문의게시판  총 갯수 -->   
 	<select id="selectQnACount" resultType="_int">
-		SELECT COUNT(*) FROM QNA where pno = #{no}
+		SELECT COUNT(*) FROM QNA where pno = #{pno}
 	</select>	
+	
+	<!-- 문의게시판 ajax 페이징 처리 -->
+	<select id="selectQnaBoardList" parameterType="_int" resultType="qna">
+		select * from QNA where PNO = #{pno}
+	</select>
 
 </mapper>

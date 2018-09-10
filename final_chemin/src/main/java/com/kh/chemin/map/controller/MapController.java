@@ -37,7 +37,9 @@ public class MapController {
 	
 	//지도를 보여주는 화면
 	@RequestMapping("/map/mapView.do")
-	public String mapView() {
+	public String mapView(Model model) {
+		List<Place> plaList = service.placeList();
+		model.addAttribute("plaList", plaList);
 		return "/map/mapView";
 	}
 	
@@ -53,7 +55,7 @@ public class MapController {
 		return "/map/placeReg";
 	}
 
-
+	
 	@RequestMapping(value="/map/placeInsert.do", method = RequestMethod.POST)
 	public ModelAndView placeInsert(Place place ,@RequestParam("mainImg")MultipartFile mainImg,@RequestParam("file")MultipartFile[] file,HttpServletRequest request,String[] menuName,String[] menuPrice,String[] menuCheck, String phoneFirst, String phoneMiddle, String phoneEnd,String postCode, String roadAddr, String jibunAddr,
 							  String day, String startTime, String endTime,String subContent,String keyword1,String keyword2, String keyword3, String keyword4, String keyword5) {
@@ -132,4 +134,5 @@ public class MapController {
 		mv.setViewName("common/msg");
 		return mv;
 	}
+	
 }

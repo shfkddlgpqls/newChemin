@@ -11,4 +11,6 @@ public interface MypageService {
 	List<PlaceAttachment> selectAttachList(int plaNo);
 	List<PlaceMenu> selectMenuList(int plaNo);
 	int placeDelete(int plaNo);
+	Place placeSelect(int plaNo);
+	int placeUpdate(Place place,List<PlaceMenu> menuList,List<PlaceAttachment> attList);
 }
