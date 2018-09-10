@@ -29,9 +29,6 @@
 		update place set PLAAREA=#{plaArea}, PLACATEGORY=#{plaCategory}, PLANAME=#{plaName}, 
 		ORIMG=#{orImg}, REIMG=#{reImg}, PLAPHONE=#{plaPhone}, PLAADDR=#{plaAddr}, PLATIME=#{plaTime},
 		PLACONTENT=#{plaContent}, PLAKEYWORD=#{plaKeyword}, PLADATE=default, PLASTATUS='N' where PLANO=#{plaNo} 
-		<selectKey keyProperty="plaNo" resultType="_int" order="AFTER">
-		 SELECT SEQ_PLACE_NO.CURRVAL FROM DUAL
-		</selectKey>
 	</update>
 	
 	<update id="updateMenu" parameterType="placeMenu">
