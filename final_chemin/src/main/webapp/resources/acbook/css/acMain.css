@@ -1,3 +1,94 @@
+<<<<<<< HEAD
+@charset "UTF-8";
+/* .card-content{
+margin:5%;
+object-fit:contain;
+width: 100%;
+height: 100%;
+} */
+.card-content {
+	background: #ffffff;
+	border: 4px;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+}
+/* 메인 배경색 */
+#newMain {
+	background-color: rgba(236, 240, 241);
+}
+/* 예산 수입 지출 */
+.acTop1{
+    border: 1px;
+    width:100%;
+    height:15%;
+    border-radius: 5px;
+    padding:2%;
+	margin: 0;
+	margin-top:1%;
+	margin-bottom:0;
+	color:white;
+	text-align:right;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+}
+.aclayout{
+	border: 1px solid white;
+	display:block;
+	padding:3%;
+	text-align:center;
+	background-color:white;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+	margin:0%;
+	object-fit:contain;
+	width: 100%;
+	height: 40%;
+}
+#acid{
+	border: 1px;
+	width: 100%;
+	heigth: 100%;
+	margin: 0;
+	margin-top:2%;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+}
+#userprofile{
+	border: 1px;
+	width: 100%;
+	heigth: 50%;
+	margin: 0;
+	margin-top:1%;
+}
+#yesan {
+	background-color:Orange;
+}
+#income {
+	background-color:MediumSeaGreen;
+}
+#dispenditure {
+	background-color:salmon;
+	 /* #ab47bc; 보라색*/
+	}
+#settings{
+	background-color: rgb(0,222,242);
+}
+/* 레프트포인트보더 */
+#despDesc{
+	border: 1px solid #ffffff;
+	border-left:5px solid indigo;
+	border-radius:2%;
+	display:block;
+	background-color:white;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+}
+/* 카드 흰색폰트 */
+p.font1{
+	font-size:15px;
+	font-weight:normal;
+	text-align:left;
+	color:white;
+	margin:2px;
+}
+hr{
+margin:0;
+=======
 @charset "UTF-8";
 /*form styles*/
 #msform {
@@ -423,4 +514,5 @@ width: 100%;
 }
 	
 }
+>>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git
 }

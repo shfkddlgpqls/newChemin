@@ -28,6 +28,8 @@ public interface AcBookService {
 	List<Model> selectExGrade();
 	
 	List<Model> monthlyDispenditure();
+	//ac_calendar.jsp: search list for detailView
+	Map<String, Object> acSelectOne(int acNo);
 	
 	
 	//타입별 소비-지출 패턴
