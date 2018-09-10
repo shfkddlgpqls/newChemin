@@ -27,6 +27,8 @@ public interface AcBookDao {
 	List<Model> selectExGrade(SqlSessionTemplate sqlSession);
 
 	List<Model> monthlyDispenditure(SqlSessionTemplate sqlSession);
+
+	Map<String, Object> acSelectOne(SqlSessionTemplate sqlSession, int acNo);
 	
 	
 }
