@@ -43,5 +43,11 @@ public class PlaceServiceImpl implements PlaceService {
 		
 		return result;
 	}
+
+	@Override
+	public List<Place> placeList() {
+		List<Place> placeList = dao.placeList(sqlSession);
+		return placeList;
+	}
 	
 }

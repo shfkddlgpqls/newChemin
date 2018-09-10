@@ -20,5 +20,7 @@
 		insert into pla_menu(MENUNO,PLANO,MENUNAME,MENUPRICE) values(seq_placemenu_no.nextval,#{plaNo},#{menuName},#{menuPrice})
 	</insert>
 	
-	
+	<select id="placeList" resultType="place">
+		select*from place
+	</select>
 </mapper>

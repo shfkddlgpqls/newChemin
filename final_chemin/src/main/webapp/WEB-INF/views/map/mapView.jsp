@@ -140,16 +140,64 @@ color:#fff;
   
 </div>
 
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eb4ae7857a625ec0a907f8f742645cfb"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eb4ae7857a625ec0a907f8f742645cfb&libraries=services"></script>
 <script>
+$(function(){
+	var size = '${plaList.size()}';
+	var array=[];
+	 for(var i=0; i<size; i++){ 
+		array.push('${plaList.get(i).getPlaAddr()}');
+	} 
+	fn_drawMap(array);
+	
+})
 
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
+
+function fn_drawMap(array){
+	var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = { 
-        center: new daum.maps.LatLng(37.498004414546934, 127.02770621963765), // 지도의 중심좌표 
-        level: 3 // 지도의 확대 레벨 
+        center: new daum.maps.LatLng(37.556048302475745, 126.91733299528988), // 지도의 중심좌표 
+        level: 5 // 지도의 확대 레벨 
     }; 
+	
+	var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+	//주소-좌표 변환 객체를 생성합니다
+	var geocoder = new daum.maps.services.Geocoder();
+    var coords = []; 
+	for(var i=0; i<array.length; i++){
+		/* alert(array[i]) */
+	// 주소로 좌표를 검색합니다
+	
+	geocoder.addressSearch(array[i], function(result, status) {
+	i--;
+    // 정상적으로 검색이 완료됐으면 
+	     if (status === daum.maps.services.Status.OK) {
+	    	
+	        var coords = new daum.maps.LatLng(result[i].y, result[i].x);
+	        alert("i : "+i);
+	   		alert("coords : "+coords);
+	        // 결과값으로 받은 위치를 마커로 표시합니다
+	        var marker = new daum.maps.Marker({
+	            map: map,
+	            position: coords
+	        });
+	
+	       /*  // 인포윈도우로 장소에 대한 설명을 표시합니다
+	        var infowindow = new daum.maps.InfoWindow({
+	            content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
+	        });
+	        infowindow.open(map, marker); */ 
+	
+	        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+	        /* map.setCenter(coords); */
+	       
+	    } 
+	});   
+  }
+	
+}
 
-var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
 
 // 커피숍 마커가 표시될 좌표 배열입니다
 var coffeePositions = [ 
@@ -223,10 +271,10 @@ var content = '<div class="wrap">' +
             '</div>';
 
 
-            createCoffeeMarkers(); // 커피숍 마커를 생성하고 커피숍 마커 배열에 추가합니다
+            /* createCoffeeMarkers(); // 커피숍 마커를 생성하고 커피숍 마커 배열에 추가합니다
           
 
-            changeMarker('coffee'); // 지도에 커피숍 마커가 보이도록 설정합니다    
+            changeMarker('coffee'); // 지도에 커피숍 마커가 보이도록 설정합니다     */
              
            
             

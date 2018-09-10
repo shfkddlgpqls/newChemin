@@ -1,5 +1,7 @@
 package com.kh.chemin.map.model.dao;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -23,4 +25,10 @@ public class PlaceDaoImpl implements PlaceDao {
 	public int insertAttach(SqlSessionTemplate sqlSession, PlaceAttachment a) {
 		return sqlSession.insert("place.insertAttach",a);
 	}
+
+	@Override
+	public List<Place> placeList(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectList("place.placeList");
+	}
+	
 }
