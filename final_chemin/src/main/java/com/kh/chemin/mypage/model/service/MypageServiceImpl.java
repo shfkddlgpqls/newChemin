@@ -51,11 +51,11 @@ public class MypageServiceImpl implements MypageService {
 
 	@Override
 	public int placeUpdate(Place place, List<PlaceMenu> menuList, List<PlaceAttachment> attList) {
-		int result=0;
-		int plaNo=0;
+	/*	int result=0;
+		int plaNo=0;*/
 		
-		result = dao.placeUpdate(sqlSession, place);
-		plaNo = place.getPlaNo();
+		int result = dao.placeUpdate(sqlSession, place);
+	/*	plaNo = place.getPlaNo();
 		
 		if(menuList.size()>0) {
 			for(PlaceMenu m : menuList) {
@@ -68,7 +68,7 @@ public class MypageServiceImpl implements MypageService {
 				a.setPlaNo(plaNo);
 				result =dao.updateAttach(sqlSession, a);
 			}
-		}
+		}*/
 		
 		return result;
 	}

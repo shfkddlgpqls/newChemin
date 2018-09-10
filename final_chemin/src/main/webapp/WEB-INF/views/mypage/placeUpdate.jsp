@@ -285,7 +285,7 @@ function validate(){
 				  button: "확인",
 				});
 			return false;
-		}else if(mainImg.trim()==0){
+		}else if(imgName.trim()==0){
 			swal({
 				  text: "대표 사진을 등록해주세요",
 				  icon: "warning",
@@ -384,7 +384,8 @@ function validate(){
 			    		</div>
 			    		<div class="col-md-10">
 			    				<div class="filebox bs3-primary">
-		                            <input class="upload-name" value="${place.reImg}" disabled="disabled">
+			    					<input type="hidden" name="plaNo" value="${place.plaNo}"/>
+		                            <input class="upload-name" name="imgName" value="${place.reImg}" disabled="disabled">
 		
 		                           <label for="ex_filename">업로드</label>
 		                          <input type="file" name="mainImg" id="ex_filename" class="upload-hidden"> 
@@ -392,8 +393,7 @@ function validate(){
 				                 <!-- <div class="custom-file" >
 				                    <input style="width:50%" type="file" class="custom-file-input" name="mainImg" id="mainImg1">
 				                    <label style="width:50%" class="custom-file-label" for="mainImg1">파일을 선택하세요</label>
-				                </div> -->        
-           			 		 
+				                </div> -->        	 
 			    		</div>
 		    		</div>
 
