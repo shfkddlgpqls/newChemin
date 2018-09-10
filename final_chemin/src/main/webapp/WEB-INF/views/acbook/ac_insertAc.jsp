@@ -28,7 +28,7 @@
 				<h2 class="text-center">
 					한눈에 파악해보는 나의  재정 현황! 플레리북이 함께합니다.<br> 지금,만들어볼까요?
 				</h2>
-				<form id="msform" action="acbook/insertExpenditure.do" method="post">
+				<form id="msform" action="acbook/insertAc.do" method="post">
 				<!-- progressbar -->
 
 				<ul id="progressbar">

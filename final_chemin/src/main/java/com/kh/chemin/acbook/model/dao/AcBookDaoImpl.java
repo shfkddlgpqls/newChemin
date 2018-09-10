@@ -57,6 +57,11 @@ public class AcBookDaoImpl implements AcBookDao {
 	public List<Model> monthlyDispenditure(SqlSessionTemplate sqlSession) {
 		return sqlSession.selectList("ac.monthlyDispenditure");
 	}
+
+	@Override
+	public Map<String, Object> acSelectOne(SqlSessionTemplate sqlSession, int acNo) {
+		return sqlSession.selectOne("ac.acSelectOne",acNo);
+	}
 	
 	
 	

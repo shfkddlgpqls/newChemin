@@ -10,26 +10,24 @@
 <!-- sideBar -->
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
 <!-- Side Bar -->
-<link rel="stylesheet" href="<c:url value= "/resources/acbook/css/bootstrap.min.css?var1"/>">
+<link rel="stylesheet" href="<c:url value= "/resources/acbook/css/bootstrap.min.css?var2"/>">
 <!-- Side Bar -->
-<link rel="stylesheet" href="<c:url value= "/resources/acbook/css/fullcalendar.css?var1"/>">
-<!-- Side Bar -->
-<link rel="stylesheet" href="<c:url value= "/resources/acbook/css/fullcalendar.print.css?var1"/>">
-<!-- Fullcalendar: ac_calendar: ? -->
-<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/ac_calendar.css?var1"/>">
+<link rel="stylesheet" href="<c:url value= "/resources/acbook/fullcalendar/fullcalendar.css"/>">
 <!-- Fullcalendar: ac_calenndar: ? -->
 <link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/bootstrap-datetimepicker.css"/>">
 <!--DatePicker: ac_inputIn-->
 <link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/bootstrap-datetimepicker.min.css"/>">
 
 <style>
-#calendar {
-	max-width: 70%;
-	margin: 0 auto;
+/* 캘린더 여백 */
+#calendarDiv{
+margin-top:3%;
+margin-bottom:3%;
 }
-</style>
+.fc-event-container{
+background-color: salmon;
+}
 <!-- 모달테스트 -->
-<style>
 .center {
     margin-top:50px;   
 }
@@ -105,48 +103,37 @@ body {
 <!-- 여기서부터입력 -->
 <!------ Include the above in your HEAD tag ---------->
 <!-- details card section starts from here -->
-<section class="details-card">
-    <div class="container">
-        <div class="row">
-			<div class="container-fluid">
-			<br><br>
-            <div class = "row">
-	             <div class="col-md-8">
-	            	<div class="card-content">
-						<div id="monthly_calendar" class="card-desc">
-							<br>
-							<div id='calendar'></div>
-						</div>
-	            	</div>
-	            </div>
-	            <div class="col-md-4">
-	            <div class="container">
-					<div class="row">
-					<div class="card-content">			
-					<table class="table table-hover" id="tbls" style="font-size:10px">
-							<tr>
-								<th>No</th>
-								<th>날짜</th>
-								<th>구분</th>
-								<th>항목</th>
-								<th>금액</th>
-								<th>수정</th>
-							</tr>
-					</table>
-					<table class="table table-hover" id="tbl-cal" style="font-size:10px">
-					</table>
-					<div id="pageBar"></div>
+	<div class="container-fluid" id="newMain">
+      	<div class="row">
+           <div class="col-md-8">
+	          	<div class="card-content" id="calendarDiv">
+					<div id="monthly_calendar">
+						<br>
+						<div id='calendar'></div>
 					</div>
+	          	</div>
+          </div>
+          <div class="col-md-4">
+				<div class="card-content" id="calendarDiv">			
+					<div id="monthly_table">
+						<table class="table table-hover" id="tbls" style="font-size:10px">
+								<tr>
+									<th>No</th>
+									<th>날짜</th>
+									<th>구분</th>
+									<th>항목</th>
+									<th>금액</th>
+									<th>수정</th>
+								</tr>
+						</table>
+						<table class="table table-hover" id="tbl-cal" style="font-size:10px">
+						</table>
+							<div id="pageBar"></div>
 					</div>
 				</div>
-						<div class="center"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block" onclick="modal_view();">상세창</button></div>			
-	            </div>
 			</div>
-			</div>           
-        </div>
+    	</div>			          
     </div>
-    <!-- 로우디아이브이 -->
-</section>
 <!-- details card section starts from here -->
 
 	<!-- 여기서그만 -->
@@ -243,35 +230,39 @@ function updateAcMem(){
 }
 </script>
 <script>
-function modal_view(){
+function modal_view(acNo){
 	$.ajax({
-		url:"${pageContext.request.contextPath}/acbook/acSelectPageList.do",
+		url:"${pageContext.request.contextPath}/acbook/acSelectOne.do",
+		data:{acNo:acNo},
 		type:"get",
 		dataType:"json",
 		success:function(data){
 			console.log("success (MemData) onload")
 			console.log(data);
-			console.log(data.model.list[3].ACCOST);
 			if(data!=null){
-			$('#acDate').val(data.model.list[3].ACDATE);
-			$('#typeNum').val(data.model.list[3].TYPENUM);
+			$('#acDate').val(data.ACDATE);
+			$('#typeNum').val(data.TYPENUM);
+	
+			$('#cateNum1').show();
+			$('#cateNum2').show();
+			$('#exCode').show();
 			
 
-			if(data.model.list[3].TYPENUM=='101'){
+			if(data.TYPENUM=='101'){
  				$('#cateNum2').hide();
  				$('#exCode').hide();
 				
-				$('#cateNum1').val(data.model.list[2].CATENUM);
+				$('#cateNum1').val(data.CATENUM);
 				
-				$('#acCost').val(data.model.list[2].ACCOST);
-				$('#memo').text(data.model.list[2].MEMO);
+				$('#acCost').val(data.ACCOST);
+				$('#memo').text(data.MEMO);
 			}else{
-				$('#cateNum1').remove();
+				$('#cateNum1').hide();
 				
-				$('#cateNum2').val(data.model.list[3].CATENUM);
-				$('#exCode').val(data.model.list[3].EXCODE);
-				$('#acCost').val(data.model.list[3].ACCOST);
-				$('#memo').text(data.model.list[3].MEMO);	
+				$('#cateNum2').val(data.CATENUM);
+				$('#exCode').val(data.EXCODE);
+				$('#acCost').val(data.ACCOST);
+				$('#memo').text(data.MEMO);	
 			}
 		}
 			
@@ -301,29 +292,32 @@ function fn_list(cPage){
 		success:function(data){
 			console.log(data)
 			console.log("load (PageData) success");
-			//totalCounts ->제대로 나와요
+			//totalCounts
 			var html1 = $("#totalCounts").html();
 			var totalCounts = data.model.totalCounts;
+			
 			$("#totalCounts").html(html1+totalCounts).show();
 			
 			//pageBar
 			var html2 = $("#pageBar").html();
 			var pageBar = data.model.pageBar;
-	/* 		console.log("paging"+htms); */	
 			$("#pageBar").html(pageBar).show();
 			
 			
-			//acBookList ->제대로 나와요
+			//acBookList
 			if(data!=null){
 				var html3= $("#tbl-cal").html();
 				var html;			
+/* 				for(var i=0;i<totalCounts<i++){
+					html7+="<td>"+((-i)+(totalCounts))+"</td>";
+				} */
 				for(var i=0;i<data.model.list.length;i++){
-	 				html+="<tr><td>"+[i]+"</td>";
-					html+="<td>"+data.model.list[i].ACDATE+"</td>";
+ 					html+="<tr><td>"+((-i)+(totalCounts))+"</td>";
+ 					html+="<td>"+data.model.list[i].ACDATE+"</td>";
 					html+="<td>"+data.model.list[i].TYPENAME+"</td>";
 					html+="<td>"+data.model.list[i].CATENAME+"</td>";
 					html+="<td>"+data.model.list[i].ACCOST+"</td>";
-					html+="<td><button data-toggle='modal' data-target='#squarespaceModal' class='btn btn-primary center-block' onclick='modal_view();'>상세창</button></td></tr>";
+					html+="<td><button data-toggle='modal' data-target='#squarespaceModal' class='btn btn-warning' onclick='modal_view("+data.model.list[i].ACNO+");'style='font-size:10px;color:white'>click</button></td></tr>";
 				}
 				$("#tbl-cal").html(html).show();
 				
@@ -337,44 +331,9 @@ function fn_list(cPage){
 }
 
 </script>
-<!-- <script>
-		$.ajax({
-			url: "${pageContext.request.contextPath}/acbook/acSelectList.do",
-			type: "get",
-			dataType:"json",
-			success: function(data){
-				console.log("load (ListData) success");
-				console.log(data);
-				
-				
-				var html;
-				var orihtml= $("#tbl-cal").html();
-/* 				var ac_date = $(this).attr("AC_DATE");
-				var type_num = $(this).attr("TYPE_NUM");
-				var cate_name = $(this).attr("CATE_NAME");
-				var ac_extype = $(this).attr("AC_EXTYPE");
-				var cost = $(this).attr("AC_COST"); */
-				
-				if(data!=null){
-				for(var i=0;i<data.length;i++){
-					html+="<tr><td>"+data[i].AC_DATE+"</td>";
-					html+="<td>"+data[i].TYPE_NUM+"</td>";
-					html+="<td>"+data[i].CATE_NAME+"</td>";
-					html+="<td>"+data[i].AC_EXTYPE+"</td>";
-					html+="<td>"+data[i].AC_COST+"</td></tr>";
-				}
-				$("#tbl-cal").html(orihtml+html).show();
-				}else{
-					html+="<tr><td>조회된 가계부 정보가 없습니다.</td></tr>";
-					$("#tbl-cal").html(html).show();
-				}
-			}
-		});
-</script>
-Calendar
--->
  <script>
 $('#calendar').fullCalendar({
+	themeSystem: 'bootstrap4',
 	header : {
 		left : 'prev,next today',
 		center : 'title',
@@ -400,21 +359,21 @@ $('#calendar').fullCalendar({
 
 					case 101:
 						events.push({
-							title : $(this).attr('ACALL'),
+							title : 'In:'+$(this).attr('ACALL'),
 							start : $(this).attr('ACDATE'),
 							allDay : true,
-							color : 'white',
+							color : 'powderblue',
 							textColor : 'blue',
 							fontSize : '5px'
 						});
 						break;
 					case 201:
 						events.push({
-							title : $(this).attr('ACALL'),
+							title : 'Ex:'+$(this).attr('ACALL'),
 							start : $(this).attr('ACDATE'),
 							allDay : true,
 							color : 'white',
-							textColor : "rgb(160,171,188)",
+							textColor : "salmon",
 							fontSize : '5px'
 						});
 						break;
@@ -429,11 +388,16 @@ $('#calendar').fullCalendar({
 				console.log(errorThrown);
 			}
 		});
+	},
+ 	dayClick: function() {
+	    alert("this is event");
 	}
 });
 </script>
 <!-- acMain.js -->
-<script src="<c:url value="/resources/acbook/js/fullcalendar.min.js" />"></script>
+<script src="<c:url value="/resources/acbook/fullcalendar/jquery.min.js" />"></script>
+<script src="<c:url value="/resources/acbook/fullcalendar/moment.min.js" />"></script>
+<script src="<c:url value="/resources/acbook/fullcalendar/fullcalendar.js" />"></script>
 <!-- FullCalendar -->
 <script src="<c:url value="/resources/acbook/js/jquery-ui.min.js" />"></script>
 <!-- footer -->

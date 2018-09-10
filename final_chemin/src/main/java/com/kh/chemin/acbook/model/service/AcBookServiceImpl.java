@@ -64,6 +64,11 @@ public class AcBookServiceImpl implements AcBookService {
 	public List<Model> monthlyDispenditure() {
 		return dao.monthlyDispenditure(sqlSession);
 	}
+
+	@Override
+	public Map<String, Object> acSelectOne(int acNo) {
+		return dao.acSelectOne(sqlSession,acNo);
+	}
 	
 	
 	

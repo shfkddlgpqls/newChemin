@@ -9,7 +9,7 @@
 <!-- ProgressBar: ac_inputIn -->
 <link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/ac_navBar.css"/>">
 <!-- ProgressBar: ac_inputIn -->
-<link rel="stylesheet" type="text/css" href="${path}/resources/acbook/css/acMain.css"/>
+<link rel="stylesheet" type="text/css" href="${path}/resources/acbook/css/acMain.css?var3"/>
 
 
 <!------ Include the above in your HEAD tag ---------->

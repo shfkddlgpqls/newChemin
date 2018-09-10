@@ -10,7 +10,7 @@
 <!-- sideBar -->
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
 <!-- ProgressBar: ac_inputIn -->
-<link rel="stylesheet" type="text/css" href="${path}/resources/acbook/css/acMain.css"/>
+<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/acMain.css?var4"/>">
 <!-- Main Start -->
 <div class="col-md-10 col-sm-8 main-content">
 
