@@ -1,6 +1,7 @@
 package com.kh.chemin.map.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,36 @@ public class PlaceServiceImpl implements PlaceService {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public List<Place> placeList() {
+		List<Place> placeList = dao.placeList(sqlSession);
+		return placeList;
+	}
+
+	@Override
+	public Place placeSelect(int plaNo) {
+		Place place = dao.placeSelect(sqlSession,plaNo);
+		return place;
+	}
+
+	@Override
+	public List<PlaceAttachment> selectAttachList(int plaNo) {
+		List<PlaceAttachment> attachList = dao.selectAttachList(sqlSession,plaNo);
+		return attachList;
+	}
+
+	@Override
+	public List<PlaceMenu> selectMenuList(int plaNo) {
+		List<PlaceMenu> menuList = dao.selectMenuList(sqlSession,plaNo);
+		return menuList;
+	}
+
+	@Override
+	public List<Place> placeSearch(Map map) {
+		List<Place> plaList = dao.placeSearch(sqlSession, map);
+		return plaList;
 	}
 	
 }
