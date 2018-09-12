@@ -47,10 +47,11 @@
           datatype:"json",
           success:function(data){
              if(data==1){
+             	fn_cartCount();
                 swal
                 ({
                    title: "["+pName+"] 추가",
-                    text: "장바구니에 상품이 담겼습니다. 확인하러 go?!",
+                    text: "장바구니 상품은 7일간 보관됩니다.\n확인하러 장바구니로 이동하시겠습니까?!",
                     icon: "success",
                     buttons: true,
                     dangerMode: true,
@@ -63,13 +64,13 @@
                    }
                 });
              } else if(data==0){
-                swal("["+pName+"] 추가 실패", "장바구니에 상품 추가를 실패하였습니다.(로그인 후 이용하세용)", "error");
+                swal("["+pName+"] 추가 실패", "장바구니에 상품 추가를 실패하였습니다.\n로그인 후 이용하세용", "error");
              } else {
                 /* 상품이 이미 들어있는 경우 */
                 swal
                 ({
                    title: "["+pName+"] 존재",
-                    text: "장바구니에 상품이 이미 존재합니다. 확인하러 go?!",
+                    text: "장바구니에 상품이 이미 존재합니다.\n확인하러 장바구니로 이동하시겠습니까?!",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,

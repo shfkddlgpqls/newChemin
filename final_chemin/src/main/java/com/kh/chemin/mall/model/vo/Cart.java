@@ -1,7 +1,5 @@
 package com.kh.chemin.mall.model.vo;
 
-import java.sql.Date;
-
 public class Cart {
 	private int listNo;
 	private String userId;
@@ -10,12 +8,12 @@ public class Cart {
 	private int amount;
 	private String payYn;
 	private int totalPrice;
-	private Date cDate;
+	private String cDate;
 	
 	public Cart() {}
 
 	public Cart(int listNo, String userId, String orderNo, int pno, int amount, String payYn, int totalPrice,
-			Date cDate) {
+			String cDate) {
 		super();
 		this.listNo = listNo;
 		this.userId = userId;
@@ -83,11 +81,11 @@ public class Cart {
 		this.totalPrice = totalPrice;
 	}
 
-	public Date getcDate() {
+	public String getcDate() {
 		return cDate;
 	}
 
-	public void setcDate(Date cDate) {
+	public void setcDate(String cDate) {
 		this.cDate = cDate;
 	}
 

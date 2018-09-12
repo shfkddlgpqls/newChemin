@@ -1,7 +1,5 @@
 package com.kh.chemin.mall.model.vo;
 
-import java.sql.Date;
-
 public class Product {
 	private int pno;
 	private int cno;
@@ -12,12 +10,12 @@ public class Product {
 	private int price;
 	private int pCount;
 	private int sales;
-	private Date pDate;
+	private String pDate;
 	
 	public Product() {}
 
 	public Product(int pno, int cno, String pName, String details, String oriImg, String reImg, int price, int pCount,
-			int sales, Date pDate) {
+			int sales, String pDate) {
 		super();
 		this.pno = pno;
 		this.cno = cno;
@@ -103,11 +101,11 @@ public class Product {
 		this.sales = sales;
 	}
 
-	public Date getpDate() {
+	public String getpDate() {
 		return pDate;
 	}
 
-	public void setpDate(Date pDate) {
+	public void setpDate(String pDate) {
 		this.pDate = pDate;
 	}
 
