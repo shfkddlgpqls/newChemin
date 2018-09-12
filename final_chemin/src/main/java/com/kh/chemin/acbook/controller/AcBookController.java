@@ -1,6 +1,7 @@
 package com.kh.chemin.acbook.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,14 +25,12 @@ import com.kh.chemin.acbook.model.service.AcBookService;
 import com.kh.chemin.acbook.model.vo.AcBook;
 
 
-
 @Controller
 public class AcBookController extends HttpServlet{
-	
-	/**
-	 * 
-	 */
+	private Logger logger = LoggerFactory.getLogger(AcBookController.class);
+
 	private static final long serialVersionUID = -5563158563639817L;
+	
 	@Autowired
 	AcBookService service;
 	
@@ -38,14 +39,9 @@ public class AcBookController extends HttpServlet{
 		return "acbook/ac_main";		
 	}
 	
-	@RequestMapping("ac_inputIn.do")
+	@RequestMapping("ac_insertAc.do")
 	public String ac_inputIn() {
-		return "acbook/ac_inputIn";
-	}
-
-	@RequestMapping("ac_dsepIn.do")
-	public String ac_despIn() {
-		return "acbook/ac_despIn";
+		return "acbook/ac_insertAc";
 	}
 
 	@RequestMapping("ac_calendar.do")
@@ -66,40 +62,18 @@ public class AcBookController extends HttpServlet{
 	public String ac_community() {
 		return "acbook/ac_community";
 	}
-
-
-
-	//ac_inputIn.jsp: 가계부 수입 입력
-	@RequestMapping("acbook/insertIncome.do")
-	public String insertIncome(AcBook ac) {
-		int result = service.insertIn(ac);
-		System.out.println(ac);
-		String msg="";
-		String loc="";
-		
-		if(result>0) {
-			msg="가계부에 수입이 등록되었습니다!";
-		}
-		else {
-			msg="등록 실패!";
-		}
-		return "acbook/ac_calendar";
-		
-	}
 	
-	
-	//ac_despIn.jsp : 가계부 지출 등록
-	@RequestMapping("acbook/insertExpenditure.do")
+	//ac_insertAc
+	@RequestMapping("acbook/insertAc.do")
 	public String insertExpenditure(AcBook ac){
 		
 		int result= service.insertEx(ac);
-		System.out.println(ac);
+		logger.debug("insert complate that data is: "+ac);
 		String msg="";
 		String loc="";
-		
-		//mem_id(project 연결되면 memberLoggedIn아이디와 일치하는 회원 아이디 가져오는것으로 변경)
+
 		if(result>0) {
-			msg="가계부에 지출이 등록되었습니다!";
+			msg="플레리북 등록 완료";
 		}
 		else {
 			msg="등록 실패!";
@@ -120,7 +94,7 @@ public class AcBookController extends HttpServlet{
 	//ac_calendar.jsp: 가계부 상세정보 출력리스트
 	@RequestMapping(value="acbook/acSelectPageList.do")
 	public void selectPageList(@RequestParam(value="cPage", required=false, defaultValue ="1")int cPage, HttpServletResponse response, HttpServletRequest request) throws ServletException, IOException{
-		System.out.println(cPage);
+		logger.debug("request parameter to ajax where ac_calendar.jsp, value is cPage: "+cPage);
 		ModelAndView mv = new ModelAndView();
 		int numPerPage=5;
 		List<Map<String,String>>list = service.selectPageList(cPage,numPerPage);
@@ -159,19 +133,28 @@ public class AcBookController extends HttpServlet{
 		new Gson().toJson(selectExGrade, response.getWriter());
 	}
 	
-	public String selectLank() {
-		
-		return "";
-	}
 	
 	@RequestMapping("/ajax/monthlyDispenditure")
 	public void monthlyDispenditure(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Model> monthlyDispenditure= service.monthlyDispenditure();
 		response.setContentType(("application/json;charset=UTF-8"));
-		System.out.println(monthlyDispenditure);
 		new Gson().toJson(monthlyDispenditure, response.getWriter());
 		
-	};
+	}
+	
+	
+	//request acNo for search acBook detailView
+	@RequestMapping(value="acbook/acSelectOne.do")
+	public void acSelectOne(@RequestParam(value="acNo")int acNo, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		logger.debug("request parameter to ajax where ac_calendar.jsp, value is acNo: "+acNo);
+		Map<String,Object> map = new HashMap<String, Object>();
+		map = service.acSelectOne(acNo);
+		logger.debug("this is map: "+map);
+		response.setContentType("application/json;charset=UTF-8");
+		new Gson().toJson(map,response.getWriter());
+	}
+
+
 	
 /*	//ac_calendar.jsp: 가계부 상세정보 출력리스트
 		@RequestMapping("/acbook/acSelectList.do")

@@ -30,6 +30,7 @@
    		</interceptor>
    		<interceptor>
    			<mapping path="/community/**/*.do"/>
+   			<mapping path="/mypage/**/*.do"/>
    			<beans:bean id="LoginCheckInterceptor" class="com.kh.chemin.common.interceptor.LoginCheckInterceptor"></beans:bean>
    		</interceptor>
 	</interceptors>

@@ -20,5 +20,23 @@
 		insert into pla_menu(MENUNO,PLANO,MENUNAME,MENUPRICE) values(seq_placemenu_no.nextval,#{plaNo},#{menuName},#{menuPrice})
 	</insert>
 	
+	<select id="placeList" resultType="place">
+		select*from place
+	</select>
 	
+	<select id="placeSelect" parameterType="_int" resultType="place">
+		select * from place where PLANO = #{plaNo}
+	</select>
+	
+	<select id="selectAttachList" parameterType="_int" resultType="placeAttach">
+		select*from pla_attachment where PLANO = #{plaNo}
+	</select>
+	
+	<select id="selectMenuList" parameterType="_int" resultType="placeMenu">
+		select*from pla_menu where PLANO = #{plaNo}
+	</select>
+	
+	<select id="placeSearch" parameterType="map" resultType="place">
+		select*from place where PLACATEGORY=#{plaCategory} and PLAAREA=#{plaArea}
+	</select>
 </mapper>

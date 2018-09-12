@@ -2,9 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//DN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="mypage">
 <!-- resultType은 vo에 있는것을 가져오는것을 말함/ resultMap은 db에 있는걸 바로 가져올때. jsp에 쏴줄땐 대문자로 적음 -->
-	<resultMap type="map" id="placeMap">
-		
-	</resultMap>
+	<resultMap type="map" id="placeMap"></resultMap>
 	<select id="selectPlaceList" parameterType="String" resultMap="placeMap">
 		select*from place where USERID=#{userId} order by PLADATE desc
 	</select>
@@ -20,4 +18,22 @@
 	<delete id="placeDelete" parameterType="_int">
 		delete place where PLANO = #{plaNo}
 	</delete>
+	
+	<!-- 커뮤니티 관리 -->
+	<resultMap type="map" id="communityMap"></resultMap>
+	<select id="communityList" resultMap="communityMap" parameterType="String">
+		select c.*,
+		(select count(*) from community_comment cc where c.communityno=cc.communityno) as ccount
+		from community c 
+		where writer=#{community_writer}
+		order by communitydate desc
+	</select>
+	
+	<resultMap type="map" id="attachmentMap"></resultMap>
+	<select id="attachmentList" parameterType="list" resultMap="attachmentMap">
+		select * from attachment where communityno in
+		<foreach item="a" collection="list" open="(" separator="," close=")">
+		#{a}
+		</foreach>
+	</select>
 </mapper>
