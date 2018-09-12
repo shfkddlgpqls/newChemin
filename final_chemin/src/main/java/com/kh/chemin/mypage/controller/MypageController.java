@@ -171,7 +171,7 @@ public class MypageController
 			if(!menuName[i].isEmpty()&&!menuPrice[i].isEmpty()) {
 			PlaceMenu menu = new PlaceMenu();
 			menu.setMenuName(menuName[i]);
-			menu.setMenuPrice(menuPrice[0]);
+			menu.setMenuPrice(menuPrice[i]);
 			menuList.add(menu);
 			}
 			}

@@ -32,10 +32,18 @@
 	</update>
 	
 	<update id="updateMenu" parameterType="placeMenu">
-		update pla_menu set MENUNAME=#{menuName}, MENUPRICE=#{menuPrice} where PLANO=#{plaNo}
+		insert into pla_menu(MENUNO,PLANO,MENUNAME,MENUPRICE) values(seq_placemenu_no.nextval,#{plaNo},#{menuName},#{menuPrice})
 	</update>
 	
 	<update id="updateAttach" parameterType="placeAttach">
-		update pla_attachment set ORIMG=#{orImg}, REIMG=#{reImg}, ATTACHDATE =sysdate where PLANO=#{plaNo}
+		insert into PLA_ATTACHMENT(ATTACHMENTNO,PLANO,ORIMG,REIMG) values(SEQ_PLAATTACH_NO.nextval,#{plaNo},#{orImg},#{reImg})
 	</update>
+	
+	<delete id="removeMenu" parameterType="_int">
+		delete pla_menu where PLANO=#{plaNo}
+	</delete>
+	
+	<delete id="removeAttach" parameterType="_int">
+		delete pla_attachment where PLANO=#{plaNo}
+	</delete>
 </mapper>

@@ -15,6 +15,8 @@ public interface MypageDao {
 	int placeDelete(SqlSessionTemplate sqlSession, int plaNo);
 	Place placeSelect(SqlSessionTemplate sqlSession, int plaNo);
 	int placeUpdate(SqlSessionTemplate sqlSession, Place place);
-	int updateMenu(SqlSessionTemplate sqlSession, PlaceMenu m);
-	int updateAttach(SqlSessionTemplate sqlSession, PlaceAttachment a);
+	int insertMenu(SqlSessionTemplate sqlSession, PlaceMenu m);
+	int insertAttach(SqlSessionTemplate sqlSession, PlaceAttachment a);
+	int removeMenu(SqlSessionTemplate sqlSession, int plaNo);
+	int removeAttach(SqlSessionTemplate sqlSession, int plaNo);
 }
