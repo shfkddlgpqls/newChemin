@@ -2,17 +2,28 @@
 <!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
-	<!-- Appenders -->
-	<appender name="console" class="org.apache.log4j.ConsoleAppender">
-		<param name="Target" value="System.out" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
-		</layout>
-	</appender>
-	
-	<logger name="com.kh.chemin.common.aop.LoggerAspect" additivity="false">
+   <!-- Appenders -->
+   <!-- 로그를 남기고 처리할 객체를 지정하는곳 처리할 클래스와 타겟을 설정 -->
+   <appender name="console" class="org.apache.log4j.ConsoleAppender">
+      <param name="Target" value="System.out" />
+      <!-- 로그를 찍을 때 어떠한 형식으로 찍을건지, 형식을 나타내는 클래스 -->
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%-5p: %c - %m%n" />
+      </layout>
+   </appender>
+   
+   <!-- log4jremix어펜더 추가 -->
+   <appender name="sqlLogger" class="org.apache.log4j.ConsoleAppender">
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%-5p : %m%n"/>
+      </layout>
+   </appender>
+   
+   <!-- Application Loggers -->
+   <!-- 패키지 하위에 있는 클래스들에 대한 로거가 찍혀있으면 출력; level이 info라는것은 info부터 출력한다는 뜻; level: debug<info<warn<error<fatal(저장공간 부족, 윈도우 이상) -->
+   <logger name="com.kh.chemin.common.aop.LoggerAspect" additivity="false">
 		<level value="debug"/>
-<!-- 		<appender-ref ref="loginLogger"/> -->
+		<appender-ref ref="loginLogger"/>
 	</logger>
    <logger name="jdbc.sqlonly" additivity="false">
       <level value="info"/>
