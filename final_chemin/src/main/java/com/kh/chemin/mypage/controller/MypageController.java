@@ -1,11 +1,17 @@
 package com.kh.chemin.mypage.controller;
 
+import java.io.File;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,11 +19,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kh.chemin.community.model.vo.Attachment;
+import com.kh.chemin.community.model.vo.Community;
 import com.kh.chemin.map.controller.MapController;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
@@ -114,6 +124,27 @@ public class MypageController
 		return mv;
 	}
 	
+	@RequestMapping("/mypage/myCommunityList.do")
+	public ModelAndView myCommunityList(ModelAndView mv,String userId)
+	{
+		System.out.println("userId::"+userId);
+		List<Map<String,Object>> list=service.communityList(userId);
+		logger.debug("communityList::"+list);
+		List<Integer> cno=new ArrayList<Integer>();
+		int[] no = new int[list.size()];
+		for(int i=0;i<list.size();i++)
+		{
+			no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
+			cno.add(no[i]);
+		}
+		List<Map<String,Object>> attList=service.attachmentList(cno);
+		logger.debug("attachmentList::"+attList);
+		
+		mv.addObject("list",list);
+		mv.addObject("attList",attList);
+		mv.setViewName("mypage/myCommunityList");
+		return mv;
+	}
 }
 
 

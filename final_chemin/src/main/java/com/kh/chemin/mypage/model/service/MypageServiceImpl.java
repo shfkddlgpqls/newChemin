@@ -1,6 +1,7 @@
 package com.kh.chemin.mypage.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,16 @@ public class MypageServiceImpl implements MypageService {
 		int result = dao.placeDelete(sqlSession, plaNo);
 		return result;
 	}
+
+	@Override
+	public List<Map<String, Object>> communityList(String userId) {
+		return dao.communityList(sqlSession,userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> attachmentList(List<Integer> cno) {
+		return dao.attachmentList(sqlSession,cno);
+	}
+
 
 }

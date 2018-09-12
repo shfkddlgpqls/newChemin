@@ -1,6 +1,7 @@
 package com.kh.chemin.mypage.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -32,4 +33,15 @@ public class MypageDaoImpl implements MypageDao {
 		return sqlSession.delete("mypage.placeDelete",plaNo);
 	}
 
+	@Override
+	public List<Map<String, Object>> communityList(SqlSessionTemplate sqlSession,String userId) {
+		return sqlSession.selectList("mypage.communityList",userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> attachmentList(SqlSessionTemplate sqlSession, List<Integer> cno) {
+		return sqlSession.selectList("mypage.attachmentList",cno);
+	}
+
+	
 }
