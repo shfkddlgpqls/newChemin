@@ -214,7 +214,7 @@ function validate(){
 <section>
 	<div class="container" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 		<div class="row" style="margin-top:55px">
-			<form action="${path}/map/placeInsert.do" method="post" onsubmit="return validate();" enctype="multipart/form-data">
+			<form action="${path}/map/placeInsert.do?userId=${memberLoggedIn.userId}" method="post" onsubmit="return validate();" enctype="multipart/form-data">
 		    	 <h1 class="text-uppercase nanumFont">
 		    		<i class="fa fa-edit"></i> 장소 등록
 		    	</h1>
@@ -222,6 +222,7 @@ function validate(){
 		    	<div class="info col-md-12">
 		    		<div class="row frist">
 			    		<div class="col-md-2">
+			    		
 			    			<span>지역선택</span>
 			    		</div>
 			    		<div class="col-md-10">

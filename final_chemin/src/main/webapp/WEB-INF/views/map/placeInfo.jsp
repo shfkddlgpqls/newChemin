@@ -141,7 +141,7 @@
 <section>
 <div class="container">
       <div class="title_box">
-      	<h1 style="margin-top:3%;font-size:50px"><strong>용호낙지 강남점</strong></h1>
+      	<h1 style="margin-top:3%;font-size:50px"><strong>${place.plaName}</strong></h1>
       	<div class="row" style="width:40%;margin-left:auto; margin-right:auto;text-align:center">
       	<span style="margin:2%;font-size:1.09em">평점 </span> 	
       			<div class="star-rating" style=" font-size:1.3em;margin:1%">
@@ -176,30 +176,52 @@
 	      		<span style="font-size:20px;text-transform:uppercase;"><strong>상세정보</strong></span>
 	      	</div>
 	      	<div style="float:right; color:#989898;font-size:5px;margin-right:13%">
-	      		<span style="font-size:15px;text-transform:uppercase;">업데이트 2018.08.27</span>
+	      		<span style="font-size:15px;text-transform:uppercase;">등록날짜 <fmt:formatDate value="${place.plaDate}" pattern="yyyy년  MM월  dd일"/></span>
 	      	</div>
       	</div>
 
       	<div class="row">
       	<div style="margin-left:15%;float:left;">
       		<i class="fa fa-map-marker" style="font-size:20px;color:#989898;"></i>
-      		<span >서울 강남구 테헤란로 119 (우)21574</span>
-      		 <p>(지번) 역삼동 649-14 1층</p> 
+      		<c:forTokens items="${place.plaAddr}" delims="/" var="addr" varStatus="status">
+      		  <c:if test="${status.index == 0}">
+	      		<span style="font-size:0.94em">${addr}</span><br>
+	      	  </c:if>
+	      	  <c:if test="${status.index == 1}">
+	      		<span style="width:20%;font-size:0.94em">&nbsp;&nbsp;&nbsp;(우)${addr}</span>
+	      	  </c:if>
+	      	  <c:if test="${status.index == 2}">	
+	      		<span style="font-size:0.94em">&nbsp;&nbsp;&nbsp;(지번)${addr}</span> 
+	      	  </c:if>	
+      		</c:forTokens>
       	</div> 
       	</div>
       	
       	<div class="row">
-      	<div style="margin-left:15%;float:left;">
-      		<i class="fa fa-clock-o" style="font-size:20px;color:#989898;"></i>
-      		<span >영업시간 영업종료</span>
-      		<p>매일 11:00 ~ 23:00 연중무휴</p> 
+      	<div style="margin-left:15%;float:left;margin-top:1%">
+      		<i class="fa fa-clock-o" style="font-size:19px;color:#989898;"></i>
+      		<span style="font-size:0.94em">영업시간</span><br>
+      		<c:forTokens items="${place.plaTime}" delims="/" var="time" varStatus="status"> 
+      		  <c:if test="${status.index == 0}">		
+	      		<span style="font-size:0.94em;">&nbsp;&nbsp;&nbsp; ${time} </span> 
+	      	  </c:if>
+	      	  <c:if test="${status.index == 1}">	
+	      		<span style="font-size:0.94em;">${time} ~</span>
+	      	  </c:if>
+	      	  <c:if test="${status.index == 2}">
+	      		<span style="font-size:0.94em;">${time}</span>
+	      	  </c:if>
+	      	  <c:if test="${status.index == 3}">	
+	      		<span style="font-size:0.94em;color:#F05F40">${time}</span>
+	      	  </c:if>	
+      		</c:forTokens>
       	</div> 
       	</div>
       	
       	<div class="row">
-      	<div style="margin-left:15%;float:left">
+      	<div style="margin-left:15%;float:left;margin-top:1%">
       		<i class="fa fa-phone" style="font-size:20px;color:#989898"></i>
-      		<span >02-1564-5441</span>
+      		<span style="font-size:0.94em">${place.plaPhone }</span>
       	</div> 
       	</div>	
       	
@@ -216,38 +238,14 @@
       	<div class="row">
       	<div style="margin-left:15%;float:left;">
       		<table>
+      			<c:forEach items="${menuList}" var="menu">
       			<tr>
-	      			<th></th>
-	      			<th></th>
-	      			<th></th>
-      			</tr>
-      			<tr>
-      				<td>낙곱새</td>
+      				<td>${menu.menuName}</td>
       				<td>&nbsp;---------------------------------------------------&nbsp;</td>
-      				<td>10000원</td>
+      				<td>${menu.menuPrice}원</td>
       			
       			</tr>
-      			
-      			<tr>
-      				<td>용호전골</td>
-      				<td>&nbsp;---------------------------------------------------&nbsp;</td>
-      				<td>10000원</td>
-      			</tr>
-      			<tr>
-      				<td>낙새</td>
-      				<td>&nbsp;---------------------------------------------------&nbsp;</td>
-      				<td>10000원</td>
-      			</tr>
-      			<tr >
-      				<td>라면 · 우동</td>
-      				<td>&nbsp;---------------------------------------------------&nbsp;</td>
-      				<td>2000원</td>
-      			</tr>
-      			<tr>
-      				<td>사이다 · 콜라</td>
-      				<td>&nbsp;---------------------------------------------------&nbsp;</td>
-      				<td>2000원</td>
-      			</tr>
+      			</c:forEach>
       		</table>
       	</div> 
       	</div>
@@ -269,17 +267,15 @@
     <!-- main slider carousel -->
     
         <div id="ThumbnailCarousel" class="carousel slide col-xs-12" data-ride="carousel">
-			  <div class="carousel-inner">
-			    <div class="carousel-item active">
-			      <div class="row">
-			          <div class="col-md-3 col-sm-6"><a href="#x" class="thumbnail"><img src="${path}/resources/base/img/menu.jpg" alt="Image" class=" img-thumbnail"></a>
+			 <div class="carousel-inner">
+			  <div class="carousel-item active">
+			  	<div class="row">
+			  	  <c:forEach items="${attachList}" var="attach" varStatus="status">
+			  	     <c:if test="${status.index <4}">
+			          <div class="col-md-3"><a href="#x" class="thumbnail"><img src="${path}/resources/upload/place/attach/${attach.reImg}" alt="Image" class=" img-thumbnail"></a>
 			          </div>
-			          <div class="col-md-3 col-sm-6"><a href="#x" class="thumbnail"><img src="${path}/resources/base/img/menu.jpg" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			          <div class="col-md-3"><a href="#x" class="thumbnail"><img src="${path}/resources/base/img/menu.jpg" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="${path}/resources/base/img/menu.jpg" alt="Image" class=" img-thumbnail"></a>
-			          </div>
+			         </c:if> 
+			        </c:forEach>  
 			      </div>
 			    </div>
 			    <div class="carousel-item">
@@ -294,7 +290,8 @@
 			          </div>
 			      </div>
 			    </div>
-			    <div class="carousel-item">
+				
+			  <!--   <div class="carousel-item">
 			      <div class="row">
 			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/PIAimages/0566046_PE664563_S3.JPG" alt="Image" class="img-fluid img-thumbnail"></a>
 			          </div>
@@ -305,7 +302,7 @@
 			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/bumerang-bumelang-osgeol-i-hwaiteu__0192382_PE347080_S4.JPG" alt="Image" class=" img-thumbnail"></a>
 			          </div>
 			      </div>
-			    </div>
+			    </div> -->
 			  </div>
 			  
 			  <a class="carousel-control-prev "  href="#ThumbnailCarousel" role="button" data-slide="prev">
@@ -424,6 +421,7 @@ geocoder.addressSearch('서울 강남구 테헤란로 119', function(result, sta
 });    
 </script>  -->
     <script>
+   
     var $star_rating = $('.star-rating .fa');
 
     var SetRatingStar = function() {

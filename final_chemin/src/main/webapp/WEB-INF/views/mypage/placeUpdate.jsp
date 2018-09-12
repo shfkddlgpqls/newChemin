@@ -263,11 +263,11 @@ $(function() {
 	    	$('[id=mePriceOne]').val('${menu.menuPrice}')
 	    	
 	    </c:if>
-		<c:if test="${status.index>0}">
+	/* 	<c:if test="${status.index>0}">
 			$('[id=subMenu]').val('${menu.menuName}')
 			$('[id=subPrice]').val('${menu.menuName}')
 			add_item()
-		</c:if>
+		</c:if> */
 	    </c:forEach>
 
 });
@@ -285,7 +285,7 @@ function validate(){
 				  button: "확인",
 				});
 			return false;
-		}else if(imgName.trim()==0){
+		}else if(mainImg.trim()==0){
 			swal({
 				  text: "대표 사진을 등록해주세요",
 				  icon: "warning",
@@ -388,7 +388,7 @@ function validate(){
 		                            <input class="upload-name" name="imgName" value="${place.reImg}" disabled="disabled">
 		
 		                           <label for="ex_filename">업로드</label>
-		                          <input type="file" name="mainImg" id="ex_filename" class="upload-hidden"> 
+		                          <input type="file" name="mainImg" id="ex_filename" class="upload-hidden" value="${place.reImg}"> 
 		                        </div>
 				                 <!-- <div class="custom-file" >
 				                    <input style="width:50%" type="file" class="custom-file-input" name="mainImg" id="mainImg1">

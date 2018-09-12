@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,9 +18,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.chemin.community.controller.CommunityController;
 import com.kh.chemin.community.model.service.CommunityService;
 import com.kh.chemin.map.model.service.PlaceService;
@@ -45,7 +49,14 @@ public class MapController {
 	
 	//장소 상세정보를 보여주는 화면
 	@RequestMapping("/map/placeInfo.do")
-	public String info() {
+	public String placeinfo(String plaNo, Model model, HttpServletRequest reqeust) {
+		int no = Integer.parseInt(reqeust.getParameter("plaNo"));
+		Place place = service.placeSelect(no);
+		List<PlaceAttachment> attachList = service.selectAttachList(no);
+		List<PlaceMenu> menuList = service.selectMenuList(no);
+		model.addAttribute("place", place);
+		model.addAttribute("attachList", attachList);
+		model.addAttribute("menuList", menuList);
 		return "/map/placeInfo";
 	}
 	
@@ -56,6 +67,7 @@ public class MapController {
 	}
 
 	
+	//장소 등록
 	@RequestMapping(value="/map/placeInsert.do", method = RequestMethod.POST)
 	public ModelAndView placeInsert(Place place ,@RequestParam("mainImg")MultipartFile mainImg,@RequestParam("file")MultipartFile[] file,HttpServletRequest request,String[] menuName,String[] menuPrice,String[] menuCheck, String phoneFirst, String phoneMiddle, String phoneEnd,String postCode, String roadAddr, String jibunAddr,
 							  String day, String startTime, String endTime,String subContent,String keyword1,String keyword2, String keyword3, String keyword4, String keyword5) {
@@ -68,7 +80,7 @@ public class MapController {
 		place.setPlaAddr(address);
 		place.setPlaTime(time);
 		place.setPlaKeyword(keyword);
-		place.setUserId("hyebeen");
+		place.setUserId(place.getUserId());
 
 
 		//대표이미지 저장경로 지정 및 서버에 이미지 저장
@@ -91,7 +103,7 @@ public class MapController {
 			if(!menuName[i].isEmpty()&&!menuPrice[i].isEmpty()) {
 			PlaceMenu menu = new PlaceMenu();
 			 menu.setMenuName(menuName[i]);
-			 menu.setMenuPrice(menuPrice[0]);
+			 menu.setMenuPrice(menuPrice[i]);
 			 menuList.add(menu);
 			}
 		}
@@ -134,5 +146,31 @@ public class MapController {
 		mv.setViewName("common/msg");
 		return mv;
 	}
+	
+	//장소 카테고리 검색
+	@RequestMapping("/map/placeSearch.do")
+	public String placeSearch(String plaCategory, String plaArea, Model model) {
+		Map<String, String> map = new HashMap<>();
+		map.put("plaCategory", plaCategory);
+		map.put("plaArea", plaArea);
+		
+		List<Place> plaList = service.placeSearch(map);
+		model.addAttribute("plaList", plaList);
+		return "/map/mapView";
+	}
+	
+	/*@RequestMapping(value="/map/placeSelect.do",produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String placeSelect(int plaNo) throws Exception
+	{
+		Map<String, Object> map = new HashMap<String, Object>();
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonStr = null;
+		Place place = service.placeSelect(plaNo);
+		
+		map.put("place", place);
+		jsonStr = mapper.writeValueAsString(map);
+		return jsonStr;
+	}*/
 	
 }

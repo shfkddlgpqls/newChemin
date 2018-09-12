@@ -193,7 +193,13 @@ function fn_modal(obj){
 		    		}
 		    		
 		    } 		
-		}
+		},error:function(jxhr,textStatus,error)
+         {
+            console.log("ajax실패!");
+            console.log(jxhr);
+            console.log(textStatus);
+            console.log(error);
+         }
 	})
 
 }

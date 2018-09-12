@@ -51,24 +51,31 @@ public class MypageServiceImpl implements MypageService {
 
 	@Override
 	public int placeUpdate(Place place, List<PlaceMenu> menuList, List<PlaceAttachment> attList) {
-	/*	int result=0;
-		int plaNo=0;*/
+		int result=0;
+		int plaNo=0;
 		
-		int result = dao.placeUpdate(sqlSession, place);
-	/*	plaNo = place.getPlaNo();
+		result = dao.placeUpdate(sqlSession, place);
+		plaNo = place.getPlaNo();
+		
 		
 		if(menuList.size()>0) {
+			result = dao.removeMenu(sqlSession,plaNo);
+			if(result>0) {
 			for(PlaceMenu m : menuList) {
 				m.setPlaNo(plaNo);
-				result =dao.updateMenu(sqlSession, m);
+				result =dao.insertMenu(sqlSession, m);
+				}
 			}
 		}
 		if(attList.size()>0) {
+			result = dao.removeAttach(sqlSession,plaNo);
+			if(result>0) {
 			for(PlaceAttachment a : attList) {
 				a.setPlaNo(plaNo);
-				result =dao.updateAttach(sqlSession, a);
+				result =dao.insertAttach(sqlSession, a);
+			 }
 			}
-		}*/
+		}
 		
 		return result;
 	}
