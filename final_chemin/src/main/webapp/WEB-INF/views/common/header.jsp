@@ -74,12 +74,35 @@
               <a class="nav-link js-scroll-trigger" href="${path }/map/mapView.do">Map</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="${path }/mall/mainMall.do">Mall</a>
+              <a class="nav-link js-scr!ll-trigger"	href="${path }/mall/mainMall.do">Mall</a>
             </li>
             <c:if test="${memberLoggedIn!=null }"> 
-               <li class="nav-item">
-                 <a class="nav-link js-scroll-trigger" href="${path }/mall/cartList.do">cart</a>
+              	<li class="nav-item">
+                 <a class="nav-link js-scroll-trigger" href="${path }/mall/cartList.do">cart <span id="cartCount" class="badge" style="background: #AE9797;color: #FDF2F2;"></span></a>
                </li>
+               <input type="hidden" id="userId" value="${memberLoggedIn.userId }"/>
+               <script>
+               $(window).load(function(){
+					fn_cartCount();
+				});
+				
+				function fn_cartCount(){
+					var userId=$('#userId').val();
+					$.ajax({
+						type:"get",
+						url:"${path}/mall/cartCount.do",
+						data:{userId:userId},
+						datatype:"json",
+						success:function(data){
+							$('#cartCount').text(data);
+						},
+						error:function(jxhr,textStatus,error){
+							console.log("cartCount ajax 실패 : "+jxhr+" "+textStatus+" "+error);
+						}
+					});
+				}
+               </script>
+               
             </c:if>
             <li class="nav-item">
              <a class="nav-link js-scroll-trigger" href="${path}/community/communityList.do">Good Tip</a>
