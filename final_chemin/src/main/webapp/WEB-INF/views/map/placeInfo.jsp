@@ -36,7 +36,6 @@
         height:auto;
         border:solid 1px #E5E8E8;
       }
-
  	   .title_box{
  	   	 margin-left:auto;
   		margin-right:auto;
@@ -47,11 +46,9 @@
  	   	 box-shadow: 0px 2px 5px #BDBDBD;
  	   	 border:solid 1px #E5E8E8;
  	   }
-
       .box {
         width: 80%;      
       }
-
       @media screen and (max-width: 400px) {
         .detail_box {
           color: white;
@@ -148,15 +145,12 @@
   word-wrap: normal;
   white-space: nowrap;
   direction: ltr;
-
   /* Support for all WebKit browsers. */
   -webkit-font-smoothing: antialiased;
   /* Support for Safari and Chrome. */
   text-rendering: optimizeLegibility;
-
   /* Support for Firefox. */
   -moz-osx-font-smoothing: grayscale;
-
   /* Support for IE. */
   font-feature-settings: 'liga';
 }
@@ -168,6 +162,7 @@
 <section>
 <div class="container">
       <div class="title_box">
+      	<input type="hidden" name="plaName" value="${place.plaName}"/>
       	<h1 style="margin-top:3%;font-size:50px"><strong>${place.plaName}</strong></h1>
       	<div class="row" style="width:40%;margin-left:auto; margin-right:auto;text-align:center">
       			<div class="row" id="main_review" style="width:95%;margin-left:auto; margin-right:auto;text-align:center">
@@ -201,6 +196,7 @@
       	<div class="row">
       	<div style="margin-left:15%;float:left;">
       		<i class="fa fa-map-marker" style="font-size:20px;color:#989898;"></i>
+      		<input type="hidden" name="addr" value="${place.plaAddr}">
       		<c:forTokens items="${place.plaAddr}" delims="/" var="addr" varStatus="status">
       		  <c:if test="${status.index == 0}">
 	      		<span style="font-size:0.94em">${addr}</span><br>
@@ -254,7 +250,7 @@
       	</div>
       	
       	<div class="row">
-      	<div style="margin-left:15%;float:left;margin-bottom:5%">
+      	<div style="margin-left:15%;float:left;margin-bottom:4%">
       		<table>
       			<c:forEach items="${menuList}" var="menu">
       			<tr>
@@ -273,7 +269,7 @@
       
      <!-- 사진 내용 -->
        <div class="box picture_box">
-	       <div style="height:6%; margin-top:5%;">
+	       <div style="height:6%; margin-top:5%;margin-bottom:3%">
 		      	<div style="margin-left:13%; float:left">
 		      		<span style="font-size:20px;text-transform:uppercase;"><strong>사진</strong></span>
 		      	</div>
@@ -334,28 +330,66 @@
 	      	</div>
 	      	
 	      	<div class="row" style="width:75%;margin-left:auto;margin-right:auto;">
-				<!-- 1. 약도 노드 -->
-				<div style="margin-bottom:5%;width:100%;" id="daumRoughmapContainer${place.plaStamp}" class="root_daum_roughmap root_daum_roughmap_landing"></div>
-				<input type="hidden" name="stamp" value="${place.plaStamp}"/>
-				<input type="hidden" name="key" value="${place.plaKey}"/>
-				<!-- 2. 설치 스크립트 -->
-				<script charset="UTF-8" class="daum_roughmap_loader_script" src="http://dmaps.daum.net/map_js_init/roughmapLoader.js"></script>
-				
-				<!-- 3. 실행 스크립트 -->
-				<script charset="UTF-8">
-				  var stamp= $('[name=stamp]').val();
-				  var key= $('[name=key]').val()
-				
-					new daum.roughmap.Lander({
-						"timestamp" : stamp,
-						"key" : key,
-						"mapWidth" : "100%",
-						"mapHeight" : "300"
-					}).render();
-				</script>
+	      		 <c:if test="${!empty place.plaStamp}">
+					 <!-- 1. 약도 노드 -->
+					<div style="margin-bottom:5%;width:100%;" id="daumRoughmapContainer${place.plaStamp}" class="root_daum_roughmap root_daum_roughmap_landing"></div>
+					<input type="hidden" name="stamp" value="${place.plaStamp}"/>
+					<input type="hidden" name="key" value="${place.plaKey}"/>
+					<!-- 2. 설치 스크립트 -->
+					<script charset="UTF-8" class="daum_roughmap_loader_script" src="http://dmaps.daum.net/map_js_init/roughmapLoader.js"></script>
+					
+					<!-- 3. 실행 스크립트 -->
+					<script charset="UTF-8">
+					  var stamp= $('[name=stamp]').val();
+					  var key= $('[name=key]').val()
+					
+						new daum.roughmap.Lander({
+							"timestamp" : stamp,
+							"key" : key,
+							"mapWidth" : "100%",
+							"mapHeight" : "300"
+						}).render();
+					</script> 
+					
+				</c:if> 
+				  <c:if test="${empty place.plaStamp}">
+					 <div id="map" style="width:100%;height:45%;margin-bottom:10%"></div>
+					<script>
+						var addr = $('[name=addr]').val();
+						var plaName = $('[name=plaName]').val();
+						var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+						    mapOption = {
+						        center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+						        level: 3 // 지도의 확대 레벨
+						    };  
+						<!-- // 지도를 생성합니다    
+						var map = new daum.maps.Map(mapContainer, mapOption); 
+						// 주소-좌표 변환 객체를 생성합니다
+						var geocoder = new daum.maps.services.Geocoder();
+						// 주소로 좌표를 검색합니다
+						geocoder.addressSearch(addr, function(result, status) {
+						    // 정상적으로 검색이 완료됐으면 
+						     if (status === daum.maps.services.Status.OK) {
+						        var coords = new daum.maps.LatLng(result[0].y, result[0].x);
+						        // 결과값으로 받은 위치를 마커로 표시합니다
+						        var marker = new daum.maps.Marker({
+						            map: map,
+						            position: coords
+						        });
+						         // 인포윈도우로 장소에 대한 설명을 표시합니다
+						        var infowindow = new daum.maps.InfoWindow({
+						            content: '<div style="width:100%;text-align:center;padding:6px 0;">'+plaName+'</div>'
+						        });
+						        infowindow.open(map, marker); 
+						        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+						        map.setCenter(coords);
+						    } 
+						});    
+						</script>  
+				</c:if>  
+					    
 	      	</div> 
 	      </div>
-	      
 	      
 	      
 	      
@@ -395,49 +429,13 @@
 		      	</div>
 	      </div>
     
-<!-- <script>
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-    mapOption = {
-        center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
-    };  
 
-<!-- // 지도를 생성합니다    
-var map = new daum.maps.Map(mapContainer, mapOption); 
-
-// 주소-좌표 변환 객체를 생성합니다
-var geocoder = new daum.maps.services.Geocoder();
-
-// 주소로 좌표를 검색합니다
-geocoder.addressSearch('서울 강남구 테헤란로 119', function(result, status) {
-
-    // 정상적으로 검색이 완료됐으면 
-     if (status === daum.maps.services.Status.OK) {
-
-        var coords = new daum.maps.LatLng(result[0].y, result[0].x);
-
-        // 결과값으로 받은 위치를 마커로 표시합니다
-        var marker = new daum.maps.Marker({
-            map: map,
-            position: coords
-        });
-
-       /*  // 인포윈도우로 장소에 대한 설명을 표시합니다
-        var infowindow = new daum.maps.InfoWindow({
-            content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
-        });
-        infowindow.open(map, marker); */
-
-        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-        map.setCenter(coords);
-    } 
-});    
-</script>  -->
     <script>
-   
+ 
     var $star_rating = $('.star-rating .fa');
-
+    
     var SetRatingStar = function() {
+    	
       return $star_rating.each(function() {
         if (parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))) {
           return $(this).removeClass('fa-star-o').addClass('fa-star');
@@ -446,12 +444,10 @@ geocoder.addressSearch('서울 강남구 테헤란로 119', function(result, sta
         }
       });
     };
-
     $star_rating.on('click', function() {
       $star_rating.siblings('input.rating-value').val($(this).data('rating'));
       return SetRatingStar();
     });
-
     SetRatingStar();
    
     //리뷰 내용의 글자수 세기 이벤트, 리뷰 리스트 불러오기
@@ -479,6 +475,8 @@ geocoder.addressSearch('서울 강남구 테헤란로 119', function(result, sta
     			var sum=0;
     			var avg=0;
     			
+               
+                
     			if(data!=null){
     				 for(var i=0; i<data.reviewList.length; i++){
     					sum+=data.reviewList[i].REVIEWSTAR;
@@ -504,6 +502,8 @@ geocoder.addressSearch('서울 강남구 테헤란로 119', function(result, sta
     				mainRe+='<span style="margin:2%"> ·&nbsp;&nbsp;리뷰('+data.reviewList.length+')</span>'; 
     				
     				for(var i=0; i<data.reviewList.length; i++){
+    					var date=new Date(data.reviewList[i].REVIEWDATE);
+    					 var fmDate=date.toISOString().slice(0,10);
     					if(i==0){
     						content+='<div class="star-rating" style=" font-size:1.1em;">';
     						for(var j=0; j<5; j++){
@@ -515,10 +515,11 @@ geocoder.addressSearch('서울 강남구 테헤란로 119', function(result, sta
 								
     						}
     						content+='<span>'+data.reviewList[i].REVIEWSTAR+'</span>';
-    						/* content+='<input type="text" name="star" class="rating-value" value='+data.reviewList[i].REVIEWSTAR+'> '; */
     						content+='</div>';
         					content+='<p style="word-wrap: break-word;margin-bottom:0rem;font-size:0.9em;">'+data.reviewList[i].REVIEWCONTENT+'</p>';
-        					content+='<div style="color:#989898;font-size:0.95em;margin-bottom:3%">'+data.reviewList[i].USERID+'｜'+parseMSDate('/Date('+data.reviewList[i].REVIEWDATE+')/')+'</div>'; 
+        					content+='<div style="color:#989898;font-size:0.95em;margin-bottom:3%;">'+data.reviewList[i].USERID+'｜'+fmDate+'<div style="float:right;">';
+        					content+='<button class="btn btn-primary">수정</button><button class="btn btn-primary">삭제</button></div></div>';
+        					
     					}else{																													
     						content+='<div  style="border-top:1px solid #E5E8E8">';
     						content+='<div class="star-rating" style=" font-size:1.1em;margin-top:3%">';
@@ -533,7 +534,7 @@ geocoder.addressSearch('서울 강남구 테헤란로 119', function(result, sta
     						content+='<span>'+data.reviewList[i].REVIEWSTAR+'</span>';
     						content+='</div>';
         					content+='<p style="word-wrap: break-word;margin-bottom:0rem;font-size:0.9em;">'+data.reviewList[i].REVIEWCONTENT+'</p>';
-        					content+='<div style="color:#989898;font-size:0.95em;margin-bottom:3%">'+data.reviewList[i].USERID+'｜'+data.reviewList[i].REVIEWDATE+'</div>';
+        					content+='<div style="color:#989898;font-size:0.95em;margin-bottom:3%">'+data.reviewList[i].USERID+'｜'+fmDate+'</div>';
     						content+='</div>';
     					}	
     				}
@@ -614,14 +615,3 @@ geocoder.addressSearch('서울 강남구 테헤란로 119', function(result, sta
     	}
     </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
-
-
-
-
-
-
-
-
-
-
-

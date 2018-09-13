@@ -196,7 +196,7 @@ $(function(){
         };  
 	  	var markerImage = createMarkerImage(sprotsMarkerImgSrc, imageSize, imageOptions)
 	  	categoryImg.push(markerImage);
-	}else{
+	}else if('${p.plaCategory}'=='영화/공연'){
 		var imageSize = new daum.maps.Size(32, 39),
         imageOptions = {  
     		offset: new daum.maps.Point(18, 60)  
@@ -231,7 +231,7 @@ $(function(){
     '</div>';
 	    contentArray.push(content)
 	</c:forEach>
-	
+	console.log(categoryImg);
 	fn_drawMap(address,categoryImg,contentArray);
 	
 })
@@ -246,8 +246,8 @@ function createMarkerImage(src, size, options) {
 function fn_drawMap(address,categoryImg,contentArray){
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = { 
-        center: new daum.maps.LatLng(37.556048302475745, 126.91733299528988), // 지도의 중심좌표 
-        level: 5 // 지도의 확대 레벨 
+        center: new daum.maps.LatLng(37.551427, 126.920575), // 지도의 중심좌표 
+        level: 4 // 지도의 확대 레벨 
     }; 
 	
 	var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
@@ -262,7 +262,7 @@ function fn_drawMap(address,categoryImg,contentArray){
 			     if (status === daum.maps.services.Status.OK) {
 			    	
 			        var coords = new daum.maps.LatLng(result[0].y, result[0].x);
-			  
+			  		console.log(i)
 			        // 결과값으로 받은 위치를 마커로 표시합니다
 			        var marker = new daum.maps.Marker({
 			            map: map,
@@ -279,6 +279,13 @@ function fn_drawMap(address,categoryImg,contentArray){
 				     daum.maps.event.addListener(marker, 'click', function() {
 				    		 overlay.setMap(map);  
 				     });
+			        
+			        function closeOverlay() {
+			        	for(var i=0; i<overlayArr; i++){
+			        		overlayArr[i].setMap(null);  
+			        	}
+			        	   
+			        } s
 				   
 			    } 
 			});
@@ -287,12 +294,7 @@ function fn_drawMap(address,categoryImg,contentArray){
 	
 }
 
-/* function closeOverlay() {
-	for(var i=0; i<overlayArr; i++){
-		overlayArr[i].setMap(null);  
-	}
-	   
-} */
+
 
 
 // 카테고리를 클릭했을 때 type에 따라 카테고리의 스타일과 지도에 표시되는 마커를 변경합니다

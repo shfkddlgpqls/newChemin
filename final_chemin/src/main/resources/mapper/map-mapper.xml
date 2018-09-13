@@ -21,7 +21,7 @@
 	</insert>
 	
 	<select id="placeList" resultType="place">
-		select*from place
+		select*from place where PLASTATUS ='Y'
 	</select>
 	
 	<select id="placeSelect" parameterType="_int" resultType="place">
@@ -37,7 +37,7 @@
 	</select>
 	
 	<select id="placeSearch" parameterType="map" resultType="place">
-		select*from place where PLACATEGORY=#{plaCategory} and PLAAREA=#{plaArea}
+		select*from place where PLACATEGORY=#{plaCategory} and PLAAREA=#{plaArea} and PLASTATUS ='Y'
 	</select>
 	
 	<select id="placeReviewList" parameterType="_int" resultMap="reviewMap">

@@ -316,7 +316,7 @@ function fn_send(){
 		  	
 		  	 <div class="row" style="margin-left:auto;margin-right:auto;width:95%">
 	         	<c:forEach items="${plaList}" var="p">
-				<div class="card shadow gallery-item" style="width:30%;margin-right:3%">
+				<div class="card shadow gallery-item" style="width:30%;margin-right:3%;margin-bottom:3%">
 				
 				  
 				    <div class="gallery-item-image">
