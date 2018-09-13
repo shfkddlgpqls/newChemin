@@ -2,25 +2,32 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
 <configuration>
 <typeAliases>
-		<typeAlias type="com.kh.chemin.community.model.vo.Community" alias="community"/>
 		<typeAlias type="com.kh.chemin.common.StringArrayType" alias="strArr"/>
-		<typeAlias type="com.kh.chemin.member.model.vo.Member" alias="member"/>
-		<typeAlias type="com.kh.chemin.mall.model.vo.Product" alias="product"/>
-		<typeAlias type="com.kh.chemin.mall.model.vo.Cart" alias="cart"/>
+		
+		<typeAlias type="com.kh.chemin.community.model.vo.Community" alias="community"/>
 		<typeAlias type="com.kh.chemin.community.model.vo.Attachment" alias="attachment"/>
 		<typeAlias type="com.kh.chemin.community.model.vo.Comment" alias="comment"/>
+		
+		<typeAlias type="com.kh.chemin.map.model.vo.Place" alias="place"/>
+		<typeAlias type="com.kh.chemin.map.model.vo.PlaceAttachment" alias="placeAttach"/>
+		<typeAlias type="com.kh.chemin.map.model.vo.PlaceMenu" alias="placeMenu"/>
+		<typeAlias type="com.kh.chemin.map.model.vo.PlaceReview" alias="placeReview"/>
+		
+		<typeAlias type="com.kh.chemin.member.model.vo.Member" alias="member"/>
+		
+		<typeAlias type="com.kh.chemin.mall.model.vo.Product" alias="product"/>
+		<typeAlias type="com.kh.chemin.mall.model.vo.Cart" alias="cart"/>
+		<typeAlias type="com.kh.chemin.mall.model.vo.OrderDetail" alias="orderDetail"/>
+		<typeAlias type="com.kh.chemin.mall.model.vo.QnA_board" alias="qna"/>
 		
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcBook" alias="AcBook"/>	
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcCategory" alias="AcCategory"/>
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcExType" alias="AcExType"/>
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcType" alias="AcType"/>
 		
-		<typeAlias type="com.kh.chemin.map.model.vo.Place" alias="place"/>
-		<typeAlias type="com.kh.chemin.map.model.vo.PlaceAttachment" alias="placeAttach"/>
-		<typeAlias type="com.kh.chemin.map.model.vo.PlaceMenu" alias="placeMenu"/>
-		
-		<typeAlias type="com.kh.chemin.mall.model.vo.QnA_board" alias="qna"/>
+		<typeAlias type="java.util.List" alias="list"/>
 </typeAliases>
  
 
 </configuration>
+

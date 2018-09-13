@@ -6,15 +6,15 @@ public class PlaceReview {
    private int reviewNo;
    private String userId;
    private int plaNo;
-   private String reStar;
+   private int reStar;
    private String reContent;
-   private Date reDate;
+   private String reDate;
    private String orImg;
    private String reImg;
    
    public PlaceReview() {}
 
-public PlaceReview(int reviewNo, String userId, int plaNo, String reStar, String reContent, Date reDate, String orImg,
+public PlaceReview(int reviewNo, String userId, int plaNo, int reStar, String reContent, String reDate, String orImg,
 		String reImg) {
 	super();
 	this.reviewNo = reviewNo;
@@ -51,11 +51,11 @@ public void setPlaNo(int plaNo) {
 	this.plaNo = plaNo;
 }
 
-public String getReStar() {
+public int getReStar() {
 	return reStar;
 }
 
-public void setReStar(String reStar) {
+public void setReStar(int reStar) {
 	this.reStar = reStar;
 }
 
@@ -67,11 +67,11 @@ public void setReContent(String reContent) {
 	this.reContent = reContent;
 }
 
-public Date getReDate() {
+public String getReDate() {
 	return reDate;
 }
 
-public void setReDate(Date reDate) {
+public void setReDate(String reDate) {
 	this.reDate = reDate;
 }
 
@@ -99,3 +99,4 @@ public String toString() {
    
    
 }
+

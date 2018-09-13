@@ -1,6 +1,7 @@
 package com.kh.chemin.mypage.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 
@@ -19,4 +20,8 @@ public interface MypageDao {
 	int insertAttach(SqlSessionTemplate sqlSession, PlaceAttachment a);
 	int removeMenu(SqlSessionTemplate sqlSession, int plaNo);
 	int removeAttach(SqlSessionTemplate sqlSession, int plaNo);
+
+	List<Map<String,Object>> communityList(SqlSessionTemplate sqlSession,String userId);
+	List<Map<String,Object>> attachmentList(SqlSessionTemplate sqlSession, List<Integer> cno);
 }
+
