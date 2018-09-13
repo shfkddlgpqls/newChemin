@@ -11,6 +11,7 @@ import com.kh.chemin.map.model.dao.PlaceDao;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.map.model.vo.PlaceReview;
 
 @Service
 public class PlaceServiceImpl implements PlaceService {
@@ -73,6 +74,18 @@ public class PlaceServiceImpl implements PlaceService {
 	public List<Place> placeSearch(Map map) {
 		List<Place> plaList = dao.placeSearch(sqlSession, map);
 		return plaList;
+	}
+
+	@Override
+	public List<PlaceReview> placeReviewList(int plaNo) {
+		List<PlaceReview> reviewList = dao.placeReviewList(sqlSession, plaNo);
+		return reviewList;
+	}
+
+	@Override
+	public int placeInsertReview(PlaceReview review) {
+		int result = dao.placeInsertReview(sqlSession, review);
+		return result;
 	}
 	
 }

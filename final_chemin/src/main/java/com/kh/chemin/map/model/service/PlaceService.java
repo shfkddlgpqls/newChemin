@@ -6,6 +6,7 @@ import java.util.Map;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.map.model.vo.PlaceReview;
 
 public interface PlaceService {
 	int placeInsert(Place place,List<PlaceMenu> menuList,List<PlaceAttachment> attList);
@@ -14,4 +15,6 @@ public interface PlaceService {
 	List<PlaceAttachment> selectAttachList(int plaNo);
 	List<PlaceMenu> selectMenuList(int plaNo);
 	List<Place> placeSearch(Map map);
+	List<PlaceReview> placeReviewList(int plaNo);
+	int placeInsertReview(PlaceReview review);
 }
