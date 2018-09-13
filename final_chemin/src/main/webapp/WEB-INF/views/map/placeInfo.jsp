@@ -10,7 +10,7 @@
     
 <style>
       .box {
-        min-height: 150px;
+        min-height: auto;
          margin-left:auto;
   		margin-right:auto;
   		
@@ -26,7 +26,7 @@
        background-color: white;
        /*  color: #efefef; */
         margin-bottom:1%;
-        height:30%;
+        height:auto;
         border:solid 1px #E5E8E8;
       }
 
@@ -74,20 +74,26 @@
 		background-color: white;
        /*  color: #efefef; */
         margin-bottom:1%;
-        height:40%;
+        height:auto;
         border:solid 1px #E5E8E8;
 	}
 	.review_sub_box{
 		border:solid 1px #E5E8E8;
 		  margin-left:auto;
   		margin-right:auto;
-  		height:46%;
+  		height:auto;
+	}
+	.confirm_box{
+		border:solid 1px #E5E8E8;
+		  margin-left:auto;
+  		margin-right:auto;
+  		height:auto;
 	}
  .load_box{
  background-color: white;
        /*  color: #efefef; */
         margin-bottom:1%;
-        height:109%;
+        height:auto;
         border:solid 1px #E5E8E8;
  }
 	.star-rating {
@@ -229,19 +235,19 @@
       
       <!-- 메뉴  content -->
       <div class="box menu_box">
-      	<div style="height:10%; margin-top:5%; margin-bottom:2%">
+      	<div style="height:6%; margin-top:5%; ">
 		      <div style="margin-left:13%; float:left">
 		      		<span style="font-size:20px;text-transform:uppercase;"><strong>메뉴</strong></span>
 		      </div>
       	</div>
       	
       	<div class="row">
-      	<div style="margin-left:15%;float:left;">
+      	<div style="margin-left:15%;float:left;margin-bottom:5%">
       		<table>
       			<c:forEach items="${menuList}" var="menu">
       			<tr>
       				<td>${menu.menuName}</td>
-      				<td>&nbsp;---------------------------------------------------&nbsp;</td>
+      				<td>&nbsp;------------------------------------------------------------&nbsp;</td>
       				<td>${menu.menuPrice}원</td>
       			
       			</tr>
@@ -275,34 +281,21 @@
 			          <div class="col-md-3"><a href="#x" class="thumbnail"><img src="${path}/resources/upload/place/attach/${attach.reImg}" alt="Image" class=" img-thumbnail"></a>
 			          </div>
 			         </c:if> 
-			        </c:forEach>  
-			      </div>
-			    </div>
-			    <div class="carousel-item">
-			      <div class="row">
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/vardagen-baleudagen-gyelyangkeob__0462815_PE608339_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/tokig-tokigeu-chaesotalsugi-hwaiteu__0095891_PE235176_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/plastis-peullaseutiseu-eol-eumteul-teokwoijeu__0092975_PE229787_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			           <div class="col-md-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/dekad-dekadeu-allamsigye-beullaeg__0110719_PE262840_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			      </div>
-			    </div>
-				
-			  <!--   <div class="carousel-item">
-			      <div class="row">
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/PIAimages/0566046_PE664563_S3.JPG" alt="Image" class="img-fluid img-thumbnail"></a>
-			          </div>
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/fado-pado-tagsangseutaendeu-pingkeu__0606975_PE682644_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/koarp-koaleupeu-amcheeo-beiji__0522280_PE643185_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/bumerang-bumelang-osgeol-i-hwaiteu__0192382_PE347080_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			      </div>
-			    </div> -->
+			         </c:forEach> 
+			       </div>
+			     </div>
+			     
+			      <div class="carousel-item">
+				    <div class="row">
+				    	<c:forEach items="${attachList}" var="attach" varStatus="status">
+					    <c:if test="${status.index>3 && status.index<8 }">
+					          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="${path}/resources/upload/place/attach/${attach.reImg}" alt="Image" class=" img-thumbnail"></a>
+					          </div>
+					      
+					    </c:if>
+				    	</c:forEach>      
+					</div>
+				   </div>
 			  </div>
 			  
 			  <a class="carousel-control-prev "  href="#ThumbnailCarousel" role="button" data-slide="prev">
@@ -329,7 +322,7 @@
 	      	
 	      	<div class="row" style="width:75%;margin-left:auto;margin-right:auto;">
 				<!-- 1. 약도 노드 -->
-				<div style="margin:0%;width:100%;" id="daumRoughmapContainer1535771533186" class="root_daum_roughmap root_daum_roughmap_landing"></div>
+				<div style="margin-bottom:5%;width:100%;" id="daumRoughmapContainer1536738977100" class="root_daum_roughmap root_daum_roughmap_landing"></div>
 				
 				<!-- 2. 설치 스크립트 -->
 				<script charset="UTF-8" class="daum_roughmap_loader_script" src="http://dmaps.daum.net/map_js_init/roughmapLoader.js"></script>
@@ -337,8 +330,8 @@
 				<!-- 3. 실행 스크립트 -->
 				<script charset="UTF-8">
 					new daum.roughmap.Lander({
-						"timestamp" : "1535771533186",
-						"key" : "psb4",
+						"timestamp" : "1536738977100",
+						"key" : "pyk7",
 						"mapWidth" : "100%",
 						"mapHeight" : "300"
 					}).render();
@@ -351,35 +344,42 @@
 	      
 	      <!-- 평가 리뷰 -->
 	      <div class="box review_box">
-	       <div style="height:10%; margin-top:5%; margin-bottom:2%">
+	       <div style="height:6%; margin-top:5%; margin-bottom:1%">
 		      	<div style="margin-left:13%; float:left">
 		      		<span style="font-size:20px;text-transform:uppercase;"><strong>평가하기</strong></span>
 		      	</div>
 	      	</div>
 	      	
-	      	<div class="row" ">
-				<div class="review_sub_box" style="width:72%; float:left;">					
-					<div style="width:100%;height:20%; border-bottom:solid 1px #E5E8E8;">
-						<div class="star-rating" style="margin:2%">
-					        <span class="fa fa-star-o" data-rating="1"></span>
-					        <span class="fa fa-star-o" data-rating="2"></span>
-					        <span class="fa fa-star-o" data-rating="3"></span>
-					        <span class="fa fa-star-o" data-rating="4"></span>
-					        <span class="fa fa-star-o" data-rating="5"></span>
-					        <input type="text" name="star-value" class="rating-value" value="3">/5 
-					        &nbsp;<span style="font-size:0.85em"> 평가해주세요!</span>
-					      </div>
-					</div>
-					<textarea rows="5" style="width:100%;border-bottom:1px solid #E5E8E8;border-top:0px;border-left:0px;border-right:0px" 
-					placeholder="&#13;&#10;&#13;&#10;&nbsp;여기의 어떤 점이 마음에 드셨나요?" id="content" maxlength="1000"></textarea>
+	     
+		      	<div class="row">
+					<div class="review_sub_box" style="width:72%; float:left;">					
+						<div style="width:100%;height:6%; border-bottom:solid 1px #E5E8E8;">
+							<div class="star-rating" style="margin:2%">
+						        <span class="fa fa-star-o" data-rating="1"></span>
+						        <span class="fa fa-star-o" data-rating="2"></span>
+						        <span class="fa fa-star-o" data-rating="3"></span>
+						        <span class="fa fa-star-o" data-rating="4"></span>
+						        <span class="fa fa-star-o" data-rating="5"></span>
+						        <input type="text" name="star" class="rating-value" value="3">/5 
+						        &nbsp;<span style="font-size:0.85em"> 평가해주세요!</span>
+						      </div>
+						</div>
+						<textarea rows="5" style="width:100%;border-bottom:1px solid #E5E8E8;border-top:0px;border-left:0px;border-right:0px" 
+						placeholder="&#13;&#10;&#13;&#10;&nbsp;여기의 어떤 점이 마음에 드셨나요?" id="content" name="content" maxlength="1000"></textarea>
 					
-				  <div  style="width:100%;height:18%;">
-				  <button  style="height:100%;width:10%;float:right;">등록</button>
-				  	 <span id="counter" style="font-size:1.2em;margin:1%;float:right;">###</span>&nbsp; 					
-				  </div>
-				</div>		
-    
-	      	</div> 
+					</div>		
+	    		    <div class="confirm_box" style="width:72%;height:5%;float:left;border-top:0;margin-bottom:6%">
+					  <button class="btn btn-primary"  style="height:100%;width:10%;float:right; border-radius:3px" onclick="fn_review(this)" data-no='${place.plaNo}'>등록</button>
+					  	 <span id="counter" style="font-size:1.2em;margin:1%;float:right;">###</span>&nbsp; 					
+					</div>
+					
+					<div id="sub_review">
+					
+					</div>
+		      	</div> 
+	    
+	      	
+	      	
 	      </div>
     
 <!-- <script>
@@ -450,5 +450,58 @@ geocoder.addressSearch('서울 강남구 테헤란로 119', function(result, sta
         });
         $('#content').keyup();
     });
+    
+    
+    function fn_review(obj){
+    	var plaNo = $(obj).data("no");
+    	var star = $('[name=star]').val();
+    	var content = $('[name=content]').val();
+    	var userId ='${memberLoggedIn.userId}';
+    	
+    	if(userId.trim().length==0){
+    		swal({
+				  text: "로그인 후 이용이 가능합니다.",
+				  icon: "warning",
+				  button: "확인",
+				});
+    	}
+    	else if(content.trim().length==0){
+			swal({
+				  text: "내용을 입력해주세요",
+				  icon: "warning",
+				  button: "확인",
+				});
+		}
+    	
+    	if(content.trim().length>0){
+      	$.ajax({
+    		url:"${path}/map/placeInsertReview.do",
+    		data:{plaNo:plaNo,reStar:star,reContent:content,userId:userId},
+    		dataType:"json",
+    		success:function(data)
+    		{
+    			console.log(data);
+    		},error:function(jxhr,textStatus,error)
+            {
+                console.log("ajax실패!");
+                console.log(jxhr);
+                console.log(textStatus);
+                console.log(error);
+             }
+    	})  
+    	}
+    }
+    
     </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+
+
+
+
+
+
+
+
+
+
+

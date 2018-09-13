@@ -144,11 +144,11 @@ color:#fff;
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eb4ae7857a625ec0a907f8f742645cfb&libraries=services"></script>
 <script>
-var foodMarkerImgSrc = 'https://i.imgur.com/JwCP32X.png';
+var foodMarkerImgSrc = 'https://i.imgur.com/kvSt5xU.png';
 var movieMarkerImgSrc = 'https://i.imgur.com/5Gvp5eL.png';
 var beerMarkerImgSrc = 'https://i.imgur.com/BgXoOqa.png';
 var micMarkerImgSrc = 'https://i.imgur.com/GKf7xiJ.png';
-var sprotsMarkerImgSrc = 'https://i.imgur.com/pxp28os.png';
+var sprotsMarkerImgSrc = 'https://i.imgur.com/UOxgFDv.png';
 
 /* var size = '${plaList.size()}'; */
 var address=[];
@@ -167,14 +167,14 @@ $(function(){
 	<c:forEach items="${plaList}" var="p">
 	address.push('${p.plaAddr}')
  	if('${p.plaCategory}'=='식사'){
-		   var imageSize = new daum.maps.Size(30, 37),
+		   var imageSize = new daum.maps.Size(32, 39),
             imageOptions = {  
         		offset: new daum.maps.Point(18, 60)  
             };  
 		  var markerImage = createMarkerImage(foodMarkerImgSrc, imageSize, imageOptions)
 		  categoryImg.push(markerImage); 
 	}else if('${p.plaCategory}'=='술'){
-		var imageSize = new daum.maps.Size(30, 37),
+		var imageSize = new daum.maps.Size(32, 39),
         imageOptions = {  
     		offset: new daum.maps.Point(18, 60)  
         };  
@@ -182,7 +182,7 @@ $(function(){
 	  	categoryImg.push(markerImage);
 	}
 	else if('${p.plaCategory}'=='노래방'){
-		var imageSize = new daum.maps.Size(30, 37),
+		var imageSize = new daum.maps.Size(32, 39),
         imageOptions = {  
     		offset: new daum.maps.Point(18, 60)  
         };  
@@ -190,14 +190,14 @@ $(function(){
 	  	categoryImg.push(markerImage);
 	} 
 	else if('${p.plaCategory}'=='스포츠'){
-		var imageSize = new daum.maps.Size(30, 37),
+		var imageSize = new daum.maps.Size(32, 39),
         imageOptions = {  
     		offset: new daum.maps.Point(18, 60)  
         };  
 	  	var markerImage = createMarkerImage(sprotsMarkerImgSrc, imageSize, imageOptions)
 	  	categoryImg.push(markerImage);
 	}else{
-		var imageSize = new daum.maps.Size(30, 37),
+		var imageSize = new daum.maps.Size(32, 39),
         imageOptions = {  
     		offset: new daum.maps.Point(18, 60)  
         };  

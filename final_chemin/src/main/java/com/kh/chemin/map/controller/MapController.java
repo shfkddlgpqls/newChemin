@@ -29,6 +29,7 @@ import com.kh.chemin.map.model.service.PlaceService;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.map.model.vo.PlaceReview;
 import com.sun.org.glassfish.gmbal.ParameterNames;
 
 @Controller
@@ -159,18 +160,19 @@ public class MapController {
 		return "/map/mapView";
 	}
 	
-	/*@RequestMapping(value="/map/placeSelect.do",produces = "application/text; charset=utf8")
+	@RequestMapping(value="/map/placeInsertReview.do",produces = "application/text; charset=utf8")
 	@ResponseBody
-	public String placeSelect(int plaNo) throws Exception
+	public String placeSelect(PlaceReview review) throws Exception
 	{
+		System.out.println(review);
 		Map<String, Object> map = new HashMap<String, Object>();
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonStr = null;
-		Place place = service.placeSelect(plaNo);
+		/*int result = service.placeInsertReview(review);*/
 		
-		map.put("place", place);
+		/*map.put("place", place);*/
 		jsonStr = mapper.writeValueAsString(map);
 		return jsonStr;
-	}*/
+	}
 	
 }
