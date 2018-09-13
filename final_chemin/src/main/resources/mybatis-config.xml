@@ -7,12 +7,11 @@
 		<typeAlias type="com.kh.chemin.community.model.vo.Community" alias="community"/>
 		<typeAlias type="com.kh.chemin.community.model.vo.Attachment" alias="attachment"/>
 		<typeAlias type="com.kh.chemin.community.model.vo.Comment" alias="comment"/>
-		<typeAlias type="com.kh.chemin.community.model.vo.Attachment" alias="attachment"/>
-		<typeAlias type="com.kh.chemin.community.model.vo.Comment" alias="comment"/>
 		
 		<typeAlias type="com.kh.chemin.map.model.vo.Place" alias="place"/>
 		<typeAlias type="com.kh.chemin.map.model.vo.PlaceAttachment" alias="placeAttach"/>
 		<typeAlias type="com.kh.chemin.map.model.vo.PlaceMenu" alias="placeMenu"/>
+		<typeAlias type="com.kh.chemin.map.model.vo.PlaceReview" alias="placeReview"/>
 		
 		<typeAlias type="com.kh.chemin.member.model.vo.Member" alias="member"/>
 		
