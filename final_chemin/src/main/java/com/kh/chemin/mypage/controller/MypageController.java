@@ -214,28 +214,6 @@ public class MypageController
 			mv.setViewName("common/msg");
 			return mv;
 	}
-	
-	@RequestMapping("/mypage/myCommunityList.do")
-	public ModelAndView myCommunityList(ModelAndView mv,String userId)
-	{
-		System.out.println("userId::"+userId);
-		List<Map<String,Object>> list=service.communityList(userId);
-		logger.debug("communityList::"+list);
-		List<Integer> cno=new ArrayList<Integer>();
-		int[] no = new int[list.size()];
-		for(int i=0;i<list.size();i++)
-		{
-			no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
-			cno.add(no[i]);
-		}
-		List<Map<String,Object>> attList=service.attachmentList(cno);
-		logger.debug("attachmentList::"+attList);
-		
-		mv.addObject("list",list);
-		mv.addObject("attList",attList);
-		mv.setViewName("mypage/myCommunityList");
-		return mv;
-	}
 }
 
 

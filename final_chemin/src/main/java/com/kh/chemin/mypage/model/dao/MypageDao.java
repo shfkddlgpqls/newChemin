@@ -21,7 +21,5 @@ public interface MypageDao {
 	int removeMenu(SqlSessionTemplate sqlSession, int plaNo);
 	int removeAttach(SqlSessionTemplate sqlSession, int plaNo);
 
-	List<Map<String,Object>> communityList(SqlSessionTemplate sqlSession,String userId);
-	List<Map<String,Object>> attachmentList(SqlSessionTemplate sqlSession, List<Integer> cno);
 }
 

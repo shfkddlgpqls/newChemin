@@ -19,21 +19,5 @@
 		delete place where PLANO = #{plaNo}
 	</delete>
 	
-	<!-- 커뮤니티 관리 -->
-	<resultMap type="map" id="communityMap"></resultMap>
-	<select id="communityList" resultMap="communityMap" parameterType="String">
-		select c.*,
-		(select count(*) from community_comment cc where c.communityno=cc.communityno) as ccount
-		from community c 
-		where writer=#{community_writer}
-		order by communitydate desc
-	</select>
 	
-	<resultMap type="map" id="attachmentMap"></resultMap>
-	<select id="attachmentList" parameterType="list" resultMap="attachmentMap">
-		select * from attachment where communityno in
-		<foreach item="a" collection="list" open="(" separator="," close=")">
-		#{a}
-		</foreach>
-	</select>
 </mapper>
