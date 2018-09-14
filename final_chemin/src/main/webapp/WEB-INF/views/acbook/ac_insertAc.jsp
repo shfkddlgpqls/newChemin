@@ -145,7 +145,7 @@
 						<h3>정보가 모두 입력되었습니다. 보내시겠습니까?</h3>
 						<div id="testArea"></div>
 						<!-- 테스트용 데이터 userId -->
-						<input type="hidden" id="userId" name = "userId" value="stella226">
+						<input type="hidden" id="userId" name="userId" value="${memberLoggedIn.userId }">
 						<input type="hidden" name="exCode" value="">
 						<input type="hidden" name="typeNum" value="">
 						<input type="hidden" name="cateNum" value="">

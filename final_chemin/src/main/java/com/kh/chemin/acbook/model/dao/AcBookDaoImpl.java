@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 
 import com.kh.chemin.acbook.model.vo.AcBook;
+import com.kh.chemin.acbook.model.vo.AcCom;
 
 @Repository
 public class AcBookDaoImpl implements AcBookDao {
@@ -24,13 +25,13 @@ public class AcBookDaoImpl implements AcBookDao {
 	}
 
 	@Override
-	public List<Model> selectEb(SqlSessionTemplate sqlSession) {	
-		return sqlSession.selectList("ac.selectEb");
+	public List<Model> selectEb(SqlSessionTemplate sqlSession, String userId) {	
+		return sqlSession.selectList("ac.selectEb", userId);
 	}
 	//페이징
 	@Override
-	public List<Map<String, String>> selectPageList(SqlSessionTemplate sqlSession, int cPage, int numPerPage) {
-		return sqlSession.selectList("ac.selectPageList",null, new RowBounds((cPage-1)*numPerPage, numPerPage));
+	public List<Map<String, String>> selectPageList(SqlSessionTemplate sqlSession, int cPage, int numPerPage, String userId) {
+		return sqlSession.selectList("ac.selectPageList",userId,new RowBounds((cPage-1)*numPerPage, numPerPage));
 	}
 
 	@Override
@@ -39,8 +40,8 @@ public class AcBookDaoImpl implements AcBookDao {
 	}
 
 	@Override
-	public List<Model> selectDailySum(SqlSessionTemplate sqlSession) {
-		return sqlSession.selectList("ac.selectDailySum");
+	public List<Model> selectDailySum(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.selectDailySum", userId);
 	}
 	
 	@Override
@@ -49,19 +50,80 @@ public class AcBookDaoImpl implements AcBookDao {
 	}
 
 	@Override
-	public List<Model> selectExGrade(SqlSessionTemplate sqlSession) {
-		return sqlSession.selectList("ac.selectExGrade");
+	public List<Model> selectExGrade(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.selectExGrade",userId);
 	}
 
 	@Override
-	public List<Model> monthlyDispenditure(SqlSessionTemplate sqlSession) {
-		return sqlSession.selectList("ac.monthlyDispenditure");
+	public List<Model> monthlyExpenditure(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.monthlyExpenditure",userId);
 	}
 
 	@Override
 	public Map<String, Object> acSelectOne(SqlSessionTemplate sqlSession, int acNo) {
 		return sqlSession.selectOne("ac.acSelectOne",acNo);
 	}
+
+	@Override
+	public int insertAcCom(SqlSessionTemplate sqlSession, AcCom acc) {
+		return sqlSession.insert("ac.insertAcCom",acc);
+	}
+
+	@Override
+	public AcCom selectReadOne(SqlSessionTemplate sqlSession, String accNo) {
+		return sqlSession.selectOne("ac.selectReadOne",accNo);
+	}
+
+	@Override
+	public List<Model> selectinExCost(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.selectinExCost",userId);
+	}
+
+	@Override
+	public String selectLastDay(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("ac.selectLastDay");
+	}
+
+	@Override
+	public List<Map<String, String>> acComList(SqlSessionTemplate sqlSession, int cPage, int numPerPage,String userId) {
+		return sqlSession.selectList("ac.acComList",userId,new RowBounds((cPage-1)*numPerPage, numPerPage));
+	}
+
+	@Override
+	public List<Model> monthlySumAvg(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.monthlySumAvg",userId);
+	}
+
+	@Override
+	public List<Model> preMonthlySumAvg(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.preMonthlySumAvg",userId);
+	}
+
+	@Override
+	public List<Model> prePreMonthlySumAvg(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.prePreMonthlySumAvg",userId);
+	}
+
+	@Override
+	public List<Model> preMonthlyData(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.preMonthlyData",userId);
+	}
+
+	@Override
+	public List<Model> prePreMonthlyData(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.prePreMonthlyData",userId);
+	}
+
+	@Override
+	public List<Model> preSelectDailySum(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.preSelectDailySum",userId);
+	}
+
+	@Override
+	public List<Model> prePreSelectDailySum(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.prePreSelectDailySum",userId);
+	}
+	
 	
 	
 	
