@@ -19,6 +19,7 @@ public interface MypageDao {
 	int insertMenu(SqlSessionTemplate sqlSession, PlaceMenu m);
 	int insertAttach(SqlSessionTemplate sqlSession, PlaceAttachment a);
 	int removeMenu(SqlSessionTemplate sqlSession, int plaNo);
+
 	int removeAttach(SqlSessionTemplate sqlSession, int plaNo);
 
 }

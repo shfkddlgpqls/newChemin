@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//DN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="place">
 <!-- resultType은 vo에 있는것을 가져오는것을 말함/ resultMap은 db에 있는걸 바로 가져올때. jsp에 쏴줄땐 대문자로 적음 -->
-
+<resultMap type="map" id="reviewMap"></resultMap>
 	<insert id="placeInsert" parameterType="place">
 		insert into place
 		values
@@ -21,7 +21,7 @@
 	</insert>
 	
 	<select id="placeList" resultType="place">
-		select*from place
+		select*from place where PLASTATUS ='Y'
 	</select>
 	
 	<select id="placeSelect" parameterType="_int" resultType="place">
@@ -37,6 +37,24 @@
 	</select>
 	
 	<select id="placeSearch" parameterType="map" resultType="place">
-		select*from place where PLACATEGORY=#{plaCategory} and PLAAREA=#{plaArea}
+		select*from place where PLACATEGORY=#{plaCategory} and PLAAREA=#{plaArea} and PLASTATUS ='Y'
 	</select>
+	
+	<select id="placeReviewList" parameterType="_int" resultMap="reviewMap">
+		select*from pla_review where PLANO=#{plaNo} order by REVIEWNO desc
+	</select>
+	
+	<insert id="placeInsertReview" parameterType="placeReview">
+		insert into pla_review values(seq_review_no.nextval,#{userId},#{plaNo},#{reStar},#{reContent},default,null,null)
+	</insert>
+	
+	<select id="placeMatch" parameterType="map" resultType="place">
+		select * from place where PLAADDR like '%' || #{plaAddr}||'%' and PLANAME like '%' || #{plaName}||'%'
+	</select>
+	
+	<delete id="reviewDelete" parameterType="_int">
+		delete pla_review where REVIEWNO = #{reviewNo}
+	</delete>
 </mapper>
+
+

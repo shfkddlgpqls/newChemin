@@ -14,4 +14,7 @@ public interface AdminService {
 	int placeDelete(int plaNo);
 	int plaStatusChange(Map map);
 	int adminReMsg(Map map);
+	int selectProductCount();
+	List<Map<String, Object>> selectProductList(int cPage, int numPerPage);
+	List<Map<String, String>> selectMallCate();
 }

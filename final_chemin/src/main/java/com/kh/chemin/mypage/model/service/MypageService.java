@@ -15,6 +15,5 @@ public interface MypageService {
 	Place placeSelect(int plaNo);
 	int placeUpdate(Place place,List<PlaceMenu> menuList,List<PlaceAttachment> attList);
 
-	
 }
 

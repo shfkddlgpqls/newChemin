@@ -144,17 +144,17 @@ color:#fff;
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eb4ae7857a625ec0a907f8f742645cfb&libraries=services"></script>
 <script>
-var foodMarkerImgSrc = 'https://i.imgur.com/JwCP32X.png';
+var foodMarkerImgSrc = 'https://i.imgur.com/kvSt5xU.png';
 var movieMarkerImgSrc = 'https://i.imgur.com/5Gvp5eL.png';
 var beerMarkerImgSrc = 'https://i.imgur.com/BgXoOqa.png';
 var micMarkerImgSrc = 'https://i.imgur.com/GKf7xiJ.png';
-var sprotsMarkerImgSrc = 'https://i.imgur.com/pxp28os.png';
+var sprotsMarkerImgSrc = 'https://i.imgur.com/UOxgFDv.png';
 
 /* var size = '${plaList.size()}'; */
 var address=[];
 var categoryImg=[];
 var contentArray=[];
-var overlayArr=[];
+
 
 $(function(){
 	if('${plaList.size()}'==0){
@@ -167,14 +167,14 @@ $(function(){
 	<c:forEach items="${plaList}" var="p">
 	address.push('${p.plaAddr}')
  	if('${p.plaCategory}'=='식사'){
-		   var imageSize = new daum.maps.Size(30, 37),
+		   var imageSize = new daum.maps.Size(32, 39),
             imageOptions = {  
         		offset: new daum.maps.Point(18, 60)  
             };  
 		  var markerImage = createMarkerImage(foodMarkerImgSrc, imageSize, imageOptions)
 		  categoryImg.push(markerImage); 
 	}else if('${p.plaCategory}'=='술'){
-		var imageSize = new daum.maps.Size(30, 37),
+		var imageSize = new daum.maps.Size(32, 39),
         imageOptions = {  
     		offset: new daum.maps.Point(18, 60)  
         };  
@@ -182,7 +182,7 @@ $(function(){
 	  	categoryImg.push(markerImage);
 	}
 	else if('${p.plaCategory}'=='노래방'){
-		var imageSize = new daum.maps.Size(30, 37),
+		var imageSize = new daum.maps.Size(32, 39),
         imageOptions = {  
     		offset: new daum.maps.Point(18, 60)  
         };  
@@ -190,14 +190,14 @@ $(function(){
 	  	categoryImg.push(markerImage);
 	} 
 	else if('${p.plaCategory}'=='스포츠'){
-		var imageSize = new daum.maps.Size(30, 37),
+		var imageSize = new daum.maps.Size(32, 39),
         imageOptions = {  
     		offset: new daum.maps.Point(18, 60)  
         };  
 	  	var markerImage = createMarkerImage(sprotsMarkerImgSrc, imageSize, imageOptions)
 	  	categoryImg.push(markerImage);
-	}else{
-		var imageSize = new daum.maps.Size(30, 37),
+	}else if('${p.plaCategory}'=='영화/공연'){
+		var imageSize = new daum.maps.Size(32, 39),
         imageOptions = {  
     		offset: new daum.maps.Point(18, 60)  
         };  
@@ -210,7 +210,8 @@ $(function(){
 	var time ='${p.plaTime}';
 	var timeStr = time.split("/");
 	
-	var content = '<div class="wrap">' + 
+	var content = document.createElement('div');
+	content.innerHTML ='<div class="wrap">' + 
     '    <div class="info">' + 
     '        <div class="title">' + 
     '              ${p.plaName}' + 
@@ -231,7 +232,7 @@ $(function(){
     '</div>';
 	    contentArray.push(content)
 	</c:forEach>
-	
+
 	fn_drawMap(address,categoryImg,contentArray);
 	
 })
@@ -242,19 +243,20 @@ function createMarkerImage(src, size, options) {
     return markerImage;            
 }
 
-
+var overlayArr=[];
 function fn_drawMap(address,categoryImg,contentArray){
+	
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = { 
-        center: new daum.maps.LatLng(37.556048302475745, 126.91733299528988), // 지도의 중심좌표 
-        level: 5 // 지도의 확대 레벨 
+        center: new daum.maps.LatLng(37.551427, 126.920575), // 지도의 중심좌표 
+        level: 4 // 지도의 확대 레벨 
     }; 
 	
 	var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 	//주소-좌표 변환 객체를 생성합니다
 	var geocoder = new daum.maps.services.Geocoder();
-  
-	for(var i=0; i<address.length; i++){
+ 
+	for(var i=0; i<=address.length; i++){
 	(function(i){
 		geocoder.addressSearch(address[i], function(result, status) {
 		    // 정상적으로 검색이 완료됐으면 
@@ -262,7 +264,6 @@ function fn_drawMap(address,categoryImg,contentArray){
 			     if (status === daum.maps.services.Status.OK) {
 			    	
 			        var coords = new daum.maps.LatLng(result[0].y, result[0].x);
-			  
 			        // 결과값으로 받은 위치를 마커로 표시합니다
 			        var marker = new daum.maps.Marker({
 			            map: map,
@@ -271,15 +272,15 @@ function fn_drawMap(address,categoryImg,contentArray){
 			        });
 			        
 			        var overlay = new daum.maps.CustomOverlay({
-				     content: contentArray[i],
+				      content: contentArray[i],
 				      position: marker.getPosition()       
 				     });
 				     
-			        overlayArr.push(overlay)
+			        overlayArr.push(overlay);
+			        
 				     daum.maps.event.addListener(marker, 'click', function() {
 				    		 overlay.setMap(map);  
 				     });
-				   
 			    } 
 			});
 	})(i);
@@ -287,12 +288,13 @@ function fn_drawMap(address,categoryImg,contentArray){
 	
 }
 
-/* function closeOverlay() {
-	for(var i=0; i<overlayArr; i++){
+function closeOverlay() {
+	for(var i=0; i<overlayArr.length; i++){
 		overlayArr[i].setMap(null);  
 	}
 	   
-} */
+} 
+
 
 
 // 카테고리를 클릭했을 때 type에 따라 카테고리의 스타일과 지도에 표시되는 마커를 변경합니다

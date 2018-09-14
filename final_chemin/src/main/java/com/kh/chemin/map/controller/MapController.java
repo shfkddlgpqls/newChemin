@@ -29,6 +29,7 @@ import com.kh.chemin.map.model.service.PlaceService;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.map.model.vo.PlaceReview;
 import com.sun.org.glassfish.gmbal.ParameterNames;
 
 @Controller
@@ -82,7 +83,7 @@ public class MapController {
 		place.setPlaKeyword(keyword);
 		place.setUserId(place.getUserId());
 
-
+		System.out.println(place);
 		//대표이미지 저장경로 지정 및 서버에 이미지 저장
 		String saveDirMain = request.getSession().getServletContext().getRealPath("/resources/upload/place/main");
 		if(!mainImg.isEmpty()) {	
@@ -159,18 +160,73 @@ public class MapController {
 		return "/map/mapView";
 	}
 	
-	/*@RequestMapping(value="/map/placeSelect.do",produces = "application/text; charset=utf8")
+	//장소 리뷰글 등록하기
+	@RequestMapping(value="/map/placeInsertReview.do",produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String placeSelect(PlaceReview review) throws Exception
+	{
+		Map<String, Object> map = new HashMap<String, Object>();
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonStr = null;
+		int result = service.placeInsertReview(review);
+		map.put("result", result);
+		jsonStr = mapper.writeValueAsString(map);
+		return jsonStr;
+	}
+	
+	//장소 리뷰리스트 가져오기
+	@RequestMapping(value="/map/placeReviewList.do",produces = "application/text; charset=utf8")
 	@ResponseBody
 	public String placeSelect(int plaNo) throws Exception
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonStr = null;
-		Place place = service.placeSelect(plaNo);
+		List<PlaceReview> reviewList = service.placeReviewList(plaNo);
 		
-		map.put("place", place);
+		map.put("reviewList", reviewList);
 		jsonStr = mapper.writeValueAsString(map);
 		return jsonStr;
-	}*/
+	}
 	
+	//동일한 장소가 있는지 검사
+	@RequestMapping(value="/map/placeMatch.do",produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String placeMatch(String plaAddr,String plaName) throws Exception
+	{
+	
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map1 = new HashMap<String, Object>();
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonStr = null;
+		map.put("plaAddr", plaAddr);
+		map.put("plaName", plaName);
+		Place plaMatch = service.placeMatch(map);
+		
+		map1.put("plaMatch", plaMatch);
+		jsonStr = mapper.writeValueAsString(map1);
+		return jsonStr;
+	}
+	
+	//장소 리뷰글 삭제하기
+	@RequestMapping(value="map/reviewDelete.do",produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String reviewDelete(int reviewNo) throws Exception
+	{
+		Map<String, Object> map = new HashMap<String, Object>();
+	
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonStr = null;
+		
+		int result = service.reviewDelete(reviewNo);
+		
+		map.put("result", result);
+		jsonStr = mapper.writeValueAsString(map);
+		return jsonStr;
+	}
 }
+
+
+
+
+

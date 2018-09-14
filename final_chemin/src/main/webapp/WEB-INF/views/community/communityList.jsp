@@ -406,4 +406,5 @@ a{color:#5d5d5d;}
    </div>
   </div>
 </section>
+
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

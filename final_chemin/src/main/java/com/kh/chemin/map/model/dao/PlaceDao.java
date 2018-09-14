@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.map.model.vo.PlaceReview;
 
 public interface PlaceDao {
 	int placeInsert(SqlSessionTemplate sqlSession, Place place);
@@ -19,4 +20,8 @@ public interface PlaceDao {
 	List<PlaceAttachment> selectAttachList(SqlSessionTemplate sqlSession,int plaNo);
 	List<PlaceMenu> selectMenuList(SqlSessionTemplate sqlSession,int plaNo);
 	List<Place> placeSearch(SqlSessionTemplate sqlSession,Map map);
+	List<PlaceReview> placeReviewList(SqlSessionTemplate sqlSession, int plaNo);
+	int placeInsertReview(SqlSessionTemplate sqlSession, PlaceReview review);
+	Place placeMatch(SqlSessionTemplate sqlSession, Map map);
+	int reviewDelete(SqlSessionTemplate sqlSession, int reviewNo);
 }

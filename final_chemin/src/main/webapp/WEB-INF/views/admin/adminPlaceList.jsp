@@ -6,6 +6,7 @@
 <c:set var="path" value="<%=request.getContextPath()%>"/>
   
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+<jsp:include page="/WEB-INF/views/admin/adminMenuBar.jsp"/>
 
 <!-- admin css-->
     <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/adminPage.css">
@@ -102,7 +103,7 @@ function fn_modal(obj){
 	 
 	 plaDate.innerHTML = $(obj).data("date"); 
 	 plaDate.innerHTML += '<input type="hidden" name="subNo" value='+plaNo+'>';
-	 userId.innerHTML = $(obj).data("userid");  
+	 userId1.innerHTML = $(obj).data("user");  
 	plaName.innerHTML = $(obj).data("name"); 	
  	plaPhone.innerHTML = $(obj).data("phone");
 	plaArea.innerHTML = $(obj).data("area");
@@ -276,35 +277,6 @@ function fn_send(){
 }
 
 </script>
-    
-	<div class="admin">
-		<h2 class="text-center">관리자 페이지 </h2>
-	</div>
-		
-	
-	<div class="container">
-		<div class="row">
-			
-				<div class="col-md-12">
-					<hr>
-						<ul class="nav justify-content-center">
-						    <li class="nav-item">
-						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminPage.do">회원관리</a></strong>
-						    </li>
-						    <li class="nav-item">
-						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminPlaceList.do">장소 요청 내역</a></strong>
-						    </li>
-						    <li class="nav-item">
-						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminProductReg.do">물품등록</a></strong>
-						    </li>
-						    <li class="nav-item">
-						   		<strong><a class="nav-link adminAtag" href="${path }/admin/adminProductList.do">물품관리</a></strong>
-						    </li>
-						  </ul>
-						  <hr>
-				</div>
-			</div>	
-		</div>
 		
 		<section>
 		<div class="container">
@@ -316,7 +288,7 @@ function fn_send(){
 		  	
 		  	 <div class="row" style="margin-left:auto;margin-right:auto;width:95%">
 	         	<c:forEach items="${plaList}" var="p">
-				<div class="card shadow gallery-item" style="width:30%;margin-right:3%">
+				<div class="card shadow gallery-item" style="width:30%;margin-right:3%;margin-bottom:3%">
 				
 				  
 				    <div class="gallery-item-image">
@@ -339,7 +311,7 @@ function fn_send(){
 				      
 				     <button type="button" class="btn btn-primary plaBtn" onclick="fn_modal(this)" data-no='${p.PLANO }' data-name='${p.PLANAME}' data-address='${p.PLAADDR }' data-date='${p.PLADATE}'
 				     data-category='${p.PLACATEGORY}' data-area='${p.PLAAREA}'	data-phone='${p.PLAPHONE }' data-content='${p.PLACONTENT}' data-time='${p.PLATIME}' data-keyword='${p.PLAKEYWORD}'
-				     data-status='${p.PLASTATUS}' data-userid='${p.USERID}' data-toggle="modal" data-target="#place_modal" style="float:right">상세보기</button>
+				     data-status='${p.PLASTATUS}' data-user='${p.USERID}' data-toggle="modal" data-target="#place_modal" style="float:right">상세보기</button>
 				     <c:if test="${p.PLASTATUS == 'N'}">
 				     <button type="button" class="btn btn-info"  style="float:right;margin-right:1%">승인대기</button>  
 				     </c:if>
@@ -382,7 +354,7 @@ function fn_send(){
 		        	   	  <tr>
 		        	   	  	<td style="width:15%">등록자</td>
 		        	   	  	<td>: </td>
-		        	   	  	<td id="userId"></td>	
+		        	   	  	<td id="userId1"></td>	
 		        	   	  </tr>
 		        	   	  <tr>
 		        	   	  	<td style="width:15%">업체명</td>
@@ -500,8 +472,7 @@ function fn_send(){
 		  </div>
 		  </div>
 		  <!-- 승인 거절 메세지 모달 끝 -->
-</section>
-		
+		</section>
 		
 
 	<div class="text-center">
