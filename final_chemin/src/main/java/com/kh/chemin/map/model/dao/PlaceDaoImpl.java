@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.map.model.vo.PlaceReview;
 
 @Repository
 public class PlaceDaoImpl implements PlaceDao {
@@ -50,6 +51,26 @@ public class PlaceDaoImpl implements PlaceDao {
 	@Override
 	public List<Place> placeSearch(SqlSessionTemplate sqlSession, Map map) {
 		return sqlSession.selectList("place.placeSearch", map);
+	}
+
+	@Override
+	public List<PlaceReview> placeReviewList(SqlSessionTemplate sqlSession, int plaNo) {
+		return sqlSession.selectList("place.placeReviewList", plaNo);
+	}
+
+	@Override
+	public int placeInsertReview(SqlSessionTemplate sqlSession, PlaceReview review) {
+		return sqlSession.insert("place.placeInsertReview", review);
+	}
+
+	@Override
+	public Place placeMatch(SqlSessionTemplate sqlSession, Map map) {
+		return sqlSession.selectOne("place.placeMatch", map);
+	}
+
+	@Override
+	public int reviewDelete(SqlSessionTemplate sqlSession, int reviewNo) {
+		return sqlSession.delete("place.reviewDelete", reviewNo);
 	}
 	
 }

@@ -48,7 +48,7 @@
 						   		<strong><a class="nav-link mypageAtag" href="${path }/mypage/myWishList.do">찜 목록</a></strong>
 						    </li>
 						    <li class="nav-item">
-						   		<strong><a class="nav-link mypageAtag" href="${path }/mypage/myPlaceList.do?userId=hyebeen">장소 등록 내역</a></strong>
+						   		<strong><a class="nav-link mypageAtag" href="${path }/mypage/myPlaceList.do?userId=${memberLoggedIn.userId}">장소 등록 내역</a></strong>
 						    </li>
 						  </ul>
 						  <hr>
