@@ -78,7 +78,7 @@
             </li>
             <c:if test="${memberLoggedIn!=null }"> 
               	<li class="nav-item">
-                 <a class="nav-link js-scroll-trigger" href="${path }/mall/cartList.do">cart <span id="cartCount" class="badge" style="background: #AE9797;color: #FDF2F2;"></span></a>
+                 <a class="nav-link js-scroll-trigger" href="${path }/mall/cartList.do">cart <span id="cartCount" class="badge badge-pill badge-secondary"></span></a>
                </li>
                <input type="hidden" id="userId" value="${memberLoggedIn.userId }"/>
                <script>

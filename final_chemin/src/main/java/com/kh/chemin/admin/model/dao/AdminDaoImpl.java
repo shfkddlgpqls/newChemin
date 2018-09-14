@@ -3,6 +3,7 @@ package com.kh.chemin.admin.model.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -41,6 +42,21 @@ public class AdminDaoImpl implements AdminDao {
 	@Override
 	public int adminReMsg(SqlSessionTemplate sqlSession, Map map) {
 		return sqlSession.update("admin.adminReMsg",map);
+	}
+
+	@Override
+	public int selectProductCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("admin.selectProductCount");
+	}
+
+	@Override
+	public List<Map<String, Object>> selectProductList(SqlSessionTemplate sqlSession, int cPage, int numPerPage) {
+		return sqlSession.selectList("admin.selectProductList", null, new RowBounds((cPage-1)*numPerPage, numPerPage));
+	}
+
+	@Override
+	public List<Map<String, String>> selectMallCate(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectList("admin.selectMallCate");
 	}
 
 }

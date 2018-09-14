@@ -6,6 +6,7 @@
 <c:set var="path" value="<%=request.getContextPath()%>"/>
   
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+<jsp:include page="/WEB-INF/views/admin/adminMenuBar.jsp"/>
 
 <!-- admin css-->
     <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/adminPage.css">
@@ -276,35 +277,6 @@ function fn_send(){
 }
 
 </script>
-    
-	<div class="admin">
-		<h2 class="text-center">관리자 페이지 </h2>
-	</div>
-		
-	
-	<div class="container">
-		<div class="row">
-			
-				<div class="col-md-12">
-					<hr>
-						<ul class="nav justify-content-center">
-						    <li class="nav-item">
-						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminPage.do">회원관리</a></strong>
-						    </li>
-						    <li class="nav-item">
-						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminPlaceList.do">장소 요청 내역</a></strong>
-						    </li>
-						    <li class="nav-item">
-						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminProductReg.do">물품등록</a></strong>
-						    </li>
-						    <li class="nav-item">
-						   		<strong><a class="nav-link adminAtag" href="${path }/admin/adminProductList.do">물품관리</a></strong>
-						    </li>
-						  </ul>
-						  <hr>
-				</div>
-			</div>	
-		</div>
 		
 		<section>
 		<div class="container">
@@ -500,8 +472,7 @@ function fn_send(){
 		  </div>
 		  </div>
 		  <!-- 승인 거절 메세지 모달 끝 -->
-</section>
-		
+		</section>
 		
 
 	<div class="text-center">
