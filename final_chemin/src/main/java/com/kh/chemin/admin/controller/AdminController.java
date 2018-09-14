@@ -1,8 +1,14 @@
 package com.kh.chemin.admin.controller;
 
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,15 +16,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.chemin.admin.model.service.AdminService;
+import com.kh.chemin.common.MallPageBar;
 import com.kh.chemin.community.controller.CommunityController;
+import com.kh.chemin.mall.model.vo.Product;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+
+import net.sf.json.JSONArray;
 
 @Controller
 public class AdminController {
@@ -41,16 +54,18 @@ public class AdminController {
 		return "admin/adminPlaceList";
 	}
 	
-	//물품등록 페이지
-	@RequestMapping("/admin/adminProductReg.do")
-	public String adminProductReg() {
-		return "admin/adminProductReg";
-	}
-	
-	//물품관리 페이지
+	//상품관리 페이지
 	@RequestMapping("/admin/adminProductList.do")
 	public String memberList() {
 		return "admin/adminProductList";
+	}
+	
+	//상품등록페이지
+	@RequestMapping("/admin/adminProductView.do")
+	public String productView(Model model) {
+		List<Map<String, String>> list = service.selectMallCate();
+		model.addAttribute("cate", list);
+		return "admin/adminProductEnroll";
 	}
 	
 	//장소 상세 페이지(모달)
@@ -160,4 +175,38 @@ public class AdminController {
 		mv.setViewName("common/msg");
 		return mv;
 	}
+	
+	@RequestMapping("/admin/adminProductData.do")
+	public void adminPData(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, HttpServletResponse response) throws Exception {
+		int numPerPage = 10;
+		int totalCount = service.selectProductCount();
+		String pageBar = MallPageBar.getPageAdmin(cPage, numPerPage, totalCount);
+		List<Map<String, Object>> list = service.selectProductList(cPage, numPerPage);
+		
+		JSONArray jsonArr = new JSONArray();
+		jsonArr.add(list);
+		jsonArr.add(pageBar);
+		
+		response.setContentType("application/json;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(jsonArr);
+	}
+	
+	@RequestMapping(value="/admin/productEnroll.do", method = RequestMethod.POST)
+	public String productEnroll(Product product, @RequestParam("mainImg") MultipartFile mainImg, HttpServletRequest request) {
+		// 대표이미지 저장경로 지정 및 서버에 이미지 저장
+		String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload/productImg");
+		
+		if(!mainImg.isEmpty()) {
+			String oriImg = mainImg.getOriginalFilename();
+			// 확장자
+			String ext = oriImg.substring(oriImg.lastIndexOf(".")+1);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+			String today = sdf.format(new Date(System.currentTimeMillis()));
+			String reImg = today+"_"+""+"."+ext;
+		}
+		
+		return "";
+	}
+	
 }

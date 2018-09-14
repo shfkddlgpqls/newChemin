@@ -360,15 +360,15 @@
                        		var month=date.substr(4,2);
                        		var day=date.substr(6,2);
                        		var pdate=new Date(year,month-1,day);
-	                       	/* if(data[i].pCount==0)
+	                       	if(data[i].pCount==0)
 	                        	view+=" <span class='badge badge-secondary'>sold out</span>";
                         	else{
 		                       	if(pdate>=(today-7))
-		                       		view+=" <span class='badge badge-primary'>new</span>";
+		                       		view+=" <span class='badge badge-info'>new</span>";
 		                       	if(data[i].sales>=10)
 		                       		view+=" <span class='badge badge-warning'>best</span>";
 		                       		// view+=" <span class='badge badge-danger'>hot</span>"; 리뷰많은순?
-                        	} */
+                        	}
 	                        view+="</a>";
 	                        view+="</div>";
 	                        view+="</div>";

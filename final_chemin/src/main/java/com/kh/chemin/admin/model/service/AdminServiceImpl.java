@@ -57,4 +57,19 @@ public class AdminServiceImpl implements AdminService {
 		return result;
 	}
 
+	@Override
+	public int selectProductCount() {
+		return dao.selectProductCount(sqlSession);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectProductList(int cPage, int numPerPage) {
+		return dao.selectProductList(sqlSession, cPage, numPerPage);
+	}
+
+	@Override
+	public List<Map<String, String>> selectMallCate() {
+		return dao.selectMallCate(sqlSession);
+	}
+
 }

@@ -10,7 +10,9 @@
 	
 	<!-- 카테고리별 상품 리스트 -->
 	<select id="selectCateList" parameterType="map" resultType="product">
-		select pno, cno, pName, details, oriImg, reImg, price, pCount, sales, to_char(pDate,'YYYYMMDD') pDate from product 
+		select pno, cno, pName, details, oriImg, reImg, price, pCount, sales, to_char(pDate,'YYYYMMDD') pDate, 
+		case when pcount=0 then '1' end cnt_priority
+		from product 
 		where 1=1
 		<if test="ctype!=null and ctype!=''">
 			and cno=#{cno}
@@ -24,17 +26,18 @@
 		<if test="highValue!=null and highValue!=''">
 			and price <![CDATA[<=]]> #{highValue}
 		</if>
+		order by cnt_priority desc
 		<if test="stype_h!=null and stype_h!=''">
-			order by sales desc
+			, sales desc
 		</if>
 		<if test="stype_n!=null and stype_n!=''">
-			order by pdate desc
+			, pdate desc
 		</if>
 		<if test="stype_lv!=null and stype_lv!=''">
-			order by price
+			, price
 		</if>
 		<if test="stype_hv!=null and stype_hv!=''">
-			order by price desc
+			, price desc
 		</if>
 	</select>
 	
