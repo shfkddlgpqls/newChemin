@@ -87,5 +87,17 @@ public class PlaceServiceImpl implements PlaceService {
 		int result = dao.placeInsertReview(sqlSession, review);
 		return result;
 	}
+
+	@Override
+	public Place placeMatch(Map map) {
+		Place plaMatch = dao.placeMatch(sqlSession, map);
+		return plaMatch;
+	}
+
+	@Override
+	public int reviewDelete(int reviewNo) {
+		int result = dao.reviewDelete(sqlSession, reviewNo);
+		return  result;
+	}
 	
 }

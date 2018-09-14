@@ -14,7 +14,6 @@ public interface MypageService {
 	int placeDelete(int plaNo);
 	Place placeSelect(int plaNo);
 	int placeUpdate(Place place,List<PlaceMenu> menuList,List<PlaceAttachment> attList);
-
 	List<Map<String,Object>> communityList(String userId);
 	List<Map<String,Object>> attachmentList(List<Integer> cno);
 }

@@ -189,4 +189,44 @@ public class MapController {
 		return jsonStr;
 	}
 	
+	//동일한 장소가 있는지 검사
+	@RequestMapping(value="/map/placeMatch.do",produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String placeMatch(String plaAddr,String plaName) throws Exception
+	{
+	
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map1 = new HashMap<String, Object>();
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonStr = null;
+		map.put("plaAddr", plaAddr);
+		map.put("plaName", plaName);
+		Place plaMatch = service.placeMatch(map);
+		
+		map1.put("plaMatch", plaMatch);
+		jsonStr = mapper.writeValueAsString(map1);
+		return jsonStr;
+	}
+	
+	//장소 리뷰글 삭제하기
+	@RequestMapping(value="map/reviewDelete.do",produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String reviewDelete(int reviewNo) throws Exception
+	{
+		Map<String, Object> map = new HashMap<String, Object>();
+	
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonStr = null;
+		
+		int result = service.reviewDelete(reviewNo);
+		
+		map.put("result", result);
+		jsonStr = mapper.writeValueAsString(map);
+		return jsonStr;
+	}
 }
+
+
+
+
+

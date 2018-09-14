@@ -22,4 +22,6 @@ public interface PlaceDao {
 	List<Place> placeSearch(SqlSessionTemplate sqlSession,Map map);
 	List<PlaceReview> placeReviewList(SqlSessionTemplate sqlSession, int plaNo);
 	int placeInsertReview(SqlSessionTemplate sqlSession, PlaceReview review);
+	Place placeMatch(SqlSessionTemplate sqlSession, Map map);
+	int reviewDelete(SqlSessionTemplate sqlSession, int reviewNo);
 }
