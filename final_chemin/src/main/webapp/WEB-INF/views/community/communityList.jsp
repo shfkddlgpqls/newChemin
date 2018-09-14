@@ -16,47 +16,137 @@ a{color:#5d5d5d;}
 </style>
 
 <script type="text/javascript">
-
-	/* 좋아요 작동안됨 */
-	$(function(){
-		$("#heart").click(function(){
-			$(this).attr("src","https://icongr.am/jam/heart-f.svg?size=30&color=red");
 	
-		});
-	});
-	
-	 function like(obj) {
+	/*  function like(obj) {
 		var communityno=$(obj).data("no");
 		console.log("communityno:"+communityno);
+		var userId="${memberLoggedIn.userId}";
+		console.log(userId);
+		var likeImg=$('img#like_img');
+		 var likeCheck=likeImg.attr('alt'); 
+		var likeCheck=$(obj).children('.like_check').attr('alt');
+		console.log(likeCheck);
 		
-		$.ajax({
-			type : 'POST',
-			url : "${path}/community/like.do?community_no="+communityno,
-			dataType : "json",
-			success : function(data) {
-				alert('하이');
-				var msg='';
-				var like_img='';
-				msg += data.msg;
-				alert(msg);
+		
+		  이미지 바꿔주기  
+		if(likeCheck=='false')
+		{
+			 디비가서 데이터 올려줌  
+			  $.ajax({
+				type : 'POST',
+				url : "${path}/community/likeInsert.do",
+				data : {community_no:communityno,like_id:userId,like_check:likeCheck},
+				dataType : "json",
+				success : function(data) {
+					
+					console.log("추가 완료!");
 				
+					 디비communityList 카운트 업데이트 
+					$.ajax({
+						type : 'GET',
+						url : "${path}/community/likePlus.do",
+						data : {community_no:communityno},
+						dataType :"json",
+						success : function(data) {
+							
+							console.log("plus완료!");
+							
+							 $(obj).children('.like_check').attr('alt','true');
+							 $(obj).children('.like_check').attr('src','https://icongram.jgog.in/fontawesome/heart.svg?size=64&color=ff4848'); 
+							 좋아요 카운트 올리기  
+							 $(obj).next("p").find("span.like_cnt").append('<p>data.like_cnt</p>');  
+						}
+					});
+	
+				},
+				error : function(jpxhr,textStatus,error) {
+					console.log("추가ajax전송실패");
+					console.log(jpxhr);
+					console.log(textStatus);
+					console.log(error);
+				}
+				
+			});  
+		}
+		else {
+			$.ajax({
+					type : 'POST',
+					url : "${path}/community/likeUpdate.do",
+					data : {community_no:communityno,like_id:userId},
+					dataType : "json",
+					success : function(data) {
+						 디비 카운트 업데이트 
+						$.ajax({
+							type : 'GET',
+							url : "${path}/community/likeMinus.do",
+							data : {community_no:communityno},
+							dataType :"json",
+							success : function(data) {
+								
+								console.log("minus완료!");
+								
+								 $(obj).children('.like_check').attr('alt','false');
+								 $(obj).children('.like_check').attr('src','https://icongr.am/jam/heart.svg?size=30'); 
+								 좋아요 카운트 올리기  
+								  $(obj).next("p").find("span.like_cnt").append('<p>data.like_cnt</p>');  
+							}
+						});
+						
+						
+					},
+					error: function(jpxhr,textStatus,errormsg) {
+						console.log("삭제ajax전송실패");
+						console.log(jpxhr);
+						console.log(textStatus);
+						console.log(errormsg);
+					}
+				});
+		
+		}  
+	 } */
+	
+	 function fn_like(obj) {
+		 var communityno=$(obj).data("no");
+		 var userid="${memberLoggedIn.userId}";
+		 console.log("communityno , userid:"+communityno+","+userid);
+		 
+		 $.ajax ({
+			url : "${path}/community/like.do",
+			type : "POST",
+			dataType : "json",
+			data : {community_no:communityno,like_id:userid},
+			success : function(data) {
+				console.log(data);
+				console.log(data.like_cnt);
+				/* 클릭한 해당 게시물 번호만 보내서 그거에 해당되는 likecheck를 가져와 비교 */
 				if(data.like_check==0)
 				{
-					like_img="https://icongr.am/jam/heart.svg?size=30";
+					 $(obj).children('.like_img').attr('src','https://icongr.am/jam/heart.svg?size=30'); 
+					 
 				}
 				else
 				{
-					like_img="https://icongr.am/jam/heart-f.svg?size=30&color=ff4848";
+					$(obj).children('.like_img').attr('src','https://icongram.jgog.in/fontawesome/heart.svg?size=64&color=ff4848'); 
+					
 				}
-				$('#like_img',frm_read).attr('src',like_img);
-				$('#like_cnt').html(data.like_cnt);
+				/* $(obj).next('p').children('span#like_cnt').append("<span>"+data.like_cnt+"</span>"); */
+				/* $('.like_check').html(data.like_check); */
 				
+			},
+			erro : function(request,status,error) {
+				console.log("ajax전송실패");
+				console.log(request);
+				console.log(status);
+				console.log(error);
 			}
-		});
-		
-	} 
+		 });
+	 }
+	 
 	
-	
+	 
+		 
+	 
+	 
 	/* ajax 댓글 조회하기 */
 	var i;
 	function showComment(obj) {
@@ -74,11 +164,14 @@ a{color:#5d5d5d;}
 						
 						$(obj).parents("tr").next("tr").find("div.comList").append("<br><div value='"+data.commentList[i].COMMENTNO+"'><div class='inComment' style='height:100px;'><p><br><br>"+data.commentList[i].WRITER+" / "+fmDate+"</p><p style='background-color:#E7E7E7;border:2px solid #E7E7E7;padding:10px;border-radius:30px;margin-left:1%;float:left;'>"+data.commentList[i].CONTENT+"</p>");
 						
-						if("${memberLoggedIn.userId}"==data.commentList[i].WRITER)  
+						if("${memberLoggedIn.userId}"==data.commentList[i].WRITER || "${memberLoggedIn.userId}"=='admin')  
 					 	{ 	
-							$(obj).parents("tr").next("tr").find("div.comList").append("<button class='btn btn-danger' style='float:right;' data-no='"+data.commentList[i].COMMENTNO+"' onclick='commentDelete(this)'>삭제</button><button class='btn btn-default' data-no='"+data.commentList[i].COMMENTNO+"' onclick='commentUpdate(this)' data-toggle='modal' data-target='#updateModal' style='float:right;'>수정</button></div></div>");
+							$(obj).parents("tr").next("tr").find("div.comList").append("<button class='btn btn-danger' style='float:right;' data-no='"+data.commentList[i].COMMENTNO+"' onclick='commentDelete(this)'>삭제</button>");
 						 }
-						
+						if("${memberLoggedIn.userId}"==data.commentList[i].WRITER)
+						{
+							$(obj).parents("tr").next("tr").find("div.comList").append("<button class='btn btn-default' data-no='"+data.commentList[i].COMMENTNO+"' onclick='commentUpdate(this)' data-toggle='modal' data-target='#updateModal' style='float:right;'>수정</button></div></div>");
+						}
 					 };   
 				}
 			
@@ -131,6 +224,14 @@ a{color:#5d5d5d;}
 	}
 	/* 카테고리별 게시물 분류 */
 	
+	/* 내 글만 보기 */
+	function myPage(obj) {
+		var userId=$(obj).data("no");
+
+		location.href="${path}/community/myCommunityList.do?userId="+userId;
+	}
+	
+	
 </script>
 <div style="background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);width:100%;height:30%;">
 	<p class="text-center" style="font-family: 'Francois One', sans-serif;font-size:70px;padding-top:5%;color:white;text-shadow:2px 2px 4px gray;">GOOD TIP</p>
@@ -168,10 +269,11 @@ a{color:#5d5d5d;}
 		</div>	
 		<div>
 			<button class="btn btn-primary float" type="button" style ="margin-right:2%;" onclick="location.href='${path }/community/communityWrite.do'">글쓰기 
+			<button class="btn btn-default float" data-no="${memberLoggedIn.userId }" onclick="myPage(this)">내글만 보기</button>
 		</div>
 		<div class="container" style="font-family: 'Poor Story', cursive;">
 			<c:forEach items="${list}" var="c"> 
-			<input id="community_no" name="community_no" value="${c.COMMUNITYNO }">
+			<input type="hidden" id="community_no" name="community_no" value="${c.COMMUNITYNO }">
 			<br>
 			<table class="post" border="1" bordercolor="white" style="width:100%;">
 				<tr>
@@ -233,10 +335,24 @@ a{color:#5d5d5d;}
 						<button type="button" class="showComment btn btn-outline-light" data-no="${c.COMMUNITYNO }" onclick="showComment(this)">
 							<img class="post-img button" src="https://icongr.am/jam/message.svg" style="height:50px;width:50px;float:left;"/>
 						</button>
-						<button type="button" id="like" class="btn btn-outline-light" data-no="${c.COMMUNITYNO }" onclick="like(this)">
-							<img class="post-img like_check" id="like_img" style="height:50px;width:50px;"src="https://icongr.am/jam/heart.svg?size=30">
-						</button>
-						<p class="post-likenumber" style="font-size:15px;float:right;">좋아요 <span id="like_cnt"></span>개<br>
+						<%-- <c:set var="l" value="${like_check }"></c:set> --%>
+						
+						<a onclick="fn_like(this)" data-no="${c.COMMUNITYNO }">
+							<img style="height:50px;width:50px;" src="https://icongr.am/jam/heart.svg?size=30" class="like_img">
+						</a>
+						
+							<%-- <button type="button" class="btn btn-outline-light" data-no="${c.COMMUNITYNO }" onclick="like(this)">
+								<img class="post-img like_check" id="like_img" alt="false" value="false" style="height:50px;width:50px;"src="https://icongr.am/jam/heart.svg?size=30">
+							</button>
+							<c:forEach items="${likeList }" var="l">	
+								<c:if test="${c.COMMUNITYNO eq l.COMMUNITYNO  and l.LIKECHECK =='true'}">
+									<button type="button" class="btn btn-outline-light" >
+										<img class="post-img" style="height:50px;width:50px;" src="https://icongr.am/jam/heart.svg?size=30">
+									</button>
+								</c:if>
+							</c:forEach> --%>
+						<p class="post-likenumber" style="font-size:15px;float:right;">
+						좋아요 <span id="like_cnt">${c.LIKECNT}</span>개<br>
 						댓글 ${c.CCOUNT }개 </p>
 					</td>
 				</tr>
@@ -290,4 +406,5 @@ a{color:#5d5d5d;}
    </div>
   </div>
 </section>
+
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

@@ -13,12 +13,16 @@ function fn_file() {
 			alert("사진은 2개까지 등록가능합니다.");
 			return false;
 		}
+		if(length==0) {
+			alert("반드시 1개이상은 등록해야합니다.");
+			return false;
+		}
 		var fm=document.communityFrm;
 		var fnm=fm.upFile;
 		var ext=fnm.value;
-		if(!(ext.substr(ext.length-3) == 'mp4' || ext.substr(ext.length-3) == 'jpg' || ext.substr(ext.length-3) == 'JPG' || ext.substr(ext.length-3) == 'PNG'))
+		if(!(ext.substr(ext.length-3) == 'mp4' || ext.substr(ext.length-3) == 'MP4' || ext.substr(ext.length-3) == 'jpg' || ext.substr(ext.length-3) == 'JPG' || ext.substr(ext.length-3) == 'PNG' || ext.substr(ext.length-3) == 'png'))
 		{
-			alert("png/jpg 파일만 올릴 수 있습니다.");
+			alert("png/jpg/mp4 파일만 올릴 수 있습니다.");
 			return false;
 		}
 		return true;

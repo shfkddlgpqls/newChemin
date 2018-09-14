@@ -16,6 +16,7 @@ import com.kh.chemin.community.model.dao.CommunityDao;
 import com.kh.chemin.community.model.vo.Attachment;
 import com.kh.chemin.community.model.vo.Comment;
 import com.kh.chemin.community.model.vo.Community;
+import com.kh.chemin.community.model.vo.LikeTo;
 
 @Service
 public class CommunityServiceImpl implements CommunityService {
@@ -35,6 +36,11 @@ public class CommunityServiceImpl implements CommunityService {
 	public List<Map<String,Object>> attachmentList() {
 		return dao.attachmentList(sqlSession);
 	}
+	/*
+	@Override
+	public List<Map<String,Object>> likeList() {
+		return dao.likeList(sqlSession);
+	}*/
 
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.READ_COMMITTED)
@@ -126,8 +132,86 @@ public class CommunityServiceImpl implements CommunityService {
 	}
 
 	@Override
-	public int like(HashMap<String, Object> map) {
-		System.out.println(":::likeService::"+map);
-		return dao.like(sqlSession,map);
+	public List<Map<String, Object>> mycommunityList(String userId) {
+		return dao.mycommunityList(sqlSession,userId);
 	}
+
+	@Override
+	public List<Map<String, Object>> myattachmentList(List<Integer> cno) {
+		return dao.myattachmentList(sqlSession,cno);
+	}
+
+	@Override
+	public LikeTo read(HashMap<String, Object> hashMap) {
+		System.out.println("::likeReadRow::"+hashMap);
+		return dao.read(sqlSession, hashMap);
+	}
+
+	@Override
+	public Community communityRead(int community_no) {
+		System.out.println("communityRowRead:"+community_no);
+		return dao.communityRead(sqlSession,community_no);
+	}
+
+	@Override
+	public int likeCount(int community_no) {
+		System.out.println("::likeCountService:::");
+		return dao.likeCount(sqlSession,community_no);
+	}
+
+	@Override
+	public int likeCheckUp(HashMap<String, Object> hashMap) {
+		System.out.println("::likeCheckUpService::");
+		return dao.likeCheckUp(sqlSession,hashMap);
+	}
+
+	@Override
+	public int likeCntUp(int community_no) {
+		System.out.println("::likeCntUpService::");
+		return dao.likeCntUp(sqlSession,community_no);
+	}
+
+	@Override
+	public int likeCheckDown(HashMap<String, Object> hashMap) {
+		System.out.println("::likeCheckDown::");
+		return dao.likeCheckDown(sqlSession,hashMap);
+	}
+
+	@Override
+	public int likeCntDown(int community_no) {
+		System.out.println("::likeCntDown::");
+		return dao.likeCntDown(sqlSession,community_no);
+	}
+
+	@Override
+	public int likeCreate(HashMap<String, Object> hashMap) {
+		System.out.println("::likeCreateService::");
+		return dao.likeCreate(sqlSession,hashMap);
+	}
+	
+	/*@Override
+	public int likeInsert(HashMap<String, Object> map) {
+		System.out.println(":::likeInsertService::"+map);
+		return dao.likeInsert(sqlSession,map);
+	}
+
+	@Override
+	public int likeUpdate(HashMap<String, Object> map) {
+		System.out.println(":::likeDeleteService::"+map);
+		return dao.likeUpdate(sqlSession,map);
+	}
+
+	@Override
+	public int likePlus(int community_no) {
+		System.out.println(":::likePlusService::"+community_no);
+		return dao.likePlus(sqlSession,community_no);
+	}
+
+	@Override
+	public int likeMinus(int community_no) {
+		System.out.println(":::likeMinusService::"+community_no);
+		return dao.likeMinus(sqlSession,community_no);
+	}*/
+	
+	
 }
