@@ -13,6 +13,7 @@
 	position:relative;
 	top:0px;left:0px;width:50px;
 	height:100%;
+	margin:0";
 	z-index:10;
 	border:1px solid black;
 	font-family:'Malgun Gothic','맑은 고딕',sans-serif;
@@ -71,6 +72,16 @@ color:#fff;
     .info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
     .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
     .info .link {color: #5085BB;}
+    
+
+#mainNav .navbar-nav > li.nav-item > a.nav-link, #mainNav .navbar-nav > li.nav-item > a.nav-link:focus {
+    color: black;
+}
+
+
+#mainNav .navbar-brand {
+    color: #F05F40;
+}
 </style>
 <div class="main-content">
 <div  class="row" style="margin-top:55px">

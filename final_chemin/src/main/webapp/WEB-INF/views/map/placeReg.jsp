@@ -6,7 +6,7 @@
 
 
 <c:set value="${pageContext.request.contextPath }" var="path"/>
-  <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+  <jsp:include page="/WEB-INF/views/common/header1.jsp"/>
   <style>
   	.container{
   		width:50%;
@@ -270,10 +270,11 @@ function validate(){
 			return false;
 		}
 		
-	
+		var result ;
 	       $.ajax({
 			url:"${path}/map/placeMatch.do",
     		data:{plaAddr:roadAddr,plaName:plaName},
+    		async: false,
     		dataType:"json",
     		success:function(data){
     			console.log(data.plaMatch)
@@ -284,20 +285,19 @@ function validate(){
       					  icon: "error",
       					  button: "확인",
       					})
-    					$('#placeInsert').attr('onsubmit',false);
+    					result = false;
     				}else if(data.plaMatch.plaStatus=='N'){
     					swal({
         					  text: "등록 요청 중인 장소입니다",
         					  icon: "error",
         					  button: "확인",
         					})
-        					$('#placeInsert').attr('onsubmit',false);
+        					result = false;
     				}
     			}
     			else
     			{
-    				alert("여기는 등록되지 않았다!!")
-    				return true;
+    				result= true;
     			}
     		},
     		error:function(jxhr,textStatus,error)
@@ -308,7 +308,7 @@ function validate(){
                 console.log(error);
              }
 		})
-		return true;
+		return result;
 	       
 	}
 
