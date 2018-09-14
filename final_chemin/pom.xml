@@ -20,8 +20,16 @@
          </repository>
       </repositories>
       
-   <dependencies>
-   
+	<dependencies>
+	
+	  <!-- jpg파일변환 -->
+	  <!--https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+	  <dependency>
+	      <groupId>commons-codec</groupId>
+	      <artifactId>commons-codec</artifactId>
+	      <version>1.10</version>
+	  </dependency>	  
+
       <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
      <dependency>
         <groupId>com.google.code.gson</groupId>
