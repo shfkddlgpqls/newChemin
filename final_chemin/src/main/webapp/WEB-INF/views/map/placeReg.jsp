@@ -233,8 +233,6 @@ function validate(){
 	var menuName =$('[name=menuName]').val();
 	var menuPrice =$('[name=menuPrice]').val();
 	
-	console.log(roadAddr)
-	console.log(plaName)
 		if(plaName.trim().length==0){
 			swal({
 				  text: "업체명을 입력해주세요",
@@ -286,19 +284,19 @@ function validate(){
       					  icon: "error",
       					  button: "확인",
       					})
-    					return false;
+    					$('#placeInsert').attr('onsubmit',false);
     				}else if(data.plaMatch.plaStatus=='N'){
     					swal({
         					  text: "등록 요청 중인 장소입니다",
         					  icon: "error",
         					  button: "확인",
         					})
-    					return false
+        					$('#placeInsert').attr('onsubmit',false);
     				}
     			}
     			else
     			{
-    				alert("여기는 등록되지 않앗따!!")
+    				alert("여기는 등록되지 않았다!!")
     				return true;
     			}
     		},
@@ -310,7 +308,8 @@ function validate(){
                 console.log(error);
              }
 		})
-		
+		return true;
+	       
 	}
 
 
@@ -327,7 +326,7 @@ function validate(){
 <section>
 	<div class="container" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 		<div class="row" style="margin-top:55px">
-			<form action="${path}/map/placeInsert.do?userId=${memberLoggedIn.userId}" method="post" onsubmit="return validate();" enctype="multipart/form-data">
+			<form id="placeInsert" action="${path}/map/placeInsert.do?userId=${memberLoggedIn.userId}" method="post" onsubmit="return validate();" enctype="multipart/form-data">
 		    	 <h1 class="text-uppercase nanumFont">
 		    		<i class="fa fa-edit"></i> 장소 등록
 		    	</h1>
