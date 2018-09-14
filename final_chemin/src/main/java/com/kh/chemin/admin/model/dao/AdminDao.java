@@ -16,4 +16,7 @@ public interface AdminDao {
 	int placeDelete(SqlSessionTemplate sqlSession, int plaNo);
 	int plaStatusChange(SqlSessionTemplate sqlSession, Map map);
 	int adminReMsg(SqlSessionTemplate sqlSession, Map map);
+	int selectProductCount(SqlSessionTemplate sqlSession);
+	List<Map<String, Object>> selectProductList(SqlSessionTemplate sqlSession, int cPage, int numPerPage);
+	List<Map<String, String>> selectMallCate(SqlSessionTemplate sqlSession);
 }
