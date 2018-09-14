@@ -3,26 +3,26 @@
 <mapper namespace="ac">
 	<resultMap type="map" id="acmap"></resultMap>
 
- 	<insert id="insertIn" parameterType="AcBook">
+ 	<insert id="insertIn" parameterType="acbook">
 		INSERT INTO ACBOOK VALUES(seq_ac_no.nextval,#{userId},#{acDate},#{typeNum},#{exCode},#{cateNum},#{acCost},#{memo})
 	</insert>
 	<insert id="insertEx">
 		INSERT INTO ACBOOK VALUES(seq_ac_no.nextval,#{userId},#{acDate},#{typeNum},#{exCode},#{cateNum},#{acCost},#{memo})
 	</insert>
 
-
-	<select id="selectEb" resultMap="acmap">
+	<select id="selectEb" parameterType="string" resultMap="acmap">
 		SELECT DISTINCT TO_CHAR(ACDATE,'yyyy-MM-dd')AS ACDATE, TYPENUM, SUM(ACCOST)
 		OVER(PARTITION BY TO_CHAR(ACDATE,'yyyy-MM-dd'),TYPENUM) AS ACALL
 		FROM ACBOOK
+		WHERE USERID=#{userId}
 		ORDER BY ACDATE DESC
 	</select>
 
-
+	<!-- calendar.jsp:load datalist -->
 	<select id="selectPageList"	resultMap="acmap">
 		SELECT ACNO, USERID, TO_CHAR(ACDATE,('yyyy-MM-dd hh:mm:ss'))AS ACDATE, T.TYPENUM, T.TYPENAME, E.EXCODE, E.EXNAME, C.CATENUM, C.CATENAME, ACCOST, MEMO
 		FROM ACBOOK A, AC_TYPE T, AC_CATEGORY C, AC_EXTYPE E
-		WHERE T.TYPENUM=A.TYPENUM AND C.CATENUM=A.CATENUM AND E.EXCODE=A.EXCODE
+		WHERE T.TYPENUM=A.TYPENUM AND C.CATENUM=A.CATENUM AND E.EXCODE=A.EXCODE AND USERID= #{userId}
 		ORDER BY ACDATE DESC
 	</select>
 
@@ -30,15 +30,34 @@
 		SELECT COUNT(*) FROM ACBOOK
 	</select>
 	
+	<!--이번달 누적 일일 지출 -->
 	<select id="selectDailySum" resultMap="acmap">
 		SELECT TO_CHAR(A.ACDATE,'MM/dd')ACDATE, A.USERID, A.TYPENUM, C.CATENAME, A.ACCOST
 		, SUM(A.ACCOST)OVER(PARTITION BY A.TYPENUM ORDER BY A.ACDATE ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)CUMAL_SUM
 		FROM ACBOOK A, AC_CATEGORY C
-		WHERE A.CATENUM=C.CATENUM AND A.TYPENUM='201' AND USERID='stella226' AND TO_CHAR(A.ACDATE,'MM')='09'
+		WHERE A.CATENUM=C.CATENUM AND A.TYPENUM='201' AND TO_CHAR(A.ACDATE,'yy-MM')= TO_CHAR(sysdate,'yy-MM') AND USERID= #{userId} 
 		ORDER BY A.ACDATE ASC
 	</select>
 	
-	<!--일일누적저축현황 -->
+	<!-- 저번달 일일 누적 지출 -->
+	<select id="preSelectDailySum" resultMap="acmap">
+	    SELECT TO_CHAR(A.ACDATE,'MM/dd')ACDATE, A.ACCOST
+		, SUM(A.ACCOST)OVER(PARTITION BY A.TYPENUM ORDER BY A.ACDATE ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)CUMAL_SUM
+		FROM ACBOOK A, AC_CATEGORY C
+		WHERE A.CATENUM=C.CATENUM AND A.TYPENUM='201' AND TO_CHAR(A.ACDATE,'yy-MM')= TO_CHAR(ADD_MONTHS(sysdate,-1),'yy-MM') AND USERID= #{userId}
+		ORDER BY A.ACDATE ASC
+	</select>
+	
+	<!-- 저저번달 일일 누적 지출 -->
+	<select id="prePreSelectDailySum" resultMap="acmap">
+		SELECT TO_CHAR(A.ACDATE,'MM/dd')ACDATE, A.ACCOST
+		, SUM(A.ACCOST)OVER(PARTITION BY A.TYPENUM ORDER BY A.ACDATE ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)CUMAL_SUM
+		FROM ACBOOK A, AC_CATEGORY C
+		WHERE A.CATENUM=C.CATENUM AND A.TYPENUM='201' AND TO_CHAR(A.ACDATE,'yy-MM')= TO_CHAR(ADD_MONTHS(sysdate,-2),'yy-MM') AND USERID= #{userId}
+		ORDER BY A.ACDATE ASC
+	</select>
+	
+	<!--연간 일일누적저축현황 -->
  	<select id="selectSaveList" resultMap="acmap">
 		SELECT TO_CHAR(A.ACDATE,'MM/dd')AS ACDATE
 		, SUM(ACCOST) OVER(PARTITION BY C.TYPENUM ORDER BY A.ACDATE ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)CUMAL_SAV
@@ -47,30 +66,94 @@
 		ORDER BY A.ACDATE ASC
 	</select>
 	
+	<!-- 소비등급 -->
 	<select id="selectExGrade" resultMap="acmap">
 		SELECT DISTINCT TYPENUM, SUM(ACCOST)
 		OVER(PARTITION BY TYPENUM)VSCOST
 		FROM ACBOOK
+		WHERE USERID= #{userId}
 	</select>
 	
-	
-	<select id="monthlyDispenditure" resultMap="acmap">
+	<!-- 이번달 총 지출 합계, 일평균 지출액 -->
+	<select id="monthlySumAvg" parameterType="string" resultMap="acmap">
+        SELECT TO_CHAR(SUM(ACCOST),'999,999,999,999')AS ALLCOST, TRUNC(SUM(ACCOST)/TO_NUMBER(TO_CHAR(SYSDATE,'dd')))AS AVGCOST
+        FROM ACBOOK
+        WHERE TYPENUM='201' AND TO_CHAR(ACDATE,'yy-MM')= TO_CHAR(SYSDATE,'yy-MM') AND USERID=#{userId}
+	</select>
+	<!-- 저번달 총 지출 합계, 일 평균지출액 -->
+	<select id="preMonthlySumAvg" parameterType="string" resultMap="acmap">
+		SELECT TO_CHAR(SUM(ACCOST),'999,999,999,999')AS ALLCOST,
+		TRUNC(SUM(ACCOST)/TO_NUMBER(TO_CHAR(TRUNC(LAST_DAY(ADD_MONTHS(SYSDATE, -1)))+0.99999421,'dd')))AS AVGCOST
+        FROM ACBOOK
+        WHERE TYPENUM='201' AND TO_CHAR(ACDATE,'yy-MM')= TO_CHAR(ADD_MONTHS(sysdate,-1),'yy-MM') AND USERID=#{userId}
+	</select>
+	<!-- 저저번달 총 지출 합계 -->
+	<select id="prePreMonthlySumAvg" parameterType="string" resultMap="acmap">
+		SELECT TO_CHAR(SUM(ACCOST),'999,999,999,999')AS ALLCOST,
+		TO_CHAR(TRUNC(SUM(ACCOST)/TO_NUMBER(TO_CHAR(TRUNC(LAST_DAY(ADD_MONTHS(SYSDATE, -2)))+0.99999421,'dd'))),'999,999,999,999')AS AVGCOST
+        FROM ACBOOK
+        WHERE TYPENUM='201' AND TO_CHAR(ACDATE,'yy-MM')= TO_CHAR(ADD_MONTHS(sysdate,-2),'yy-MM') AND USERID=#{userId}
+	</select>
+	<!-- 이번달 카테고리별 지출 합계 -->	
+	<select id="monthlyExpenditure" parameterType="string" resultMap="acmap">
 		SELECT DISTINCT C.CATENAME, SUM(A.ACCOST)
 		OVER(PARTITION BY C.CATENUM)CATESUM
 		FROM ACBOOK A, AC_CATEGORY C
-		WHERE A.CATENUM=C.CATENUM AND A.TYPENUM='201' AND TO_CHAR(A.ACDATE,('yyyy-MM'))='2018-09'
+		WHERE A.CATENUM=C.CATENUM AND A.TYPENUM='201'
+		AND TO_CHAR(ACDATE,'yy-MM')= TO_CHAR(sysdate,'yy-MM')AND USERID= #{userId}
+		ORDER BY CATESUM DESC
+	</select>	
+	<!-- 저번달 카테고리별 지출 합계 -->
+	<select id="preMonthlyData" parameterType="string" resultMap="acmap">
+		SELECT DISTINCT  TO_CHAR(ACDATE,'yy-MM'), C.CATENAME, SUM(A.ACCOST)
+		OVER(PARTITION BY C.CATENUM)CATESUM
+		FROM ACBOOK A, AC_CATEGORY C
+		WHERE A.CATENUM=C.CATENUM AND A.TYPENUM='201'
+		AND TO_CHAR(ACDATE,'yy-MM')= TO_CHAR(ADD_MONTHS(sysdate,-1),'yy-MM')AND USERID= #{userId}
 		ORDER BY CATESUM DESC
 	</select>
-<!--총 리스트 뽑아오기	
-	<select id="selectList" resultMap="acmap">
+	<!-- 저저번달 카테고리별 지출 합계 -->
+	<select id="prePreMonthlyData" parameterType="string" resultMap="acmap">
+		SELECT DISTINCT  TO_CHAR(ACDATE,'yy-MM'), C.CATENAME, SUM(A.ACCOST)
+		OVER(PARTITION BY C.CATENUM)CATESUM
+		FROM ACBOOK A, AC_CATEGORY C
+		WHERE A.CATENUM=C.CATENUM AND A.TYPENUM='201'
+		AND TO_CHAR(ACDATE,'yy-MM')= TO_CHAR(ADD_MONTHS(sysdate,-2),'yy-MM')AND USERID= #{userId}
+		ORDER BY CATESUM DESC
+	</select>
+	
+	<select id="acSelectOne" parameterType="_int"  resultMap="acmap">
 		SELECT ACNO, USERID, TO_CHAR(ACDATE,('yyyy-MM-dd hh:mm:ss'))AS ACDATE, T.TYPENUM, T.TYPENAME, E.EXCODE, E.EXNAME, C.CATENUM, C.CATENAME, ACCOST, MEMO
 		FROM ACBOOK A, AC_TYPE T, AC_CATEGORY C, AC_EXTYPE E
-		WHERE T.TYPENUM=A.TYPENUM AND C.CATENUM=A.CATENUM AND E.EXCODE=A.EXCODE
-		ORDER BY ACDATE DESC
-	</select>	
+		WHERE T.TYPENUM=A.TYPENUM AND C.CATENUM=A.CATENUM AND E.EXCODE=A.EXCODE AND ACNO= #{acNo}
+		ORDER BY ACDATE DESC 
+	</select>
 	
-	날짜검색:상세정보출력
-	<select id="acSelectList" parameterType="string" resultMap="acmap">
-		SELECT * FROM ACBOOK WHERE ACDATE=#{acDate}	
-	</select> -->
+	<!-- 게시판 글쓰기 -->
+	<insert id="insertAcCom" parameterType="accom">
+		INSERT INTO ACCOM VALUES(seq_acc_no.nextval,sysdate,#{accCount},#{accLike},#{userId},#{accTitle},#{editor})
+	</insert>
+	
+	<select id="acComList" resultMap="acmap">
+		SELECT * FROM ACCOM ORDER BY ACCNO DESC
+	</select>
+	
+	<select id="selectReadOne" resultType="accom">
+		SELECT * FROM ACCOM WHERE ACCNO= #{accNo}
+	</select>
+	
+	
+	<!--acMain.jsp: 이번달 수입 지출 -->
+	<select id="selectinExCost" parameterType="string" resultMap="acmap">
+		SELECT DISTINCT TO_CHAR(ACDATE,'yy-MM')ACDATE, TYPENUM, SUM(ACCOST)
+		OVER(PARTITION BY TO_CHAR(ACDATE,'yy-MM'),TYPENUM)ALLCOST
+		FROM ACBOOK
+		WHERE TO_CHAR(ACDATE,'yy-MM')= TO_CHAR(sysdate,'yy-MM') AND USERID= #{userId}
+		ORDER BY ACDATE DESC
+	</select>
+	
+	<!-- 이번달의 마지막 날 -->
+	<select id="selectLastDay" resultType="string">
+		SELECT TO_CHAR(LAST_DAY(SYSDATE),'dd')AS LASTDAY FROM DUAL
+	</select>
 </mapper>

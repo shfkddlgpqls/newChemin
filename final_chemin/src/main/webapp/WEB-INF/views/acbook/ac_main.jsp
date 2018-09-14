@@ -1,143 +1,54 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set value="${pageContext.request.contextPath}" var="path" />
 <!-- jQurery -->
-
 <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
-
 <!-- header -->
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <!-- sideBar -->
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
-<style>
-/* div{
-overflow:hidden;
-height:auto;
-border: 1px solid black;
-padding:0;
-} */
-.card-content{
-margin:5%;
-object-fit:contain;
-width: 100%;
-height: 100%;
-}
-/* 메인 배경색 */
-#newMain {
-	background-color: rgba(236, 240, 241);
-}
-/* 예산 수입 지출 */
-.acTop1{
-    border: 1px;
-    width:100%;
-    height:15%;
-    border-radius: 5px;
-    padding:2%;
-	margin: 0;
-	margin-top:1%;
-	margin-bottom:0;
-	color:white;
-	text-align:right;
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
-}
-.aclayout{
-	border: 1px solid white;
-	display:block;
-	padding:3%;
-	text-align:center;
-	background-color:white;
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
-	margin:0%;
-	object-fit:contain;
-	width: 100%;
-	height: 40%;
-}
-#acid{
-	border: 1px;
-	width: 100%;
-	heigth: 100%;
-	margin: 0;
-	margin-top:2%;
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
-}
-#userprofile{
-	border: 1px;
-	width: 100%;
-	heigth: 50%;
-	margin: 0;
-	margin-top:1%;
-}
-#yesan {
-	background-color:Orange;
-}
-#income {
-	background-color:MediumSeaGreen;
-}
-#dispenditure {
-	background-color:salmon;
-	 /* #ab47bc; 보라색*/
-	}
-#settings{
-	background-color: rgb(0,222,242);
-}
-/* 레프트포인트보더 */
-#despDesc{
-	border: 1px solid #ffffff;
-	border-left:5px solid indigo;
-	border-radius:2%;
-	display:block;
-	background-color:white;
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
-}
-/* 카드 흰색폰트 */
-p.font1{
-	font-size:15px;
-	font-weight:normal;
-	text-align:left;
-	color:white;
-	margin:2px;
-}
-hr{
-margin:0;
-}
-</style>
+<!-- ProgressBar: ac_inputIn -->
+<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/acMain.css?var4"/>">
 <!-- Main Start -->
 <div class="col-md-10 col-sm-8 main-content">
-
-
 
 	<!-- 여기서부터입력 -->
 <!------ Include the above in your HEAD tag ---------->
 <div class="container-fluid" id="newMain">
+<br><br>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="row">
 				<div class="col-md-3">
 					<div class="acTop1" id="yesan">
 						<p class="font1">Budget</p><hr>
-						<h2 class="timer count-title count-number" data-to="1000000" data-speed="2500"></h2>
+						<h2 class="timer count-title count-number" data-to="${list[0].ALLCOST}" data-speed="2500"></h2>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<div class="acTop1" id="income">
 						<p class="font1">Income</p><hr> 
-						<h2 class="timer count-title count-number" data-to="2047000" data-speed="2000">$</h2>
+						<h2 class="timer count-title count-number" data-to="${list[0].ALLCOST}" data-speed="2000">$</h2>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<div class="acTop1" id="dispenditure">
 						<p class="font1">Expenditure</p><hr> 
-						<h2 class="timer count-title count-number" data-to="1521340" data-speed="1500">$</h2>
+						<h2 class="timer count-title count-number" data-to="${list[1].ALLCOST }" data-speed="1500">$</h2>
 					</div>
 				</div>
+
 				<div class="col-md-3">
 					<div class="acTop1" id="settings">
 						<p class="font1">Settings</p><hr> 
-						<h2 class="timer count-title count-number" data-to="42300" data-speed="1000">$</h2>
+						<h2 class="timer count-title count-number" data-to="${lastDay }" data-speed="1000">$</h2>
 					</div>
+<!-- 					<script>
+					var a = ${list[0].ALLCOST}/${lastDay}
+					return a;
+					</script> -->
 				</div>
 			</div>
 			<div class="row">
@@ -165,7 +76,13 @@ margin:0;
 							<canvas id="gradeSearch"></canvas>
 						</div>
 						<div class="card-desc">
-							<h3>소비등급</h3>   
+							<h4>연간소비등급</h4><hr>
+							<h6><span style="color:black;font-weight:bold">${memberLoggedIn.userId}</span>님의 소비등급은<br>
+							현재 <span class="grades" style="color:red;font-weight:bold;"></span>등급으로
+							<span class="acCons" style="font-weight:bold;"></span> 단계예요.<br>
+							<span class="acDetails"></span>				
+							</h6>
+		
 						</div>			
 					</div>
 				</div>
@@ -187,7 +104,7 @@ margin:0;
 	                        <img src="https://placeimg.com/380/230/animals" alt="">
 	                    </div>
 						<div class="card-desc">
-							<h3>꾸루룽님</h3>자산관리 확인<br><br><br>
+							<h3>${memberLoggedIn.userId }님</h3>자산관리 확인<br><br><br>
 							<a href="#" class="btn-card" >search my dp</a>
 						</div>
 					</div>
@@ -269,6 +186,9 @@ function drawDoughnut() {
 				console.log("load (VSData) success");
 				var vsLabels = [];//TYPENUM
 				var vsData = [];//VSCOST
+				var acGrade = "";
+				var acCons="";
+				var acDetails = "";
 				$(d).each(function() {
 					vsLabels.push($(this).attr('TYPENUM'));
 					vsData.push($(this).attr('VSCOST'));
@@ -282,6 +202,43 @@ function drawDoughnut() {
 						break;
 					};
 				});
+				console.log(vsData[0]/vsData[1]);
+				
+				if(vsData[0]/vsData[1]>1.5){
+					console.log("1등급")
+					acGrade = "1"
+					acCons = "최상"
+					acDetails = "훌륭한 소비습관입니다!"
+				}else if(vsData[0]/vsData[1]>1){
+					console.log("2등급")
+					acGrade = "2"
+					acCons = "안심"
+					acDetails = "1등급이 멀지 않았어요!"
+				}else if(vsData[0]/vsData[1]>0.5){
+					console.log("3등급")
+					acGrade = "3"
+					acCons = "걱정"
+					acDetails = "현명한 소비습관이 필요합니다."
+				}else if(vsData[0]/vsData[1]>0){
+					console.log("4등급")
+					acGrade = "4"
+					acCons = "심각"
+					acDetails = "더이상의 지출은 No!"
+				}else{
+					console.log("5등급")
+					acGrade = "5"
+					acCons = "재정파탄"
+					acDetails = "아이고..."
+				}
+				
+				var htmlG=$(".grades").html();
+				$(".grades").html(htmlG+acGrade).show();
+				
+				var htmlC=$(".acCons").html();
+				$(".acCons").html(htmlC+acCons).show();			
+
+				var htmlD=$(".acDetails").html();
+				$(".acDetails").html(htmlD+acDetails).show();		
 				
 	var myDoughnut1 = new Chart(
 			ctx1,
@@ -303,7 +260,7 @@ function drawDoughnut() {
 						circumference: 1 * Math.PI,
 						elements: {
 							center: {
-								text: '3',
+								text: acGrade,
 						      	color: '#FF6384', 
 						     	fontStyle: 'Arial',
 						     	fontSize:20,
@@ -425,42 +382,82 @@ var ctxs1 = $("#cateLank");
 
 function drawDoughnut2() {
 
-/*  	var vsLabels = [];//TYPENUM
-	var vsData = [];//VSCOST
-	$(d).each(function() {
-		vsLabels.push($(this).attr('TYPENUM'));
-		vsData.push($(this).attr('VSCOST'));
-		
-		console.log(vsData+ "vsData없니?");
-		console.log(vsLabels+"VSLAVEL야");
-		
-		var clue = $(this).attr('TYPENUM');
-
-		switch (clue) {
-		case '101':
-			vsData.push($(this).attr('VSCOST'));
-			break;
-		case '201':
-			vsData.push($(this).attr('VSCOST'));
-			break;
-		}
-		;
-
-	}); */
-	
+	$.ajax({
+		url : "${pageContext.request.contextPath}/ajax/monthlyExpenditure",
+		type : "get",
+		dataType : "json",
+		success : function(d) {
+			console.log("load (VSData) success");
+			var vsLabels = [];//CATENAME
+			var vsData = [];//CATESUM
+			var acGrade = "";
+			$(d).each(function() {
+				vsLabels.push($(this).attr('CATENAME'));
+				var clue = $(this).attr('CATENAME');
+				switch (clue) {
+				case '식비':
+					vsData.push($(this).attr('CATESUM'));
+					break;
+				case '교통비':
+					vsData.push($(this).attr('CATESUM'));
+					break;
+				case '문화생활':
+					vsData.push($(this).attr('CATESUM'));
+					break;
+				case '생필품':
+					vsData.push($(this).attr('CATESUM'));
+					break;
+				case '의류':
+					vsData.push($(this).attr('CATESUM'));
+					break;
+				case '미용':
+					vsData.push($(this).attr('CATESUM'));
+					break;
+				case '의료/건강':
+					vsData.push($(this).attr('CATESUM'));
+					break;
+				case '휴대폰요금':
+					vsData.push($(this).attr('CATESUM'));
+					break;
+				case '경조사비':
+					vsData.push($(this).attr('CATESUM'));
+					break;
+				case '공과금':
+					vsData.push($(this).attr('CATESUM'));
+					break;
+				case '카드대금':
+					vsData.push($(this).attr('CATESUM'));
+					break;
+				case '저축':
+					vsData.push($(this).attr('CATESUM'));
+					break;
+				case '기타':
+					vsData.push($(this).attr('CATESUM'));
+					break;					
+				}
+			});
 	var myDoughnut12 = new Chart(
 			ctxs1,
 			{
 				type : 'doughnut',
 				data : {
-						labels: ["식비","저축","문화생활","교통비","의료/건강"],	
+						labels: vsLabels,	
 					datasets : [ {
-						data : ["65","20","10","3","2"],
+						data : vsData,
 						backgroundColor : [ "#F94C45",
 											"rgb(252,217,32)",
 											"rgb(171,209,26)",
 											"rgb(160,171,188)",
-											"rgba(75,192,192,1)"
+											"rgba(75,192,192,1)",
+											"rgb(160,171,188)",
+											"rgba(75,192,192,1)",
+											"rgb(160,171,188)",
+											"rgba(75,192,192,1)",
+											"rgb(160,171,188)",
+											"rgba(75,192,192,1)",
+											"rgb(160,171,188)",
+											"rgba(75,192,192,1)",
+											"rgb(160,171,188)"
 											],
 						hoverBackgroundColor : "rgba(75,192,192,1)",
 						/* 						borderColor: "rgba(75,192,192,1)", */
@@ -488,7 +485,7 @@ function drawDoughnut2() {
 					elements: {
 						position:'center',
 						center: {
-							text: '식비',
+							text: vsLabels[0],
 					      	color: '#FF6384', 
 					     	fontStyle: 'Arial', 
 					      	sidePadding:5,
@@ -501,8 +498,10 @@ function drawDoughnut2() {
 			            animationDuration: 1000,
 			        },
 			        responsiveAnimationDuration: 2000,
-				}
-			});
+				}//옵션
+			})//씨알티
+		}
+	})
 
 };
 $(document).ready(function() {

@@ -7,5 +7,4 @@ public interface MemberService {
 	int insertMember(Member member);
 	Member checkEmail(String email);
 	Member checkPhone(String phone);
-	
 }

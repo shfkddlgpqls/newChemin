@@ -7,6 +7,7 @@ import com.kh.chemin.member.model.vo.Member;
 
 @Repository
 public class MemberDaoImpl implements MemberDao {
+
 	
 	@Override
 	public Member selectOne(SqlSessionTemplate sqlSession, String userId) {
@@ -26,5 +27,7 @@ public class MemberDaoImpl implements MemberDao {
 	public Member checkPhone(SqlSessionTemplate sqlSession, String phone) {
 		System.out.println(phone);
 		return sqlSession.selectOne("member.checkphone", phone);
-	}
+
+
+}
 }

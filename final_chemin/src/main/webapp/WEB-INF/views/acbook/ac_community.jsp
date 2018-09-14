@@ -25,15 +25,21 @@
 					<div class="panel-body">
 						<div class="pull-right">
 							<div class="btn-group">
-								<button type="button" class="btn btn-info btn-filter" data-target="pagado">Female</button>
-								<button type="button" class="btn btn-warning btn-filter" data-target="pendiente">Male</button>
-								<button type="button" class="btn btn-default btn-filter" data-target="all">All</button>
+								<button type="button" class="btn btn-info btn-filter" data-target="pagado">10's</button>
+								<button type="button" class="btn btn-warning btn-filter" data-target="pendiente">20's</button>
+								<button type="button" class="btn btn-default btn-filter" data-target="all">30's</button>
+								<button type="button" class="btn btn-primary btn-filter" data-target="pagado">40's</button>
+								<button type="button" class="btn btn-danger btn-filter" data-target="pendiente">50's</button>
+								<button type="button" class="btn btn-info btn-filter" data-target="pagado">60's</button>
 							</div>
 						</div>
 						<div class="table-container">
-							<table class="table table-filter" id="tbl-calist"></table>
+							<table class="table table-filter" id="tbl-comlist"></table>
 							<div  id="pageBar"></div>
 							<div id="totalCounts"></div>
+						</div>
+						<div class="container" style="magin:10%;">
+							<button type="button" class="btn btn-info btn-filter" id="writeAc">write</button>
 						</div>
 					</div>
 				</div>
@@ -53,7 +59,16 @@
 </div>
 </div>
 <!-- Side Bar Div End -->
-
+<script>
+$('#writeAc').on('click',function(){
+	location.href="${pageContext.request.contextPath}/ac_comBoard.do";
+})
+</script>
+<script>
+$('#readAc').on('click',function(){
+	location.href="${pageContext.request.contextPath}/acbook/selectReadOne.do";
+})
+</script>
 <script>
 $(document).ready(function () {
 
@@ -83,7 +98,7 @@ $(function(){
 });
 function fn_list(cPage){
 	$.ajax({
-		url:"${pageContext.request.contextPath}/acbook/acSelectPageList.do",
+		url:"${pageContext.request.contextPath}/acbook/acComList.do",
 		data:{cPage:cPage},
 		type:"get",
 		dataType:"json",
@@ -100,7 +115,7 @@ function fn_list(cPage){
 			$("#pageBar").html(pageBar).show();
 			
 			if(data!=null){
-				var html3= $("#tbl-calist").html();
+				var html3= $("#tbl-comlist").html();
 				var html;
 				for(var i=0;i<data.model.list.length;i++){
 					html+="<tbody>";
@@ -111,7 +126,7 @@ function fn_list(cPage){
 					html+="<label for='checkbox1'></label>";
 					html+="</div>";					
 					html+="</td>";
-					html+="<td><h4 class='accmt' id='accmt'>"+[i]+"</h4>";
+					html+="<td><h4 class='accmt' id='accmt'>"+data.model.list[i].ACCNO+"</h4>";
 					html+="</td>";
 					html+="<td>";
 					html+="<a href='javascript:;' class='star'>";
@@ -124,13 +139,13 @@ function fn_list(cPage){
 					html+="<img src='https://image.flaticon.com/icons/svg/138/138283.svg' class='media-photo'>";
 					html+="</a>";
 					html+="<div class='media-body'>";
-					html+="<span class='media-meta pull-right'>"+data.model.list[i].ACDATE+"</span>";
+					html+="<span class='media-meta pull-right'>"+data.model.list[i].ACCDATE+"</span>";
 					html+="<h4 class='title'>";
 					html+=data.model.list[i].USERID;
-					html+="<span class='pull-right pagado'>"+data.model.list[i].CATENAME+"</span>";
+					html+="<span class='pull-right pagado' id='accNo'>"+data.model.list[i].ACCNO+"</span>";
 					html+="<span class='media-meta pull-right' style='color:salmon'>2</span><span class='media-meta pull-right'>10</span>"
 					html+="</h4>";
-					html+="<p class='summary'>"+data.model.list[i].MEMO+"</p>";
+					html+="<p class='summary'>"+data.model.list[i].ACCTITLE+"</p>";
 					html+="</div>";
 					html+="</div>";
 					html+="</td>";					
@@ -138,15 +153,31 @@ function fn_list(cPage){
 					html+="</td>";
 					html+="</tr>";
 					html+="</tbody>";
+										
 				}
-				$("#tbl-calist").html(html).show();				
+				$("#tbl-comlist").html(html).show();
+				
+				$("#tbl-comlist tr").on('click',function(){
+					var accNo = "";
+
+					$(this).find("td").each(function(i, item){ 
+						if (i == 1) {
+							 accNo = $(item).text();
+							 location.href="${pageContext.request.contextPath}/acbook/selectReadOne.do?accNo="+accNo;
+							 }
+						});
+				});
+
 				}else{
-					html="<tr><td>조회된 가계 데이터가 없습니다</td></tr>";
+					html="<tr><td>게시글이 없습니다</td></tr>";
 					$("#tbl-calist").html(html).show();
 				}
 		}
 	})
 }
+</script>
+<script>
+
 </script>
 <!-- footer -->
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

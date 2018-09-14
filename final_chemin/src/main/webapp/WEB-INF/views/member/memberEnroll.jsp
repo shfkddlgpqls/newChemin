@@ -397,22 +397,14 @@ $("#memberEnroll").submit(function(event)
 		<p>Please fill in this form to create an account!</p>
 		<hr>
 		
-			<label>Userid</label><label id="idResult" class="float-right"></label>
-		 	<!-- <div id="userId-container">
-					<input type="text" class="form-control" name="userId" id="userId_" onsubmit="return fn_enroll_validate();" placeholder="영문대소문자+숫자로 이루어진 4~12글자" required>
-							<span class="guide ok">사용가능한 ID입니다.</span>
-							<span class="guide error">이미 존재하는 ID입니다.</span>
-							<input type="hidden" name="idDuplicateCheck" id="idDuplicateCheck" value='0'/>
-						</div> -->
+		 	
 						<div id="userId-container">
+						<label>Userid</label><label id="idResult" class="float-right"></label>
 					<input type="text" class="form-control" name="userId" id="userId_" placeholder="영문대소문자+숫자로 이루어진 4~12글자" required>
 							<span class="guide ok" id="idResult"></span>
 							<input type="hidden" name="idDuplicateCheck" id="idDuplicateCheck" value='0'/>
 						</div>
-		 <!-- <div class="form-group">
-	            <label for="userId">ID</label><span> *</span><label id="idResult" class="float-right"></label>
-	            <input type="text" class="form-control" id="userId" name="userId" placeholder="영문대소문자+숫자로 이루어진 4~12글자" required>
-	          </div> -->
+		
         <div class="form-group">
 	            <label for="userPw">비밀번호</label><span> *</span><label id="pwd1Result" class="float-right"></label>
 	            <input type="password" class="form-control" id="password1" name="password" placeholder="8글자이상 16글자이하의 영문,숫자,특수문자조합" required>

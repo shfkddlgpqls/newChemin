@@ -3,10 +3,12 @@ package com.kh.chemin.mall.model.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kh.chemin.mall.model.vo.Product;
+import com.kh.chemin.mall.model.vo.QnA_board;
 
 @Repository
 public class DetailsDaoImpl implements DetailsDao 
@@ -34,8 +36,18 @@ public class DetailsDaoImpl implements DetailsDao
 		
 		//문의게시판 총 갯수 출력
 		@Override
-		public int selectQnACount(SqlSessionTemplate sqlSession, int no) 
+		public int selectQnACount(SqlSessionTemplate sqlSession, int pno) 
 		{
-			return sqlSession.selectOne("details.selectQnACount", no);
+			return sqlSession.selectOne("details.selectQnACount", pno);
 		}
+
+		//문의게시판 페이징 처리 ajax
+		@Override
+		public List<QnA_board> selectQnaBoardList(SqlSessionTemplate sqlSession, int cPage, int numPerPage, int pno) 
+		{
+			return sqlSession.selectList("details.selectQnaBoardList", pno, new RowBounds((cPage-1)*numPerPage, numPerPage));
+		}
+		
+		
+		
 }

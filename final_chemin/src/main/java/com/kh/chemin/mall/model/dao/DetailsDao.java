@@ -6,6 +6,7 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 
 import com.kh.chemin.mall.model.vo.Product;
+import com.kh.chemin.mall.model.vo.QnA_board;
 
 public interface DetailsDao 
 {
@@ -19,5 +20,8 @@ public interface DetailsDao
 		List<Map<String, String>> selectQnAList(SqlSessionTemplate sqlSession, int no);
 
 		//문의게시판 총 갯수
-		int selectQnACount(SqlSessionTemplate sqlSession, int no);
+		int selectQnACount(SqlSessionTemplate sqlSession, int pno);
+
+		//문의게시판 페이징 처리 ajax
+		List<QnA_board> selectQnaBoardList(SqlSessionTemplate sqlSession, int cPage, int numPerPage, int pno);
 }
