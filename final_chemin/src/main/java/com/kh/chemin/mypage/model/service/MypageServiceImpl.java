@@ -81,15 +81,7 @@ public class MypageServiceImpl implements MypageService {
 		return result;
 	}
 	
-	@Override
-	public List<Map<String, Object>> communityList(String userId) {
-		return dao.communityList(sqlSession,userId);
-	}
-
-	@Override
-	public List<Map<String, Object>> attachmentList(List<Integer> cno) {
-		return dao.attachmentList(sqlSession,cno);
-	}
+	
 
 }
 

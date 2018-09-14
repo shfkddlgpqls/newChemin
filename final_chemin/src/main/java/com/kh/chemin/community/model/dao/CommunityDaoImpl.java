@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.chemin.community.model.vo.Attachment;
 import com.kh.chemin.community.model.vo.Comment;
 import com.kh.chemin.community.model.vo.Community;
+import com.kh.chemin.community.model.vo.LikeTo;
 
 @Repository
 public class CommunityDaoImpl implements CommunityDao {
@@ -23,7 +24,12 @@ public class CommunityDaoImpl implements CommunityDao {
 	public List<Map<String,Object>> attachmentList(SqlSessionTemplate sqlSession) {
 		return sqlSession.selectList("community.attachmentList");
 	}
-
+	
+	/*@Override
+	public List<Map<String, Object>> likeList(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectList("community.likeList");
+	}*/
+	
 	@Override
 	public int communityWriteEnd(SqlSessionTemplate sqlSession, Community community) {
 		return sqlSession.insert("community.communityWriteEnd",community);
@@ -33,11 +39,6 @@ public class CommunityDaoImpl implements CommunityDao {
 	public int insertAttach(SqlSessionTemplate sqlSession, Attachment a) {
 		return sqlSession.insert("community.insertAttachment",a);
 	}
-
-	/*@Override
-	public int updateLikeCount(SqlSessionTemplate sqlSession,int community_no) {
-		return sqlSession.update("community.updateLikeCount",community_no);
-	}*/
 
 	@Override
 	public List<Comment> commentList(SqlSessionTemplate sqlSession,int community_no) {
@@ -98,11 +99,91 @@ public class CommunityDaoImpl implements CommunityDao {
 		return sqlSession.update("community.commentUpdate",comment);
 	}
 
+
 	@Override
-	public int like(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
+	public List<Map<String, Object>> mycommunityList(SqlSessionTemplate sqlSession,String userId) {
+		return sqlSession.selectList("community.myCommunityList",userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> myattachmentList(SqlSessionTemplate sqlSession, List<Integer> cno) {
+		return sqlSession.selectList("community.myAttachmentList",cno);
+	}
+
+	@Override
+	public LikeTo read(SqlSessionTemplate sqlSession, HashMap<String, Object> hashMap) {
+		System.out.println("::likeReadRow::"+hashMap);
+		return sqlSession.selectOne("community.likeRead",hashMap);
+	}
+
+	@Override
+	public Community communityRead(SqlSessionTemplate sqlSession, int community_no) {
+		System.out.println("communityReadRow:"+community_no);
+		return sqlSession.selectOne("community.communityRead",community_no);
+	}
+
+	@Override
+	public int likeCount(SqlSessionTemplate sqlSession, int community_no) {
+		System.out.println("::likeCountDao::");
+		return sqlSession.selectOne("community.likeCount",community_no);
+	}
+
+	@Override
+	public int likeCheckUp(SqlSessionTemplate sqlSession, HashMap<String, Object> hashMap) {
+		System.out.println("::likeCheckUpDao::");
+		return sqlSession.update("community.likeCheckUp",hashMap);
+	}
+
+	@Override
+	public int likeCntUp(SqlSessionTemplate sqlSession, int community_no) {
+		System.out.println("::likeCntUpDao::");
+		return sqlSession.update("community.likeCntUp",community_no);
+	}
+
+	@Override
+	public int likeCheckDown(SqlSessionTemplate sqlSession, HashMap<String, Object> hashMap) {
+		System.out.println("::likeCheckDown::");
+		return sqlSession.update("community.likeCheckDown",hashMap);
+	}
+
+	@Override
+	public int likeCntDown(SqlSessionTemplate sqlSession, int community_no) {
+		System.out.println("::likeCntDown::");
+		return sqlSession.update("community.likeCntDown",community_no);
+	}
+
+	@Override
+	public int likeCreate(SqlSessionTemplate sqlSession, HashMap<String, Object> hashMap) {
+		System.out.println("::likeCreateDao::");
+		int result=sqlSession.insert("community.likeCreate",hashMap);
+		System.out.println("::likeCreateResult::");
+		return result;
+	}
+
+	/*@Override
+	public int likeInsert(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
 		System.out.println("::likeDao::"+map);
 		return sqlSession.insert("community.like",map);
 	}
+
+	@Override
+	public int likeUpdate(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
+		System.out.println("::likeUpdateDao::"+map);
+		return sqlSession.update("community.likeUpdate",map);
+	}
+
+	@Override
+	public int likePlus(SqlSessionTemplate sqlSession, int community_no) {
+		System.out.println("::likePlusDao::"+community_no);
+		return sqlSession.update("community.likePlus",community_no);
+	}
+
+	@Override
+	public int likeMinus(SqlSessionTemplate sqlSession, int community_no) {
+		System.out.println("::likeMinusDao::"+community_no);
+		return sqlSession.update("community.likeMinus",community_no);
+	}*/
+
 
 
 }
