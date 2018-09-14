@@ -41,12 +41,20 @@
 	</select>
 	
 	<select id="placeReviewList" parameterType="_int" resultMap="reviewMap">
-		select*from pla_review where PLANO=#{plaNo}
+		select*from pla_review where PLANO=#{plaNo} order by REVIEWNO desc
 	</select>
 	
 	<insert id="placeInsertReview" parameterType="placeReview">
 		insert into pla_review values(seq_review_no.nextval,#{userId},#{plaNo},#{reStar},#{reContent},default,null,null)
 	</insert>
+	
+	<select id="placeMatch" parameterType="map" resultType="place">
+		select * from place where PLAADDR like '%' || #{plaAddr}||'%' and PLANAME like '%' || #{plaName}||'%'
+	</select>
+	
+	<delete id="reviewDelete" parameterType="_int">
+		delete pla_review where REVIEWNO = #{reviewNo}
+	</delete>
 </mapper>
 
 

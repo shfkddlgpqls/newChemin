@@ -269,7 +269,7 @@
       
      <!-- 사진 내용 -->
        <div class="box picture_box">
-	       <div style="height:6%; margin-top:5%;margin-bottom:3%">
+	       <div style="height:6%; margin-top:5%;margin-bottom:2%">
 		      	<div style="margin-left:13%; float:left">
 		      		<span style="font-size:20px;text-transform:uppercase;"><strong>사진</strong></span>
 		      	</div>
@@ -455,11 +455,12 @@
         $('#content').keyup(function (e){
             var content = $(this).val();
              /* $(this).height(((content.split('\n').length + 1) * 1.5) + 'em');  */
-            $('#counter').html(content.length + '/1000');
+            $('#counter').html(content.length + '/500');
         });
         $('#content').keyup();
         var  plaNo = $('[name=plaNo]').val();
         fn_reviewList(plaNo)
+ 
     });
  
   
@@ -504,6 +505,7 @@
     				for(var i=0; i<data.reviewList.length; i++){
     					var date=new Date(data.reviewList[i].REVIEWDATE);
     					 var fmDate=date.toISOString().slice(0,10);
+    					
     					if(i==0){
     						content+='<div class="star-rating" style=" font-size:1.1em;">';
     						for(var j=0; j<5; j++){
@@ -517,9 +519,13 @@
     						content+='<span>'+data.reviewList[i].REVIEWSTAR+'</span>';
     						content+='</div>';
         					content+='<p style="word-wrap: break-word;margin-bottom:0rem;font-size:0.9em;">'+data.reviewList[i].REVIEWCONTENT+'</p>';
-        					content+='<div style="color:#989898;font-size:0.95em;margin-bottom:3%;">'+data.reviewList[i].USERID+'｜'+fmDate+'<div style="float:right;">';
-        					content+='<button class="btn btn-primary">수정</button><button class="btn btn-primary">삭제</button></div></div>';
-        					
+        					content+='<div style="color:#989898;font-size:0.95em;margin-bottom:3%;">'+data.reviewList[i].USERID+'｜'+fmDate;
+        					if(data.reviewList[i].USERID=='${memberLoggedIn.userId}'){
+        					content+='<div style="float:right;">';
+        					content+='<button class="btn btn-primary btn-sm" onclick="fn_reUpdate('+data.reviewList[i].REVIEWNO+')">수정</button><button class="btn btn-primary btn-sm" onclick="fn_reDelete('+data.reviewList[i].REVIEWNO+')">삭제</button></div>';
+    
+        					}
+        					content+='</div>';
     					}else{																													
     						content+='<div  style="border-top:1px solid #E5E8E8">';
     						content+='<div class="star-rating" style=" font-size:1.1em;margin-top:3%">';
@@ -534,9 +540,16 @@
     						content+='<span>'+data.reviewList[i].REVIEWSTAR+'</span>';
     						content+='</div>';
         					content+='<p style="word-wrap: break-word;margin-bottom:0rem;font-size:0.9em;">'+data.reviewList[i].REVIEWCONTENT+'</p>';
-        					content+='<div style="color:#989898;font-size:0.95em;margin-bottom:3%">'+data.reviewList[i].USERID+'｜'+fmDate+'</div>';
-    						content+='</div>';
+        					content+='<div style="color:#989898;font-size:0.95em;margin-bottom:3%;">'+data.reviewList[i].USERID+'｜'+fmDate;
+        					if(data.reviewList[i].USERID=='${memberLoggedIn.userId}'){
+        					content+='<div style="float:right;">';
+        					content+='<button class="btn btn-primary btn-sm" onclick="fn_reUpdate('+data.reviewList[i].REVIEWNO+')">수정</button><button class="btn btn-primary btn-sm" onclick="fn_reDelete('+data.reviewList[i].REVIEWNO+')">삭제</button></div>';
+    
+        					}
+        					content+='</div>';
     					}	
+    				
+    				   
     				}
     			}
     			$('#sub_review').html(content);
@@ -552,6 +565,44 @@
     	})
     }
     
+    //review 삭제
+    function fn_reDelete(reviewNo){
+    	 var  plaNo = $('[name=plaNo]').val();
+    	swal({
+  		  title: "정말로 삭제하시겠습니까?",
+  		  icon: "warning",
+  		  buttons: true,
+  		  dangerMode: true,
+  		})
+  		.then((willDelete) => {
+  		  if (willDelete) {
+  			$.ajax({
+  	    		url:"${path}/map/reviewDelete.do",
+  	    		data:{reviewNo:reviewNo},
+  	    		dataType:"json",
+  	    		success:function(data){
+  	    			if(data.result>0){
+  						swal({
+  							  text: "삭제되었습니다",
+  							  icon: "success",
+  							  button: "확인",
+  							});
+  						fn_reviewList(plaNo)
+  					}else{
+  						swal({
+  							  text: "삭제되지 않았습니다",
+  							  icon: "error",
+  							  button: "확인",
+  							});
+  					}
+  	    		}
+  	    	}) 
+  		  } else {
+  		    
+  		  }
+  		});
+    	 
+    }
     
     function fn_reviewReg(obj){
     	var plaNo = $(obj).data("no");
@@ -588,7 +639,11 @@
 						  button: "확인",
 						}).then(function(isConfirm) {
 							  if (isConfirm) {
-								   fn_reviewList(plaNo); 
+								   fn_reviewList(plaNo);
+								   $('#content').val('');
+								   $('#counter').text('0/500');
+								   $star_rating.siblings('input.rating-value').val('3');
+								   return SetRatingStar();
 								  }
 								});
 				}else{
@@ -609,9 +664,6 @@
     	})  
     	}
     } 
-    function parseMSDate(s) {
-    	   var dregex = /\/Date\((\d*)\)\//;
-    	   return dregex.test(s) ? new Date(parseInt(dregex.exec(s)[1])) : s;
-    	}
+ 
     </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

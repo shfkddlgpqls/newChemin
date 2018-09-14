@@ -208,14 +208,33 @@ $(function() {
         $('#counter').html(content.length + '/2000');
     });
     $('#content').keyup();
+    
+    //대표이미지 파일 이름 보여주기
+    var fileTarget = $('.filebox .upload-hidden');
+    fileTarget.on('change', function(){
+        if(window.FileReader){
+            var filename = $(this)[0].files[0].name;
+        } else {
+            var filename = $(this).val().split('/').pop().split('\\').pop();
+        }
+
+        $(this).siblings('.upload-name').val(filename);
+    });
 });
+
+
 
 function validate(){
 	var plaName =$('[name=plaName]').val();
 	var mainImg =$('[name=mainImg]').val();
 	var phoneMiddle =$('[name=phoneMiddle]').val();
 	var phoneEnd =$('[name=phoneEnd]').val();
-
+	var roadAddr =$('[name=roadAddr]').val();
+	var menuName =$('[name=menuName]').val();
+	var menuPrice =$('[name=menuPrice]').val();
+	
+	console.log(roadAddr)
+	console.log(plaName)
 		if(plaName.trim().length==0){
 			swal({
 				  text: "업체명을 입력해주세요",
@@ -230,21 +249,21 @@ function validate(){
 				  button: "확인",
 				});
 			return false;
-		}else if(phoneMiddle.trim==0||phoneEnd.trim==0){
+		}else if(phoneMiddle.trim()==0||phoneEnd.trim()==0){
 			swal({
 				  text: "번호를 입력해주세요",
 				  icon: "warning",
 				  button: "확인",
 				});
 			return false;
-		}else if(menuName==0||menuName==null){
+		}else if(menuName.trim()==0||menuName==null){
 			swal({
 				  text: "메뉴명을 입력해주세요.",
 				  icon: "warning",
 				  button: "확인",
 				});
 			return false;
-		}else if(menuPrice==0||menuPrice==null){
+		}else if(menuPrice.trim()==0||menuPrice==null){
 			swal({
 				  text: "메뉴 가격을 입력해주세요.",
 				  icon: "warning",
@@ -252,19 +271,49 @@ function validate(){
 				});
 			return false;
 		}
-		return true;	
+		
+	
+	       $.ajax({
+			url:"${path}/map/placeMatch.do",
+    		data:{plaAddr:roadAddr,plaName:plaName},
+    		dataType:"json",
+    		success:function(data){
+    			console.log(data.plaMatch)
+    			if(data.plaMatch!=null && data.plaMatch!=''){
+    				if(data.plaMatch.plaStatus=='Y'){
+    					swal({
+      					  text: "이미 등록되어 있는 장소입니다",
+      					  icon: "error",
+      					  button: "확인",
+      					})
+    					return false;
+    				}else if(data.plaMatch.plaStatus=='N'){
+    					swal({
+        					  text: "등록 요청 중인 장소입니다",
+        					  icon: "error",
+        					  button: "확인",
+        					})
+    					return false
+    				}
+    			}
+    			else
+    			{
+    				alert("여기는 등록되지 않앗따!!")
+    				return true;
+    			}
+    		},
+    		error:function(jxhr,textStatus,error)
+            {
+                console.log("ajax실패!");
+                console.log(jxhr);
+                console.log(textStatus);
+                console.log(error);
+             }
+		})
+		
 	}
 
-var fileTarget = $('.filebox .upload-hidden');
-fileTarget.on('change', function(){
-    if(window.FileReader){
-        var filename = $(this)[0].files[0].name;
-    } else {
-        var filename = $(this).val().split('/').pop().split('\\').pop();
-    }
 
-    $(this).siblings('.upload-name').val(filename);
-});
 /* $(function(){
 	$("#check_all").click(function(){
 		var chk = $(this).is(":checked");//.attr('checked');

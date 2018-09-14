@@ -154,7 +154,7 @@ var sprotsMarkerImgSrc = 'https://i.imgur.com/UOxgFDv.png';
 var address=[];
 var categoryImg=[];
 var contentArray=[];
-var overlayArr=[];
+
 
 $(function(){
 	if('${plaList.size()}'==0){
@@ -210,7 +210,8 @@ $(function(){
 	var time ='${p.plaTime}';
 	var timeStr = time.split("/");
 	
-	var content = '<div class="wrap">' + 
+	var content = document.createElement('div');
+	content.innerHTML ='<div class="wrap">' + 
     '    <div class="info">' + 
     '        <div class="title">' + 
     '              ${p.plaName}' + 
@@ -231,7 +232,7 @@ $(function(){
     '</div>';
 	    contentArray.push(content)
 	</c:forEach>
-	console.log(categoryImg);
+
 	fn_drawMap(address,categoryImg,contentArray);
 	
 })
@@ -242,8 +243,9 @@ function createMarkerImage(src, size, options) {
     return markerImage;            
 }
 
-
+var overlayArr=[];
 function fn_drawMap(address,categoryImg,contentArray){
+	
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
     mapOption = { 
         center: new daum.maps.LatLng(37.551427, 126.920575), // 지도의 중심좌표 
@@ -253,8 +255,8 @@ function fn_drawMap(address,categoryImg,contentArray){
 	var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 	//주소-좌표 변환 객체를 생성합니다
 	var geocoder = new daum.maps.services.Geocoder();
-  
-	for(var i=0; i<address.length; i++){
+ 
+	for(var i=0; i<=address.length; i++){
 	(function(i){
 		geocoder.addressSearch(address[i], function(result, status) {
 		    // 정상적으로 검색이 완료됐으면 
@@ -262,7 +264,6 @@ function fn_drawMap(address,categoryImg,contentArray){
 			     if (status === daum.maps.services.Status.OK) {
 			    	
 			        var coords = new daum.maps.LatLng(result[0].y, result[0].x);
-			  		console.log(i)
 			        // 결과값으로 받은 위치를 마커로 표시합니다
 			        var marker = new daum.maps.Marker({
 			            map: map,
@@ -271,22 +272,15 @@ function fn_drawMap(address,categoryImg,contentArray){
 			        });
 			        
 			        var overlay = new daum.maps.CustomOverlay({
-				     content: contentArray[i],
+				      content: contentArray[i],
 				      position: marker.getPosition()       
 				     });
 				     
-			        overlayArr.push(overlay)
+			        overlayArr.push(overlay);
+			        
 				     daum.maps.event.addListener(marker, 'click', function() {
 				    		 overlay.setMap(map);  
 				     });
-			        
-			        function closeOverlay() {
-			        	for(var i=0; i<overlayArr; i++){
-			        		overlayArr[i].setMap(null);  
-			        	}
-			        	   
-			        } s
-				   
 			    } 
 			});
 	})(i);
@@ -294,6 +288,12 @@ function fn_drawMap(address,categoryImg,contentArray){
 	
 }
 
+function closeOverlay() {
+	for(var i=0; i<overlayArr.length; i++){
+		overlayArr[i].setMap(null);  
+	}
+	   
+} 
 
 
 

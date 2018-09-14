@@ -385,7 +385,8 @@ function validate(){
 			    		<div class="col-md-10">
 			    				<div class="filebox bs3-primary">
 			    					<input type="hidden" name="plaNo" value="${place.plaNo}"/>
-		                            <input class="upload-name" name="imgName" value="${place.reImg}" disabled="disabled">
+			    					<input class="upload-name" name="imgName" value="파일을 선택하세요" disabled="disabled">
+		                            <%-- <input class="upload-name" name="imgName" value="${place.reImg}" disabled="disabled"> --%>
 		
 		                           <label for="ex_filename">업로드</label>
 		                          <input type="file" name="mainImg" id="ex_filename" class="upload-hidden" value="${place.reImg}"> 

@@ -62,5 +62,15 @@ public class PlaceDaoImpl implements PlaceDao {
 	public int placeInsertReview(SqlSessionTemplate sqlSession, PlaceReview review) {
 		return sqlSession.insert("place.placeInsertReview", review);
 	}
+
+	@Override
+	public Place placeMatch(SqlSessionTemplate sqlSession, Map map) {
+		return sqlSession.selectOne("place.placeMatch", map);
+	}
+
+	@Override
+	public int reviewDelete(SqlSessionTemplate sqlSession, int reviewNo) {
+		return sqlSession.delete("place.reviewDelete", reviewNo);
+	}
 	
 }

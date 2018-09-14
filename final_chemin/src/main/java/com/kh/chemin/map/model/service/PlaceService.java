@@ -17,4 +17,6 @@ public interface PlaceService {
 	List<Place> placeSearch(Map map);
 	List<PlaceReview> placeReviewList(int plaNo);
 	int placeInsertReview(PlaceReview review);
+	Place placeMatch(Map map);
+	int reviewDelete(int reviewNo);
 }
