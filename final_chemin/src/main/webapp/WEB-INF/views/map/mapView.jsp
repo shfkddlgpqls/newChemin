@@ -13,6 +13,7 @@
 	position:relative;
 	top:0px;left:0px;width:50px;
 	height:100%;
+	margin:0";
 	z-index:10;
 	border:1px solid black;
 	font-family:'Malgun Gothic','맑은 고딕',sans-serif;
@@ -55,6 +56,7 @@ color:#fff;
 	height:26px;
 }
 
+
 /* 마커위에 창 */
    .wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
     .wrap * {padding: 0;margin: 0;}
@@ -70,8 +72,19 @@ color:#fff;
     .info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
     .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
     .info .link {color: #5085BB;}
+    
+
+#mainNav .navbar-nav > li.nav-item > a.nav-link, #mainNav .navbar-nav > li.nav-item > a.nav-link:focus {
+    color: black;
+}
+
+
+#mainNav .navbar-brand {
+    color: #F05F40;
+}
 </style>
-<div class="row" style="margin-top:55px">
+<div class="main-content">
+<div  class="row" style="margin-top:55px">
   <div class="category col-md-2">
   	 <form action="${path}/map/placeSearch.do" method="post" onsubmit="return validate();">
         <ul class="list-group">
@@ -141,7 +154,7 @@ color:#fff;
  		<div class="col-md-10" id="map" style="width:45%;height:100%;"></div>
   
 </div>
-
+</div>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eb4ae7857a625ec0a907f8f742645cfb&libraries=services"></script>
 <script>
 var foodMarkerImgSrc = 'https://i.imgur.com/kvSt5xU.png';

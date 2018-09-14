@@ -6,7 +6,7 @@
 
 
 <c:set value="${pageContext.request.contextPath }" var="path"/>
-  <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+  <jsp:include page="/WEB-INF/views/common/header1.jsp"/>
   <style>
   	.container{
   		width:50%;
@@ -233,8 +233,6 @@ function validate(){
 	var menuName =$('[name=menuName]').val();
 	var menuPrice =$('[name=menuPrice]').val();
 	
-	console.log(roadAddr)
-	console.log(plaName)
 		if(plaName.trim().length==0){
 			swal({
 				  text: "업체명을 입력해주세요",
@@ -272,10 +270,11 @@ function validate(){
 			return false;
 		}
 		
-	
+		var result ;
 	       $.ajax({
 			url:"${path}/map/placeMatch.do",
     		data:{plaAddr:roadAddr,plaName:plaName},
+    		async: false,
     		dataType:"json",
     		success:function(data){
     			console.log(data.plaMatch)
@@ -286,20 +285,19 @@ function validate(){
       					  icon: "error",
       					  button: "확인",
       					})
-    					return false;
+    					result = false;
     				}else if(data.plaMatch.plaStatus=='N'){
     					swal({
         					  text: "등록 요청 중인 장소입니다",
         					  icon: "error",
         					  button: "확인",
         					})
-    					return false
+        					result = false;
     				}
     			}
     			else
     			{
-    				alert("여기는 등록되지 않앗따!!")
-    				return true;
+    				result= true;
     			}
     		},
     		error:function(jxhr,textStatus,error)
@@ -310,7 +308,8 @@ function validate(){
                 console.log(error);
              }
 		})
-		
+		return result;
+	       
 	}
 
 
@@ -327,7 +326,7 @@ function validate(){
 <section>
 	<div class="container" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 		<div class="row" style="margin-top:55px">
-			<form action="${path}/map/placeInsert.do?userId=${memberLoggedIn.userId}" method="post" onsubmit="return validate();" enctype="multipart/form-data">
+			<form id="placeInsert" action="${path}/map/placeInsert.do?userId=${memberLoggedIn.userId}" method="post" onsubmit="return validate();" enctype="multipart/form-data">
 		    	 <h1 class="text-uppercase nanumFont">
 		    		<i class="fa fa-edit"></i> 장소 등록
 		    	</h1>

@@ -154,16 +154,21 @@
   /* Support for IE. */
   font-feature-settings: 'liga';
 }
+#page-top{
+padding:0;
+}
+
 </style>
 
 
-<jsp:include page="/WEB-INF/views/common/header.jsp"/>
-<div class="container-fluid" style="background:#F3F3F3;">
-<section>
-<div class="container">
+<jsp:include page="/WEB-INF/views/common/header1.jsp"/>
+
+<section style="background:#F3F3F3;">
+<div class="container" >
       <div class="title_box">
       	<input type="hidden" name="plaName" value="${place.plaName}"/>
-      	<h1 style="margin-top:3%;font-size:50px"><strong>${place.plaName}</strong></h1>
+      	<h1 style="font-size:50px;border-top-style: solid;border-top-color:#FA6E9C;border-top-width : 50px;border-image: url("http://papers.co/wallpaper/papers.co-sj42-purple-soft-red-gradation-blur-35-3840x2160-4k-wallpaper.jpg") "><strong>${place.plaName}</strong></h1>
+      
       	<div class="row" style="width:40%;margin-left:auto; margin-right:auto;text-align:center">
       			<div class="row" id="main_review" style="width:95%;margin-left:auto; margin-right:auto;text-align:center">
     
@@ -429,7 +434,8 @@
 		      	</div>
 	      </div>
     
-
+</div>
+</section>
     <script>
  
     var $star_rating = $('.star-rating .fa');
@@ -522,7 +528,7 @@
         					content+='<div style="color:#989898;font-size:0.95em;margin-bottom:3%;">'+data.reviewList[i].USERID+'｜'+fmDate;
         					if(data.reviewList[i].USERID=='${memberLoggedIn.userId}'){
         					content+='<div style="float:right;">';
-        					content+='<button class="btn btn-primary btn-sm" onclick="fn_reUpdate('+data.reviewList[i].REVIEWNO+')">수정</button><button class="btn btn-primary btn-sm" onclick="fn_reDelete('+data.reviewList[i].REVIEWNO+')">삭제</button></div>';
+        					content+='<button class="btn btn-default btn-sm" onclick="fn_reUpdate('+data.reviewList[i].REVIEWNO+')">수정</button><button class="btn btn-primary btn-sm" onclick="fn_reDelete('+data.reviewList[i].REVIEWNO+')">삭제</button></div>';
     
         					}
         					content+='</div>';
@@ -543,7 +549,7 @@
         					content+='<div style="color:#989898;font-size:0.95em;margin-bottom:3%;">'+data.reviewList[i].USERID+'｜'+fmDate;
         					if(data.reviewList[i].USERID=='${memberLoggedIn.userId}'){
         					content+='<div style="float:right;">';
-        					content+='<button class="btn btn-primary btn-sm" onclick="fn_reUpdate('+data.reviewList[i].REVIEWNO+')">수정</button><button class="btn btn-primary btn-sm" onclick="fn_reDelete('+data.reviewList[i].REVIEWNO+')">삭제</button></div>';
+        					content+='<button class="btn btn-default btn-sm" onclick="fn_reUpdate('+data.reviewList[i].REVIEWNO+')">수정</button><button class="btn btn-primary btn-sm" onclick="fn_reDelete('+data.reviewList[i].REVIEWNO+')">삭제</button></div>';
     
         					}
         					content+='</div>';
@@ -602,6 +608,17 @@
   		  }
   		});
     	 
+    }
+    
+    //리뷰수정
+    function fn_reUpdate(plaNo){
+    	$('#content').focus();
+    	var star = $('[name=star]').val();
+    	var content = $('[name=content]').val();
+    	var userId ='${memberLoggedIn.userId}';
+    	alert("star"+star);
+    	alert("content"+content);
+    	alert("plaNo" +plaNo)
     }
     
     function fn_reviewReg(obj){
