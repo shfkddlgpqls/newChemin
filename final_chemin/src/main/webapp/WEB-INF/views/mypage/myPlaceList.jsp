@@ -193,7 +193,13 @@ function fn_modal(obj){
 		    		}
 		    		
 		    } 		
-		}
+		},error:function(jxhr,textStatus,error)
+         {
+            console.log("ajax실패!");
+            console.log(jxhr);
+            console.log(textStatus);
+            console.log(error);
+         }
 	})
 
 }
@@ -245,6 +251,9 @@ function fn_update(){
 						    </li>
 						    <li class="nav-item">
 						      <strong><a class="nav-link mypageAtag" href="${path }/mypage/myBoardList.do">게시글 관리</a></strong>
+						    </li>
+						    <li class="nav-item">
+						      <strong><a class="nav-link mypageAtag" href="${path }/mypage/myCommunityList.do?userId=hyeran">커뮤니티 관리</a></strong>
 						    </li>
 						    <li class="nav-item">
 						      <strong><a class="nav-link mypageAtag" href="${path }/mypage/myShoppingCart.do">장바구니</a></strong>

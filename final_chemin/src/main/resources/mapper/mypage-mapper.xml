@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//DN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="mypage">
-<!-- resultType은 vo에 있는것을 가져오는것을 말함/ resultMap은 db에 있는걸 바로 가져올때. jsp에 쏴줄땐 대문자로 적음 -->
-	<resultMap type="map" id="placeMap">
-		
-	</resultMap>
+	<!-- 장소관리 -->
+	<resultMap type="map" id="placeMap"></resultMap>
 	<select id="selectPlaceList" parameterType="String" resultMap="placeMap">
-		select*from place where USERID=#{userId} order by PLADATE desc
+		select*from place where USERID=#{userId} order by PLANO desc
 	</select>
 	
 	<select id="selectAttachList" parameterType="_int" resultType="placeAttach">
@@ -22,23 +20,46 @@
 	</delete>
 	
 	<select id="placeSelect" parameterType="_int" resultType="place">
-		select * from place where PLANO = #{plaNo}
+		select*from place where PLANO =#{plaNo}
 	</select>
 	
 	<update id="placeUpdate" parameterType="place">
 		update place set PLAAREA=#{plaArea}, PLACATEGORY=#{plaCategory}, PLANAME=#{plaName}, 
 		ORIMG=#{orImg}, REIMG=#{reImg}, PLAPHONE=#{plaPhone}, PLAADDR=#{plaAddr}, PLATIME=#{plaTime},
 		PLACONTENT=#{plaContent}, PLAKEYWORD=#{plaKeyword}, PLADATE=default, PLASTATUS='N' where PLANO=#{plaNo} 
-		<selectKey keyProperty="plaNo" resultType="_int" order="AFTER">
-		 SELECT SEQ_PLACE_NO.CURRVAL FROM DUAL
-		</selectKey>
 	</update>
 	
-	<update id="updateMenu" parameterType="placeMenu">
-		update pla_menu set MENUNAME=#{menuName}, MENUPRICE=#{menuPrice} where PLANO=#{plaNo}
+		<update id="updateMenu" parameterType="placeMenu">
+		insert into pla_menu(MENUNO,PLANO,MENUNAME,MENUPRICE) values(seq_placemenu_no.nextval,#{plaNo},#{menuName},#{menuPrice})
 	</update>
 	
 	<update id="updateAttach" parameterType="placeAttach">
-		update pla_attachment set ORIMG=#{orImg}, REIMG=#{reImg}, ATTACHDATE =sysdate where PLANO=#{plaNo}
+		insert into PLA_ATTACHMENT(ATTACHMENTNO,PLANO,ORIMG,REIMG) values(SEQ_PLAATTACH_NO.nextval,#{plaNo},#{orImg},#{reImg})
 	</update>
+	
+	<delete id="removeMenu" parameterType="_int">
+		delete pla_menu where PLANO=#{plaNo}
+	</delete>
+	
+	<delete id="removeAttach" parameterType="_int">
+		delete pla_attachment where PLANO=#{plaNo}
+	</delete>
+	
+	<!-- 커뮤니티 관리 -->
+	<resultMap type="map" id="communityMap"></resultMap>
+	<select id="communityList" resultMap="communityMap" parameterType="String">
+		select c.*,
+		(select count(*) from community_comment cc where c.communityno=cc.communityno) as ccount
+		from community c 
+		where writer=#{community_writer}
+		order by communitydate desc
+	</select>
+	
+	<resultMap type="map" id="attachmentMap"></resultMap>
+	<select id="attachmentList" parameterType="list" resultMap="attachmentMap">
+		select * from attachment where communityno in
+		<foreach item="a" collection="list" open="(" separator="," close=")">
+		#{a}
+		</foreach>
+	</select>
 </mapper>

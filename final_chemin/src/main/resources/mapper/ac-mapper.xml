@@ -156,5 +156,4 @@
 	<select id="selectLastDay" resultType="string">
 		SELECT TO_CHAR(LAST_DAY(SYSDATE),'dd')AS LASTDAY FROM DUAL
 	</select>
-
 </mapper>

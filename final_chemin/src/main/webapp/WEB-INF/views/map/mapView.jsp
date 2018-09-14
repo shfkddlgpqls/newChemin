@@ -66,74 +66,76 @@ color:#fff;
     .info .body {position: relative;overflow: hidden;}
     .info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
     .desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
-    .desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
+    .desc .phone .time{font-size: 11px;color: #888;margin-top: -2px;}
     .info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
     .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
     .info .link {color: #5085BB;}
-
 </style>
 <div class="row" style="margin-top:55px">
   <div class="category col-md-2">
+  	 <form action="${path}/map/placeSearch.do" method="post" onsubmit="return validate();">
         <ul class="list-group">
         	<li class="list-group-item" style="width:100%">
         		<span style="font-size:1.3em; width:30%;"><strong>지역선택</strong></span>        		
-				  <select class="form-control" style="width:70%;margin-left:16%;margin-top:3%">
-				  <option>마포구</option>
-				  <option>강남구</option>
-				  <option>서초구</option>
-				  <option>송파구</option>
+				  <select class="form-control" name="plaArea" style="width:70%;margin-left:16%;margin-top:3%">
+					  <option value="마포구">마포구</option>
+			   		  <option value="강남구">강남구</option>
+			   		  <option value="서초구">서초구</option>
+			   		  <option value="송파구">송파구</option>
 				</select>
         	</li>
         	<div class="row">
-            <li class="list-group-item"  id="coffeeMenu" onclick="changeMarker('coffee')">
-               <div>
-               		<img style="width:35%;height:65%" src="${path}/resources/map/img/res1.png"/>
-               	</div>
-               	<span style="font-size:1.3em; width:30%; text-align: center;"><strong>식사</strong></span> 
-            </li>
-            <li class="list-group-item" id="storeMenu" onclick="changeMarker('store')">
-               <div>
-               		<img style="width:35%;height:65%" src="${path}/resources/map/img/beer1.png"/>
-               	</div>
-               	<span style="font-size:1.3em; width:30%; text-align: center;"><strong>술</strong></span> 
-            </li>
+	            <li class="list-group-item"  id="foodMenu"  onclick="changeMarker('food')">
+	            	<input type="hidden" name="plaCategory"/>
+	               <div>
+	               		<img style="width:35%;height:65%"  src="${path}/resources/map/img/res1.png"/>
+	               	</div>
+	               	<span style="font-size:1.3em; width:30%; text-align: center;"><strong>식사</strong></span> 
+	            </li>
+	            <li class="list-group-item" id="beerMenu" onclick="changeMarker('beer')">
+	               <div>
+	               		<img style="width:35%;height:65%" src="${path}/resources/map/img/beer1.png"/>
+	               	</div>
+	               	<span style="font-size:1.3em; width:30%; text-align: center;"><strong>술</strong></span> 
+	            </li>
             </div>
             <div class="row">
-            <li class="list-group-item " id="carparkMenu" onclick="changeMarker('carpark')">
-               	<div>
-               		<img style="width:35%;height:65%" src="${path}/resources/map/img/mic1.png"/>
-               	</div>
-               	<span style="font-size:1.3em; width:30%; text-align: center;"><strong>노래방</strong></span> 
-            </li>
-             <li class="list-group-item " id="sportskMenu" onclick="changeMarker('sports')">
-               	<div>
-               		<img style="width:35%;height:65%" src="${path}/resources/map/img/gym1.png"/>
-               	</div>
-               	<span style="font-size:1.3em; width:30%; text-align: center;"><strong>운동</strong></span> 
-            </li>
+	            <li class="list-group-item " id="micMenu" onclick="changeMarker('mic')">
+	               	<div>
+	               		<img style="width:35%;height:65%" src="${path}/resources/map/img/mic1.png"/>
+	               	</div>
+	               	<span style="font-size:1.3em; width:30%; text-align: center;"><strong>노래방</strong></span> 
+	            </li>
+	             <li class="list-group-item " id="sportsMenu" onclick="changeMarker('sports')">
+	               	<div>
+	               		<img style="width:35%;height:65%" src="${path}/resources/map/img/gym1.png"/>
+	               	</div>
+	               	<span style="font-size:1.3em; width:30%; text-align: center;"><strong>운동</strong></span> 
+	            </li>
             </div>
             <div class="row">
-             <li class="list-group-item " id="movieMenu" onclick="changeMarker('movie')"> 
-             		<div>
-               		<img style="width:35%;height:65%" src="${path}/resources/map/img/movie1.png"/>
-               		</div>
-               		<span style="font-size:1.3em; width:30%; text-align: center;"><strong>영화/공연</strong></span> 
-            </li>
-             <li class="list-group-item " id="addMenu" onclick="changeMarker('add')">
-               	<div>
-               		<img style="width:35%;height:65%" src="${path}/resources/map/img/add.png"/>
-               	</div>
-               	<span style="font-size:1.3em; width:30%; text-align: center;"><strong>장소추가</strong></span> 
-            </li>
+	             <li class="list-group-item " id="movieMenu" onclick="changeMarker('movie')"> 
+	             		<div>
+	               		<img style="width:35%;height:65%" src="${path}/resources/map/img/movie1.png"/>
+	               		</div>
+	               		<span style="font-size:1.3em; width:30%; text-align: center;"><strong>영화/공연</strong></span> 
+	            </li>
+	             <li class="list-group-item " id="addMenu" onclick="changeMarker('add')">
+	               	<div>
+	               		<img style="width:35%;height:65%" src="${path}/resources/map/img/add.png"/>
+	               	</div>
+	               	<span style="font-size:1.3em; width:30%; text-align: center;"><strong>장소추가</strong></span> 
+	            </li>
             </div>
             
             <div class="row" >
             	 <li class="list-group-item "style="width:100%"> 
-             		<button class="btn btn-primary" style="width:80%;height:75%">검색</button>
+             		<input type="submit" class="btn btn-primary" style="width:80%;height:75%" value="검색">
            		</li>
             	
             </div>
         </ul>
+        </form>
     </div>
     <!-- 지도가 표시될 div -->
  		<div class="col-md-10" id="map" style="width:45%;height:100%;"></div>
@@ -142,83 +144,98 @@ color:#fff;
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eb4ae7857a625ec0a907f8f742645cfb&libraries=services"></script>
 <script>
+var foodMarkerImgSrc = 'https://i.imgur.com/kvSt5xU.png';
+var movieMarkerImgSrc = 'https://i.imgur.com/5Gvp5eL.png';
+var beerMarkerImgSrc = 'https://i.imgur.com/BgXoOqa.png';
+var micMarkerImgSrc = 'https://i.imgur.com/GKf7xiJ.png';
+var sprotsMarkerImgSrc = 'https://i.imgur.com/UOxgFDv.png';
+
+/* var size = '${plaList.size()}'; */
+var address=[];
+var categoryImg=[];
+var contentArray=[];
+
+
 $(function(){
-	var size = '${plaList.size()}';
-	var array=[];
-	 for(var i=0; i<size; i++){ 
-		array.push('${plaList.get(i).getPlaAddr()}');
+	if('${plaList.size()}'==0){
+	swal({
+		  text: "검색결과가 없습니다.",
+		  icon: "error",
+		  button: "확인",
+		});
+	}
+	<c:forEach items="${plaList}" var="p">
+	address.push('${p.plaAddr}')
+ 	if('${p.plaCategory}'=='식사'){
+		   var imageSize = new daum.maps.Size(32, 39),
+            imageOptions = {  
+        		offset: new daum.maps.Point(18, 60)  
+            };  
+		  var markerImage = createMarkerImage(foodMarkerImgSrc, imageSize, imageOptions)
+		  categoryImg.push(markerImage); 
+	}else if('${p.plaCategory}'=='술'){
+		var imageSize = new daum.maps.Size(32, 39),
+        imageOptions = {  
+    		offset: new daum.maps.Point(18, 60)  
+        };  
+	  	var markerImage = createMarkerImage(beerMarkerImgSrc, imageSize, imageOptions)
+	  	categoryImg.push(markerImage);
+	}
+	else if('${p.plaCategory}'=='노래방'){
+		var imageSize = new daum.maps.Size(32, 39),
+        imageOptions = {  
+    		offset: new daum.maps.Point(18, 60)  
+        };  
+	  	var markerImage = createMarkerImage(micMarkerImgSrc, imageSize, imageOptions)
+	  	categoryImg.push(markerImage);
 	} 
-	fn_drawMap(array);
+	else if('${p.plaCategory}'=='스포츠'){
+		var imageSize = new daum.maps.Size(32, 39),
+        imageOptions = {  
+    		offset: new daum.maps.Point(18, 60)  
+        };  
+	  	var markerImage = createMarkerImage(sprotsMarkerImgSrc, imageSize, imageOptions)
+	  	categoryImg.push(markerImage);
+	}else if('${p.plaCategory}'=='영화/공연'){
+		var imageSize = new daum.maps.Size(32, 39),
+        imageOptions = {  
+    		offset: new daum.maps.Point(18, 60)  
+        };  
+	  	var markerImage = createMarkerImage(movieMarkerImgSrc, imageSize, imageOptions)
+	  	categoryImg.push(markerImage);
+	}
+
+	var addr = '${p.plaAddr}';
+	var addrStr = addr.split("/"); 
+	var time ='${p.plaTime}';
+	var timeStr = time.split("/");
+	
+	var content = document.createElement('div');
+	content.innerHTML ='<div class="wrap">' + 
+    '    <div class="info">' + 
+    '        <div class="title">' + 
+    '              ${p.plaName}' + 
+    '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' + 
+    '        </div>' + 
+    '        <div class="body">' + 
+    '            <div class="img">' +
+    '                <img src="${path}/resources/upload/place/main/${p.reImg}" width="73" height="70">' +
+    '           </div>' + 
+    '            <div class="desc">' + 
+    '                <div class="ellipsis">'+addrStr[0]+'</div>' + 
+    '                <div class="phone"><i class="fa fa-phone" style="font-size:1em;color:#989898"></i> ${p.plaPhone}</div>' + 
+    '                <div class="time"><i class="fa fa-clock-o" style="font-size:1em;color:#989898;"></i>'+' '+timeStr[0]+' '+timeStr[1]+'~'+timeStr[2]+'</div>'+
+    '                <div><a href="${path}/map/placeInfo.do?plaNo=${p.plaNo}" class="link">${p.plaName}</a></div>' + 
+    '            </div>' + 
+    '        </div>' + 
+    '    </div>' +    
+    '</div>';
+	    contentArray.push(content)
+	</c:forEach>
+
+	fn_drawMap(address,categoryImg,contentArray);
 	
 })
-
-
-function fn_drawMap(array){
-	var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
-    mapOption = { 
-        center: new daum.maps.LatLng(37.556048302475745, 126.91733299528988), // 지도의 중심좌표 
-        level: 5 // 지도의 확대 레벨 
-    }; 
-	
-	var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-	//주소-좌표 변환 객체를 생성합니다
-	var geocoder = new daum.maps.services.Geocoder();
-    var coords = []; 
-	for(var i=0; i<array.length; i++){
-		/* alert(array[i]) */
-	// 주소로 좌표를 검색합니다
-	
-	geocoder.addressSearch(array[i], function(result, status) {
-	i--;
-    // 정상적으로 검색이 완료됐으면 
-	     if (status === daum.maps.services.Status.OK) {
-	    	
-	        var coords = new daum.maps.LatLng(result[i].y, result[i].x);
-	        alert("i : "+i);
-	   		alert("coords : "+coords);
-	        // 결과값으로 받은 위치를 마커로 표시합니다
-	        var marker = new daum.maps.Marker({
-	            map: map,
-	            position: coords
-	        });
-	
-	       /*  // 인포윈도우로 장소에 대한 설명을 표시합니다
-	        var infowindow = new daum.maps.InfoWindow({
-	            content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
-	        });
-	        infowindow.open(map, marker); */ 
-	
-	        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-	        /* map.setCenter(coords); */
-	       
-	    } 
-	});   
-  }
-	
-}
-
-
-
-// 커피숍 마커가 표시될 좌표 배열입니다
-var coffeePositions = [ 
-    new daum.maps.LatLng(37.499590490909185, 127.0263723554437),
-    new daum.maps.LatLng(37.499427948430814, 127.02794423197847),
-    new daum.maps.LatLng(37.498553760499505, 127.02882598822454),
-    new daum.maps.LatLng(37.497625593121384, 127.02935713582038),
-    new daum.maps.LatLng(37.49646391248451, 127.02675574250912),
-    new daum.maps.LatLng(37.49629291770947, 127.02587362608637),
-    new daum.maps.LatLng(37.49754540521486, 127.02546694890695)                
-];
-
-
-
-selectMarker=null;
-
-var markerImageSrc = 'http://localimg.daum-img.net/localimages/07/2009/map/icon/blog_icon01_on.png';
-	
-    coffeeMarkers = []; // 커피숍 마커 객체를 가지고 있을 배열입니다
-
-
 
 // 마커이미지의 주소와, 크기, 옵션으로 마커 이미지를 생성하여 리턴하는 함수입니다
 function createMarkerImage(src, size, options) {
@@ -226,188 +243,152 @@ function createMarkerImage(src, size, options) {
     return markerImage;            
 }
 
-// 좌표와 마커이미지를 받아 마커를 생성하여 리턴하는 함수입니다
+var overlayArr=[];
+function fn_drawMap(address,categoryImg,contentArray){
+	
+	var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
+    mapOption = { 
+        center: new daum.maps.LatLng(37.551427, 126.920575), // 지도의 중심좌표 
+        level: 4 // 지도의 확대 레벨 
+    }; 
+	
+	var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+	//주소-좌표 변환 객체를 생성합니다
+	var geocoder = new daum.maps.services.Geocoder();
+ 
+	for(var i=0; i<=address.length; i++){
+	(function(i){
+		geocoder.addressSearch(address[i], function(result, status) {
+		    // 정상적으로 검색이 완료됐으면 
+		    	
+			     if (status === daum.maps.services.Status.OK) {
+			    	
+			        var coords = new daum.maps.LatLng(result[0].y, result[0].x);
+			        // 결과값으로 받은 위치를 마커로 표시합니다
+			        var marker = new daum.maps.Marker({
+			            map: map,
+			            position: coords,
+			            image: categoryImg[i]
+			        });
+			        
+			        var overlay = new daum.maps.CustomOverlay({
+				      content: contentArray[i],
+				      position: marker.getPosition()       
+				     });
+				     
+			        overlayArr.push(overlay);
+			        
+				     daum.maps.event.addListener(marker, 'click', function() {
+				    		 overlay.setMap(map);  
+				     });
+			    } 
+			});
+	})(i);
+  }
+	
+}
 
-	function createMarker(position, image) {
-	    var marker = new daum.maps.Marker({
-	        position: position,
-	        image: image
-	    });
-	      var overlay = new daum.maps.CustomOverlay({
-	     	 content: content,
-	      position: marker.getPosition()       
-	     });
-	     
-	     daum.maps.event.addListener(marker, 'click', function() {
-	    		 overlay.setMap(map);  
-	     });
-	    return marker;  
-	}   
-
-	function closeOverlay() {
-		overlay.setMap(null);     
+function closeOverlay() {
+	for(var i=0; i<overlayArr.length; i++){
+		overlayArr[i].setMap(null);  
 	}
-
-
-
-//마커 클릭시 보여지는 커스텀 창
-var content = '<div class="wrap">' + 
-            '    <div class="info">' + 
-            '        <div class="title">' + 
-            '              용호낙지' + 
-            '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' + 
-            '        </div>' + 
-            '        <div class="body">' + 
-            '            <div class="img">' +
-            '                <img src="${path}/resources/base/img/yong.PNG" width="73" height="70">' +
-            '           </div>' + 
-            '            <div class="desc">' + 
-            '                <div class="ellipsis">서울 강남구 테헤란로 119</div>' + 
-            '                <div class="jibun ellipsis">(우) 06134 (지번) 역삼동 649-14 1층</div>' + 
-            '                <div><a href="${path}/map/placeInfo.do" class="link">용호낙지</a></div>' + 
-            '            </div>' + 
-            '        </div>' + 
-            '    </div>' +    
-            '</div>';
-
-
-            /* createCoffeeMarkers(); // 커피숍 마커를 생성하고 커피숍 마커 배열에 추가합니다
-          
-
-            changeMarker('coffee'); // 지도에 커피숍 마커가 보이도록 설정합니다     */
-             
-           
-            
-              
-// 커피숍 마커를 생성하고 커피숍 마커 배열에 추가하는 함수입니다
-function createCoffeeMarkers() {
-    
-    for (var i = 0; i < coffeePositions.length; i++) {  
-        
-        var imageSize = new daum.maps.Size(28, 35),
-            imageOptions = {  
-        		offset: new daum.maps.Point(18, 60)  
-            };     
-        
-        // 마커이미지와 마커를 생성합니다
-        var markerImage = createMarkerImage(markerImageSrc, imageSize, imageOptions),    
-            marker = createMarker(coffeePositions[i], markerImage);
-        
-      
-        // 생성된 마커를 커피숍 마커 배열에 추가합니다
-        coffeeMarkers.push(marker);
-    }    
-  
-
-}
-
-// 커피숍 마커들의 지도 표시 여부를 설정하는 함수입니다
-function setCoffeeMarkers(map) {        
-    for (var i = 0; i < coffeeMarkers.length; i++) {  
-        coffeeMarkers[i].setMap(map);
-        
-       
-    } 
-  
-}
+	   
+} 
 
 
 
 // 카테고리를 클릭했을 때 type에 따라 카테고리의 스타일과 지도에 표시되는 마커를 변경합니다
 function changeMarker(type){
     
-    var coffeeMenu = document.getElementById('coffeeMenu');
-    var storeMenu = document.getElementById('storeMenu');
-    var carparkMenu = document.getElementById('carparkMenu');
-    var sportskMenu = document.getElementById('sportskMenu');
+    var foodMenu = document.getElementById('foodMenu');
+    var beerMenu = document.getElementById('beerMenu');
+    var micMenu = document.getElementById('micMenu');
+    var sportsMenu = document.getElementById('sportsMenu');
     var movieMenu = document.getElementById('movieMenu');
     var addMenu = document.getElementById('addMenu');
     
-    // 커피숍 카테고리가 클릭됐을 때
-    if (type === 'coffee') {
-        // 커피숍 카테고리를 선택된 스타일로 변경하고
-        coffeeMenu.className = 'menu_selected';
+    // 식사 카테고리가 클릭됐을 때
+    if (type === 'food') {
+        // 식사 카테고리를 선택된 스타일로 변경하고
+        foodMenu.className = 'menu_selected';
         
         // 편의점과 주차장 카테고리는 선택되지 않은 스타일로 바꿉니다
-        storeMenu.className = '';
-        carparkMenu.className = '';
-        sportskMenu.className = '';
+        beerMenu.className = '';
+        micMenu.className = '';
+        sportsMenu.className = '';
         movieMenu.className = '';
         addMenu.className = '';
+
+        $('[name=plaCategory]').val('식사');
         
-        // 커피숍 마커들만 지도에 표시하도록 설정합니다
-        setCoffeeMarkers(map);
-        setStoreMarkers(null);
-        setCarparkMarkers(null);
-        
-    } else if (type === 'store') { // 편의점 카테고리가 클릭됐을 때
+    } else if (type === 'beer') { // 술 카테고리가 클릭됐을 때
     
-        // 편의점 카테고리를 선택된 스타일로 변경하고
-        coffeeMenu.className = '';
-        storeMenu.className = 'menu_selected';
-        carparkMenu.className = '';
-        sportskMenu.className = '';
+        foodMenu.className = '';
+        beerMenu.className = 'menu_selected';
+        micMenu.className = '';
+        sportsMenu.className = '';
         movieMenu.className = '';
         addMenu.className = '';
         
-        // 편의점 마커들만 지도에 표시하도록 설정합니다
-        setCoffeeMarkers(null);
-        setStoreMarkers(map);
-        setCarparkMarkers(null);
-        
-    } else if (type === 'carpark') { // 주차장 카테고리가 클릭됐을 때
+        $('[name=plaCategory]').val('술');
+    } else if (type === 'mic') { // 노래방 카테고리가 클릭됐을 때
      
-        // 주차장 카테고리를 선택된 스타일로 변경하고
-        coffeeMenu.className = '';
-        storeMenu.className = '';
-        carparkMenu.className = 'menu_selected';
-        sportskMenu.className = '';
+        foodMenu.className = '';
+        beerMenu.className = '';
+        micMenu.className = 'menu_selected';
+        sportsMenu.className = '';
         movieMenu.className = '';
         addMenu.className = '';
-        
-        // 주차장 마커들만 지도에 표시하도록 설정합니다
-        setCoffeeMarkers(null);
-        setStoreMarkers(null);
-        setCarparkMarkers(map);  
+        $('[name=plaCategory]').val('노래방');
+
     } 
     else if (type === 'sports') { // 스포츠 카테고리가 클릭됐을 때
-        
-        // 주차장 카테고리를 선택된 스타일로 변경하고
-        coffeeMenu.className = '';
-        storeMenu.className = '';
-        carparkMenu.className = '';
-        sportskMenu.className = 'menu_selected';
+        foodMenu.className = '';
+        beerMenu.className = '';
+        micMenu.className = '';
+        sportsMenu.className = 'menu_selected';
         movieMenu.className = '';
         addMenu.className = '';
+        $('[name=plaCategory]').val('스포츠');
         
-        // 주차장 마커들만 지도에 표시하도록 설정합니다
-        setCoffeeMarkers(null);
-        setStoreMarkers(null);
-        setCarparkMarkers(map);  
     } 
-    else if (type === 'movie') { // 스포츠 카테고리가 클릭됐을 때 
-        // 주차장 카테고리를 선택된 스타일로 변경하고
-        coffeeMenu.className = '';
-        storeMenu.className = '';
-        carparkMenu.className = '';
-        sportskMenu.className = '';
+    else if (type === 'movie') { // 영화/공연 카테고리가 클릭됐을 때 
+        foodMenu.className = '';
+        beerMenu.className = '';
+        micMenu.className = '';
+        sportsMenu.className = '';
         movieMenu.className = 'menu_selected';
         addMenu.className = '';
+        $('[name=plaCategory]').val('영화/공연');
         
-        // 주차장 마커들만 지도에 표시하도록 설정합니다
-        setCoffeeMarkers(null);
-        setStoreMarkers(null);
-        setCarparkMarkers(map);  
     } else if (type === 'add'){
-    	 coffeeMenu.className = '';
-         storeMenu.className = '';
-         carparkMenu.className = '';
-         sportskMenu.className = '';
+    	 foodMenu.className = '';
+         beerMenu.className = '';
+         micMenu.className = '';
+         sportsMenu.className = '';
          movieMenu.className = '';
          addMenu.className='menu_selected';
          location.href="${path}/map/placeReg.do";
     }
 } 
+
+function validate(){
+	var food = $('#foodMenu').attr('class');
+	var beer = $('#beerMenu').attr('class');
+	var mic = $('#micMenu').attr('class');
+	var sports = $('#sportsMenu').attr('class');
+	var movie = $('#movieMenu').attr('class');
+
+		if(food!='menu_selected'&&beer!='menu_selected'&&mic!='menu_selected'&&sports!='menu_selected'&&movie!='menu_selected'){
+			swal({
+				  text: "카테고리를 선택해주세요",
+				  icon: "warning",
+				  button: "확인",
+				});
+			return false;
+		}
+		return true;	
+	}
 </script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

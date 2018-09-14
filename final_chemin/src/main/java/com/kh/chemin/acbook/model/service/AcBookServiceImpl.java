@@ -130,10 +130,6 @@ public class AcBookServiceImpl implements AcBookService {
 	public List<Model> prePreSelectDailySum(String userId) {
 		return dao.prePreSelectDailySum(sqlSession, userId);
 	}
-	
-	
-	
-	
-	
+
 
 }

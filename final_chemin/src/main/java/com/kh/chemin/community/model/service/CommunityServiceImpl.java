@@ -1,5 +1,6 @@
 package com.kh.chemin.community.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,10 +59,6 @@ public class CommunityServiceImpl implements CommunityService {
 		return result;
 	}
 
-	@Override
-	public List<Map<String,Object>> fileCount() {
-		return dao.fileCount(sqlSession);
-	}
 
 	@Override
 	public List<Comment> commentList(int communityno) {
@@ -73,8 +70,64 @@ public class CommunityServiceImpl implements CommunityService {
 		return dao.commentWrite(sqlSession,comment);
 	}
 
-	/*@Override
-	public int updateLikeCount(int community_no) {
-		return dao.updateLikeCount(sqlSession,community_no);
-	}*/
+	@Override
+	public Map selectOne(int community_no) {
+		return dao.selectOne(sqlSession, community_no);
+	}
+
+	@Override
+	public List<Map<String,String>> selectAttachmentsOne(int community_no) {
+		return dao.selectAttachmentsOne(sqlSession, community_no);
+	}
+
+	@Override
+	public int selectDelete(int community_no) {
+		return dao.selectDelete(sqlSession, community_no);
+	}
+
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.READ_COMMITTED)
+	public int communityUpdateEnd(Community community,List<Attachment> attList) {
+		int result=0;
+		int community_no=0;
+		result=dao.communityUpdateEnd(sqlSession, community);
+		community_no=community.getCommunity_no();
+		if(attList.size()>0)
+		{
+			for(Attachment a : attList)
+			{
+				a.setCommunity_no(community_no);
+				result=dao.updateAttach(sqlSession,a);
+				
+			}
+		}
+		return result;
+	}
+	/*댓글 삭제*/
+	@Override
+	public int commentDelete(int comment_no) {
+		System.out.println("::::commentService::::");
+		return dao.commentDelete(sqlSession,comment_no);
+	}
+
+	@Override
+	public List<Map<String, Object>> communitySearch(String hashTag) {
+		return dao.communitySearch(sqlSession,hashTag);
+	}
+
+	@Override
+	public List<Map<String, Object>> communityAttSearch(List<Integer> cno) {
+		return dao.communityAttSearch(sqlSession,cno);
+	}
+
+	@Override
+	public int commentUpdate(Comment comment) {
+		return dao.commentUpdate(sqlSession,comment);
+	}
+
+	@Override
+	public int like(HashMap<String, Object> map) {
+		System.out.println(":::likeService::"+map);
+		return dao.like(sqlSession,map);
+	}
 }

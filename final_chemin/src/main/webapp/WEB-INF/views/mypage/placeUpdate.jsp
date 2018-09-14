@@ -109,9 +109,9 @@
     font-family: inherit;
     line-height: normal;
     vertical-align: middle;
-    background-color: #f5f5f5;
-  border: 1px solid #ebebeb;
-  border-bottom-color: #e2e2e2;
+    background-color: #E9ECEF;
+  border: 1px solid #CED4DA;
+
   border-radius: .25em;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -263,11 +263,11 @@ $(function() {
 	    	$('[id=mePriceOne]').val('${menu.menuPrice}')
 	    	
 	    </c:if>
-		<c:if test="${status.index>0}">
+	/* 	<c:if test="${status.index>0}">
 			$('[id=subMenu]').val('${menu.menuName}')
 			$('[id=subPrice]').val('${menu.menuName}')
 			add_item()
-		</c:if>
+		</c:if> */
 	    </c:forEach>
 
 });
@@ -384,16 +384,17 @@ function validate(){
 			    		</div>
 			    		<div class="col-md-10">
 			    				<div class="filebox bs3-primary">
-		                            <input class="upload-name" value="${place.reImg}" disabled="disabled">
+			    					<input type="hidden" name="plaNo" value="${place.plaNo}"/>
+			    					<input class="upload-name" name="imgName" value="파일을 선택하세요" disabled="disabled">
+		                            <%-- <input class="upload-name" name="imgName" value="${place.reImg}" disabled="disabled"> --%>
 		
 		                           <label for="ex_filename">업로드</label>
-		                          <input type="file" name="mainImg" id="ex_filename" class="upload-hidden"> 
+		                          <input type="file" name="mainImg" id="ex_filename" class="upload-hidden" value="${place.reImg}"> 
 		                        </div>
 				                 <!-- <div class="custom-file" >
 				                    <input style="width:50%" type="file" class="custom-file-input" name="mainImg" id="mainImg1">
 				                    <label style="width:50%" class="custom-file-label" for="mainImg1">파일을 선택하세요</label>
-				                </div> -->        
-           			 		 
+				                </div> -->        	 
 			    		</div>
 		    		</div>
 
@@ -449,41 +450,59 @@ function validate(){
 			   					</select>
 			   				 	
 			   					<select class="form-control"  id="time"  name="startTime">
-			   						<option value="00:00">00:00</option>
-			   						<option value="01:00">01:00</option>
-			   						<option value="02:00">02:00</option>
-			   						<option value="03:00">03:00</option>
-			   						<option value="04:00">04:00</option>
-			   						<option value="05:00">05:00</option>
-			   						<option value="06:00">06:00</option>
-			   						<option value="07:00">07:00</option>
-			   						<option value="08:00">08:00</option>
-			   						<option value="09:00">09:00</option>
-			   						<option value="06:00">10:00</option>
-			   						<option value="07:00">11:00</option>
-			   						<option value="08:00">12:00</option>
-			   						<option value="09:00">13:00</option>
-			   						<option value="09:00">13:00</option>
-			   						<option value="09:00">13:00</option>
-			   						<option value="09:00">13:00</option>
-			   						<option value="09:00">13:00</option>
+			   						<option value="09:00">00:00</option>
+			   						<option value="09:00">01:00</option>
+			   						<option value="09:00">02:00</option>
+			   						<option value="09:00">03:00</option>
+			   						<option value="00:00">04:00</option>
+			   						<option value="00:00">05:00</option>
+			   						<option value="00:00">06:00</option>
+			   						<option value="00:00">07:00</option>
+			   						<option value="01:00">08:00</option>
+			   						<option value="02:00">09:00</option>
+			   						<option value="03:00">10:00</option>
+			   						<option value="04:00">11:00</option>
+			   						<option value="05:00">12:00</option>
+			   						<option value="06:00">13:00</option>
+			   						<option value="07:00">14:00</option>
+			   						<option value="08:00">15:00</option>
+			   						<option value="09:00">16:00</option>
+			   						<option value="06:00">17:00</option>
+			   						<option value="07:00">18:00</option>
+			   						<option value="08:00">19:00</option>
+			   						<option value="09:00">20:00</option>
+			   						<option value="09:00">21:00</option>
+			   						<option value="09:00">22:00</option>
+			   						<option value="09:00">23:00</option>
+			   						<option value="09:00">24:00</option>
 			   						
 			   					</select> 
 			   					<select class="form-control" id="time"  name="endTime">
-			   						<option value="00:00">00:00</option>
-			   						<option value="01:00">01:00</option>
-			   						<option value="02:00">02:00</option>
-			   						<option value="03:00">03:00</option>
-			   						<option value="04:00">04:00</option>
-			   						<option value="05:00">05:00</option>
-			   						<option value="06:00">06:00</option>
-			   						<option value="07:00">07:00</option>
-			   						<option value="08:00">08:00</option>
-			   						<option value="09:00">09:00</option>
-			   						<option value="06:00">10:00</option>
-			   						<option value="07:00">11:00</option>
-			   						<option value="08:00">12:00</option>
-			   						<option value="09:00">13:00</option>
+			   						<option value="09:00">00:00</option>
+			   						<option value="09:00">01:00</option>
+			   						<option value="09:00">02:00</option>
+			   						<option value="09:00">03:00</option>
+			   						<option value="00:00">04:00</option>
+			   						<option value="00:00">05:00</option>
+			   						<option value="00:00">06:00</option>
+			   						<option value="00:00">07:00</option>
+			   						<option value="01:00">08:00</option>
+			   						<option value="02:00">09:00</option>
+			   						<option value="03:00">10:00</option>
+			   						<option value="04:00">11:00</option>
+			   						<option value="05:00">12:00</option>
+			   						<option value="06:00">13:00</option>
+			   						<option value="07:00">14:00</option>
+			   						<option value="08:00">15:00</option>
+			   						<option value="09:00">16:00</option>
+			   						<option value="06:00">17:00</option>
+			   						<option value="07:00">18:00</option>
+			   						<option value="08:00">19:00</option>
+			   						<option value="09:00">20:00</option>
+			   						<option value="09:00">21:00</option>
+			   						<option value="09:00">22:00</option>
+			   						<option value="09:00">23:00</option>
+			   						<option value="09:00">24:00</option>
 			   					</select>
 			   					<input class="form-control" style="width:25%" name="subContent" type="text" placeholder="ex)1월 1일 휴무"/>
 							</div>			    		
