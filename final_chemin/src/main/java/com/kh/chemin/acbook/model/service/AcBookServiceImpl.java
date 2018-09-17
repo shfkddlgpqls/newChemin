@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 
 import com.kh.chemin.acbook.model.dao.AcBookDao;
 import com.kh.chemin.acbook.model.vo.AcBook;
-import com.kh.chemin.acbook.model.vo.AcCom;
 
 @Service
 public class AcBookServiceImpl implements AcBookService {
@@ -32,13 +31,13 @@ public class AcBookServiceImpl implements AcBookService {
 	}
 
 	@Override
-	public List<Model> selectEb(String userId) {
-		return dao.selectEb(sqlSession, userId);
+	public List<Model> selectEb() {
+		return dao.selectEb(sqlSession);
 	}
 	
 	@Override
-	public List<Map<String, String>> selectPageList(int cPage, int numPerPage, String userId) {
-		return dao.selectPageList(sqlSession, cPage, numPerPage, userId);
+	public List<Map<String, String>> selectPageList(int cPage, int numPerPage) {
+		return dao.selectPageList(sqlSession, cPage, numPerPage);
 	}
 
 	@Override
@@ -47,8 +46,8 @@ public class AcBookServiceImpl implements AcBookService {
 	}
 
 	@Override
-	public List<Model> selectDailySum(String userId) {
-		return dao.selectDailySum(sqlSession, userId);
+	public List<Model> selectDailySum() {
+		return dao.selectDailySum(sqlSession);
 	}
 	
 	@Override
@@ -57,79 +56,15 @@ public class AcBookServiceImpl implements AcBookService {
 	}
 
 	@Override
-	public List<Model> selectExGrade(String userId) {
-		return dao.selectExGrade(sqlSession, userId);
+	public List<Model> selectExGrade() {
+		return dao.selectExGrade(sqlSession);
 	}
 
 	@Override
-	public List<Model> monthlyExpenditure(String userId) {
-		return dao.monthlyExpenditure(sqlSession, userId);
+	public List<Model> monthlyDispenditure() {
+		return dao.monthlyDispenditure(sqlSession);
 	}
-
-	@Override
-	public Map<String, Object> acSelectOne(int acNo) {
-		return dao.acSelectOne(sqlSession,acNo);
-	}
-
-	@Override
-	public int insertAcCom(AcCom acc) {
-		return dao.insertAcCom(sqlSession, acc);
-	}
-
-	@Override
-	public AcCom selectReadOne(String accNo) {
-		return dao.selectReadOne(sqlSession, accNo);
-	}
-
-	@Override
-	public  List<Model> selectinExCost(String userId) {
-		return dao.selectinExCost(sqlSession, userId);
-	}
-
-	@Override
-	public String selectLastDay() {
-		return dao.selectLastDay(sqlSession);
-	}
-
-	@Override
-	public List<Map<String, String>> acComList(int cPage, int numPerPage, String userId) {
-		return dao.acComList(sqlSession,cPage,numPerPage,userId);
-	}
-
-	@Override
-	public List<Model> monthlySumAvg(String userId) {
-		return dao.monthlySumAvg(sqlSession, userId);
-	}
-
-	@Override
-	public List<Model> preMonthlySumAvg(String userId) {
-		return dao.preMonthlySumAvg(sqlSession, userId);
-	}
-
-	@Override
-	public List<Model> prePreMonthlySumAvg(String userId) {
-		return dao.prePreMonthlySumAvg(sqlSession, userId);
-	}
-
-	@Override
-	public List<Model> preMonthlyData(String userId) {
-		return dao.preMonthlyData(sqlSession, userId);
-	}
-
-	@Override
-	public List<Model> prePreMonthlyData(String userId) {
-		return dao.prePreMonthlyData(sqlSession, userId);
-	}
-
-	@Override
-	public List<Model> preSelectDailySum(String userId) {
-		return dao.preSelectDailySum(sqlSession, userId);
-	}
-
-	@Override
-	public List<Model> prePreSelectDailySum(String userId) {
-		return dao.prePreSelectDailySum(sqlSession, userId);
-	}
-
-
+	
+	
+	
 }

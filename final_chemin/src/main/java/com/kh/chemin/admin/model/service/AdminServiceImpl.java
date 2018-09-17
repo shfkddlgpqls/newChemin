@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.chemin.admin.model.dao.AdminDao;
+import com.kh.chemin.mall.model.vo.QnA_board;
+import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
@@ -116,6 +118,47 @@ public class AdminServiceImpl implements AdminService {
 		System.out.println("::searchListService::"+map);
 		return dao.searchList(sqlSession,map);
 	}
+	
+	//문의게시판 총 갯수 출력
+		@Override
+		public int selectQnACount() 
+		{
+			return dao.selectQnACount(sqlSession);
+		}
+		
+
+		@Override
+		public List<QnA_board> selectQnaBoardList(int cPage, int numPerPage) 
+		{
+			return dao.selectQnaBoardList(sqlSession,cPage,numPerPage);
+		}
+
+		
+		//관리자 글 답변
+		@Override
+		public int insertReply(Map<String, Object> map) 
+		{
+			return dao.insertReply(sqlSession, map);
+			
+		}
+
+		@Override
+		public int updateState(String board_num) 
+		{
+			return dao.updateState(sqlSession,board_num);
+		}
+
+		@Override
+		public List<Review> selectReviewList(int cPage, int numPerPage) 
+		{
+			return dao.selectReviewList(sqlSession,cPage,numPerPage);
+		}
+
+		@Override
+		public int selectReviewCount() 
+		{
+			return dao.selectReviewCount(sqlSession);
+		}
 
 
 }

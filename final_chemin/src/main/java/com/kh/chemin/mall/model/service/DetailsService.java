@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.kh.chemin.mall.model.vo.Product;
 import com.kh.chemin.mall.model.vo.QnA_board;
+import com.kh.chemin.mall.model.vo.Review;
 
 public interface DetailsService 
 {
@@ -22,5 +23,11 @@ public interface DetailsService
 
 		//문의게시판 페이징 처리(ajax)
 		List<QnA_board> selectQnaBoardList(int cPage, int numPerPage, int pno);
+
+		//리뷰 페이징 처리(ajax)
+		List<Review> selectReviewList(int cPage, int numPerPage, int pno);
+
+		//리뷰 총 갯수
+		int selectReviewCount(int pno);
 	
 }

@@ -93,4 +93,36 @@
 			order by username
 		<!-- </if> -->
 	</select>  
+	
+	<!-- 문의게시판  총 갯수 -->   
+	<select id="selectQnACount" resultType="_int">
+		select count(*) from QNA
+	</select>
+	
+	<!-- 문의게시판 ajax 페이징 처리 -->
+	<select id="selectQnaBoardList" resultType="qna">
+		select qnano, userid,pno,qna_cate_no,qnatitle,qnacontent, reply_content,qnadate,qnastate,qnapw from qna FULL OUTER JOIN reply using(qnaNo)
+	</select>
+	
+	<!-- 답변 게시판 insert -->
+	<insert id="insertReply" parameterType="map">
+		insert into reply values (#{qnaNo},REPLY_SEQ.nextval,#{reply_content} )
+	</insert> 
+	
+	<!-- 상태 update -->
+	<update id="updateState" parameterType="String">
+		update qna set qnaState = '답변완료' where qnaNo = #{board_num} 
+	</update>
+	
+	<!-- 리뷰 리스트 불러오기 -->
+	<select id="selectReviewList" resultType="review">
+		select * from review order by redate desc
+	</select>
+	
+	
+	<!-- 문의게시판  총 갯수 -->   
+	<select id="selectReviewCount" resultType="_int">
+		select count(*) from review
+	</select>
+	
 </mapper>

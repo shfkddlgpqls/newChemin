@@ -10,15 +10,15 @@ public class QnA_board
 	private int qna_cate_no;
 	private String qnaTitle;
 	private String qnaContent;
-	private String qnaReply;
-	private Date qnaDate;
+	private String reply_content;
+	private String qnaDate;
 	private String qnaState;
 	private int qnaPw;
 	
 	public QnA_board() {}
 
 	public QnA_board(int qnaNo, String userId, int pno, int qna_cate_no, String qnaTitle, String qnaContent,
-			String qnaReply, Date qnaDate, String qnaState, int qnaPw) {
+			String reply_content, String qnaDate, String qnaState, int qnaPw) {
 		super();
 		this.qnaNo = qnaNo;
 		this.userId = userId;
@@ -26,7 +26,7 @@ public class QnA_board
 		this.qna_cate_no = qna_cate_no;
 		this.qnaTitle = qnaTitle;
 		this.qnaContent = qnaContent;
-		this.qnaReply = qnaReply;
+		this.reply_content = reply_content;
 		this.qnaDate = qnaDate;
 		this.qnaState = qnaState;
 		this.qnaPw = qnaPw;
@@ -80,19 +80,19 @@ public class QnA_board
 		this.qnaContent = qnaContent;
 	}
 
-	public String getQnaReply() {
-		return qnaReply;
+	public String getReply_content() {
+		return reply_content;
 	}
 
-	public void setQnaReply(String qnaReply) {
-		this.qnaReply = qnaReply;
+	public void setQnaReply(String reply_content) {
+		this.reply_content = reply_content;
 	}
 
-	public Date getQnaDate() {
+	public String getQnaDate() {
 		return qnaDate;
 	}
 
-	public void setQnaDate(Date qnaDate) {
+	public void setQnaDate(String qnaDate) {
 		this.qnaDate = qnaDate;
 	}
 
@@ -115,7 +115,7 @@ public class QnA_board
 	@Override
 	public String toString() {
 		return "QnA_board [qnaNo=" + qnaNo + ", userId=" + userId + ", pno=" + pno + ", qna_cate_no=" + qna_cate_no
-				+ ", qnaTitle=" + qnaTitle + ", qnaContent=" + qnaContent + ", qnaReply=" + qnaReply + ", qnaDate="
+				+ ", qnaTitle=" + qnaTitle + ", qnaContent=" + qnaContent + ", reply_content=" + reply_content + ", qnaDate="
 				+ qnaDate + ", qnaState=" + qnaState + ", qnaPw=" + qnaPw + "]";
 	}
 	

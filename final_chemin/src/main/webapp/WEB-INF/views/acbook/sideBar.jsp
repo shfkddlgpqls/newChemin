@@ -8,6 +8,36 @@
 <link rel="stylesheet" href="<c:url value= "/resources/acbook/css/sideBar.css"/>">	
 <!-- ProgressBar: ac_inputIn -->
 <link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/ac_navBar.css"/>">
+<<<<<<< HEAD
+
+
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container-fluid">
+    <div class="row">
+    	<!-- Left Section Start-->
+        <div class="col-md-2 col-sm-4 sidebar1">
+            <div class="logo넣으면">
+                <img src="" class="" alt="">
+            </div>
+            <br>
+            <div class="left-navigation">
+             	<ul class="list">
+                    <h5><strong>Main</strong></h5>
+                    <li><a class="a_tags" href="${path}/ac_main.do">AcBook</a></li>
+                </ul>
+                <br>
+                <ul class="list">
+                    <h5><strong>Input</strong></h5>
+                    <li><a class="a_tags" href="${path}/ac_inputIn.do">Income</a></li>
+                    <li><a class="a_tags" href="${path}/ac_dsepIn.do">Expenditure</a></li>
+                </ul>
+
+                <br>
+                <ul class="list">
+                    <h5><strong>Menu</strong></h5>
+                    <li><a class="a_tags" href="${path}/ac_calendar.do">Calendar</a></li>
+=======
 <!-- ProgressBar: ac_inputIn -->
 <link rel="stylesheet" type="text/css" href="${path}/resources/acbook/css/acMain.css?var3"/>
 
@@ -37,6 +67,7 @@
                 <br>
                 <ul class="list">
                     <h5><strong>Menu</strong></h5>
+>>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git
                     <li><a class="a_tags" href="${path}/ac_monthlyData.do">MontlyData</a></li>
                     <li><a class="a_tags" href="${path}/ac_savingChart.do">SavingChart</a></li>
                     <li><a class="a_tags" href="${path}/ac_community.do">Community</a></li>

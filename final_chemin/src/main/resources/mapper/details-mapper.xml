@@ -12,12 +12,12 @@
 
 	 <!-- 문의하기 입력 -->
    <insert id="insertQna" parameterType="map">
-		insert into QNA values(QNA_BOARD_SEQ.nextval,#{USERID},#{PNO},#{QNA_CATE_NO},#{QNATITLE}, #{QNACONTENT},null,sysdate,default,#{QNAPW})
+		insert into QNA values(QNA_BOARD_SEQ.nextval,#{USERID},#{PNO},#{QNA_CATE_NO},#{QNATITLE}, #{QNACONTENT},sysdate,default,#{QNAPW})
    </insert>
    
    <!-- 문의게시판 출력 -->
-   <select id="selectQnAList" resultMap="qnaMap">
-   		select * from QNA where pno = #{no}
+   <select id="selectQnAList" resultType="qna">
+   		select qnano, userid,pno,qna_cate_no,qnatitle,qnacontent, reply_content,qnadate,qnastate,qnapw from qna where pno=#{pno} FULL OUTER JOIN reply using(qnaNo) where pno=#{pno} order by QNADATE desc
    </select>
 	   
 	<!-- 문의게시판  총 갯수 -->   
@@ -27,7 +27,18 @@
 	
 	<!-- 문의게시판 ajax 페이징 처리 -->
 	<select id="selectQnaBoardList" parameterType="_int" resultType="qna">
-		select * from QNA where PNO = #{pno}
+		select qnano, userid,pno,qna_cate_no,qnatitle,qnacontent, reply_content,qnadate,qnastate,qnapw from qna FULL OUTER JOIN reply using(qnaNo) where pno=#{pno} order by QNADATE desc
 	</select>
+	
+	<!-- 리뷰  총 갯수 -->   
+	<select id="selectReviewCount" resultType="_int">
+		SELECT COUNT(*) FROM Review where pno = #{pno}
+	</select>	
+	
+	<!-- 리뷰  ajax 페이징 처리 -->
+	<select id="selectReviewList" parameterType="_int" resultType="review">
+		select * from Review where PNO = #{pno} order by redate desc
+	</select>
+
 
 </mapper>

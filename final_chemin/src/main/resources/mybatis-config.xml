@@ -30,11 +30,12 @@
 		<typeAlias type="com.kh.chemin.mall.model.vo.Cart" alias="cart"/>
 		<typeAlias type="com.kh.chemin.mall.model.vo.OrderDetail" alias="orderDetail"/>
 		<typeAlias type="com.kh.chemin.mall.model.vo.QnA_board" alias="qna"/>
-		
+			<typeAlias alias="review" type="com.kh.chemin.mall.model.vo.Review"/>
 		
 
 </typeAliases>
  
 
 </configuration>
+
 

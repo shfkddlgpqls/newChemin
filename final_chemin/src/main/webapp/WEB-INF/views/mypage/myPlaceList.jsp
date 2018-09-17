@@ -215,8 +215,7 @@ function fn_modal(obj){
             attachmentOne.innerHTML='<div class="row" id="subattachOne">';
              for(i=0; i<data.attachList.length; i++){
                 if(i==0){
-                   subattachOne.innerHTML=   
-                                  '<div class="col-md-3">'+
+                   subattachOne.innerHTML='<div class="col-md-3">'+
                                   '<a href="#x" class="thumbnail">'+
                                   "<img src="+"${pageContext.request.contextPath }/resources/upload/place/attach/"+data.attachList[i].reImg + " class='img-thumbnail'>"+
                                   '</a>'+

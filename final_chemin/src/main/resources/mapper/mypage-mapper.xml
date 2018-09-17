@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//DN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="mypage">
+
+<!-- resultType은 vo에 있는것을 가져오는것을 말함/ resultMap은 db에 있는걸 바로 가져올때. jsp에 쏴줄땐 대문자로 적음 -->
+
+
+	<insert id="insertReview" parameterType="review">
+		INSERT INTO REVIEW values (REVIEW_SEQ.nextval,#{userId},#{pno},#{reContent},#{orImg},#{reImg},#{stars},sysdate)
+	</insert>
+	
+	<select id="selectQnaBoardList" parameterType="String" resultType="qna">
+		select qnano, userid,pno,qna_cate_no,qnatitle,qnacontent, reply_content,qnadate,qnastate,qnapw from qna FULL OUTER JOIN reply using(qnaNo) where userid= #{userId} order by qnadate desc 
+	</select>
+	
+	<select id="selectQnACount" resultType="_int">
+		select count(*) from qna where userId = #{userId}
+	</select>
+	
+	<!-- 리뷰  ajax 페이징 처리 -->
+	<select id="selectReviewList" parameterType="String" resultType="review">
+		select * from Review where userId = #{userId} order by redate desc
+	</select>
+	
+	<select id="selectReviewCount" resultType="_int">
+		select count(*) from review where userId = #{userId}
+	</select>
 	<!-- 장소관리 -->
 	<resultMap type="map" id="placeMap"></resultMap>
 	<select id="selectPlaceList" parameterType="map" resultMap="placeMap">

@@ -8,6 +8,8 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.chemin.mall.model.vo.QnA_board;
+import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
@@ -102,6 +104,46 @@ public class AdminDaoImpl implements AdminDao {
 		System.out.println("::searchListDao::"+map);
 		return sqlSession.selectList("admin.searchList",map);
 	}
+	
+	//문의게시판 총 갯수 출력
+		@Override
+		public int selectQnACount(SqlSessionTemplate sqlSession) 
+		{
+			return sqlSession.selectOne("admin.selectQnACount");
+		}
+		
+
+		//게시글 관리 처음 페이지 게시글 불러올 때 
+		@Override
+		public List<QnA_board> selectQnaBoardList(SqlSessionTemplate sqlSession, int cPage, int numPerPage) 
+		{
+			return sqlSession.selectList("admin.selectQnaBoardList", null, new RowBounds((cPage-1)*numPerPage, numPerPage));
+		}
+
+		//관리자 답변 글 
+		@Override
+		public int insertReply(SqlSessionTemplate sqlSession, Map<String, Object> map) 
+		{
+			return sqlSession.insert("admin.insertReply",map);
+		}
+
+		@Override
+		public int updateState(SqlSessionTemplate sqlSession, String board_num) 
+		{
+			return sqlSession.update("admin.updateState", board_num);
+		}
+
+		@Override
+		public List<Review> selectReviewList(SqlSessionTemplate sqlSession, int cPage, int numPerPage) 
+		{
+			return sqlSession.selectList("admin.selectReviewList", null, new RowBounds((cPage-1)*numPerPage, numPerPage));
+		}
+
+		@Override
+		public int selectReviewCount(SqlSessionTemplate sqlSession) 
+		{
+			return sqlSession.selectOne("admin.selectReviewCount");
+		}
 
 
 }

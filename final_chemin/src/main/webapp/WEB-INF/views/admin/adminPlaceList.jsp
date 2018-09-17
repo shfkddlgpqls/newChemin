@@ -4,7 +4,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <c:set var="path" value="<%=request.getContextPath()%>"/>
-
   
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <jsp:include page="/WEB-INF/views/admin/adminMenuBar.jsp"/>
@@ -647,5 +646,4 @@ function fn_status(cPage){
 		  </div>
 		  <!-- 승인 거절 메세지 모달 끝 -->
 		</section> 
-
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>  
