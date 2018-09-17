@@ -24,6 +24,7 @@ import com.kh.chemin.common.MallPageBar;
 import com.kh.chemin.mall.model.service.DetailsService;
 import com.kh.chemin.mall.model.vo.Product;
 import com.kh.chemin.mall.model.vo.QnA_board;
+import com.kh.chemin.mall.model.vo.Review;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -36,8 +37,8 @@ public class DetailsController
 	
 	private Logger logger = LoggerFactory.getLogger(DetailsController.class);
 
-		// 상품 상세화면 이동
-	/*	@RequestMapping("/mall/detail.do")
+		/*// 상품 상세화면 이동
+		@RequestMapping("/mall/detail.do")
 		public ModelAndView mallDetail(ModelAndView mv, int no)
 		{
 			//해당 상품 리스트 보내기 
@@ -112,44 +113,75 @@ public class DetailsController
 		
 		//QnA 페이징 처리
 		@RequestMapping(value="/mall/qnaPage.do",produces = "application/text; charset=utf8")
-		@ResponseBody
-		public String qnaPaging(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage,  int pno) throws Exception 
+	    @ResponseBody
+	      public String qnaPaging(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage,  int pno) throws Exception 
 		{
-			int numPerPage= 4;
-			Map<String, Object> map = new HashMap<String, Object>();
-			ObjectMapper mapper = new ObjectMapper();
-			String jsonStr = null;
-			List<QnA_board> list = service.selectQnaBoardList(cPage,numPerPage,pno);	
-			//관리자 list를 따로 불러오기
-			
-			//문의게시판  글 갯수
-			int qTotalCount = service.selectQnACount(pno);
-			
-			//페이지바
-			String qnaPageBar = MallPageBar.getQnaPage(cPage, numPerPage, qTotalCount);
-			
-			System.out.println("list 값"+list);
-			System.out.println("qTotalCount 값"+qTotalCount);
-			System.out.println("qnaPageBar"+qnaPageBar);
-				
-			//json
-		/*	JSONObject jsonRes = null;
-		    JSONArray jsonArr = new JSONArray();*/
-//		    Map map=new HashMap();
-//		    map.put("list", list);
-			
-		  
-		    
-			map.put("list", list);
-			map.put("pageBar", qnaPageBar);
-		   /* ModelAndView mv=new ModelAndView();
-		    mv.addObject("list",list);
-		    mv.setViewName("jsonView");
-		    mv.addObject("pageBar",qnaPageBar);*/
+			  int numPerPage= 4;
+			  
+		         Map<String, Object> map = new HashMap<String, Object>();
+		         ObjectMapper mapper = new ObjectMapper();
+		         String jsonStr = null;
+		         List<QnA_board> list = service.selectQnaBoardList(cPage,numPerPage,pno);   
+		         //관리자 list를 따로 불러오기
+		         
+		         //문의게시판  글 갯수
+		         int qTotalCount = service.selectQnACount(pno);
+		         
+		         //페이지바
+		         String qnaPageBar = MallPageBar.getQnaPage(cPage, numPerPage, qTotalCount);
+		         
+		         System.out.println("list 값"+list);
+		         System.out.println("qTotalCount 값"+qTotalCount);
+		         System.out.println("qnaPageBar"+qnaPageBar);
+		            
+		         //json
+		      /*   JSONObject jsonRes = null;
+		          JSONArray jsonArr = new JSONArray();*/
+//		          Map map=new HashMap();
+//		          map.put("list", list);
+		         	          
+		         map.put("list", list);
+		         map.put("pageBar", qnaPageBar);
+		         /* ModelAndView mv=new ModelAndView();
+		          mv.addObject("list",list);
+		          mv.setViewName("jsonView");
+		          mv.addObject("pageBar",qnaPageBar);*/
 
-			jsonStr = mapper.writeValueAsString(map);
-			return jsonStr;
+		         jsonStr = mapper.writeValueAsString(map);
+		         return jsonStr;
+
 		    
 		}	
+		
+	
+		@RequestMapping(value="/mall/reviewPage.do",produces = "application/text; charset=utf8")
+	    @ResponseBody
+	      public String reviewPaging(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, int pno) throws Exception 
+		{
+				int numPerPage= 4;
+			  
+		         Map<String, Object> map = new HashMap<String, Object>();
+		         ObjectMapper mapper = new ObjectMapper();
+		         String jsonStr = null;
+		         List<Review> list = service.selectReviewList(cPage,numPerPage,pno);
+       
+		         //문의게시판  글 갯수
+		         int rTotalCount = service.selectReviewCount(pno);
+		         
+		         //페이지바
+		         String reviewPageBar = MallPageBar.getReviewPage(cPage, numPerPage, rTotalCount);
+		         
+		         logger.debug("list 값"+list);
+		         logger.debug("rTotalCount 값"+rTotalCount);
+		         logger.debug("reviewPageBar 값"+reviewPageBar);
+		        
+		         	          
+		         map.put("list", list);
+		         map.put("pageBar", reviewPageBar);
+
+		         jsonStr = mapper.writeValueAsString(map);
+		         return jsonStr;
+   
+		}		
 		
 }

@@ -28,6 +28,9 @@
 						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminPage.do">회원관리</a></strong>
 						    </li>
 						    <li class="nav-item">
+						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminBoardManage.do">게시글 관리</a></strong>
+						    </li> 
+						    <li class="nav-item">
 						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminPlaceList.do">장소 요청 내역</a></strong>
 						    </li>
 						    <li class="nav-item">

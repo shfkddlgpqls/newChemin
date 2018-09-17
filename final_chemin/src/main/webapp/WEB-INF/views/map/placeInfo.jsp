@@ -19,7 +19,7 @@
         background-color: white;
        /*  color: #efefef; */
         margin-bottom:1%;
-        height:35%;
+        height:auto;
         border:solid 1px #E5E8E8;
       }
       .picture_box{
@@ -41,7 +41,7 @@
   		margin-right:auto;
  	   	 background:white;
  	   	 width:70%;
- 	   	 height:25%;
+ 	   	 height:auto;
  	   	 position:relative; top:50px;
  	   	 box-shadow: 0px 2px 5px #BDBDBD;
  	   	 border:solid 1px #E5E8E8;
@@ -154,16 +154,47 @@
   /* Support for IE. */
   font-feature-settings: 'liga';
 }
+#page-top{
+padding:0;
+}
+.pagination a 
+    {
+       color: black;
+       float: left;
+       padding: 8px 16px;
+       text-decoration: none;
+   }
+   
+  
+   
+    .pagination a:hover
+   {
+      background-color : #ffd6f4; 
+         color: white;
+   }
+   .pagination a:active 
+   {
+         background-color: #ffd6f4;
+         color: white;
+   }
+   
+    .pagination a:visited
+   {
+         background-color: #ffd6f4;
+         color: white;
+   }
+   
 </style>
 
 
-<jsp:include page="/WEB-INF/views/common/header.jsp"/>
-<div class="container-fluid" style="background:#F3F3F3;">
-<section>
-<div class="container">
+<jsp:include page="/WEB-INF/views/common/header1.jsp"/>
+
+<section style="background:#F3F3F3;">
+<div class="container" >
       <div class="title_box">
       	<input type="hidden" name="plaName" value="${place.plaName}"/>
-      	<h1 style="margin-top:3%;font-size:50px"><strong>${place.plaName}</strong></h1>
+      	<h1 style="font-size:50px;border-top-style: solid;border-top-color:#FA6E9C;border-top-width : 50px;border-image: url("http://papers.co/wallpaper/papers.co-sj42-purple-soft-red-gradation-blur-35-3840x2160-4k-wallpaper.jpg") "><strong>${place.plaName}</strong></h1>
+      
       	<div class="row" style="width:40%;margin-left:auto; margin-right:auto;text-align:center">
       			<div class="row" id="main_review" style="width:95%;margin-left:auto; margin-right:auto;text-align:center">
     
@@ -184,7 +215,7 @@
       </div>
       
       <div class="box detail_box">
-       <div style="height:10%; margin-top:90px; margin-bottom:2%">
+       <div style="height:5%; margin-top:90px; margin-bottom:2%">
 	      	<div style="margin-left:13%; float:left">
 	      		<span style="font-size:20px;text-transform:uppercase;"><strong>상세정보</strong></span>
 	      	</div>
@@ -232,7 +263,7 @@
       	</div> 
       	</div>
       	
-      	<div class="row">
+      	<div class="row" style="margin-bottom:4%">
       	<div style="margin-left:15%;float:left;margin-top:1%">
       		<i class="fa fa-phone" style="font-size:20px;color:#989898"></i>
       		<span style="font-size:0.94em">${place.plaPhone }</span>
@@ -419,17 +450,25 @@
 					
 					</div>		
 	    		    <div class="confirm_box">
+	    		      <input type="hidden" id="check" value="reg"/>
+	    		      <input type="hidden" id="reviewNo" value=""/>
 					  <button class="btn btn-primary"  style="height:100%;width:10%;float:right; border-radius:3px" onclick="fn_reviewReg(this)" data-no='${place.plaNo}'>등록</button>
 					  	 <span id="counter" style="font-size:1.2em;margin:1%;float:right;">###</span>&nbsp; 					
 					</div>
 					
-					<div class="sub_review" id="sub_review">
+					
+					
+					<div class="sub_review" id="sub_review" >
 					  	
 		      		</div> 
-		      	</div>
-	      </div>
+	     	 </div>
+	     	 
+			       <div class="row justify-content-center" id="pageBar" style="margin-bottom:4%">
+				            	
+					</div> 
     
-
+</div>
+</section>
     <script>
  
     var $star_rating = $('.star-rating .fa');
@@ -458,26 +497,25 @@
             $('#counter').html(content.length + '/500');
         });
         $('#content').keyup();
-        var  plaNo = $('[name=plaNo]').val();
-        fn_reviewList(plaNo)
+       
+        fn_reviewList(1)
  
     });
  
   
     //리뷰 리스트를 불러오는 함수
-    function fn_reviewList(plaNo){
+    function fn_reviewList(cPage){
+    	 var  plaNo = $('[name=plaNo]').val();
     	$.ajax({
     		url:"${path}/map/placeReviewList.do",
-    		data:{plaNo:plaNo},
+    		data:{plaNo:plaNo,cPage:cPage},
     		dataType:"json",
     		success:function(data){
+    			var pageBar = data.pageBar;
     			var content="";
     			var mainRe="";
     			var sum=0;
     			var avg=0;
-    			
-               
-                
     			if(data!=null){
     				 for(var i=0; i<data.reviewList.length; i++){
     					sum+=data.reviewList[i].REVIEWSTAR;
@@ -522,7 +560,7 @@
         					content+='<div style="color:#989898;font-size:0.95em;margin-bottom:3%;">'+data.reviewList[i].USERID+'｜'+fmDate;
         					if(data.reviewList[i].USERID=='${memberLoggedIn.userId}'){
         					content+='<div style="float:right;">';
-        					content+='<button class="btn btn-primary btn-sm" onclick="fn_reUpdate('+data.reviewList[i].REVIEWNO+')">수정</button><button class="btn btn-primary btn-sm" onclick="fn_reDelete('+data.reviewList[i].REVIEWNO+')">삭제</button></div>';
+        					content+='<button class="btn btn-default btn-sm" onclick="fn_reUpdate('+data.reviewList[i].REVIEWNO+","+data.reviewList[i].REVIEWSTAR+",'"+data.reviewList[i].REVIEWCONTENT+"'"+')">수정</button><button class="btn btn-primary btn-sm" onclick="fn_reDelete('+data.reviewList[i].REVIEWNO+')">삭제</button></div>';
     
         					}
         					content+='</div>';
@@ -543,7 +581,7 @@
         					content+='<div style="color:#989898;font-size:0.95em;margin-bottom:3%;">'+data.reviewList[i].USERID+'｜'+fmDate;
         					if(data.reviewList[i].USERID=='${memberLoggedIn.userId}'){
         					content+='<div style="float:right;">';
-        					content+='<button class="btn btn-primary btn-sm" onclick="fn_reUpdate('+data.reviewList[i].REVIEWNO+')">수정</button><button class="btn btn-primary btn-sm" onclick="fn_reDelete('+data.reviewList[i].REVIEWNO+')">삭제</button></div>';
+        					content+='<button class="btn btn-default btn-sm" onclick="fn_reUpdate('+data.reviewList[i].REVIEWNO+","+data.reviewList[i].REVIEWSTAR+",'"+data.reviewList[i].REVIEWCONTENT+"'"+')">수정</button><button class="btn btn-primary btn-sm" onclick="fn_reDelete('+data.reviewList[i].REVIEWNO+')">삭제</button></div>';
     
         					}
         					content+='</div>';
@@ -552,8 +590,10 @@
     				   
     				}
     			}
+    			$()
     			$('#sub_review').html(content);
-    		    $('#main_review').html(mainRe);  
+    		    $('#main_review').html(mainRe);
+    		    $('#pageBar').html(pageBar);
     		},
     		error:function(jxhr,textStatus,error)
             {
@@ -573,8 +613,7 @@
   		  icon: "warning",
   		  buttons: true,
   		  dangerMode: true,
-  		})
-  		.then((willDelete) => {
+  		}).then((willDelete) => {
   		  if (willDelete) {
   			$.ajax({
   	    		url:"${path}/map/reviewDelete.do",
@@ -587,13 +626,23 @@
   							  icon: "success",
   							  button: "확인",
   							});
-  						fn_reviewList(plaNo)
+  						fn_reviewList()
+  						$('#content').val('');
+						   $('#counter').text('0/500');
+						   $('#check').val('reg');
+						   $star_rating.siblings('input.rating-value').val('3');
+						   return SetRatingStar();
   					}else{
   						swal({
   							  text: "삭제되지 않았습니다",
   							  icon: "error",
   							  button: "확인",
   							});
+  						$('#content').val('');
+						   $('#counter').text('0/500');
+						   $('#check').val('reg');
+						   $star_rating.siblings('input.rating-value').val('3');
+						   return SetRatingStar();
   					}
   	    		}
   	    	}) 
@@ -604,11 +653,23 @@
     	 
     }
     
+    //리뷰수정
+    function fn_reUpdate(reviewNo,star,content){
+    	$('#check').val("update");//등록 버튼을 누를때 새로 등록하는 리뷰인지 아니면 기존의 리뷰를 업데이트하는건지 구분하기 위해사용!(등록버튼 하나로 등록,수정하기때문에 구분)
+    	$('#reviewNo').val(reviewNo);
+    	$('#content').focus();
+    	 $('[name=content]').val(content); 
+    	 $star_rating.siblings('input.rating-value').val(star);
+		   return SetRatingStar(); 
+    }
+    
     function fn_reviewReg(obj){
     	var plaNo = $(obj).data("no");
     	var star = $('[name=star]').val();
     	var content = $('[name=content]').val();
     	var userId ='${memberLoggedIn.userId}';
+    	var reviewNo = $('#reviewNo').val();
+    	var check = $('#check').val();
     	
     	if(userId.trim().length==0){
     		swal({
@@ -625,43 +686,87 @@
 				});
 		}
     	
+    	
     	if(content.trim().length>0){
-      	$.ajax({
-    		url:"${path}/map/placeInsertReview.do",
-    		data:{plaNo:plaNo,reStar:star,reContent:content,userId:userId},
-    		dataType:"json",
-    		success:function(data)
-    		{
-				if(data.result>0){
-					swal({
-						  text: "등록이 완료되었습니다.",
-						  icon: "success",
-						  button: "확인",
-						}).then(function(isConfirm) {
-							  if (isConfirm) {
-								   fn_reviewList(plaNo);
-								   $('#content').val('');
-								   $('#counter').text('0/500');
-								   $star_rating.siblings('input.rating-value').val('3');
-								   return SetRatingStar();
-								  }
-								});
-				}else{
-					swal({
-						  text: "등록이 되지 않았습니다.",
-						  icon: "error",
-						  button: "확인",
-						});
-				}
-    			
-    		},error:function(jxhr,textStatus,error)
-            {
-                console.log("ajax실패!");
-                console.log(jxhr);
-                console.log(textStatus);
-                console.log(error);
-             }
-    	})  
+    		//리뷰내용이 있고 새로등록하는 리뷰글 
+    	   if(check=="reg"){
+    			$.ajax({
+    	    		url:"${path}/map/placeInsertReview.do",
+    	    		data:{plaNo:plaNo,reStar:star,reContent:content,userId:userId},
+    	    		dataType:"json",
+    	    		success:function(data)
+    	    		{
+    					if(data.result>0){
+    						swal({
+    							  text: "등록이 완료되었습니다.",
+    							  icon: "success",
+    							  button: "확인",
+    							}).then(function(isConfirm) {
+    								  if (isConfirm) {
+    									  $('[name=plaNo]').val(plaNo);
+    									   fn_reviewList();
+    									   $('#content').val('');
+    									   $('#counter').text('0/500');
+    									   $star_rating.siblings('input.rating-value').val('3');
+    									   return SetRatingStar();
+    									  }
+    									});
+    					}else{
+    						swal({
+    							  text: "등록이 되지 않았습니다.",
+    							  icon: "error",
+    							  button: "확인",
+    							});
+    					}
+    	    			
+    	    		},error:function(jxhr,textStatus,error)
+    	            {
+    	                console.log("ajax실패!");
+    	                console.log(jxhr);
+    	                console.log(textStatus);
+    	                console.log(error);
+    	             }
+    	    	}) 
+    	   }else{//리뷰내용이 있고 기존의 내용을 업데이트
+    		   $.ajax({
+   	    		url:"${path}/map/reviewUpdate.do",
+   	    		data:{reviewNo:reviewNo,reStar:star,reContent:content},
+   	    		dataType:"json",
+   	    		success:function(data)
+   	    		{
+   					if(data.result>0){
+   						swal({
+   							  text: "수정이 완료되었습니다.",
+   							  icon: "success",
+   							  button: "확인",
+   							}).then(function(isConfirm) {
+   								  if (isConfirm) {
+   									$('[name=plaNo]').val(plaNo);
+   									   fn_reviewList();
+   									   $('#content').val('');
+   									   $('#counter').text('0/500');
+   									   $star_rating.siblings('input.rating-value').val('3');
+   									   return SetRatingStar();
+   									  }
+   									});
+   					}else{
+   						swal({
+   							  text: "수정이 되지 않았습니다.",
+   							  icon: "error",
+   							  button: "확인",
+   							});
+   					}
+   	    			
+   	    		},error:function(jxhr,textStatus,error)
+   	            {
+   	                console.log("ajax실패!");
+   	                console.log(jxhr);
+   	                console.log(textStatus);
+   	                console.log(error);
+   	             }
+   	    	}) 
+    	   }
+       
     	}
     } 
  

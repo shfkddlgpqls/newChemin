@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.kh.chemin.mall.model.dao.DetailsDao;
 import com.kh.chemin.mall.model.vo.Product;
 import com.kh.chemin.mall.model.vo.QnA_board;
+import com.kh.chemin.mall.model.vo.Review;
 
 @Service
 public class DetailsServiceImpl implements DetailsService 
@@ -45,12 +46,28 @@ public class DetailsServiceImpl implements DetailsService
 		{
 			return dao.selectQnACount(sqlSession,pno);
 		}
+		
+		
+
+		@Override
+		public int selectReviewCount(int pno) 
+		{
+			return dao.selectReviewCount(sqlSession,pno);
+		}
 
 		@Override
 		public List<QnA_board> selectQnaBoardList(int cPage, int numPerPage, int pno) 
 		{
 			return dao.selectQnaBoardList(sqlSession,cPage,numPerPage,pno);
 		}
+
+		@Override
+		public List<Review> selectReviewList(int cPage, int numPerPage, int pno) 
+		{
+			return dao.selectReviewList(sqlSession,cPage,numPerPage,pno);
+		}
+		
+		
 		
 		
 }

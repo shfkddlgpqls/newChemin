@@ -37,7 +37,14 @@
 	</select>
 	
 	<select id="placeSearch" parameterType="map" resultType="place">
-		select*from place where PLACATEGORY=#{plaCategory} and PLAAREA=#{plaArea} and PLASTATUS ='Y'
+		select*from place where 1=1
+		<if test="plaCategory!=null and plaCategory!='' ">
+			and PLACATEGORY=#{plaCategory}
+		</if>
+		<if test="plaArea!=null and plaArea!='' and plaArea!='전체'">
+			and PLAAREA=#{plaArea}
+		</if>
+		  and PLASTATUS ='Y'
 	</select>
 	
 	<select id="placeReviewList" parameterType="_int" resultMap="reviewMap">
@@ -55,6 +62,15 @@
 	<delete id="reviewDelete" parameterType="_int">
 		delete pla_review where REVIEWNO = #{reviewNo}
 	</delete>
+	
+	<update id="reviewUpdate" parameterType="placeReview">
+		update pla_review set REVIEWSTAR=#{reStar}, REVIEWCONTENT=#{reContent} where REVIEWNO=#{reviewNo}
+	</update>
+	
+	<select id="selectReviewCount" parameterType="_int" resultType="_int">
+		select count(*) from pla_review
+		where 1=1
+		and PLANO = #{plaNo}
+	</select>
 </mapper>
-
 

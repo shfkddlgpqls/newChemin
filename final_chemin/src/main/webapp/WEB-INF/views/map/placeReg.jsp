@@ -6,7 +6,7 @@
 
 
 <c:set value="${pageContext.request.contextPath }" var="path"/>
-  <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+  <jsp:include page="/WEB-INF/views/common/header1.jsp"/>
   <style>
   	.container{
   		width:50%;
@@ -83,7 +83,6 @@
     clip:rect(0,0,0,0);
     border: 0;
 }
-
 .filebox label {
     display: inline-block;
     padding: .5em .75em;
@@ -98,7 +97,6 @@
     border-radius: .25em;
     margin:0;
 }
-
 /* named upload */
 .filebox .upload-name {
 	width:39%;
@@ -110,13 +108,11 @@
     vertical-align: middle;
     background-color: #E9ECEF;
   border: 1px solid #CED4DA;
-
   border-radius: .25em;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
 }
-
  .filebox.bs3-primary label {
   color: #fff;
     background-color: #F05F40;
@@ -142,12 +138,10 @@ function execDaumPostcode() {
     new daum.Postcode({
         oncomplete: function(data) {
             // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
             // 도로명 주소의 노출 규칙에 따라 주소를 조합한다.
             // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
             var fullRoadAddr = data.roadAddress; // 도로명 주소 변수
             var extraRoadAddr = ''; // 도로명 조합형 주소 변수
-
             // 법정동명이 있을 경우 추가한다. (법정리는 제외)
             // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
             if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
@@ -165,22 +159,18 @@ function execDaumPostcode() {
             if(fullRoadAddr !== ''){
                 fullRoadAddr += extraRoadAddr;
             }
-
             // 우편번호와 주소 정보를 해당 필드에 넣는다.
             document.getElementById('postcode').value = data.zonecode; //5자리 새우편번호 사용
             document.getElementById('roadAddress').value = fullRoadAddr;
             document.getElementById('jibunAddress').value = data.jibunAddress;
-
             // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
             if(data.autoRoadAddress) {
                 //예상되는 도로명 주소에 조합형 주소를 추가한다.
                 var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
                 document.getElementById('guide').innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
-
             } else if(data.autoJibunAddress) {
                 var expJibunAddr = data.autoJibunAddress;
                 document.getElementById('guide').innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
-
             } else {
                 document.getElementById('guide').innerHTML = '';
             }
@@ -188,7 +178,6 @@ function execDaumPostcode() {
     }).open();
   
 }
-
 //추가버튼 클릭시 가격정보 추가되는 부분
 function add_item(){
     var div = document.createElement('div');
@@ -196,11 +185,9 @@ function add_item(){
     div.setAttribute('class', 'form-inline margin-bottom-sub');
     document.getElementById('field').appendChild(div);
 }
-
 function remove_item(obj){
 	 document.getElementById('field').removeChild(obj.parentNode);
 }
-
 $(function() {
     $('#content').keyup(function (e){
         var content = $(this).val();
@@ -217,13 +204,9 @@ $(function() {
         } else {
             var filename = $(this).val().split('/').pop().split('\\').pop();
         }
-
         $(this).siblings('.upload-name').val(filename);
     });
 });
-
-
-
 function validate(){
 	var plaName =$('[name=plaName]').val();
 	var mainImg =$('[name=mainImg]').val();
@@ -233,8 +216,6 @@ function validate(){
 	var menuName =$('[name=menuName]').val();
 	var menuPrice =$('[name=menuPrice]').val();
 	
-	console.log(roadAddr)
-	console.log(plaName)
 		if(plaName.trim().length==0){
 			swal({
 				  text: "업체명을 입력해주세요",
@@ -272,10 +253,11 @@ function validate(){
 			return false;
 		}
 		
-	
+		var result ;
 	       $.ajax({
 			url:"${path}/map/placeMatch.do",
     		data:{plaAddr:roadAddr,plaName:plaName},
+    		async: false,
     		dataType:"json",
     		success:function(data){
     			console.log(data.plaMatch)
@@ -286,20 +268,19 @@ function validate(){
       					  icon: "error",
       					  button: "확인",
       					})
-    					return false;
+    					result = false;
     				}else if(data.plaMatch.plaStatus=='N'){
     					swal({
         					  text: "등록 요청 중인 장소입니다",
         					  icon: "error",
         					  button: "확인",
         					})
-    					return false
+        					result = false;
     				}
     			}
     			else
     			{
-    				alert("여기는 등록되지 않앗따!!")
-    				return true;
+    				result= true;
     			}
     		},
     		error:function(jxhr,textStatus,error)
@@ -310,10 +291,9 @@ function validate(){
                 console.log(error);
              }
 		})
-		
+		return result;
+	       
 	}
-
-
 /* $(function(){
 	$("#check_all").click(function(){
 		var chk = $(this).is(":checked");//.attr('checked');
@@ -321,13 +301,12 @@ function validate(){
 		else  
 	});
 }); */
-
 </script>
 
 <section>
 	<div class="container" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 		<div class="row" style="margin-top:55px">
-			<form action="${path}/map/placeInsert.do?userId=${memberLoggedIn.userId}" method="post" onsubmit="return validate();" enctype="multipart/form-data">
+			<form id="placeInsert" action="${path}/map/placeInsert.do?userId=${memberLoggedIn.userId}" method="post" onsubmit="return validate();" enctype="multipart/form-data">
 		    	 <h1 class="text-uppercase nanumFont">
 		    		<i class="fa fa-edit"></i> 장소 등록
 		    	</h1>

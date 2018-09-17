@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <c:set value="${pageContext.request.contextPath }" var="path"/>
-<jsp:include page="/WEB-INF/views/common/header.jsp"/>
+<jsp:include page="/WEB-INF/views/common/header1.jsp"/>
 <script>
 var length=($('#upFile')[0].files.length);
 
@@ -13,12 +13,13 @@ function fn_file() {
 			alert("사진은 2개까지 등록가능합니다.");
 			return false;
 		}
+		
 		var fm=document.communityFrm;
 		var fnm=fm.upFile;
 		var ext=fnm.value;
-		if(!(ext.substr(ext.length-3) == 'mp4' || ext.substr(ext.length-3) == 'jpg' || ext.substr(ext.length-3) == 'JPG' || ext.substr(ext.length-3) == 'PNG'))
+		if(!(ext.substr(ext.length-3) == 'mp4' || ext.substr(ext.length-3) == 'MP4' || ext.substr(ext.length-3) == 'jpg' || ext.substr(ext.length-3) == 'JPG' || ext.substr(ext.length-3) == 'PNG' || ext.substr(ext.length-3) == 'png'))
 		{
-			alert("png/jpg 파일만 올릴 수 있습니다.");
+			alert("png/jpg/mp4 파일만 올릴 수 있습니다.");
 			return false;
 		}
 		return true;
@@ -46,7 +47,6 @@ function fn_file() {
                               <option value="집수리">집수리</option>
                               <option value="보안">보안</option>
                               <option value="1인레시피">1인레시피</option>
-                              <option value="청소">청소</option>
                            </select> 
                    </div>
                 </div><br>
@@ -88,7 +88,7 @@ function fn_file() {
                    </div>
                    <div class="col-md-10">
                        <div class="form-group middleSize">
-                          <input multiple="multiple" id="upFile" name="upFile" type="file" class="file" data-preview-file-type="any"/> 
+                          <input multiple="multiple" id="upFile" name="upFile" type="file" class="file" data-preview-file-type="any" required/> 
                           <p style="font-size:12px;">사진과 동영상 합쳐서 2개까지만 등록 가능합니다<p>
                      </div> 
       
