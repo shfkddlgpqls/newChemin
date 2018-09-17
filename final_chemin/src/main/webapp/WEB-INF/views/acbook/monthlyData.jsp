@@ -16,15 +16,17 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <!-- sideBar -->
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
 <!-- Main Start -->
-<div class="col-md-10 col-sm-8 main-content">
+<div class="col-md-10 col-sm-8 main-content"  id="newMain">
 	<div class="container-fluid">
 <!-- 	여기서부터 내용 쓰면 됨 -->
 <!-- START: WHOLE TEMPLATE SECTION -->
 <!------ Include the above in your HEAD tag ---------->
 <!-- <div class="container-fluid"><span style="font-size:60px;margin-top:0;">Monthly Expenditure Pattern</span></div> -->
+<form name="imgForm" id="imgForm" action="acbook/download.do" method="post">
+    <input type="hidden" id="imgData" name="imgData">
+</form>
+<div class="row">
 <div class="col-md-6">
 <div class="printDiv">
 	<div class="content" id="newMain">             
@@ -367,9 +369,6 @@
    </div> 
 </div>
 </div>
-<form name="imgForm" id="imgForm" action="acbook/download.do" method="post">
-    <input type="hidden" id="imgData" name="imgData">
-</form>
 <div class="col-md-6">
 <!--***************** 	여기서부터 내용 쓰면 됨 -->
 		<div class='' id="graph1">
@@ -383,10 +382,9 @@
 			</div>
 		</div>
 	<hr style="margin:0;">
-		<div class="row">
 		<div class='' id="graph2_2">
 			<div id='ex23' style="text-align:left">
-				<div><span style="font-size:45px;margin:0;background-color:Coral;color:white;">Monthly Expenditure Pattern,&nbsp;</span></div>
+				<div><span style="font-size:40px;margin:0;background-color:Coral;color:white;">Monthly Expenditure Pattern,&nbsp;</span></div>
 				&nbsp;&nbsp;<p>${memberLoggedIn.userId }님 의 이번달 지출은 현재까지 ${monthlySumAvg[0].ALLCOST}원 입니다.<br>
 				수입은 ""원 이며, "이미 지출한계를 초과했습니다." 앞으로  매일 "0"원씩 사용해야 지출임계점을 넘지 않을 수 있습니다.<br>
 				"그러나", 지출비율중 "저축"의 비율이 "60%"로 "매우 높은 편입니다." 저축하는 좋은 습관을 기르고 있습니다.<br>
@@ -399,8 +397,9 @@
 				
 			</div>
 		</div>
-		</div>
+	</div>
 	<!--**************Caution*********************** 이 아래 Div 건드리지말것 -->
+</div>
 </div>
 <!-- END: WHOLE TEMPLATE SECTION -->
 </div>
@@ -456,6 +455,7 @@ function drawLine(){
 			var addData1 = addData1;
 			var addData2 = addData2;
 			var addData3 = addData3;
+			var myColors = ["rgba(220,220,220,0.2)"]
 			var myLine = new Chart(ctx,{
 				type : 'line',
 				data :{
@@ -463,12 +463,13 @@ function drawLine(){
 					 datasets: [
 					        {
 					            label: "My First dataset",
-					            fillColor: "#ffc107",
-					            strokeColor: "#ffc107",
-					            pointColor: "#ffc107",
-					            pointStrokeColor: "#ffc107",
-					            pointHighlightFill: "#ffc107",
-					            pointHighlightStroke: "#ffc107",
+					            fillColor: "rgba(220,220,220,0.2)",
+					            borderColor: myColors,
+					            strokeColor: "rgba(220,220,220,0.2)",
+					            pointColor: "rgba(220,220,220,0.2)",
+					            pointStrokeColor: "rgba(220,220,220,0.2)",
+					            pointHighlightFill: "rgba(220,220,220,0.2)",
+					            pointHighlightStroke: "rgba(220,220,220,0.2)",
 					            data: addData1
 					        },
 					        {
@@ -483,12 +484,12 @@ function drawLine(){
 					        },
 					        {
 					            label: "My Second dataset",
-					            fillColor: "rgba(151,187,205,0.2)",
-					            strokeColor: "rgba(151,187,205,1)",
-					            pointColor: "rgba(151,187,205,1)",
+					            fillColor: "rgba(220,220,220,0.2)",
+					            strokeColor: "rgba(220,220,220,0.2)",
+					            pointColor: "rgba(220,220,220,0.2)",
 					            pointStrokeColor: "#fff",
 					            pointHighlightFill: "#fff",
-					            pointHighlightStroke: "rgba(151,187,205,1)",
+					            pointHighlightStroke: "rgba(220,220,220,0.2)",
 					            data: addData3
 					        }
 					    ]
@@ -504,6 +505,17 @@ function drawLine(){
 			            	boxWidth: 10,
 			            }
 			        },
+			        tooltips: {
+	                    yAlign: 'bottom',
+	                    callbacks: {
+	                        labelColor: function(tooltipItem, chart) {
+	                            return {
+	                                backgroundColor: 'rgb(255, 0, 0)'
+	                            }
+	                        },
+	                    },
+	            backgroundColor: '#227799'
+	                }
 
 				}
 			});

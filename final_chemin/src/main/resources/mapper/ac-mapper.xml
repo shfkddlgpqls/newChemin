@@ -9,7 +9,15 @@
 	<insert id="insertEx">
 		INSERT INTO ACBOOK VALUES(seq_ac_no.nextval,#{userId},#{acDate},#{typeNum},#{exCode},#{cateNum},#{acCost},#{memo})
 	</insert>
-
+	
+	<insert id="insertReply" parameterType="reply">
+		INSERT INTO REPLY VALUES(SEQ_R_NO.NEXTVAL,#{accNo},#{userId},sysdate,#{rContent})
+	</insert>
+	<!-- 댓글리스트 불러오기 -->
+	<select id="selectReply" resultMap="acmap">
+		SELECT * FROM REPLY WHERE ACCNO=#{accNo} ORDER BY RDATE DESC
+	</select>
+	
 	<select id="selectEb" parameterType="string" resultMap="acmap">
 		SELECT DISTINCT TO_CHAR(ACDATE,'yyyy-MM-dd')AS ACDATE, TYPENUM, SUM(ACCOST)
 		OVER(PARTITION BY TO_CHAR(ACDATE,'yyyy-MM-dd'),TYPENUM) AS ACALL

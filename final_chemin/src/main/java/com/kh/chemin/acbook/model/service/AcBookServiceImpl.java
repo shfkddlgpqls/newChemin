@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import com.kh.chemin.acbook.model.dao.AcBookDao;
 import com.kh.chemin.acbook.model.vo.AcBook;
 import com.kh.chemin.acbook.model.vo.AcCom;
+import com.kh.chemin.acbook.model.vo.Reply;
 
 @Service
 public class AcBookServiceImpl implements AcBookService {
@@ -131,5 +132,15 @@ public class AcBookServiceImpl implements AcBookService {
 		return dao.prePreSelectDailySum(sqlSession, userId);
 	}
 
+	@Override
+	public int insertReply(Reply rp) {
+		return dao.insertReply(sqlSession,rp);
+	}
 
+	@Override
+	public List<Model> selectReply(String accNo) {
+		return dao.selectReply(sqlSession, accNo);
+	}
+	
+	
 }

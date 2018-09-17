@@ -12,11 +12,11 @@
 <!-- ProgressBar: ac_inputIn -->
 <link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/acMain.css?var4"/>">
 <!-- Main Start -->
-<div class="col-md-10 col-sm-8 main-content">
+<div class="col-md-10 col-sm-8 main-content"  id="newMain">
 
 	<!-- 여기서부터입력 -->
 <!------ Include the above in your HEAD tag ---------->
-<div class="container-fluid" id="newMain">
+<div class="innerpage-container-fluid">
 <br><br>
 	<div class="row">
 		<div class="col-md-12">
