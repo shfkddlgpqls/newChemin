@@ -58,4 +58,3 @@ public interface CommunityService {
 	int reportWrite(Report report);
 	int reportCountUp(String userid);
 }
-

@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.chemin.acbook.common.Page;
 import com.kh.chemin.admin.model.service.AdminService;
 import com.kh.chemin.common.MallPageBar;
+import com.kh.chemin.common.PlacePageBar;
 import com.kh.chemin.community.controller.CommunityController;
 import com.kh.chemin.mall.model.vo.Product;
 import com.kh.chemin.map.model.vo.Place;
@@ -33,6 +34,7 @@ import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 public class AdminController {
@@ -49,10 +51,40 @@ public class AdminController {
 	
 	//장소요청내역 페이지
 	@RequestMapping("/admin/adminPlaceList.do")
-	public String adminPlaceList(Model model) {
-		List<Place> plaList = service.adminPlaceList();
-		model.addAttribute("plaList", plaList);
+	public String adminPlaceList(Model model,char plaStatus) {
+		/*Map<String, Object> map = new HashMap<String, Object>();
+		map.put("plaStatus", plaStatus);
+		List<Place> plaList = service.adminPlaceList(map);*/
+		/*model.addAttribute("plaList", plaList);*/
+		model.addAttribute("plaStatus", plaStatus);
 		return "admin/adminPlaceList";
+	}
+	
+	//장소 승인상태에 따른 리스트
+	@RequestMapping(value="/admin/placeStatusList.do",produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String placeStatusList(char plaStatus,String plaCategory,@RequestParam(value="cPage",required=false,defaultValue="1") int cPage) throws Exception {
+		int numPerPage =6;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map1 = new HashMap<String, Object>();
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonStr = null;
+		
+		
+		map.put("plaStatus", plaStatus);
+		map.put("plaCategory", plaCategory);
+		
+		List<Place> plaList = service.adminPlaceList(map,cPage,numPerPage);
+		
+		//승인상태 글 갯수
+		int totalCount = service.selectPlaceCount(map);
+		
+		String pageBar = PlacePageBar.getPagePlace(cPage, numPerPage, totalCount);
+		map1.put("plaList", plaList);
+		map1.put("pageBar",  pageBar);
+		jsonStr = mapper.writeValueAsString(map1);
+		return jsonStr;
 	}
 	
 	//상품관리 페이지
@@ -90,7 +122,7 @@ public class AdminController {
 	
 	//장소삭제
 	@RequestMapping("/admin/adminPlaceDelete.do")
-	public ModelAndView placeDelete(int plaNo,String userId)
+	public ModelAndView placeDelete(int plaNo)
 	{
 		int result = service.placeDelete(plaNo);
 				
@@ -102,7 +134,7 @@ public class AdminController {
 		}else {
 			msg="장소가 삭제 되지 않았습니다.";
 		}
-		loc="/admin/adminPlaceList.do?userId="+userId;
+		loc="/admin/adminPlaceList.do?plaStatus="+'N';
 		
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("msg", msg);
@@ -138,7 +170,7 @@ public class AdminController {
 			}
 		}
 		
-		loc="/admin/adminPlaceList.do";
+		loc="/admin/adminPlaceList.do?plaStatus="+'N';
 		
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("msg", msg);
@@ -148,7 +180,7 @@ public class AdminController {
 		return mv;
 	}
 	
-	
+	//승인 거절메세지
 	@RequestMapping("/admin/adminReMsg.do")
 	public ModelAndView adminReMsg(int plaNo, String plaReMsg, char plaStatus) 
 	{
@@ -167,7 +199,7 @@ public class AdminController {
 				msg="승인 거절되지 않았습니다.";
 		}
 		
-		loc="/admin/adminPlaceList.do";
+			loc="/admin/adminPlaceList.do?plaStatus="+'N';
 		
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("msg", msg);

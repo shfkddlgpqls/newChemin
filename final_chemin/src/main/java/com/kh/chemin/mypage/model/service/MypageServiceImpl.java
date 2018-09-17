@@ -21,8 +21,8 @@ public class MypageServiceImpl implements MypageService {
 	private SqlSessionTemplate sqlSession;
 	
 	@Override
-	public List<Place> selectPlaceList(String userId) {
-		List<Place> list = dao.selectPlaceList(sqlSession, userId);
+	public List<Place> selectPlaceList(Map map, int cPage, int numPerPage) {
+		List<Place> list = dao.selectPlaceList(sqlSession, map,cPage,numPerPage);
 		return list;
 	}
 
@@ -85,6 +85,12 @@ public class MypageServiceImpl implements MypageService {
 	public int warnMsg(String userId) {
 		System.out.println("::warnMsgService::"+userId);
 		return dao.warnMsg(sqlSession,userId);
+	}
+
+	@Override
+	public int selectPlaceCount(Map map) {
+		int totalCount = dao.selectPlaceCount(sqlSession, map);
+		return totalCount;
 	}
 	
 

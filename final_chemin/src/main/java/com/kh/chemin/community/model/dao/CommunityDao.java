@@ -85,4 +85,3 @@ public interface CommunityDao {
 	
 	int reportCountUp(SqlSessionTemplate sqlSession, String userid);
 }
-

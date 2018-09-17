@@ -470,4 +470,5 @@ input[type="radio"] {display:none;}
   </div>
 </section>
 
+
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

@@ -206,6 +206,4 @@ public class CommunityDaoImpl implements CommunityDao {
 		return sqlSession.update("community.likeMinus",community_no);
 	}*/
 
-
-
 }

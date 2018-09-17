@@ -9,7 +9,8 @@ import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
 
 public interface AdminService {
-	List<Place> adminPlaceList();
+	List<Place> adminPlaceList(Map map,int cPage, int numPerPage);
+	int selectPlaceCount(Map map);
 	List<PlaceAttachment> selectAttachList(int plaNo);
 	List<PlaceMenu> selectMenuList(int plaNo);
 	int placeDelete(int plaNo);

@@ -23,9 +23,15 @@ public class AdminServiceImpl implements AdminService {
 	private SqlSessionTemplate sqlSession;
 	
 	@Override
-	public List<Place> adminPlaceList() {
-		List<Place> placeList = dao.adminPlaceList(sqlSession);
+	public List<Place> adminPlaceList(Map map,int cPage, int numPerPage) {
+		List<Place> placeList = dao.adminPlaceList(sqlSession,map,cPage,numPerPage);
 		return placeList;
+	}
+	
+	@Override
+	public int selectPlaceCount(Map map) {
+		int totalCount  = dao.selectPlaceCount(sqlSession, map);
+		return totalCount;
 	}
 
 	@Override
@@ -73,6 +79,7 @@ public class AdminServiceImpl implements AdminService {
 		return dao.selectMallCate(sqlSession);
 	}
 
+
 	@Override
 	public int selectMemberCount() {
 		return dao.selectMemberCount(sqlSession);
@@ -109,5 +116,6 @@ public class AdminServiceImpl implements AdminService {
 		System.out.println("::searchListService::"+map);
 		return dao.searchList(sqlSession,map);
 	}
+
 
 }

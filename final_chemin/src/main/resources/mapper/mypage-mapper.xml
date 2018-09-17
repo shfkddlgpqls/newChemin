@@ -3,8 +3,18 @@
 <mapper namespace="mypage">
 	<!-- 장소관리 -->
 	<resultMap type="map" id="placeMap"></resultMap>
-	<select id="selectPlaceList" parameterType="String" resultMap="placeMap">
-		select*from place where USERID=#{userId} order by PLANO desc
+	<select id="selectPlaceList" parameterType="map" resultMap="placeMap">
+		select*from place where 1=1
+		<if test="plaCategory!=null and plaCategory!='' and plaCategory!='전체'">
+			and PLACATEGORY = #{plaCategory}
+		</if>
+		<if test="plaStatus!=null and plaStatus!=''">
+			and PLASTATUS=#{plaStatus}
+		</if>
+		<if test="userId!=null and userId!=''">
+			and USERID=#{userId}
+		</if>
+		 order by PLANO desc
 	</select>
 	
 	<select id="selectAttachList" parameterType="_int" resultType="placeAttach">
@@ -51,4 +61,11 @@
 	</select>
 	
 	
+	<select id="selectPlaceCount" parameterType="map" resultType="_int">
+		select count(*) from place
+		where 1=1
+		and PLASTATUS =#{plaStatus}
+		and USERID =#{userId}
+	</select>
+
 </mapper>

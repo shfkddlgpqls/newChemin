@@ -318,7 +318,7 @@
 		  
 		  <!-- 수정 하기 모달 끝 -->
 		  
-		  	
+		  
 </section>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>  
     

@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.chemin.community.model.vo.Report;
+import com.kh.chemin.common.PlacePageBar;
 import com.kh.chemin.map.controller.MapController;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
@@ -71,12 +72,41 @@ public class MypageController
 	
 	//장소 등록 페이지로 이동
 	@RequestMapping("/mypage/myPlaceList.do")
-	public String placeList(Model model, String userId)
+	public String placeList(Model model, char plaStatus)
 	{
-		List<Place> list = service.selectPlaceList(userId);
-		model.addAttribute("list", list);
+		/*List<Place> list = service.selectPlaceList(userId);
+		model.addAttribute("list", list);*/
+		model.addAttribute("plaStatus", plaStatus);
 		return "mypage/myPlaceList";
 	}
+	
+	//장소 승인상태에 따른 리스트
+		@RequestMapping(value="/mypage/placeStatusList.do",produces = "application/text; charset=utf8")
+		@ResponseBody
+		public String placeStatusList(char plaStatus,String plaCategory, String userId,@RequestParam(value="cPage",required=false,defaultValue="1") int cPage) throws Exception {
+			int numPerPage =6;
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			Map<String, Object> map1 = new HashMap<String, Object>();
+			ObjectMapper mapper = new ObjectMapper();
+			String jsonStr = null;
+			
+			
+			map.put("plaStatus", plaStatus);
+			map.put("plaCategory", plaCategory);
+			map.put("userId", userId);
+			
+			List<Place> list = service.selectPlaceList(map,cPage,numPerPage);
+			
+			//승인상태 글 갯수
+			int totalCount = service.selectPlaceCount(map);
+			
+			String pageBar = PlacePageBar.getPagePlace(cPage, numPerPage, totalCount);
+			map1.put("list", list);
+			map1.put("pageBar",  pageBar);
+			jsonStr = mapper.writeValueAsString(map1);
+			return jsonStr;
+		}
 	
 	//장소 상세 페이지 이동
 	@RequestMapping(value="/mypage/myPlaDetailList.do",produces = "application/text; charset=utf8")
