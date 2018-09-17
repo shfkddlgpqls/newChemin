@@ -3,6 +3,7 @@ package com.kh.chemin.mypage.model.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +15,8 @@ import com.kh.chemin.map.model.vo.PlaceMenu;
 public class MypageDaoImpl implements MypageDao {
 
 	@Override
-	public List<Place> selectPlaceList(SqlSessionTemplate sqlSession, String userId) {
-		return sqlSession.selectList("mypage.selectPlaceList", userId);
+	public List<Place> selectPlaceList(SqlSessionTemplate sqlSession, Map map, int cPage, int numPerPage) {
+		return sqlSession.selectList("mypage.selectPlaceList", map,new RowBounds((cPage-1)*numPerPage, numPerPage));
 	}
 
 	@Override
@@ -61,6 +62,11 @@ public class MypageDaoImpl implements MypageDao {
 	@Override
 	public int removeAttach(SqlSessionTemplate sqlSession, int plaNo) {
 		return sqlSession.delete("mypage.removeAttach",plaNo);
+	}
+
+	@Override
+	public int selectPlaceCount(SqlSessionTemplate sqlSession, Map map) {
+		return sqlSession.selectOne("mypage.selectPlaceCount", map);
 	}
 
 }

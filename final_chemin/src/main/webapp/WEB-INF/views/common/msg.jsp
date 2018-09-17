@@ -8,14 +8,9 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <c:set value="${pageContext.request.contextPath }" var="path"/>
 <script>
-/*  swal({
-	  text: "${msg}",
-	  icon: "success",
-	  button: "확인",
-	}); */ 
 
-	alert("${msg}"); 
-	location.href="${path}${loc}";
+	 alert("${msg}"); 
+	location.href="${path}${loc}"; 
 
 	 
 </script>

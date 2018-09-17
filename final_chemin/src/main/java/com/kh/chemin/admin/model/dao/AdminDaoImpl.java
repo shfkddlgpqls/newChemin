@@ -15,10 +15,15 @@ import com.kh.chemin.map.model.vo.PlaceMenu;
 public class AdminDaoImpl implements AdminDao {
 
 	@Override
-	public List<Place> adminPlaceList(SqlSessionTemplate sqlSession) {
-		return sqlSession.selectList("admin.placeList");
+	public List<Place> adminPlaceList(SqlSessionTemplate sqlSession,Map map,int cPage,int numPerPage) {
+		return sqlSession.selectList("admin.placeList",map,new RowBounds((cPage-1)*numPerPage, numPerPage));
 	}
 
+	@Override
+	public int selectPlaceCount(SqlSessionTemplate sqlSession, Map map) {
+		return sqlSession.selectOne("admin.selectPlaceCount",map);
+	}
+	
 	@Override
 	public List<PlaceAttachment> selectAttachList(SqlSessionTemplate sqlSession, int plaNo) {
 		return sqlSession.selectList("admin.selectAttachList",plaNo);
@@ -58,5 +63,7 @@ public class AdminDaoImpl implements AdminDao {
 	public List<Map<String, String>> selectMallCate(SqlSessionTemplate sqlSession) {
 		return sqlSession.selectList("admin.selectMallCate");
 	}
+
+	
 
 }
