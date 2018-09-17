@@ -10,7 +10,8 @@ import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
 
 public interface AdminDao {
-	List<Place> adminPlaceList(SqlSessionTemplate sqlSession);
+	List<Place> adminPlaceList(SqlSessionTemplate sqlSession,Map map,int cPage, int numPerPage);
+	int selectPlaceCount(SqlSessionTemplate sqlSession,Map map);
 	List<PlaceAttachment> selectAttachList(SqlSessionTemplate sqlSession, int plaNo);
 	List<PlaceMenu> selectMenuList(SqlSessionTemplate sqlSession ,int plaNo);
 	int placeDelete(SqlSessionTemplate sqlSession, int plaNo);

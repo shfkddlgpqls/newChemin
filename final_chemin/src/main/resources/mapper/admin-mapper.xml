@@ -5,8 +5,21 @@
 	<resultMap type="map" id="placeMap"></resultMap>
 	<resultMap type="map" id="adminMap"></resultMap>
 	
-	<select id="placeList" resultMap="placeMap">
-		select*from place order by PLADATE desc
+	<select id="placeList" parameterType="map" resultMap="placeMap">
+		select*from place where 1=1
+		<if test="plaCategory!=null and plaCategory!='' and plaCategory!='전체'">
+			and PLACATEGORY = #{plaCategory}		
+		</if> 
+		<if test="plaStatus!=null and plaStatus!=''">
+			and PLASTATUS=#{plaStatus}
+		</if>
+		 order by PLADATE desc
+	</select>
+	
+	<select id="selectPlaceCount" parameterType="map" resultType="_int">
+		select count(*) from place
+		where 1=1
+		and PLASTATUS =#{plaStatus}
 	</select>
 	
 	<select id="selectAttachList" parameterType="_int" resultType="placeAttach">
@@ -22,7 +35,7 @@
 	</delete>
 	
 	<update id="plaStatusChange" parameterType="map">
-		update place set PLASTATUS =#{plaStatus} where PLANO = #{plaNo}
+		update place set PLASTATUS =#{plaStatus}, PLADATE=default where PLANO = #{plaNo}
 	</update>
 	
 	<update id="adminReMsg" parameterType="map">

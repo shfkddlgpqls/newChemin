@@ -15,8 +15,10 @@ public interface PlaceService {
 	List<PlaceAttachment> selectAttachList(int plaNo);
 	List<PlaceMenu> selectMenuList(int plaNo);
 	List<Place> placeSearch(Map map);
-	List<PlaceReview> placeReviewList(int plaNo);
+	List<PlaceReview> placeReviewList(int plaNo,int cPage, int numPerPage);
+	int selectReviewCount(int plaNo);
 	int placeInsertReview(PlaceReview review);
 	Place placeMatch(Map map);
 	int reviewDelete(int reviewNo);
+	int reviewUpdate(PlaceReview review);
 }

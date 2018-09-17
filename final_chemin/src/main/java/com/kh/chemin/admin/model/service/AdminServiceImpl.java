@@ -22,9 +22,15 @@ public class AdminServiceImpl implements AdminService {
 	private SqlSessionTemplate sqlSession;
 	
 	@Override
-	public List<Place> adminPlaceList() {
-		List<Place> placeList = dao.adminPlaceList(sqlSession);
+	public List<Place> adminPlaceList(Map map,int cPage, int numPerPage) {
+		List<Place> placeList = dao.adminPlaceList(sqlSession,map,cPage,numPerPage);
 		return placeList;
+	}
+	
+	@Override
+	public int selectPlaceCount(Map map) {
+		int totalCount  = dao.selectPlaceCount(sqlSession, map);
+		return totalCount;
 	}
 
 	@Override
@@ -71,5 +77,7 @@ public class AdminServiceImpl implements AdminService {
 	public List<Map<String, String>> selectMallCate() {
 		return dao.selectMallCate(sqlSession);
 	}
+
+	
 
 }

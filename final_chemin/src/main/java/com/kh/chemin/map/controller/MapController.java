@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kh.chemin.common.PlacePageBar;
 import com.kh.chemin.community.controller.CommunityController;
 import com.kh.chemin.community.model.service.CommunityService;
 import com.kh.chemin.map.model.service.PlaceService;
@@ -43,8 +45,9 @@ public class MapController {
 	//지도를 보여주는 화면
 	@RequestMapping("/map/mapView.do")
 	public String mapView(Model model) {
-		List<Place> plaList = service.placeList();
-		model.addAttribute("plaList", plaList);
+		/*List<Place> plaList = service.placeList();
+		model.addAttribute("plaList", plaList);*/
+		
 		return "/map/mapView";
 	}
 	
@@ -144,20 +147,28 @@ public class MapController {
 		mv.addObject("msg", msg);
 		mv.addObject("loc", loc);
 		mv.addObject("result", result);
-		mv.setViewName("common/msg");
+		mv.setViewName("common/regMsg");
 		return mv;
 	}
 	
 	//장소 카테고리 검색
-	@RequestMapping("/map/placeSearch.do")
-	public String placeSearch(String plaCategory, String plaArea, Model model) {
+	@RequestMapping(value="/map/placeSearch.do",produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String placeSearch(String plaCategory, String plaArea, Model model, HttpServletResponse response)throws Exception {
 		Map<String, String> map = new HashMap<>();
+		Map<String, Object> map1 = new HashMap<String, Object>();
+		
 		map.put("plaCategory", plaCategory);
 		map.put("plaArea", plaArea);
 		
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonStr = null;
 		List<Place> plaList = service.placeSearch(map);
-		model.addAttribute("plaList", plaList);
-		return "/map/mapView";
+		
+		map1.put("plaList", plaList);
+		jsonStr = mapper.writeValueAsString(map1);
+		return jsonStr;
+
 	}
 	
 	//장소 리뷰글 등록하기
@@ -177,14 +188,21 @@ public class MapController {
 	//장소 리뷰리스트 가져오기
 	@RequestMapping(value="/map/placeReviewList.do",produces = "application/text; charset=utf8")
 	@ResponseBody
-	public String placeSelect(int plaNo) throws Exception
+	public String placeSelect(int plaNo,@RequestParam(value="cPage",required=false,defaultValue="1") int cPage) throws Exception
 	{
+		int numPerPage=3;
 		Map<String, Object> map = new HashMap<String, Object>();
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonStr = null;
-		List<PlaceReview> reviewList = service.placeReviewList(plaNo);
+		
+		List<PlaceReview> reviewList = service.placeReviewList(plaNo,cPage,numPerPage);
+		
+		int totalCount = service.selectReviewCount(plaNo);
+		
+		String pageBar = PlacePageBar.getPageReview(cPage, numPerPage, totalCount);
 		
 		map.put("reviewList", reviewList);
+		map.put("pageBar", pageBar);
 		jsonStr = mapper.writeValueAsString(map);
 		return jsonStr;
 	}
@@ -209,7 +227,7 @@ public class MapController {
 	}
 	
 	//장소 리뷰글 삭제하기
-	@RequestMapping(value="map/reviewDelete.do",produces = "application/text; charset=utf8")
+	@RequestMapping(value="/map/reviewDelete.do",produces = "application/text; charset=utf8")
 	@ResponseBody
 	public String reviewDelete(int reviewNo) throws Exception
 	{
@@ -219,6 +237,23 @@ public class MapController {
 		String jsonStr = null;
 		
 		int result = service.reviewDelete(reviewNo);
+		
+		map.put("result", result);
+		jsonStr = mapper.writeValueAsString(map);
+		return jsonStr;
+	}
+	
+	//장소 리뷰 수정하기
+	@RequestMapping(value="/map/reviewUpdate.do",produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String reviewUpdate(PlaceReview review) throws Exception
+	{
+		Map<String, Object> map = new HashMap<String, Object>();
+	
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonStr = null;
+		
+		int result = service.reviewUpdate(review);
 		
 		map.put("result", result);
 		jsonStr = mapper.writeValueAsString(map);
