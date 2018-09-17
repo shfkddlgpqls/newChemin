@@ -7,10 +7,10 @@
 		<typeAlias type="com.kh.chemin.community.model.vo.Community" alias="community"/>
 		<typeAlias type="com.kh.chemin.community.model.vo.Attachment" alias="attachment"/>
 		<typeAlias type="com.kh.chemin.community.model.vo.Comment" alias="comment"/>
-
 		<typeAlias type="java.util.List" alias="list"/>
 		<typeAlias type="com.kh.chemin.community.model.vo.LikeTo" alias="liketo"/>
 		<typeAlias type="java.util.HashMap" alias="hashMap"/>
+		<typeAlias type="com.kh.chemin.community.model.vo.Report" alias="report"/>
 
 		
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcBook" alias="acbook"/>	

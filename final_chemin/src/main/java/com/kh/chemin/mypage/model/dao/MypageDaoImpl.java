@@ -65,6 +65,13 @@ public class MypageDaoImpl implements MypageDao {
 	}
 
 	@Override
+	public int warnMsg(SqlSessionTemplate sqlSession, String userId) {
+		System.out.println(":::warnMsgDao:::"+userId);
+		int result=sqlSession.selectOne("mypage.warnMsg",userId);
+		return result;
+	}
+	
+	@Override
 	public int selectPlaceCount(SqlSessionTemplate sqlSession, Map map) {
 		return sqlSession.selectOne("mypage.selectPlaceCount", map);
 	}

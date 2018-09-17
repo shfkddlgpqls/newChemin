@@ -10,6 +10,7 @@ import com.kh.chemin.community.model.vo.Attachment;
 import com.kh.chemin.community.model.vo.Comment;
 import com.kh.chemin.community.model.vo.Community;
 import com.kh.chemin.community.model.vo.LikeTo;
+import com.kh.chemin.community.model.vo.Report;
 
 public interface CommunityDao {
 
@@ -75,5 +76,12 @@ public interface CommunityDao {
 	int likeCntDown(SqlSessionTemplate sqlSession, int community_no);
 	
 	int likeCreate(SqlSessionTemplate sqlSession, HashMap<String,Object> hashMap);
+	
+	List<Map<String,Object>> categoryFind(SqlSessionTemplate sqlSession, String community_category);
+	
+	List<Map<String,Object>> categoryAttFind(SqlSessionTemplate sqlSession, List<Integer> cno);
+	
+	int reportWrite(SqlSessionTemplate sqlSession, Report report);
+	
+	int reportCountUp(SqlSessionTemplate sqlSession, String userid);
 }
-

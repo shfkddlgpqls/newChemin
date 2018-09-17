@@ -1,5 +1,6 @@
 package com.kh.chemin.admin.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,6 +65,43 @@ public class AdminDaoImpl implements AdminDao {
 		return sqlSession.selectList("admin.selectMallCate");
 	}
 
-	
+	@Override
+	public int selectMemberCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("admin.selectMemberCount");
+	}
+
+	@Override
+	public List<Map<String, Object>> selectMemberList(SqlSessionTemplate sqlSession, int cPage, int numPerPage) {
+		return sqlSession.selectList("admin.selectMemberList",null,new RowBounds((cPage-1)*numPerPage, numPerPage));
+	}
+
+	@Override
+	public List<Map<String, Object>> rpList(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("admin.selectReportList",userId);
+	}
+
+	@Override
+	public int reportCount(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectOne("admin.reportCount",userId);
+	}
+
+	@Override
+	public int adminMemberDelete(SqlSessionTemplate sqlSession, String userId) {
+		System.out.println("::adminMemberDeleteDao::"+userId);
+		return sqlSession.delete("admin.adminMemberDelete",userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> blackList(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectList("admin.blackList");
+	}
+
+
+	@Override
+	public List<Map<String, Object>> searchList(SqlSessionTemplate sqlSession, HashMap<String,Object> map) {
+		System.out.println("::searchListDao::"+map);
+		return sqlSession.selectList("admin.searchList",map);
+	}
+
 
 }

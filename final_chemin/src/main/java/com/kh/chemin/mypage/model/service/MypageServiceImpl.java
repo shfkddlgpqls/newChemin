@@ -82,11 +82,16 @@ public class MypageServiceImpl implements MypageService {
 	}
 
 	@Override
+	public int warnMsg(String userId) {
+		System.out.println("::warnMsgService::"+userId);
+		return dao.warnMsg(sqlSession,userId);
+	}
+
+	@Override
 	public int selectPlaceCount(Map map) {
 		int totalCount = dao.selectPlaceCount(sqlSession, map);
 		return totalCount;
 	}
-	
 	
 
 }

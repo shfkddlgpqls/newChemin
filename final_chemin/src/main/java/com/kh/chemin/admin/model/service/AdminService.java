@@ -1,5 +1,6 @@
 package com.kh.chemin.admin.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,4 +19,12 @@ public interface AdminService {
 	int selectProductCount();
 	List<Map<String, Object>> selectProductList(int cPage, int numPerPage);
 	List<Map<String, String>> selectMallCate();
+	int selectMemberCount();
+	List<Map<String,Object>> selectMemberList(int cPage, int numPerPage);
+	List<Map<String,Object>> rpList(String userId);
+	int reportCount(String userId);
+	int adminMemberDelete(String userId);
+	List<Map<String,Object>> blackList();
+	List<Map<String,Object>> searchList(HashMap<String,Object> map);
+	
 }

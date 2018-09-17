@@ -20,6 +20,9 @@ public interface MypageDao {
 	int insertAttach(SqlSessionTemplate sqlSession, PlaceAttachment a);
 	int removeMenu(SqlSessionTemplate sqlSession, int plaNo);
 	int removeAttach(SqlSessionTemplate sqlSession, int plaNo);
+	int warnMsg(SqlSessionTemplate sqlSession, String userid);
+
 	int selectPlaceCount(SqlSessionTemplate sqlSession, Map map);
+
 }
 

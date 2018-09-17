@@ -2,15 +2,14 @@ package com.kh.chemin.mypage.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +23,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kh.chemin.community.model.vo.Report;
 import com.kh.chemin.common.PlacePageBar;
 import com.kh.chemin.map.controller.MapController;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
 import com.kh.chemin.mypage.model.service.MypageService;
+
+import net.sf.json.JSONArray;
 
 @Controller
 public class MypageController 
@@ -244,6 +246,31 @@ public class MypageController
 			mv.setViewName("common/msg");
 			return mv;
 	}
+	
+	/*회원 정보*/
+	@RequestMapping("/mypage/myMember.do")
+	public String myMember()
+	{
+		return "mypage/myMember";
+	}
+	
+	/*신고1번 받은 회원에게 메인에서 알림 띄어주기*/
+	/*신고당한사람 메시지 띄어주기*/
+	@RequestMapping(value="/mypage/warningMsg.do",produces="application/text; charset=utf-8")
+	@ResponseBody
+	public String warnMsg(String userId) throws Exception
+	{
+		logger.debug("::::warnMsgController:::"+userId);
+		ObjectMapper mapper=new ObjectMapper();
+		String jsonStr=null;
+		Map<String,Object> map=new HashMap<String,Object>();
+		int warnNum=service.warnMsg(userId);
+		map.put("warnNum", warnNum);
+		jsonStr=mapper.writeValueAsString(map);
+		return jsonStr;
+	}
+	
+	
 }
 
 

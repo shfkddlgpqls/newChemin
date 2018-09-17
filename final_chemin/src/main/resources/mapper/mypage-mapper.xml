@@ -55,10 +55,17 @@
 		delete pla_attachment where PLANO=#{plaNo}
 	</delete>
 	
+	<!-- 신고하기 -->
+	<select id="warnMsg" parameterType="string" resultType="_int">
+		SELECT RGCOUNT FROM MEMBER_INFO WHERE USERID=#{userId}
+	</select>
+	
+	
 	<select id="selectPlaceCount" parameterType="map" resultType="_int">
 		select count(*) from place
 		where 1=1
 		and PLASTATUS =#{plaStatus}
 		and USERID =#{userId}
 	</select>
+
 </mapper>

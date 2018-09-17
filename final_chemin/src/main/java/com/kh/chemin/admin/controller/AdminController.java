@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kh.chemin.acbook.common.Page;
 import com.kh.chemin.admin.model.service.AdminService;
 import com.kh.chemin.common.MallPageBar;
 import com.kh.chemin.common.PlacePageBar;
@@ -45,7 +46,7 @@ public class AdminController {
 	//회원관리 페이지
 	@RequestMapping("/admin/adminPage.do")
 	public String adminPage() {
-		return "admin/adminPage";
+		return "admin/adminMemberPage";
 	}
 	
 	//장소요청내역 페이지
@@ -239,6 +240,98 @@ public class AdminController {
 		}
 		
 		return "";
+	}
+	
+	/*회원관리*/
+	@RequestMapping(value="/admin/adminMemberList.do",produces="application/text; charset=utf-8",method=RequestMethod.GET)
+	@ResponseBody
+	public String adminMList(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, HttpServletResponse response) throws Exception
+	{
+		
+		int numPerPage = 5;
+		/*가입되어있는 회원 수 가져오기*/
+		int totalCount=service.selectMemberCount();
+		String pageBar = MallPageBar.getPageAdmin(cPage, numPerPage, totalCount);
+		List<Map<String, Object>> list = service.selectMemberList(cPage, numPerPage);
+		ObjectMapper mapper=new ObjectMapper();
+		String jsonStr=null;
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("list", list);
+		map.put("pageBar", pageBar);
+		
+		jsonStr=mapper.writeValueAsString(map);
+		return jsonStr;
+	}
+	
+	/*회원별 신고내용 가져오기*/
+	@RequestMapping("/admin/reportContent.do") 
+	public void reportContent(String userId,HttpServletResponse response) throws Exception
+	{
+		logger.debug("::rpListController::"+userId);
+		List<Map<String,Object>> rpList=service.rpList(userId);
+		int count=service.reportCount(userId);
+		JSONArray jsonArr = new JSONArray();
+		jsonArr.add(rpList);
+		jsonArr.add(count);
+		response.setContentType("application/json;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(jsonArr);
+	}
+	
+	/*회원 삭제*/
+	@RequestMapping("/admin/adminMemberDelete.do")
+	public ModelAndView adminMemberDelete(String userId)
+	{
+		logger.debug("::adminMemberDeleteController::"+userId);
+		int result=service.adminMemberDelete(userId);
+		String msg="";
+		String loc="";
+
+		if(result>0) {
+			msg="회원 삭제가 완료되었습니다.";
+		}else {
+			msg="회원 삭제가 실패되었습니다.";
+		}
+		
+		loc="/admin/adminMemberList.do";
+		
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("msg", msg);
+		mv.addObject("loc", loc);
+		mv.addObject("result", result);
+		mv.setViewName("common/msg");
+		return mv;
+		
+	}
+	
+	/*블랙리스트만 분류*/
+	@RequestMapping("/admin/blackList.do")
+	public void blackList(HttpServletResponse response) throws Exception
+	{
+		List<Map<String,Object>> blackList=service.blackList();
+		JSONArray jsonArr=new JSONArray();
+		jsonArr.add(blackList);
+		response.setContentType("application/json; charset=utf-8");
+		PrintWriter out=response.getWriter();
+		out.print(jsonArr);
+	}
+	
+	/*회원관리 검색*/
+	@RequestMapping("/admin/memberSearch.do")
+	public void memberSearch(String searchValue, String searchKey,HttpServletResponse response) throws Exception
+	{
+		logger.debug("::검색 key::"+searchKey);
+		logger.debug("::검색 value::"+searchValue);
+		HashMap<String,Object> map=new HashMap<String,Object>();
+		map.put("searchKey", searchKey);
+		map.put("searchValue",searchValue);
+		List<Map<String,Object>> searchList=service.searchList(map);
+		JSONArray jsonArr=new JSONArray();
+		jsonArr.add(searchList);
+		response.setContentType("application/json; charest=utf-8");
+		PrintWriter out=response.getWriter();
+		out.print(jsonArr);
+		
 	}
 	
 }
