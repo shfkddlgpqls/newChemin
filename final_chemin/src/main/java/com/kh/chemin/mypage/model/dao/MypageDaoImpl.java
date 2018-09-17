@@ -1,7 +1,7 @@
 package com.kh.chemin.mypage.model.dao;
 
 import java.util.List;
-<<<<<<< HEAD
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -9,77 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.chemin.mall.model.vo.QnA_board;
 import com.kh.chemin.mall.model.vo.Review;
-import com.kh.chemin.map.model.vo.Place;
-import com.kh.chemin.map.model.vo.PlaceAttachment;
-import com.kh.chemin.map.model.vo.PlaceMenu;
-
-@Repository
-public class MypageDaoImpl implements MypageDao {
-
-	@Override
-	public List<Place> selectPlaceList(SqlSessionTemplate sqlSession, String userId) {
-		return sqlSession.selectList("mypage.selectPlaceList", userId);
-	}
-
-	@Override
-	public List<PlaceAttachment> selectAttachList(SqlSessionTemplate sqlSession, int plaNo) {
-		return sqlSession.selectList("mypage.selectAttachList",plaNo);
-	}
-
-	@Override
-	public List<PlaceMenu> selectMenuList(SqlSessionTemplate sqlSession, int plaNo) {
-		return sqlSession.selectList("mypage.selectMenuList",plaNo);
-	}
-
-	@Override
-	public int placeDelete(SqlSessionTemplate sqlSession, int plaNo) {
-		return sqlSession.delete("mypage.placeDelete",plaNo);
-	}
-
-	//리뷰 넣기
-	@Override
-	public int insertReview(SqlSessionTemplate sqlSession, Review review) 
-	{
-		return sqlSession.insert("mypage.insertReview", review);
-	}
-
-	@Override
-	public List<QnA_board> selectQnaBoardList(SqlSessionTemplate sqlSession, int cPage, int numPerPage, String userId) 
-	{
-		return sqlSession.selectList("mypage.selectQnaBoardList", userId, new RowBounds((cPage-1)*numPerPage, numPerPage));
-	}
-
-	@Override
-	public int selectQnACount(SqlSessionTemplate sqlSession, String userId) 
-	{
-		return sqlSession.selectOne("mypage.selectQnACount", userId);
-	}
-
-	@Override
-	public List<Review> selectReviewList(SqlSessionTemplate sqlSession, int cPage, int numPerPage, String userId) 
-	{
-		return sqlSession.selectList("mypage.selectReviewList", userId, new RowBounds((cPage-1)*numPerPage, numPerPage));
-	}
-
-	@Override
-	public int selectReviewCount(SqlSessionTemplate sqlSession, String userId) 
-	{
-		return sqlSession.selectOne("mypage.selectReviewCount", userId);
-	}
-	
-	
-	
-	
-	
-
-}
-=======
-import java.util.Map;
-
-import org.apache.ibatis.session.RowBounds;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.stereotype.Repository;
-
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
@@ -148,7 +77,36 @@ public class MypageDaoImpl implements MypageDao {
 	public int selectPlaceCount(SqlSessionTemplate sqlSession, Map map) {
 		return sqlSession.selectOne("mypage.selectPlaceCount", map);
 	}
+	
+	//리뷰 넣기
+		@Override
+		public int insertReview(SqlSessionTemplate sqlSession, Review review) 
+		{
+			return sqlSession.insert("mypage.insertReview", review);
+		}
+
+		@Override
+		public List<QnA_board> selectQnaBoardList(SqlSessionTemplate sqlSession, int cPage, int numPerPage, String userId) 
+		{
+			return sqlSession.selectList("mypage.selectQnaBoardList", userId, new RowBounds((cPage-1)*numPerPage, numPerPage));
+		}
+
+		@Override
+		public int selectQnACount(SqlSessionTemplate sqlSession, String userId) 
+		{
+			return sqlSession.selectOne("mypage.selectQnACount", userId);
+		}
+
+		@Override
+		public List<Review> selectReviewList(SqlSessionTemplate sqlSession, int cPage, int numPerPage, String userId) 
+		{
+			return sqlSession.selectList("mypage.selectReviewList", userId, new RowBounds((cPage-1)*numPerPage, numPerPage));
+		}
+
+		@Override
+		public int selectReviewCount(SqlSessionTemplate sqlSession, String userId) 
+		{
+			return sqlSession.selectOne("mypage.selectReviewCount", userId);
+		}
 
 }
-
->>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git
