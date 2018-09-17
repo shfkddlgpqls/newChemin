@@ -1,0 +1,85 @@
+.file_container {
+  box-sizing: border-box;
+  position: relative;
+  display: block; }
+  .imgfileUp {
+    box-sizing: border-box;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+      height: 48px;
+    /* height: calc(2.25rem + 2px);
+    margin-top: 5px; */
+    padding: 0; 
+    margin-bottom: 0;
+      font-size: 15px;
+      font-weight: normal;}
+    .imgfileUp:hover {
+      cursor: pointer; }
+    .imgInput {
+      box-sizing: border-box;
+      height: 48px;
+      /* min-width: 14rem;
+      max-width: 100%;
+      height: calc(2.25rem + 2px); */
+      /* margin: 0; */
+      padding: 1px 22px;
+      border: 2px 2px;
+      opacity: 0; }
+    .imgControl {
+      box-sizing: border-box;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 48px;
+      border: 2px 2px;
+      padding: 12px 0;
+      /* z-index: 5; */
+      /* height: calc(2.25rem + 2px);
+      padding: .5rem .75rem; */
+      overflow: hidden;
+      border: 1px solid #c0c0af;}
+    .imgControl:empty::after {
+      box-sizing: border-box;
+      height: 48px;
+      content: "상품의 대표 사진을 선택해주세요";
+      align-content:space-between;
+      padding: 1px 22px;
+      float:left;
+      border: 2px 2px;
+      font-size: 13px;
+      font-weight: normal; }
+    .imgControl::before {
+      box-sizing: border-box;
+      position: absolute;
+      top: 0;
+      right: 0;
+      /* z-index: 6;
+      display: block;
+      height: calc(2.25rem + 2px);
+      padding: .5rem .75rem;
+      line-height: 1.25; */
+      color: #333;
+      background-color: #EDEDE8;
+      border-left: 1px solid #c0c0af; }
+    .imgControl::before {
+      box-sizing: border-box;
+      content: "UPLOAD"; 
+      height: 48px;
+      border: 2px 2px;
+      padding: 12px 22px;
+      font-size: 15px;
+      font-weight: bold;}
+  .imgPreview {
+    box-sizing: border-box;
+    transition: all 0.6s ease;
+    min-height: 250px;
+    width: 100%;
+    margin-bottom: 30px;
+    border-radius: 4px;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #fff; }
+    

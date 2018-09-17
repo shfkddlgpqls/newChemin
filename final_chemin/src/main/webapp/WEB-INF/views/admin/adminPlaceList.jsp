@@ -6,12 +6,13 @@
 <c:set var="path" value="<%=request.getContextPath()%>"/>
   
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
-
+<jsp:include page="/WEB-INF/views/admin/adminMenuBar.jsp"/>
 <!-- admin css-->
     <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/adminPage.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-
+	
 <style>
+
 .gallery{
   width: 100%;
   max-width: 960px;
@@ -75,7 +76,78 @@ border:1px solid black;
 tr{
 height:50px;
 }
+a {
+    color: #DE5F89;
+    text-decoration: none;
+    background-color: transparent;
+    -webkit-text-decoration-skip: objects;
+}
 
+.statusStyle{
+text-align:center;
+width:100%;
+font-size:1.8rem;
+margin-top:8%;
+margin-bottom:8%;
+color:#999;
+}
+
+.pagination a 
+    {
+       color: black;
+       float: left;
+       padding: 8px 16px;
+       text-decoration: none;
+   }
+   
+  
+   
+    .pagination a:hover
+   {
+      background-color : #ffd6f4; 
+         color: white;
+   }
+
+   .pagination a:active 
+   {
+         background-color: #ffd6f4;
+         color: white;
+   }
+   
+    .pagination a:visited
+   {
+         background-color: #ffd6f4;
+         color: white;
+   }
+   
+div#select_box {
+  position: relative;
+  width: 200px;
+  height: 32px;
+  border-bottom:1px solid #DE5F89;
+  
+  /* 화살표 이미지 */
+}
+
+div#select_box label {
+  position: absolute;
+  font-size: 14px;
+  color: #DE5F89;
+  top: 7px;
+  left: 12px;
+  letter-spacing: 1px;
+}
+
+div#select_box select#color {
+  width: 100%;
+  height: 32px;
+  min-height: 32px;
+  line-height: 32px;
+  padding: 0 10px;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  /* IE 8 */
+}
 
 </style>
 
@@ -100,9 +172,11 @@ function fn_modal(obj){
 		 detailFooter.innerHTML+='<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="fn_delete()">삭제</button>';
 	 }
 	 
-	 plaDate.innerHTML = $(obj).data("date"); 
+	 var date=new Date($(obj).data("date"));
+	 var fmDate=date.toISOString().slice(0,10);
+	 plaDate.innerHTML = fmDate; 
 	 plaDate.innerHTML += '<input type="hidden" name="subNo" value='+plaNo+'>';
-	 userId.innerHTML = $(obj).data("userid");  
+	 userId1.innerHTML = $(obj).data("user");  
 	plaName.innerHTML = $(obj).data("name"); 	
  	plaPhone.innerHTML = $(obj).data("phone");
 	plaArea.innerHTML = $(obj).data("area");
@@ -187,7 +261,14 @@ function fn_modal(obj){
 		    attachmentOne.innerHTML+='</div>';
 	    	attachmain.innerHTML+='</div>';
 	    	//상세보기 화면 캐러셀 사진 부분 끝	
-		}
+		},
+		error:function(jxhr,textStatus,error)
+        {
+            console.log("ajax실패!");
+            console.log(jxhr);
+            console.log(textStatus);
+            console.log(error);
+         }
 		
 	})
 
@@ -203,7 +284,7 @@ function fn_delete(){
 		})
 		.then((willDelete) => {
 		  if (willDelete) {
-			  location.href = "${path}/admin/adminPlaceDelete.do?plaNo="+plaNo+"&userId="+'${memberLoggedIn.userId}';
+			  location.href = "${path}/admin/adminPlaceDelete.do?plaNo="+plaNo;
 		  } else {
 		    
 		  }
@@ -268,93 +349,157 @@ function fn_cancle(){
 		}); 
 } 
 
-
+//거절메세지를 보낼때 실행되는 함수
 function fn_send(){
 	var plaNo = $('[name=subNo]').val();
 	var plaReMsg = $('[name=reMsg]').val();
 	 location.href = "${path}/admin/adminReMsg.do?plaNo="+plaNo+"&plaReMsg="+plaReMsg+"&plaStatus="+'R'; 	
 }
 
-</script>
-    
-	<div class="admin">
-		<h2 class="text-center">관리자 페이지 </h2>
-	</div>
-		
+/* 승인상태 변화에 따라 호출되는 함수 */
+function fn_plaStatus(status){
+	$('#category').text("카테고리 선택▼");
+	$('[name=category]').val('전체');
+	$('[name=plaStatus]').val(status);
+	fn_status(1);
+}
+
+$(function(){
+	//처음 장소내역을 눌렀을때 기본으로 승인대기의 값이 들어옴
+	$('[name=plaStatus]').val('${plaStatus}');
+	fn_status(1);
 	
-	<div class="container">
-		<div class="row">
+	 var select = $("select#color");
+	  select.change(function() {
+	    var select_name = $(this).children("option:selected").text();
+	    $(this).siblings("label").text(select_name);
+	  });
+});
+
+function fn_status(cPage){
+	
+	var plaStatus = $('[name=plaStatus]').val();
+	var category = $('[name=category]').val();
+	
+	$.ajax({
+		url:"${path}/admin/placeStatusList.do",
+		data:{plaStatus:plaStatus,cPage:cPage,plaCategory:category},
+		dataType:"json",
+		success:function(data)
+		{	
 			
-				<div class="col-md-12">
-					<hr>
-						<ul class="nav justify-content-center">
-						    <li class="nav-item">
-						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminPage.do">회원관리</a></strong>
-						    </li>
-						    <li class="nav-item">
-						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminPlaceList.do">장소 요청 내역</a></strong>
-						    </li>
-						    <li class="nav-item">
-						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminProductReg.do">물품등록</a></strong>
-						    </li>
-						    <li class="nav-item">
-						   		<strong><a class="nav-link adminAtag" href="${path }/admin/adminProductList.do">물품관리</a></strong>
-						    </li>
-						  </ul>
-						  <hr>
-				</div>
-			</div>	
-		</div>
-		
-		<section>
-		<div class="container">
-		<div class="row" style="margin-left:auto; margin-right:auto; width:100%">	
-		  	<div>
-		  		<h3>장소 요청 내역</h3>
-		  		<br>
-		  	</div>		
-		  	
-		  	 <div class="row" style="margin-left:auto;margin-right:auto;width:95%">
-	         	<c:forEach items="${plaList}" var="p">
-				<div class="card shadow gallery-item" style="width:30%;margin-right:3%">
+			var pageBar = data.pageBar;
+			
+			var status="";
+			if(data.plaList.length>0){
+			for(var i=0; i<data.plaList.length; i++){
+				status+='<div class="card shadow gallery-item" style="width:30%;margin-right:3%;margin-bottom:3%">';
+				status+='<div class="gallery-item-image">';
+				status+='<img class="card-img-top scale" src="${path}/resources/upload/place/main/'+data.plaList[i].REIMG+'" alt="Card image" style="width:100%;height:100%">'; 
+				status+='</div>';
+				status+='<div class="gallery-item-description">';
+				status+='<h4 class="card-title"><strong>'+data.plaList[i].PLANAME+'</strong></h4>';
+				status+='<p class="card-text" style="margin-bottom:1%;word-wrap: break-word;font-size:0.9rem">';
+				status+='<i class="fa fa-map-marker" style="color:#989898;"></i>';
+			 	var addr = data.plaList[i].PLAADDR;
+				var addrStr = addr.split("/");
+				var addrSubStr = addrStr[0].split("(");
+				status+=addrSubStr[0]+"<br>"+"&nbsp;&nbsp;&nbsp;("+addrSubStr[1];
+				status+='</p>';
+				status+='<p class="card-text" style="margin-bottom:8%;font-size:0.9rem">';
+				status+='<i class="fa fa-phone" style="color:#989898;"></i>';
+				status+=data.plaList[i].PLAPHONE;
+				status+='</p>';
+				status+=' <button type="button" class="btn btn-primary plaBtn" onclick="fn_modal(this)" data-no='+data.plaList[i].PLANO+' data-name='+"'"+data.plaList[i].PLANAME+"'"+' data-address='+"'"+data.plaList[i].PLAADDR+"'"+' data-date='+data.plaList[i].PLADATE+' data-category='+data.plaList[i].PLACATEGORY+' data-area='+data.plaList[i].PLAAREA+' data-phone='+data.plaList[i].PLAPHONE+' data-content='+"'"+data.plaList[i].PLACONTENT+"'"+' data-time='+"'"+data.plaList[i].PLATIME+"'"+' data-keyword='+"'"+data.plaList[i].PLAKEYWORD+"'"+' data-status='+data.plaList[i].PLASTATUS+' data-user='+data.plaList[i].USERID+' data-toggle="modal" data-target="#place_modal" style="float:right">상세보기</button>';
+				if(data.plaList[i].PLASTATUS=='N'){
+					status+='<button type="button" class="btn btn-info"  style="float:right;margin-right:1%">승인대기</button> ';
+				}else if(data.plaList[i].PLASTATUS=='Y'){
+					status+='<button type="button" class="btn btn-success"  style="float:right;margin-right:1%">승인완료</button> ';
+				}else{
+					status+='<button type="button" class="btn btn-danger"  style="float:right;margin-right:1%">승인거절</button>  ';
+				}
+				status+='</div>';
+				status+='</div>';
+				} 
+			}else{
 				
-				  
-				    <div class="gallery-item-image">
-				    <img class="card-img-top scale" src="${path}/resources/upload/place/main/${p.REIMG}" alt="Card image" style="width:100%"> 
-				    
-				    </div>
-				    <div class="gallery-item-description">
-				      <h4 class="card-title"><strong>${p.PLANAME}</strong></h4>
-				      <p class="card-text" style="margin-bottom:0%">
-				      	<i class="fa fa-map-marker" style="font-size:20px;color:#989898;"></i>
-				      	<c:forTokens items="${p.PLAADDR}" delims="/" var="item" begin="0" end="0">
-				      		${item}
-				      	</c:forTokens>
-				      </p>
-				      <p class="card-text" style="margin-bottom:0%;margin-bottom:10%">
-				      	<i class="fa fa-phone" style="font-size:20px;color:#989898;"></i>
-				      	${p.PLAPHONE}
-				      </p>
-				      <!-- plaNo값에 해당되는 attach와 price 가격정보를 가져오기 위해 button name값에 장소번호를 넣어준다.-->
-				      
-				     <button type="button" class="btn btn-primary plaBtn" onclick="fn_modal(this)" data-no='${p.PLANO }' data-name='${p.PLANAME}' data-address='${p.PLAADDR }' data-date='${p.PLADATE}'
-				     data-category='${p.PLACATEGORY}' data-area='${p.PLAAREA}'	data-phone='${p.PLAPHONE }' data-content='${p.PLACONTENT}' data-time='${p.PLATIME}' data-keyword='${p.PLAKEYWORD}'
-				     data-status='${p.PLASTATUS}' data-userid='${p.USERID}' data-toggle="modal" data-target="#place_modal" style="float:right">상세보기</button>
-				     <c:if test="${p.PLASTATUS == 'N'}">
-				     <button type="button" class="btn btn-info"  style="float:right;margin-right:1%">승인대기</button>  
-				     </c:if>
-				      <c:if test="${p.PLASTATUS == 'Y'}">
-				     <button type="button" class="btn btn-success"  style="float:right;margin-right:1%">승인완료</button>  
-				     </c:if>
-				     <c:if test="${p.PLASTATUS == 'R'}">
-				     <button type="button" class="btn btn-danger"  style="float:right;margin-right:1%">승인거절</button>  
-				     </c:if>
-				    </div>
-				</div>
-				</c:forEach>
- 			 </div>
-		  </div>	  	
-		</div> 	
+				if(plaStatus=='N')status+="<div class='statusStyle'>승인대기 내역이 없습니다<div>";
+				if(plaStatus=='Y')status+="<div class='statusStyle'>승인완료 내역이 없습니다<div>";
+				if(plaStatus=='R')status+="<div class='statusStyle'>승인거절 내역이 없습니다<div>";
+			}	
+			 $('#plaList').html(status); 
+			 $('#pageBar').html(pageBar);
+		},
+		error:function(jxhr,textStatus,error)
+	    {
+	        console.log("ajax실패!");
+	        console.log(jxhr);
+	        console.log(textStatus);
+	        console.log(error);
+	     }
+	})
+}
+
+</script>
+
+	<section>
+		<div class="container">
+			<div  style="margin-left:auto; margin-right:auto; width:100%">	
+			  	<div>
+			  		<h3>장소 요청 내역</h3>
+			  		<br>
+			  	</div>	
+			  	
+			  	<!-- 승인상태 탭 -->	
+			  	<input type="hidden" name="plaStatus" value=""/>
+				  	<div style="margin-left:auto;margin-right:auto;width:95%;padding-right:4%">
+				  	 <ul class="nav nav-tabs" role="tablist">
+				        <li class="nav-item">
+				           
+				             <a class="nav-link active" href=""  data-toggle="tab" onclick="fn_plaStatus('N')" >승인대기</a> 
+				        </li>
+				        <li class="nav-item">
+				            <a class="nav-link" href="" data-toggle="tab" onclick="fn_plaStatus('Y')">승인완료</a>
+				        </li>
+				        <li class="nav-item">
+				            <a class="nav-link" href="" data-toggle="tab" onclick="fn_plaStatus('R')">승인거절</a>
+				        </li>
+				    </ul>
+				  	</div>
+	              
+	              	<!-- 카테고리 선택 select box -->
+		             <div style="float:right;margin-right:7%;margin-top:2%;margin-bottom:4%">
+		          
+							 <div id="select_box" style ="text-align:right">
+							 
+							  <label id="category" for="color">카테고리선택 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼</span>
+							  </label>
+							  <select id="color" name="category"  title="select color" onchange="fn_status(1)">
+							    <option value="전체">전체</option>
+							    <option value="식사">식사</option>
+							    <option value="술">술</option>
+							    <option value="노래방">노래방</option>
+							    <option value="스포츠">스포츠</option>
+							    <option value="영화/공연">영화/공연</option>
+							  </select>
+							</div> 
+					</div>
+	             </div>
+	             
+	             
+	           <div>
+			  	 <div class="row" id="plaList" style="margin-left:auto;margin-right:auto;width:95%">
+		     		<!-- ajax 승인상태 출력 -->
+	 			 </div>
+	 			 
+	 			  
+		 		 <div class="row justify-content-center" id="pageBar">
+		            	<!-- 페이지바 출력 -->
+				 </div>
+				
+	 		 </div>  
+		</div>	  	
+		
 		
 		<!-- 장소 상세보기 모달 -->
 		 <!-- The Modal -->
@@ -382,7 +527,7 @@ function fn_send(){
 		        	   	  <tr>
 		        	   	  	<td style="width:15%">등록자</td>
 		        	   	  	<td>: </td>
-		        	   	  	<td id="userId"></td>	
+		        	   	  	<td id="userId1"></td>	
 		        	   	  </tr>
 		        	   	  <tr>
 		        	   	  	<td style="width:15%">업체명</td>
@@ -500,30 +645,5 @@ function fn_send(){
 		  </div>
 		  </div>
 		  <!-- 승인 거절 메세지 모달 끝 -->
-</section>
-		
-		
-
-	<div class="text-center">
-				<ul class="pagination justify-content-center" >
-					<li class="page-item">
-						<a href="#" class="page-link" aria-label="Previous">
-							<span aria-hidden="true">&laquo;</span>
-						</a>
-					</li>
-					
-					<li class="page-item"><a href="#" class="page-link">1</a></li>
-					<li class="page-item"><a href="#" class="page-link">2</a></li>
-					<li class="page-item"><a href="#" class="page-link">3</a></li>
-					<li class="page-item active"><a href="#" class="page-link">4</a></li>
-					<li class="page-item"><a href="#" class="page-link">5</a></li>
-					
-					<li class="page-item">
-					<a href="#" class="page-link" aria-label="Next">
-					<span aria-hidden="true">&raquo;</span>
-					</a>
-					</li>
-				</ul>
- 	 	</div>
-	
+		</section> 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>  

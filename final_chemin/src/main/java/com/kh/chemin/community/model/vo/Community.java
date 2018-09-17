@@ -15,11 +15,16 @@ public class Community {
 	private String community_content;
 	private Date community_date;
 	private String community_hashTag;
+
+	/*댓글 수*/
+	private int community_cmcount;
+	private int community_likecnt;
 	
 	public Community() {}
 
 	public Community(int community_no, String community_category, String community_title, String community_writer,
-			String community_content, Date community_date, String community_hashTag) {
+			String community_content, Date community_date, String community_hashTag, int community_cmcount,
+			int community_likecnt) {
 		super();
 		this.community_no = community_no;
 		this.community_category = community_category;
@@ -28,6 +33,8 @@ public class Community {
 		this.community_content = community_content;
 		this.community_date = community_date;
 		this.community_hashTag = community_hashTag;
+		this.community_cmcount = community_cmcount;
+		this.community_likecnt = community_likecnt;
 	}
 
 	public int getCommunity_no() {
@@ -74,8 +81,8 @@ public class Community {
 		return community_date;
 	}
 
-	public void setCommunity_date(Date date) {
-		this.community_date = date;
+	public void setCommunity_date(Date community_date) {
+		this.community_date = community_date;
 	}
 
 	public String getCommunity_hashTag() {
@@ -86,11 +93,32 @@ public class Community {
 		this.community_hashTag = community_hashTag;
 	}
 
+	public int getCommunity_cmcount() {
+		return community_cmcount;
+	}
+
+	public void setCommunity_cmcount(int community_cmcount) {
+		this.community_cmcount = community_cmcount;
+	}
+
+	public int getCommunity_likecnt() {
+		return community_likecnt;
+	}
+
+	public void setCommunity_likecnt(int community_likecnt) {
+		this.community_likecnt = community_likecnt;
+	}
+
 	@Override
 	public String toString() {
 		return "Community [community_no=" + community_no + ", community_category=" + community_category
 				+ ", community_title=" + community_title + ", community_writer=" + community_writer
 				+ ", community_content=" + community_content + ", community_date=" + community_date
-				+ ", community_hashTag=" + community_hashTag + "]";
-	}	
+				+ ", community_hashTag=" + community_hashTag + ", community_cmcount=" + community_cmcount
+				+ ", community_likecnt=" + community_likecnt + "]";
+	}
+
+	
+	
+
 }

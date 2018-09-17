@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//DN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="place">
 <!-- resultType은 vo에 있는것을 가져오는것을 말함/ resultMap은 db에 있는걸 바로 가져올때. jsp에 쏴줄땐 대문자로 적음 -->
-
+<resultMap type="map" id="reviewMap"></resultMap>
 	<insert id="placeInsert" parameterType="place">
 		insert into place
 		values
@@ -20,5 +20,57 @@
 		insert into pla_menu(MENUNO,PLANO,MENUNAME,MENUPRICE) values(seq_placemenu_no.nextval,#{plaNo},#{menuName},#{menuPrice})
 	</insert>
 	
+	<select id="placeList" resultType="place">
+		select*from place where PLASTATUS ='Y'
+	</select>
 	
+	<select id="placeSelect" parameterType="_int" resultType="place">
+		select * from place where PLANO = #{plaNo}
+	</select>
+	
+	<select id="selectAttachList" parameterType="_int" resultType="placeAttach">
+		select*from pla_attachment where PLANO = #{plaNo}
+	</select>
+	
+	<select id="selectMenuList" parameterType="_int" resultType="placeMenu">
+		select*from pla_menu where PLANO = #{plaNo}
+	</select>
+	
+	<select id="placeSearch" parameterType="map" resultType="place">
+		select*from place where 1=1
+		<if test="plaCategory!=null and plaCategory!='' ">
+			and PLACATEGORY=#{plaCategory}
+		</if>
+		<if test="plaArea!=null and plaArea!='' and plaArea!='전체'">
+			and PLAAREA=#{plaArea}
+		</if>
+		  and PLASTATUS ='Y'
+	</select>
+	
+	<select id="placeReviewList" parameterType="_int" resultMap="reviewMap">
+		select*from pla_review where PLANO=#{plaNo} order by REVIEWNO desc
+	</select>
+	
+	<insert id="placeInsertReview" parameterType="placeReview">
+		insert into pla_review values(seq_review_no.nextval,#{userId},#{plaNo},#{reStar},#{reContent},default,null,null)
+	</insert>
+	
+	<select id="placeMatch" parameterType="map" resultType="place">
+		select * from place where PLAADDR like '%' || #{plaAddr}||'%' and PLANAME like '%' || #{plaName}||'%'
+	</select>
+	
+	<delete id="reviewDelete" parameterType="_int">
+		delete pla_review where REVIEWNO = #{reviewNo}
+	</delete>
+	
+	<update id="reviewUpdate" parameterType="placeReview">
+		update pla_review set REVIEWSTAR=#{reStar}, REVIEWCONTENT=#{reContent} where REVIEWNO=#{reviewNo}
+	</update>
+	
+	<select id="selectReviewCount" parameterType="_int" resultType="_int">
+		select count(*) from pla_review
+		where 1=1
+		and PLANO = #{plaNo}
+	</select>
 </mapper>
+

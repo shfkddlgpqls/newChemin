@@ -20,6 +20,7 @@
   -o-background-size: cover;
   background-size: cover;
 }   
+<<<<<<< HEAD
     
    
 .star-rating {
@@ -63,3 +64,23 @@
   font-feature-settings: 'liga';
 }
   
+=======
+   
+   
+.user_star_rating
+{
+	display: inline-block;
+	margin-left: 18px;
+}
+.user_star_rating li
+{
+	display: inline-block;
+	margin-right: -3px;
+	cursor: pointer;
+}
+.user_star_rating li i
+{
+	color: #f5c136;
+	font-size: 18px;
+}   
+>>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git

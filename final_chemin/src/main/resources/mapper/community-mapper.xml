@@ -4,12 +4,21 @@
 <!-- resultType은 vo에 있는것을 가져오는것을 말함/ resultMap은 db에 있는걸 바로 가져올때. jsp에 쏴줄땐 대문자로 적음 -->
 	<resultMap type="map" id="communityMap"></resultMap>
 	<select id="communityList" resultMap="communityMap">
-		select * from community order by communitydate desc
+		select c.*,
+		(select count(*) from community_comment cc where c.communityno=cc.communityno) as ccount,
+        (select count(*) from liketo l where l.communityno=c.communityno) as lcount
+		from community c order by communitydate desc
 	</select>
+	
 	<resultMap type="map" id="attachmentMap"></resultMap>
 	<select id="attachmentList" resultMap="attachmentMap">
 		select * from attachment 
 	</select>
+	
+	<!-- <resultMap type="map" id="likeMap"></resultMap>
+	<select id="likeList" resultMap="likeMap">
+		select * from liketo
+	</select> -->
 	<insert id="communityWriteEnd" parameterType="community">
 		INSERT INTO COMMUNITY(COMMUNITYNO,CATEGORY,TITLE,WRITER,CONTENT,COMMUNITYDATE,HASHTAG)
 		VALUES (seq_communityno.nextval,#{community_category},#{community_title},#{community_writer},#{community_content},default,#{community_hashTag})
@@ -17,29 +26,156 @@
 			select seq_communityno.currval from dual
 		</selectKey>
 	</insert>
+	
 	<insert id="insertAttachment" parameterType="attachment">
 		INSERT INTO ATTACHMENT (ATTACHMENTNO,COMMUNITYNO,ORIGINALFILENAME,RENAMEDFILENAME) VALUES (seq_attachmentno.nextval,#{community_no},#{original_filename},#{renamed_filename})
 		<selectKey keyProperty="attachment_no" resultType="_int" order="AFTER">
 			select seq_attachmentno.currval from dual
 		</selectKey>
 	</insert>
-	<resultMap type="map" id="fileMap"></resultMap>
-	<select id="selectFileCount" resultMap="fileMap">
-		SELECT COMMUNITYNO, COUNT(*) AS COUNT FROM ATTACHMENT GROUP BY COMMUNITYNO
-	</select> 
-	<!-- <update id="updateLikeCount" parameterType="_int">
-		update community set likecount=likecount+1 where communityno=#{community_no}
-	</update> -->
+	
+	<delete id="selectDelete" parameterType="_int">
+		delete from community where communityno=#{community_no}
+	</delete>
+	
+	<update id="communityUpdateEnd" parameterType="community">
+		update community set category=#{community_category}, title=#{community_content}, content=#{community_content}, hashtag=#{community_hashTag},communitydate=sysdate where communityno=#{community_no}
+	</update>
+	
+	<update id="updateAttach" parameterType="attachment">
+		update attachment set originalfilename=#{original_filename}, renamedfilename=#{renamed_filename} where communityno=#{community_no}
+	</update>
+	
 	<resultMap type="map" id="commentMap"></resultMap>
 	<select id="selectComment" resultMap="commentMap">
-		SELECT * FROM COMMUNITY_COMMENT WHERE COMMUNITYNO=#{communityno} ORDER BY COMMUNITYDATE DESC
+		SELECT * FROM COMMUNITY_COMMENT WHERE COMMUNITYNO=#{communityno}
 	</select>
+	
 	<insert id="commentWrite" parameterType="comment">
-		INSERT INTO COMMENT(COMMENTNO, COMMUNITYNO,WRITER,CONTENT,COMMENTDATE)
-		VALUES (seq_community_comment.nextval,#{community_no},#{writer},#{content},sysdate)
+		INSERT INTO COMMUNITY_COMMENT(COMMENTNO, COMMUNITYNO,WRITER,CONTENT,COMMENTDATE)
+		VALUES (seq_community_commentno.nextval,#{community_no},#{writer},#{content},sysdate)
 		<selectKey keyProperty="comment_no" resultType="_int" order="AFTER">
 			select seq_community_commentno.currval from dual
 		</selectKey>
 	</insert>
-</mapper>
+	
+	<select id="selectOne" parameterType="_int" resultMap="communityMap">
+		select * from community where communityno=#{community_no}
+	</select>
+	
+	<select id="selectAttachmentsOne" parameterType="_int" resultMap="attachmentMap">
+		select * from attachment where communityno=#{community_no}
+	</select>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="commentDelete" parameterType="_int">
+		delete from community_comment where commentno=#{comment_no}
+	</delete>
+	
+	<select id="search" parameterType="string" resultMap="communityMap">
+		select * from community where hashtag like '%'||#{community_hashTag}||'%' order by communityno desc
+	</select>
+	
+	<!-- 배열로 받은 게시물 번호를 foreach로 돌려서 해당되는 파일만 가져오기 -->
+	<select id="searchAtt" parameterType="list" resultMap="attachmentMap">
+		select * from attachment where communityno in
+		<foreach item="a" collection="list" open="(" separator="," close=")">
+		#{a}
+		</foreach>
+	</select>
+	
+	<update id="commentUpdate" parameterType="comment" >
+		update community_comment set content=#{content}, commentdate=sysdate where commentno=#{comment_no}
+	</update>
+	
+	<!-- 내 글만 보기 -->
+	<select id="myCommunityList" resultMap="communityMap" parameterType="string">
+		select c.*,
+		(select count(*) from community_comment cc where c.communityno=cc.communityno) as ccount
+		from community c 
+		where writer=#{community_writer}
+		order by communitydate desc
+	</select>
+	
+	<select id="myAttachmentList" parameterType="list" resultMap="attachmentMap">
+		select * from attachment where communityno in
+		<foreach item="a" collection="list" open="(" separator="," close=")">
+		#{a}
+		</foreach>
+	</select>
+	
+	<!-- 좋아요 -->
+	<!-- <insert id="like" parameterType="map">
+		insert into liketo(LIKENO,COMMUNITYNO,USERID,LIKECHECK)
+		values(seq_liekto.nextval,#{community_no},#{like_id},#{like_check})
+	</insert>
+	
+	<update id="likeUpdate" parameterType="map">
+		update liketo set likecheck='true' where communityno=#{community_no} and userid=#{like_id}
+	</update>
+	
+	<update id="likePlus" parameterType="_int">
+		update community set likecnt=+1 where communityno=#{community_no}
+	</update>
+	
+	<update id="likeMinus" parameterType="_int">
+		update community set likecnt=-1 where communityno=#{community_no}
+	</update> -->
 
+	<select id="likeRead" parameterType="hashMap" resultType="liketo">
+		select * from liketo where communityno=#{community_no} and userid=#{like_id}
+	</select>
+	
+	<select id="communityRead" parameterType="_int" resultType="community">
+		select * from community where communityno=#{community_no}
+	</select>
+	
+	<select id="likeCount" parameterType="_int" resultType="_int">
+		select count(*) as likecnt from liketo where communityno=#{community_no} 
+	</select>
+	
+	<update id="likeCheckUp" parameterType="hashMap">
+		update liketo set likecheck=likecheck+1 where communityno=#{community_no} and userid=#{like_id}
+	</update>
+	
+	<update id="likeCntUp" parameterType="_int">
+		update community set likecnt=likecnt+1 where communityno=#{community_no}
+	</update>
+	
+	<update id="likeCheckDown" parameterType="hashMap">
+		update liketo set likecheck = 0 where communityno=#{community_no} and userid=#{like_id}
+	</update>
+	
+	<update id="likeCntDown" parameterType="_int">
+		update community set likecnt=likecnt-1 where communityno=#{community_no}
+	</update>
+	
+	<insert id="likeCreate" parameterType="hashMap">
+		INSERT INTO LIKETO(LIKENO,COMMUNITYNO,USERID,LIKECHECK) 
+		VALUES 
+		(seq_liekto.nextval,#{community_no},#{like_id},0)
+	</insert>
+	
+	<!-- 카테고리 분류하기 -->
+	<select id="categoryFind" parameterType="string" resultMap="communityMap">
+		select * from community where category=#{community_category}
+	</select>
+	
+	<select id="categoryAttFind" parameterType="list" resultMap="attachmentMap">
+		select * from attachment where communityno in
+		<foreach item="a" collection="list" open="(" separator="," close=")">
+		#{a}
+		</foreach>
+	</select>
+	
+	<!-- 신고하기 -->
+	<insert id="reportWrite" parameterType="report">
+		INSERT INTO REPORT(RNO,CATEGORY,RWRITER,CONTENT) 
+		VALUES
+		(seq_reportno.nextval,#{category},#{rwriter},#{content})
+	</insert>
+	
+	<update id="reportCountUp" parameterType="string">
+		update member_info set rgcount = rgcount + 1 where userid=#{userId}
+	</update>
+</mapper>

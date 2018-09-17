@@ -1,5 +1,6 @@
 package com.kh.chemin.mall.controller;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -8,13 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -24,6 +23,7 @@ import com.kh.chemin.common.MallPageBar;
 import com.kh.chemin.mall.model.service.DetailsService;
 import com.kh.chemin.mall.model.service.MallService;
 import com.kh.chemin.mall.model.vo.Cart;
+import com.kh.chemin.mall.model.vo.OrderDetail;
 import com.kh.chemin.mall.model.vo.Product;
 import com.kh.chemin.mall.model.vo.QnA_board;
 import com.kh.chemin.mall.model.vo.Review;
@@ -35,8 +35,6 @@ import net.sf.json.JSONObject;
 @Controller
 public class MallController 
 {
-	private Logger logger = LoggerFactory.getLogger(DetailsController.class);
-	
    @Autowired
    MallService service;
    
@@ -99,6 +97,9 @@ public class MallController
             jsonRes.put("pName", p.getpName());
             jsonRes.put("reImg", p.getReImg());
             jsonRes.put("price", df.format(p.getPrice()));
+            jsonRes.put("pCount", p.getpCount());
+            jsonRes.put("sales", p.getSales());
+            jsonRes.put("pDate", p.getpDate());
             jsonArr.add(jsonRes);
          }
       }
@@ -113,6 +114,14 @@ public class MallController
    @RequestMapping("/mall/detail.do")
    public ModelAndView mallDetail(ModelAndView mv, int no)
    {
+      /*//해당 상품 리스트 보내기 
+      Product p = service.selectProduct(no);
+      
+      mv.addObject("product",p);
+      mv.setViewName("mall/productDetail");
+      
+      return mv;*/
+	   
 	   int numPerPage= 4;
 	   int cPage=1; 
 	   
@@ -121,7 +130,7 @@ public class MallController
       List<QnA_board> qlist = dservice.selectQnaBoardList(cPage,numPerPage,no);
       List<Review> rlist = dservice.selectReviewList(cPage,numPerPage,no);
       
-      logger.debug("리뷰 리스트 불러오기"+rlist);
+ //     logger.debug("리뷰 리스트 불러오기"+rlist);
       
       //문의게시판  글 갯수
       int qTotalCount = dservice.selectQnACount(no);
@@ -147,8 +156,6 @@ public class MallController
       // 상품 가져오기
       Product product = service.selectProduct(pno);
       int price = product.getPrice() * amount;
-      SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmm");
-      String orderNo = sdf.format(new Date());
       
       Map<String, Object> map = new HashMap<String, Object>();
       map.put("userId", userId);
@@ -158,13 +165,13 @@ public class MallController
       map.put("orderNo", ""); // order폼으로 넘어갈 때 생성하기
 
       int result = 0;
+      // 로그인 한 경우에만 장바구니에 넣기
       if(userId!=null && !userId.equals("")) {
          // 장바구니에 데이터 추가! (장바구니에 이미 담긴 경우 제외)
          Cart c = service.selectCartItem(map); // userId, pno, payYn이 n인 데이터 : 장바구니에 담긴 상태
-   
-         if(c==null)
+         if(c==null) // 장바구니에 없으면
             result = service.insertCart(map);
-         else
+         else // 장바구니에 있으면
             result = -1;
       }
 
@@ -179,7 +186,7 @@ public class MallController
    // 장바구니 이동
    @RequestMapping("/mall/cartList.do")
    public String cartList() {
-      // 구매 상태가 n이고 일주일 넘은 데이터 삭제해주기
+      // 구매 상태가 n이고 일주일 넘은 데이터 삭제해주기 (모든 회원)
       service.deleteOldCart();
       
       return "mall/cartList";
@@ -198,10 +205,136 @@ public class MallController
       out.print(jsonArr);
    }
    
+   // 장바구니 수량 변경
+   @RequestMapping("/mall/updateAmount.do")
+   public void updateAmount(HttpServletResponse response, String userId, String pno, String amount) throws IOException {
+      Map<String, String> map = new HashMap<String, String>();
+      map.put("userId", userId);
+      map.put("pno", pno);
+      map.put("amount", amount);
+      
+      int result = service.updateAmount(map);
+      
+      response.setContentType("application/json;charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      out.print(result);
+   }
+   
+   // 장바구니 상품 삭제
+   @RequestMapping("/mall/deleteCart.do")
+   public void deleteCart(HttpServletResponse response, String userId, String pno) throws IOException {
+      Map<String, String> map = new HashMap<String, String>();
+      map.put("userId", userId);
+      map.put("pno", pno);
+      
+      int result = service.deleteCart(map);
+      
+      response.setContentType("application/json;charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      out.print(result);
+   }
+   
    // 주문서 폼 이동
-   @RequestMapping("mall/orderForm.do")
-   public String orderForm() {
+   @RequestMapping("/mall/orderForm.do")
+   public String orderForm(ModelAndView mv, Model model, String userId) {
+      SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmm");
+      String orderNo = sdf.format(new Date());
+      int val1 = (int)(Math.random()*10);
+      int val2 = (int)(Math.random()*10);
+      int val3 = (int)(Math.random()*10);
+      orderNo+="_"+val1+val2+val3;
+      
+      Map<String, String> map = new HashMap<String, String>();
+      map.put("userId", userId);
+      map.put("orderNo", orderNo);
+      
+      // orderNo 추가하기
+      service.updateCartList(map);
+      
+      // 화면에 보여줄 데이터
+      List<Map<String, Object>> list = service.selectCartList(userId);
+      Map<String, Object> member = service.selectMember(userId);
+      
+      // 값 처리
+      int totalPrice = 0;
+      int delivery = 0;
+      int allPrice = 0;
+      for(int i=0; i<list.size(); i++)
+         totalPrice+=Integer.parseInt(String.valueOf(list.get(i).get("TOTALPRICE")));
+      if(totalPrice<50000)
+         delivery=3000;
+      allPrice = totalPrice+delivery;
+      Map<String, String> pay = new HashMap<String, String>();
+      pay.put("total", Integer.toString(totalPrice));
+      pay.put("delivery", Integer.toString(delivery));
+      pay.put("all", Integer.toString(allPrice));
+      
+      model.addAttribute("list", list);
+      model.addAttribute("member", member);
+      model.addAttribute("pay", pay);
+      
       return "mall/orderForm";
+   }
+   
+   // 결제완료
+   @RequestMapping("/mall/orderConfirm.do")
+   public String orderConfirm(ModelAndView mv, String userId, String orderNo, String orderName, String orderPhone, String zipcode, String orderAddr, String payment, int allPrice, String orderNote) {
+      OrderDetail od = new OrderDetail(orderNo, orderName, orderPhone, zipcode, orderAddr, payment, allPrice, orderNote, null);
+      
+      // 주문 목록 등록
+      int result = service.insertOrder(od);
+      
+      Map<String, String> map = new HashMap<>();
+      map.put("userId", userId);
+      map.put("orderNo", orderNo);
+      // 장바구니 상품 구매로 변경, 재고 처리, 판매 개수 처리
+      if(result>0) {
+         service.updateCartNo(map);
+         // 주문하려는 상품 가져오기
+         List<Cart> list = service.selectCartOrder(map);
+         for(int i=0;i<list.size();i++) {
+            map.put("pno", Integer.toString(list.get(i).getPno()));
+            service.updateProduct(map);
+         }
+      }
+      
+      return "mypage/myOrderList";
+   }
+   
+   // 장바구니 상품 개수
+   @RequestMapping("/mall/cartCount.do")
+   public void cartCount(HttpServletResponse response, String userId) throws IOException {
+      int result = service.selectCartCount(userId);
+      
+      response.setContentType("application/json;charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      out.print(result);
+   }
+   
+   // 재고 확인
+   @RequestMapping("/mall/productCount.do")
+   public void productCount(HttpServletResponse response, String userId) throws IOException {
+      List<Map<String, Object>> list = service.selectProductCount(userId);
+      
+      JSONArray jsonArr = new JSONArray();
+      jsonArr.add(list);
+      
+      response.setContentType("application/json;charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      out.print(jsonArr);
+   }
+   
+   // main에 best list 불러오기
+   @RequestMapping("/mall/mainList.do")
+   public void mainList(HttpServletResponse response) throws IOException {
+      List<String> list = service.selectMainList();
+      
+      JSONArray jsonArr = new JSONArray();
+      jsonArr.add(list);
+      
+      response.setContentType("application/json;charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      out.print(jsonArr);
    }
    
 }

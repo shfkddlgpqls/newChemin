@@ -74,12 +74,35 @@
               <a class="nav-link js-scroll-trigger" href="${path }/map/mapView.do">Map</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="${path }/mall/mainMall.do">Mall</a>
+              <a class="nav-link js-scr!ll-trigger"	href="${path }/mall/mainMall.do">Mall</a>
             </li>
             <c:if test="${memberLoggedIn!=null }"> 
-               <li class="nav-item">
-                 <a class="nav-link js-scroll-trigger" href="${path }/mall/cartList.do">cart</a>
+              	<li class="nav-item">
+                 <a class="nav-link js-scroll-trigger" href="${path }/mall/cartList.do">cart <span id="cartCount" class="badge badge-pill badge-secondary"></span></a>
                </li>
+               <input type="hidden" id="userId" value="${memberLoggedIn.userId }"/>
+               <script>
+               $(window).load(function(){
+					fn_cartCount();
+				});
+				
+				function fn_cartCount(){
+					var userId=$('#userId').val();
+					$.ajax({
+						type:"get",
+						url:"${path}/mall/cartCount.do",
+						data:{userId:userId},
+						datatype:"json",
+						success:function(data){
+							$('#cartCount').text(data);
+						},
+						error:function(jxhr,textStatus,error){
+							console.log("cartCount ajax 실패 : "+jxhr+" "+textStatus+" "+error);
+						}
+					});
+				}
+               </script>
+               
             </c:if>
             <li class="nav-item">
              <a class="nav-link js-scroll-trigger" href="${path}/community/communityList.do">Good Tip</a>
@@ -101,13 +124,38 @@
             
              <c:if test="${memberLoggedIn!=null&&memberLoggedIn.userId!='admin' }"> 
                <li class="nav-item">
-                   <a class="nav-link js-scroll-trigger" href="${path}/mypage/myOrderList.do">MyPage</a>
+                   <a class="nav-link js-scroll-trigger" href="${path}/mypage/myMember.do" style="float:left;">MyPage
+                   		<span id="mp_label"></span>
+                   </a>
+                   
                </li> 
                <li class="nav-item">
                    <a class="nav-link js-scroll-trigger" href="${path }/login/memberlogout.do">LogOut</a>
                </li> 
            </c:if>
+             <script>
+             $(window).load(function(){
+					fn_warning();
+				});
              
+             function fn_warning() {
+            	 var userId="${memberLoggedIn.userId}";
+            	 $.ajax({
+            		type : "GET",
+            		dataType : "json",
+            		url : "${path}/mypage/warningMsg.do",
+            		data : {userId:userId},
+            		success : function(data) {
+            			var view='';
+            			if(data.warnNum==1)
+            			{
+            				view+='<img style="height:15px;width:15px;" src="${path }/resources/base/img/new (1).png">';
+            			}
+            			$('#mp_label').html(view);
+            		}
+            	 });
+             }
+             </script>
              <c:if test="${memberLoggedIn.userId=='admin'}"> 
              <li class="nav-item">
                    <a class="nav-link js-scroll-trigger" href="${path}/admin/adminPage.do">Admin</a>
@@ -120,4 +168,3 @@
         </div>
       </div>
     </nav>
-</header>

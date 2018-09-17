@@ -151,14 +151,15 @@
                            <option value="high">높은가격순</option>
                        </select>
                    </div>
-                   <input id="searchData" name="searchData" type="text" class="m-r-30 s-text2" placeholder="검색할 상품명" style="border:none;outline:none;border-bottom: 1px solid gray;">
+                   <input id="searchData" name="searchData" list="autoComplete" type="text" class="m-r-30 s-text2" placeholder="검색할 상품명" style="border:none;outline:none;border-bottom: 1px solid gray;">
+                   <datalist id="autoComplete"></datalist>
                </div>
    
                <div class="wra-filter-bar">
-                   <h5 class="s-text3 p-t-10 p-b-17">
-                       <span class="m-text10 p-b-17">price</span>
-                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                       \<span id="value-lower"></span> ~ \<span id="value-upper"></span>
+                   <h5 class="s-text3 p-t-10 p-b-10">
+                       \ <input type="number" id="value-lower" class="p-l-5" min='0' max='500000' step='1000' style="border:none;outline:none;border:none;color:gray;width:70px"/>
+                        ~ 
+                       \ <input type="number" id="value-upper" class="p-l-5" min='1000' max='500000' step='1000' style="border:none;outline:none;border:none;color:gray;width:70px"/>
                    </h5>
                    <div id="filter-bar"></div>
                </div>
@@ -175,9 +176,9 @@
 
         <!-- 전체 클릭시! -->
         <div id="content1" class="tab-content tabdiv">
-            <div class="tab-content p-t-35">
+            <div class="tab-content">
                 <div class="tab-pane fade show active" id="best-seller" role="tabpanel">
-                    <div class="row" id="p0" style="background: white">
+                    <div class="row justify-content-center" id="p0" style="background: white">
                     
 <%--                   <c:forEach items="${list }" var="m">
                            <!-- 상품 하나 -->
@@ -211,9 +212,9 @@
         <!-- 가구 클릭시! -->
         <div id="content2" class="tab-content tabdiv">
 
-            <div class="tab-content p-t-35">
+            <div class="tab-content">
                 <div class="tab-pane fade show active" id="best-seller" role="tabpanel">
-                    <div class="row" id="p1" style="background: white">
+                    <div class="row justify-content-center" id="p1" style="background: white">
                   <!-- ajax로 상품 출력 -->
                     </div>
                 </div>
@@ -228,9 +229,9 @@
         <!-- 식품 클릭시! -->
         <div id="content3" class="tab-content tabdiv">
 
-            <div class="tab-content p-t-35">
+            <div class="tab-content">
                 <div class="tab-pane fade show active" id="best-seller" role="tabpanel">
-                    <div class="row" id="p2" style="background: white">
+                    <div class="row justify-content-center" id="p2" style="background: white">
                   <!-- ajax로 상품 출력 -->
                     </div>
                 </div>
@@ -245,9 +246,9 @@
         <!-- 방범 클릭시! -->
         <div id="content4" class="tab-content tabdiv">
             
-            <div class="tab-content p-t-35">
+            <div class="tab-content">
                 <div class="tab-pane fade show active" id="best-seller" role="tabpanel">
-                    <div class="row" id="p3" style="background: white">
+                    <div class="row justify-content-center" id="p3" style="background: white">
                   <!-- ajax로 상품 출력 -->
                     </div>
                 </div>
@@ -283,41 +284,76 @@
       });
    </script>
     <script src="<c:url value="/resources/mall/vendor/noui/nouislider.min.js"/>"></script>
-   <script type="text/javascript">
+   <script>
       /*[ No ui ]
        ===========================================================*/
        var filterBar = document.getElementById('filter-bar');
-
+      var lower = document.getElementById('value-lower');
+      var upper = document.getElementById('value-upper');
+      var priceBar = [lower, upper];
+      
        noUiSlider.create(filterBar, {
-           start: [ 0, 1000 ],
+           start: [ 0, 500000 ],
            connect: true,
+           step:1000,
            range: {
                'min': 0,
-               'max': 1000,
+               'max': 500000,
            }
        });
 
-       var skipValues = [
-          document.getElementById('value-lower'),
-          document.getElementById('value-upper')
-       ];
-
        filterBar.noUiSlider.on('update', function( values, handle ) {
-           skipValues[handle].innerHTML = Math.round(values[handle])*1000 ;
+          priceBar[handle].value = Math.round(values[handle]) ;
+       });
+       
+       function setSliderHandle(i, value) {
+          var r = [null,null];
+          r[i] = value;
+          filterBar.noUiSlider.set(r);
+       }
+       
+       priceBar.forEach(function(input, handle) {
+
+          input.addEventListener('change', function(){
+             setSliderHandle(handle, this.value);
+          });
        });
     </script>
     
     <script>  
        $(function(){
           list_ck(1);
+          
+          $('#searchData').keyup(function(){
+             var searchData = $('#searchData').val();
+            $.ajax({
+               url:"${path}/admin/productAuto.do",
+               type:"get",
+               data:{search:searchData},
+               dataType:'html',
+               success:function(data){
+                  console.log(data);
+                  var nameArr = data.split(",");
+                  var html="";
+                  for(var i=0;i<nameArr.length;i++){
+                     html+="<option>"+nameArr[i]+"</option>";
+                  }
+                  $('#autoComplete').html(html);
+               }
+            });
+         });
        });
     
        function list_ck(cPage){
             var cno = $('input[name="tabs"]:checked').val();
             var searchType = $('#sorting').val();
             var searchData = $('#searchData').val();
-            var lowValue = $('#value-lower').text();
-            var highValue = $('#value-upper').text();
+            var lowValue = $('#value-lower').val();
+            var highValue = $('#value-upper').val();
+            if(highValue<1000) {
+               $('#value-upper').val('1000');
+            highValue=1000;
+            }
             $.ajax({
                type:"get",
                url:"${path}/mall/mallList.do",
@@ -336,20 +372,34 @@
                            view+="<img src='${path}/resources/upload/productImg/"+data[i].reImg+"' alt='IMG-PRODUCT' class='shopimg' draggable='false'>";
                            view+="</a>";
                            view+="<div class='block2-txt p-t-20'>";
-                           view+="<a id='detail' href='${path }/mall/detail.do?no="+data[i].pno+"' class='block2-name dis-block s-text3 p-b-5 shoptext' draggable='false'>"+data[i].pName+"</a>";
+                           view+="<a id='detail' href='${path }/mall/detail.do?no="+data[i].pno+"' class='block2-name dis-block s-text3 p-b-5 shoptext' draggable='false'>"+data[i].pName;
+                             var today = new Date();
+                             today.setDate(today.getDate()-7);
+                             var date=data[i].pDate;
+                             var year=date.substr(0,4);
+                             var month=date.substr(4,2);
+                             var day=date.substr(6,2);
+                             var pdate=new Date(year,month-1,day);
+                             if(data[i].pCount==0)
+                              view+=" <span class='badge badge-secondary'>sold out</span>";
+                           else{
+                                if(pdate>=(today-7))
+                                   view+=" <span class='badge badge-info'>new</span>";
+                                if(data[i].sales>=10)
+                                   view+=" <span class='badge badge-warning'>best</span>";
+                                   // view+=" <span class='badge badge-danger'>hot</span>"; 리뷰많은순?
+                           }
+                           view+="</a>";
                            view+="</div>";
                            view+="</div>";
                            view+="<span class='block2-price dis-block m-text6 p-r-5 shoptext'>\\"+data[i].price+"</span>";
                            view+="</div>";
                            view+="</div>";
                      }
-                 } else {
-                    view+="<div class='col-sm-6 col-md-4 col-lg-3 p-b-50'>";
-                  view+="<div class='block2'>";
-                    view+="<span class='block2-price dis-block m-text6 p-r-5 shoptext'>해당 정보가 없습니다.</span>";
-                        view+="</div>";
-                        view+="</div>";
-                 }
+                     if(data.length==1){
+                        view+="<h5 class='p-b-30'>해당 상품이 존재하지 않습니다</h5>";
+                     }
+                 } 
                if(cno==0) $('#p0').html(view);
                else if(cno==1) $('#p1').html(view);
                else if(cno==2) $('#p2').html(view);

@@ -32,6 +32,9 @@
 				<div class="col-md-12">
 					<hr>
 						<ul class="nav justify-content-center">
+							<li class="nav-item">
+						      <strong><a class="nav-link mypageAtag" href="${path }/mypage/myMember.do">회원 정보	</a></strong>
+						    </li>
 						    <li class="nav-item">
 						      <strong><a class="nav-link mypageAtag" href="${path }/mypage/myOrderList.do">주문 목록	</a></strong>
 						    </li>
@@ -52,8 +55,4 @@
 				</div>
 			</div>	
 		</div>
-		
-	
-	
-	
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>  

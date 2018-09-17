@@ -6,7 +6,7 @@
 
 
 <c:set value="${pageContext.request.contextPath }" var="path"/>
-  <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+  <jsp:include page="/WEB-INF/views/common/header1.jsp"/>
   <style>
   	.container{
   		width:50%;
@@ -72,6 +72,57 @@
 	width:15%;
 	margin-right:2%;
 	}
+	
+.filebox input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip:rect(0,0,0,0);
+    border: 0;
+}
+.filebox label {
+    display: inline-block;
+    padding: .5em .75em;
+    color: #999;
+    font-size: inherit;
+    line-height: normal;
+    vertical-align: middle;
+    background-color:#F05F40;
+    cursor: pointer;
+    border: 1px solid #ebebeb;
+    border-bottom-color: #e2e2e2;
+    border-radius: .25em;
+    margin:0;
+}
+/* named upload */
+.filebox .upload-name {
+	width:39%;
+    display: inline-block;
+    padding: .5em .75em;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: normal;
+    vertical-align: middle;
+    background-color: #E9ECEF;
+  border: 1px solid #CED4DA;
+  border-radius: .25em;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+ .filebox.bs3-primary label {
+  color: #fff;
+    background-color: #F05F40;
+    border-color: #F05F40;
+    font-weight: 700; 
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+} 
+.btn{
+ border-radius: 3px;
+}
   </style>
 <!--   <script>
 $ (document) .on ( "ready", function () {
@@ -87,12 +138,10 @@ function execDaumPostcode() {
     new daum.Postcode({
         oncomplete: function(data) {
             // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
             // 도로명 주소의 노출 규칙에 따라 주소를 조합한다.
             // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
             var fullRoadAddr = data.roadAddress; // 도로명 주소 변수
             var extraRoadAddr = ''; // 도로명 조합형 주소 변수
-
             // 법정동명이 있을 경우 추가한다. (법정리는 제외)
             // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
             if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
@@ -110,22 +159,18 @@ function execDaumPostcode() {
             if(fullRoadAddr !== ''){
                 fullRoadAddr += extraRoadAddr;
             }
-
             // 우편번호와 주소 정보를 해당 필드에 넣는다.
             document.getElementById('postcode').value = data.zonecode; //5자리 새우편번호 사용
             document.getElementById('roadAddress').value = fullRoadAddr;
             document.getElementById('jibunAddress').value = data.jibunAddress;
-
             // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
             if(data.autoRoadAddress) {
                 //예상되는 도로명 주소에 조합형 주소를 추가한다.
                 var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
                 document.getElementById('guide').innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
-
             } else if(data.autoJibunAddress) {
                 var expJibunAddr = data.autoJibunAddress;
                 document.getElementById('guide').innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
-
             } else {
                 document.getElementById('guide').innerHTML = '';
             }
@@ -133,7 +178,6 @@ function execDaumPostcode() {
     }).open();
   
 }
-
 //추가버튼 클릭시 가격정보 추가되는 부분
 function add_item(){
     var div = document.createElement('div');
@@ -141,11 +185,9 @@ function add_item(){
     div.setAttribute('class', 'form-inline margin-bottom-sub');
     document.getElementById('field').appendChild(div);
 }
-
 function remove_item(obj){
 	 document.getElementById('field').removeChild(obj.parentNode);
 }
-
 $(function() {
     $('#content').keyup(function (e){
         var content = $(this).val();
@@ -153,14 +195,27 @@ $(function() {
         $('#counter').html(content.length + '/2000');
     });
     $('#content').keyup();
+    
+    //대표이미지 파일 이름 보여주기
+    var fileTarget = $('.filebox .upload-hidden');
+    fileTarget.on('change', function(){
+        if(window.FileReader){
+            var filename = $(this)[0].files[0].name;
+        } else {
+            var filename = $(this).val().split('/').pop().split('\\').pop();
+        }
+        $(this).siblings('.upload-name').val(filename);
+    });
 });
-
 function validate(){
 	var plaName =$('[name=plaName]').val();
 	var mainImg =$('[name=mainImg]').val();
 	var phoneMiddle =$('[name=phoneMiddle]').val();
 	var phoneEnd =$('[name=phoneEnd]').val();
-
+	var roadAddr =$('[name=roadAddr]').val();
+	var menuName =$('[name=menuName]').val();
+	var menuPrice =$('[name=menuPrice]').val();
+	
 		if(plaName.trim().length==0){
 			swal({
 				  text: "업체명을 입력해주세요",
@@ -175,21 +230,21 @@ function validate(){
 				  button: "확인",
 				});
 			return false;
-		}else if(phoneMiddle.trim==0||phoneEnd.trim==0){
+		}else if(phoneMiddle.trim()==0||phoneEnd.trim()==0){
 			swal({
 				  text: "번호를 입력해주세요",
 				  icon: "warning",
 				  button: "확인",
 				});
 			return false;
-		}else if(menuName==0||menuName==null){
+		}else if(menuName.trim()==0||menuName==null){
 			swal({
 				  text: "메뉴명을 입력해주세요.",
 				  icon: "warning",
 				  button: "확인",
 				});
 			return false;
-		}else if(menuPrice==0||menuPrice==null){
+		}else if(menuPrice.trim()==0||menuPrice==null){
 			swal({
 				  text: "메뉴 가격을 입력해주세요.",
 				  icon: "warning",
@@ -197,10 +252,48 @@ function validate(){
 				});
 			return false;
 		}
-		return true;	
+		
+		var result ;
+	       $.ajax({
+			url:"${path}/map/placeMatch.do",
+    		data:{plaAddr:roadAddr,plaName:plaName},
+    		async: false,
+    		dataType:"json",
+    		success:function(data){
+    			console.log(data.plaMatch)
+    			if(data.plaMatch!=null && data.plaMatch!=''){
+    				if(data.plaMatch.plaStatus=='Y'){
+    					swal({
+      					  text: "이미 등록되어 있는 장소입니다",
+      					  icon: "error",
+      					  button: "확인",
+      					})
+    					result = false;
+    				}else if(data.plaMatch.plaStatus=='N'){
+    					swal({
+        					  text: "등록 요청 중인 장소입니다",
+        					  icon: "error",
+        					  button: "확인",
+        					})
+        					result = false;
+    				}
+    			}
+    			else
+    			{
+    				result= true;
+    			}
+    		},
+    		error:function(jxhr,textStatus,error)
+            {
+                console.log("ajax실패!");
+                console.log(jxhr);
+                console.log(textStatus);
+                console.log(error);
+             }
+		})
+		return result;
+	       
 	}
-
-
 /* $(function(){
 	$("#check_all").click(function(){
 		var chk = $(this).is(":checked");//.attr('checked');
@@ -208,13 +301,12 @@ function validate(){
 		else  
 	});
 }); */
-
 </script>
 
 <section>
 	<div class="container" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 		<div class="row" style="margin-top:55px">
-			<form action="${path}/map/placeInsert.do" method="post" onsubmit="return validate();" enctype="multipart/form-data">
+			<form id="placeInsert" action="${path}/map/placeInsert.do?userId=${memberLoggedIn.userId}" method="post" onsubmit="return validate();" enctype="multipart/form-data">
 		    	 <h1 class="text-uppercase nanumFont">
 		    		<i class="fa fa-edit"></i> 장소 등록
 		    	</h1>
@@ -222,6 +314,7 @@ function validate(){
 		    	<div class="info col-md-12">
 		    		<div class="row frist">
 			    		<div class="col-md-2">
+			    		
 			    			<span>지역선택</span>
 			    		</div>
 			    		<div class="col-md-10">
@@ -266,11 +359,12 @@ function validate(){
 			    			<span>대표이미지</span>
 			    		</div>
 			    		<div class="col-md-10">
-				                 <div class="custom-file" >
-				                    <input style="width:50%" type="file" class="custom-file-input" name="mainImg" id="mainImg1">
-				                    <label style="width:50%" class="custom-file-label" for="mainImg1">파일을 선택하세요</label>
-				                </div>        
-           			 		 
+			    				<div class="filebox bs3-primary">
+		                            <input class="upload-name" name="imgName" value="파일을 선택해주세요" disabled="disabled">
+		
+		                           <label for="ex_filename">업로드</label>
+		                          <input type="file" name="mainImg" id="ex_filename" class="upload-hidden" value=""> 
+		                        </div>    	 
 			    		</div>
 		    		</div>
 
@@ -325,36 +419,58 @@ function validate(){
 			   						<option value="주말">주말</option>
 			   					</select> 
 			   					 <select class="form-control" id="time"  name="startTime">
-			   						<option value="00:00">00:00</option>
-			   						<option value="01:00">01:00</option>
-			   						<option value="02:00">02:00</option>
-			   						<option value="03:00">03:00</option>
-			   						<option value="04:00">04:00</option>
-			   						<option value="05:00">05:00</option>
-			   						<option value="06:00">06:00</option>
-			   						<option value="07:00">07:00</option>
-			   						<option value="08:00">08:00</option>
-			   						<option value="09:00">09:00</option>
-			   						<option value="06:00">10:00</option>
-			   						<option value="07:00">11:00</option>
-			   						<option value="08:00">12:00</option>
-			   						<option value="09:00">13:00</option>
+			   					 	<option value="09:00">00:00</option>
+			   						<option value="09:00">01:00</option>
+			   						<option value="09:00">02:00</option>
+			   						<option value="09:00">03:00</option>
+			   						<option value="00:00">04:00</option>
+			   						<option value="00:00">05:00</option>
+			   						<option value="00:00">06:00</option>
+			   						<option value="00:00">07:00</option>
+			   						<option value="01:00">08:00</option>
+			   						<option value="02:00">09:00</option>
+			   						<option value="03:00">10:00</option>
+			   						<option value="04:00">11:00</option>
+			   						<option value="05:00">12:00</option>
+			   						<option value="06:00">13:00</option>
+			   						<option value="07:00">14:00</option>
+			   						<option value="08:00">15:00</option>
+			   						<option value="09:00">16:00</option>
+			   						<option value="06:00">17:00</option>
+			   						<option value="07:00">18:00</option>
+			   						<option value="08:00">19:00</option>
+			   						<option value="09:00">20:00</option>
+			   						<option value="09:00">21:00</option>
+			   						<option value="09:00">22:00</option>
+			   						<option value="09:00">23:00</option>
+			   						<option value="09:00">24:00</option>
 			   					</select>
 			   					<select class="form-control" id="time"  name="endTime">
-			   						<option value="00:00">00:00</option>
-			   						<option value="01:00">01:00</option>
-			   						<option value="02:00">02:00</option>
-			   						<option value="03:00">03:00</option>
-			   						<option value="04:00">04:00</option>
-			   						<option value="05:00">05:00</option>
-			   						<option value="06:00">06:00</option>
-			   						<option value="07:00">07:00</option>
-			   						<option value="08:00">08:00</option>
-			   						<option value="09:00">09:00</option>
-			   						<option value="06:00">10:00</option>
-			   						<option value="07:00">11:00</option>
-			   						<option value="08:00">12:00</option>
-			   						<option value="09:00">13:00</option>
+			   						<option value="09:00">00:00</option>
+			   						<option value="09:00">01:00</option>
+			   						<option value="09:00">02:00</option>
+			   						<option value="09:00">03:00</option>
+			   						<option value="00:00">04:00</option>
+			   						<option value="00:00">05:00</option>
+			   						<option value="00:00">06:00</option>
+			   						<option value="00:00">07:00</option>
+			   						<option value="01:00">08:00</option>
+			   						<option value="02:00">09:00</option>
+			   						<option value="03:00">10:00</option>
+			   						<option value="04:00">11:00</option>
+			   						<option value="05:00">12:00</option>
+			   						<option value="06:00">13:00</option>
+			   						<option value="07:00">14:00</option>
+			   						<option value="08:00">15:00</option>
+			   						<option value="09:00">16:00</option>
+			   						<option value="06:00">17:00</option>
+			   						<option value="07:00">18:00</option>
+			   						<option value="08:00">19:00</option>
+			   						<option value="09:00">20:00</option>
+			   						<option value="09:00">21:00</option>
+			   						<option value="09:00">22:00</option>
+			   						<option value="09:00">23:00</option>
+			   						<option value="09:00">24:00</option>
 			   					</select>
 			   					<input class="form-control" style="width:25%" name="subContent" type="text" placeholder="ex)1월 1일 휴무"/>
 							</div>			    		

@@ -1,26 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//DN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="mypage">
+
 <!-- resultType은 vo에 있는것을 가져오는것을 말함/ resultMap은 db에 있는걸 바로 가져올때. jsp에 쏴줄땐 대문자로 적음 -->
-	<resultMap type="map" id="placeMap">
-		
-	</resultMap>
-	<select id="selectPlaceList" parameterType="String" resultMap="placeMap">
-		select*from place where USERID=#{userId} order by PLADATE desc
-	</select>
-	
-	<select id="selectAttachList" parameterType="_int" resultType="placeAttach">
-		select*from pla_attachment where PLANO = #{plaNo}
-	</select>
-	
-	<select id="selectMenuList" parameterType="_int" resultType="placeMenu">
-		select*from pla_menu where PLANO = #{plaNo}
-	</select>
-	
-	<delete id="placeDelete" parameterType="_int">
-		delete place where PLANO = #{plaNo}
-	</delete>
-	
+
+
 	<insert id="insertReview" parameterType="review">
 		INSERT INTO REVIEW values (REVIEW_SEQ.nextval,#{userId},#{pno},#{reContent},#{orImg},#{reImg},#{stars},sysdate)
 	</insert>
@@ -41,6 +25,71 @@
 	<select id="selectReviewCount" resultType="_int">
 		select count(*) from review where userId = #{userId}
 	</select>
+	<!-- 장소관리 -->
+	<resultMap type="map" id="placeMap"></resultMap>
+	<select id="selectPlaceList" parameterType="map" resultMap="placeMap">
+		select*from place where 1=1
+		<if test="plaCategory!=null and plaCategory!='' and plaCategory!='전체'">
+			and PLACATEGORY = #{plaCategory}
+		</if>
+		<if test="plaStatus!=null and plaStatus!=''">
+			and PLASTATUS=#{plaStatus}
+		</if>
+		<if test="userId!=null and userId!=''">
+			and USERID=#{userId}
+		</if>
+		 order by PLANO desc
+	</select>
+	
+	<select id="selectAttachList" parameterType="_int" resultType="placeAttach">
+		select*from pla_attachment where PLANO = #{plaNo}
+	</select>
+	
+	<select id="selectMenuList" parameterType="_int" resultType="placeMenu">
+		select*from pla_menu where PLANO = #{plaNo}
+	</select>
+	
+	<delete id="placeDelete" parameterType="_int">
+		delete place where PLANO = #{plaNo}
+	</delete>
+	
+	<select id="placeSelect" parameterType="_int" resultType="place">
+		select*from place where PLANO =#{plaNo}
+	</select>
+	
+	<update id="placeUpdate" parameterType="place">
+		update place set PLAAREA=#{plaArea}, PLACATEGORY=#{plaCategory}, PLANAME=#{plaName}, 
+		ORIMG=#{orImg}, REIMG=#{reImg}, PLAPHONE=#{plaPhone}, PLAADDR=#{plaAddr}, PLATIME=#{plaTime},
+		PLACONTENT=#{plaContent}, PLAKEYWORD=#{plaKeyword}, PLADATE=default, PLASTATUS='N' where PLANO=#{plaNo} 
+	</update>
+	
+		<update id="updateMenu" parameterType="placeMenu">
+		insert into pla_menu(MENUNO,PLANO,MENUNAME,MENUPRICE) values(seq_placemenu_no.nextval,#{plaNo},#{menuName},#{menuPrice})
+	</update>
+	
+	<update id="updateAttach" parameterType="placeAttach">
+		insert into PLA_ATTACHMENT(ATTACHMENTNO,PLANO,ORIMG,REIMG) values(SEQ_PLAATTACH_NO.nextval,#{plaNo},#{orImg},#{reImg})
+	</update>
+	
+	<delete id="removeMenu" parameterType="_int">
+		delete pla_menu where PLANO=#{plaNo}
+	</delete>
+	
+	<delete id="removeAttach" parameterType="_int">
+		delete pla_attachment where PLANO=#{plaNo}
+	</delete>
+	
+	<!-- 신고하기 -->
+	<select id="warnMsg" parameterType="string" resultType="_int">
+		SELECT RGCOUNT FROM MEMBER_INFO WHERE USERID=#{userId}
+	</select>
 	
 	
+	<select id="selectPlaceCount" parameterType="map" resultType="_int">
+		select count(*) from place
+		where 1=1
+		and PLASTATUS =#{plaStatus}
+		and USERID =#{userId}
+	</select>
+
 </mapper>
