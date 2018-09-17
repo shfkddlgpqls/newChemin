@@ -290,15 +290,15 @@ function createMarkerImage(src, size, options) {
 var overlayArr=[];
 var coordsArr =[];
 
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
-mapOption = { 
-    center: new daum.maps.LatLng(37.551427, 126.920575), // 지도의 중심좌표 
-    level: 5 // 지도의 확대 레벨 
-}; 
 
-var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 function fn_drawMap(address,categoryImg,contentArray){
-	
+	var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
+	mapOption = { 
+	    center: new daum.maps.LatLng(37.551427, 126.920575), // 지도의 중심좌표 
+	    level: 5 // 지도의 확대 레벨 
+	}; 
+
+	var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 	
 	//주소-좌표 변환 객체를 생성합니다
 	var geocoder = new daum.maps.services.Geocoder();
@@ -330,12 +330,12 @@ function fn_drawMap(address,categoryImg,contentArray){
 			        
 				     daum.maps.event.addListener(marker, 'click', function() {
 				    	 overlay.setMap(map); 
-				    		 for(var j=0; j<overlayArr.length; j++){
+				    		/*  for(var j=0; j<overlayArr.length; j++){
 				    			
 				    			 	if(i!=j){
 				    			 		overlayArr[j].setMap(null); 
 				    			 	}
-				    			}
+				    			} */
 				     });
 			    } 
 			});
