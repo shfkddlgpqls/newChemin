@@ -65,6 +65,7 @@ public class MemberController {
 		}
 		loc = "/";
 		mv.addObject("msg", msg);
+		mv.addObject("status", "loginSuccess");
 		mv.addObject("loc", loc);
 		mv.setViewName("common/msg");
 		return mv;

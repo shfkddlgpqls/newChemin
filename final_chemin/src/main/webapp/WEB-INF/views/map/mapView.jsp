@@ -287,19 +287,23 @@ function createMarkerImage(src, size, options) {
     return markerImage;            
 }
 
+
 var overlayArr=[];
 var coordsArr =[];
 
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
-mapOption = { 
-    center: new daum.maps.LatLng(37.551427, 126.920575), // 지도의 중심좌표 
-    level: 5 // 지도의 확대 레벨 
-}; 
-
-var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 function fn_drawMap(address,categoryImg,contentArray){
+	console.log(address);
+	console.log(categoryImg);
+	console.log(contentArray);
 	
-	
+	var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
+	mapOption = { 
+	    center: new daum.maps.LatLng(37.551427, 126.920575), // 지도의 중심좌표 
+	    level: 5 // 지도의 확대 레벨 
+	}; 
+
+	var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
 	//주소-좌표 변환 객체를 생성합니다
 	var geocoder = new daum.maps.services.Geocoder();
  
@@ -309,10 +313,11 @@ function fn_drawMap(address,categoryImg,contentArray){
 		    // 정상적으로 검색이 완료됐으면 
 		    	
 			     if (status === daum.maps.services.Status.OK) {
-			    	
+			    	console.log(result);
 			        var coords = new daum.maps.LatLng(result[0].y, result[0].x);
 			        // 결과값으로 받은 위치를 마커로 표시합니다
 			        var marker = new daum.maps.Marker({
+			        	
 			            map: map,
 			            position: coords,
 			            image: categoryImg[i]
@@ -320,22 +325,26 @@ function fn_drawMap(address,categoryImg,contentArray){
 			        
 			        coordsArr.push(coords);
 			         
-			        map.panTo(coordsArr[0]); 
+			         map.panTo(coordsArr[0]);  
 			        var overlay = new daum.maps.CustomOverlay({
+			        	
 				      content: contentArray[i],
 				      position: marker.getPosition()       
 				     });
+			        
 				     
 			        overlayArr.push(overlay);
-			        
+			 
 				     daum.maps.event.addListener(marker, 'click', function() {
-				    	 overlay.setMap(map); 
-				    		 for(var j=0; j<overlayArr.length; j++){
-				    			
-				    			 	if(i!=j){
+				    	
+				    	overlay.setMap(map);
+				    		   /*  for(var j=0; j<overlayArr.length; j++){   			
+				    			 	if(result.address_name==address[i]){
 				    			 		overlayArr[j].setMap(null); 
+				    			 	}else{
+				    			 		overlayArr[j].setMap(map);
 				    			 	}
-				    			}
+				    			}      */
 				     });
 			    } 
 			});
@@ -344,6 +353,7 @@ function fn_drawMap(address,categoryImg,contentArray){
 	
 }
 
+console.log(overlayArr)
 /* //HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
 if (navigator.geolocation) {
     
