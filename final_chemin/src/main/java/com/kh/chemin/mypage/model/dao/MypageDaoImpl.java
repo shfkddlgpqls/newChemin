@@ -63,5 +63,12 @@ public class MypageDaoImpl implements MypageDao {
 		return sqlSession.delete("mypage.removeAttach",plaNo);
 	}
 
+	@Override
+	public int warnMsg(SqlSessionTemplate sqlSession, String userId) {
+		System.out.println(":::warnMsgDao:::"+userId);
+		int result=sqlSession.selectOne("mypage.warnMsg",userId);
+		return result;
+	}
+
 }
 

@@ -29,6 +29,7 @@ import com.kh.chemin.community.model.vo.Attachment;
 import com.kh.chemin.community.model.vo.Comment;
 import com.kh.chemin.community.model.vo.Community;
 import com.kh.chemin.community.model.vo.LikeTo;
+import com.kh.chemin.community.model.vo.Report;
 
 import net.sf.json.JSONObject;
 
@@ -122,12 +123,12 @@ public class CommunityController {
 		String msg="";
 		String loc="";
 		if(result>0) {
-			msg="성공적으로 등록!!";
+			msg="게시물이 등록되었습니다.";
 			loc="/community/communityList.do";
 		}
 		else 
 		{
-			msg="등록 실패";
+			msg="게시물이 등록 실패하였습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityWrite.do";
 			
 		}
@@ -189,12 +190,12 @@ public class CommunityController {
 		String msg="";
 		String loc="";
 		if(result>0) {
-			msg="수정 완료";
+			msg="게시물이 수정 완료되었습니다.";
 			loc="/community/communityList.do";
 		}
 		else 
 		{
-			msg="수정 실패";
+			msg="게시물이 수정 실패되었습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityUpdate.do";
 			
 		}
@@ -213,12 +214,12 @@ public class CommunityController {
 		String msg="";
 		String loc="";
 		if(result>0) {
-			msg="게시물 삭제 완료";
+			msg="게시물이 삭제 완료되었습니다.";
 			loc="/community/communityList.do";
 		}
 		else 
 		{
-			msg="게시물 삭제 실패";
+			msg="게시물이 삭제 실패되었습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityList.do";
 			
 		}
@@ -254,12 +255,12 @@ public class CommunityController {
 		String msg="";
 		String loc="";
 		if(result>0) {
-			msg="추가 완료";
+			msg="댓글이 등록이 성공되었습니다.";
 			loc="/community/communityList.do";
 		}
 		else 
 		{
-			msg="추가 실패";
+			msg="댓글이 등록 실패되었습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityList.do";
 			
 		}
@@ -278,12 +279,12 @@ public class CommunityController {
 		String msg="";
 		String loc="";
 		if(result>0) {
-			msg="게시물 삭제 완료";
+			msg="게시물 삭제가 완료되었습니다.";
 			loc="/community/communityList.do";
 		}
 		else 
 		{
-			msg="게시물 삭제 실패";
+			msg="게시물 삭제가 실패되었습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityList.do";
 			
 		}
@@ -303,12 +304,12 @@ public class CommunityController {
 		String msg="";
 		String loc="";
 		if(result>0) {
-			msg="댓글 삭제 완료";
+			msg="댓글 삭제가 완료되었습니다.";
 			loc="/community/communityList.do";
 		}
 		else 
 		{
-			msg="댓글 삭제 실패";
+			msg="댓글 삭제가 실패되었습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityList.do";
 			
 		}
@@ -323,7 +324,6 @@ public class CommunityController {
 	public ModelAndView communitySearch(HttpServletRequest request,ModelAndView mv) 
 	{
 		String hashTag=(String)request.getParameter("searchValue");
-		System.out.println("검색 내용::::"+hashTag);
 		List<Map<String,Object>> list=service.communitySearch(hashTag);
 		
 		//입력한 hashTag에 해당되는 게시물 번호를 배열로 받기
@@ -348,9 +348,7 @@ public class CommunityController {
 	@RequestMapping("/community/myCommunityList.do")
 	public ModelAndView myCommunityList(ModelAndView mv,String userId)
 	{
-		System.out.println("userId::"+userId);
 		List<Map<String,Object>> list=service.mycommunityList(userId);
-		logger.debug("communityList::"+list);
 		List<Integer> cno=new ArrayList<Integer>();
 		int[] no = new int[list.size()];
 		for(int i=0;i<list.size();i++)
@@ -359,7 +357,6 @@ public class CommunityController {
 			cno.add(no[i]);
 		}
 		List<Map<String,Object>> attList=service.myattachmentList(cno);
-		logger.debug("attachmentList::"+attList);
 		
 		mv.addObject("list",list);
 		mv.addObject("attList",attList);
@@ -375,12 +372,12 @@ public class CommunityController {
 		String msg="";
 		String loc="";
 		if(result>0) {
-			msg="수정 완료";
+			msg="댓글 수정이 완료되었습니다.";
 			loc="/community/communityList.do";
 		}
 		else 
 		{
-			msg="수정 실패";
+			msg="댓글 수정이 실패하였습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityUpdate.do";
 			
 		}
@@ -519,5 +516,54 @@ public class CommunityController {
 		obj.put("like_cnt",like_cnt);
 		
 		return obj.toString();
+	}
+	
+	/*카테고리 분류*/
+	@RequestMapping("/community/categoryFind.do")
+	public ModelAndView categoryFind(String community_category,ModelAndView mv)
+	{
+		List<Map<String,Object>> list=service.categoryFind(community_category);
+		
+		List<Integer> cno=new ArrayList<Integer>();
+		int[] no = new int[list.size()];
+		for(int i=0;i<list.size();i++)
+		{
+			no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
+			cno.add(no[i]);
+		}
+		List<Map<String,Object>> attList=service.categoryAttFind(cno);
+		
+		mv.addObject("list",list);
+		mv.addObject("attList",attList);
+		mv.setViewName("community/communityList");
+		return mv;
+	}
+	
+	/*신고하기*/
+	@RequestMapping("/community/reportWrite.do")
+	public ModelAndView reportWrite(Report report,ModelAndView mv)
+	{
+		int result=service.reportWrite(report);
+		String userid=report.getRwriter();
+		int countUp=service.reportCountUp(userid);
+		String msg = "";
+		String loc = "";
+		
+		if(result>0)
+		{
+			msg="신고글이 성공적으로 등록되었습니다.";
+			loc="/community/communityList.do";
+		}
+		else
+		{
+			msg = "신고글 등록에 실패하였습니다. <br> 관리자에게 문의해보세요.";
+			loc="/community/communityList.do";
+		}
+		
+		
+		mv.addObject("msg",msg);
+		mv.addObject("loc", loc);
+		mv.setViewName("common/msg");
+		return mv;
 	}
 }

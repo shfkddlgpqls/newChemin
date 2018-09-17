@@ -11,6 +11,7 @@ import com.kh.chemin.community.model.vo.Attachment;
 import com.kh.chemin.community.model.vo.Comment;
 import com.kh.chemin.community.model.vo.Community;
 import com.kh.chemin.community.model.vo.LikeTo;
+import com.kh.chemin.community.model.vo.Report;
 
 @Repository
 public class CommunityDaoImpl implements CommunityDao {
@@ -158,6 +159,27 @@ public class CommunityDaoImpl implements CommunityDao {
 		int result=sqlSession.insert("community.likeCreate",hashMap);
 		System.out.println("::likeCreateResult::");
 		return result;
+	}
+
+	@Override
+	public List<Map<String, Object>> categoryFind(SqlSessionTemplate sqlSession, String community_category) {
+		return sqlSession.selectList("community.categoryFind",community_category);
+	}
+
+	@Override
+	public List<Map<String, Object>> categoryAttFind(SqlSessionTemplate sqlSession, List<Integer> cno) {
+		return sqlSession.selectList("community.categoryAttFind",cno);
+	}
+
+	@Override
+	public int reportWrite(SqlSessionTemplate sqlSession, Report report) {
+		return sqlSession.insert("community.reportWrite",report);
+	}
+
+	@Override
+	public int reportCountUp(SqlSessionTemplate sqlSession, String userid) {
+		System.out.println("::신고당한자 카운트 올리기Dao::");
+		return sqlSession.update("community.reportCountUp",userid);
 	}
 
 	/*@Override

@@ -80,7 +80,12 @@ public class MypageServiceImpl implements MypageService {
 		
 		return result;
 	}
-	
+
+	@Override
+	public int warnMsg(String userId) {
+		System.out.println("::warnMsgService::"+userId);
+		return dao.warnMsg(sqlSession,userId);
+	}
 	
 
 }

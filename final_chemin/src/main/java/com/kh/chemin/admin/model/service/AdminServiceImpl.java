@@ -1,5 +1,6 @@
 package com.kh.chemin.admin.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -70,6 +71,43 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<Map<String, String>> selectMallCate() {
 		return dao.selectMallCate(sqlSession);
+	}
+
+	@Override
+	public int selectMemberCount() {
+		return dao.selectMemberCount(sqlSession);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectMemberList(int cPage, int numPerPage) {
+		return dao.selectMemberList(sqlSession, cPage, numPerPage);
+	}
+
+	@Override
+	public List<Map<String, Object>> rpList(String userId) {
+		return dao.rpList(sqlSession, userId);
+	}
+
+	@Override
+	public int reportCount(String userId) {
+		return dao.reportCount(sqlSession,userId);
+	}
+
+	@Override
+	public int adminMemberDelete(String userId) {
+		System.out.println("::adminMemberDelete::"+userId);
+		return dao.adminMemberDelete(sqlSession,userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> blackList() {
+		return dao.blackList(sqlSession);
+	}
+
+	@Override
+	public List<Map<String, Object>> searchList(HashMap<String,Object> map) {
+		System.out.println("::searchListService::"+map);
+		return dao.searchList(sqlSession,map);
 	}
 
 }

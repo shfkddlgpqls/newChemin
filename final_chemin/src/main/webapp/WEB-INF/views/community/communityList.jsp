@@ -13,6 +13,7 @@ table.post div#comList > div#inComment {width:100%;height:100px;}
 .float{float:right;}
 a{color:#5d5d5d;}
 .modalPo{margin-left:2%;}
+input[type="radio"] {display:none;}
 </style>
 
 <script type="text/javascript">
@@ -222,7 +223,7 @@ a{color:#5d5d5d;}
 			return false;
 		}
 	}
-	/* 카테고리별 게시물 분류 */
+	
 	
 	/* 내 글만 보기 */
 	function myPage(obj) {
@@ -231,31 +232,57 @@ a{color:#5d5d5d;}
 		location.href="${path}/community/myCommunityList.do?userId="+userId;
 	}
 	
+	/* 카테고리별 게시물 분류 */
+	function list_cg() {
+		var category=$('input[name="gorys"]:checked').val();
+		console.log(category);
+		
+		location.href="${path}/community/categoryFind.do?community_category="+category;
+	}
+	
+	/* 신고하기 모달창 */
+	
+	function fn_report(obj) {
+		var rp_name=$(obj).data("no");
+		$('#reportModal').modal();
+		$('#report_name').val(rp_name);
+	}
 	
 </script>
 <div style="background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);width:100%;height:30%;">
 	<p class="text-center" style="font-family: 'Francois One', sans-serif;font-size:70px;padding-top:5%;color:white;text-shadow:2px 2px 4px gray;">GOOD TIP</p>
 </div>
 <section>
-	<div class="community_list" style="position:relative; height:auto; visibility: visible;width:59%;margin-left:20%;">
+	<div class="community_list myBtnContainer" style="position:relative; height:auto; visibility: visible;width:59%;margin-left:20%;">
 		<ul class="nav" style="width:50%;float:left;">
                <li class="nav-item">
-                 <a class="nav-link" href="#all">전체보기</a>
+                  <a class="nav-link" style="" href="${path }/community/communityList.do">
+                  	<img src="${path }/resources/community/image/category.JPG">
+                  </a>
                </li>
                <li class="nav-item">
-                 <a class="nav-link" id="inter" href="#">인테리어</a>
+              	 <input id="gory2" class="goryinput" type="radio" name="gorys" checked onclick="list_cg()" value="인테리어">
+              	 	<label for="gory2">
+              	 		<img src="${path }/resources/community/image/category2.JPG">
+              	 	</label>
                </li>
                <li class="nav-item">
-                 <a class="nav-link" id="repair" href="#">집수리</a>
+               	<input id="gory3" class="goryinput" type="radio" name="gorys" checked onclick="list_cg()" value="보안">
+               	 <label for="gory3">
+               	 	<img src="${path }/resources/community/image/category3.JPG">
+               	 </label>
                </li>
                <li class="nav-item">
-                 <a class="nav-link" id="security" href="#">보안</a>
+              	 <input id="gory4" class="goryinput" type="radio" name="gorys" checked onclick="list_cg()" value="1인레시피">
+              	  <label for="gory4">
+              	  	<img src="${path }/resources/community/image/category4.JPG">
+              	  </label>
                </li>
                <li class="nav-item">
-                 <a class="nav-link" id="cook" href="#">1인레시피</a>
-               </li>
-               <li class="nav-item">
-                 <a class="nav-link" id="cleaning" href="#">청소</a>
+               	<input id="gory5" class="goryinput" type="radio" name="gorys" checked onclick="list_cg()" value="청소">
+               		<label for="gory5">
+               			<img src="${path }/resources/community/image/category5.JPG">
+               		</label>
                </li>
           	 </ul>
           	  <form name="communitySearchFrm" id="search" action="${path }/community/communitySearch.do" method="post">
@@ -285,11 +312,11 @@ a{color:#5d5d5d;}
                                              <c:choose>
                                                  <c:when test="${v eq 'mp4'}">
                                                  <video controls="controls" width="566px" height="364px">
-                                                     <source class="list_pic" style="position:relative;float:left;top:0.1%;" alt="${c.TITLE }" src="${path }/resources/upload/community/${a.RENAMEDFILENAME}"/>
+                                                     <source class="list_pic" style="position:relative;float:left;top:0.1%;" src="${path }/resources/upload/community/${a.RENAMEDFILENAME}"/>
                                                  </video>
                                                  </c:when>
                                                  <c:when test="${v eq 'jpg'}">
-                                                     <img class="list_pic" style="position:relative;float:left;top:0.1%;" alt="${c.TITLE }" src="${path }/resources/upload/community/${a.RENAMEDFILENAME}"> 					
+                                                     <img class="list_pic" style="position:relative;float:left;top:0.1%;" src="${path }/resources/upload/community/${a.RENAMEDFILENAME}"> 					
                                                  </c:when>
                                              </c:choose>
 									</c:if>
@@ -298,7 +325,9 @@ a{color:#5d5d5d;}
                            </c:forEach>
 					</td>
 					<td height="12%" bgcolor="#b7bdc9">
-						<img src="${path }/resources/community/image/report_icon.gif" style="margin-left:87%;"/>
+						<c:if test="${memberLoggedIn.userId ne c.WRITER }">
+							<img src="${path }/resources/community/image/report_icon.gif" style="margin-left:87%;" data-no="${c.WRITER }" data-toggle='modal' data-target='#reportModal' onclick="fn_report(this)"/>
+						</c:if>
 						<c:if test="${memberLoggedIn.userId == c.WRITER}">
 						<div class="dropdown">
 							<img class="dropdown-toggle" data-toggle="dropdown" src="https://icongr.am/jam/more-f.svg?color=d5d5d5" style="float:right;padding-right:1%;">
@@ -311,7 +340,7 @@ a{color:#5d5d5d;}
 						<c:if test="${memberLoggedIn.userId == 'admin'}">
 							<img src="https://icongr.am/clarity/times.svg" style="float:right" data-no="${c.COMMUNITYNO }" onclick="adminDelete(this)">
 						</c:if>
-						<p id="writer" name="writer" style="float:left;right:1%;color:white;font-size:22px;">${c.WRITER }<br>
+						<p id="writer" name="writer" style="float:left;right:1%;color:white;font-size:22px;"><span name="writer_1">${c.WRITER }<span><br>
 						<fmt:formatDate value="${c.COMMUNITYDATE}" pattern="yyyy-MM-dd HH:mm:ss"/></p>
 					</td>
 				</tr>
@@ -378,8 +407,7 @@ a{color:#5d5d5d;}
   <div class="modal fade" id="updateModal" role="dialog" tabindex="-1" aria-labelledby="updateModalTitle" aria-hidden="true">
     <div class=" modal-dialog modal-dialog-centered">
     
-    
-      <!-- Modal content-->
+    <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">댓글 수정</h4>
@@ -404,6 +432,41 @@ a{color:#5d5d5d;}
          </form>
      </div>
    </div>
+  </div>
+  
+  <!-- 신고하기 Modal -->
+  <div class="modal fade" id="reportModal" role="dialog" tabindex="-1" aria-labelledby="reportModalTitle" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+         	<img style="width:30px;hieght:30px;" src="${path }/resources/community/image/warning.png"/>
+       		<h4 class="modal-title">회원 신고</h4>
+        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <form name="reportFrm" action="${path }/community/reportWrite.do" method="post">
+        <div class="modal-body">
+        	<span>거짓 신고를 하실 경우, 회원님께서 제재를 받으실 수 있습니다.<br> 신중한 신고 부탁드립니다.</span>
+	        <div class="input-group-prepend modalPo" style="float:left;width:95%;margin-top:3%;">
+	        	<select class="form-control smallSzie"  name="category" style="width:60%;float:right;">
+	               <option value="광고">광고</option>
+	               <option value="욕설">욕설</option>
+	               <option value="음란물">음란물</option>
+	               <option value="비방글">비방글</option>
+	            </select> &nbsp&nbsp&nbsp
+			    <span class="input-group-text">신고할 회원</span>
+	        	<input id="report_name" name="rwriter" value="${c.WRITER }" type="text" style="width:40%;" readonly>
+	        </div>
+	     	<br><br>
+            <span class="modalPo">내용</span><br>
+	      <textarea type="text" row="2" class="modal_content modalPo" id="comContent" name="content" style="width:95%;"></textarea>
+       	<div class="modal-footer">
+          <button type="submit" class="btn btn-danger">신고하기</button>
+        </div>
+      </div>
+      </form>
+    </div>
   </div>
 </section>
 

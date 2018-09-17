@@ -17,6 +17,7 @@ import com.kh.chemin.community.model.vo.Attachment;
 import com.kh.chemin.community.model.vo.Comment;
 import com.kh.chemin.community.model.vo.Community;
 import com.kh.chemin.community.model.vo.LikeTo;
+import com.kh.chemin.community.model.vo.Report;
 
 @Service
 public class CommunityServiceImpl implements CommunityService {
@@ -187,6 +188,27 @@ public class CommunityServiceImpl implements CommunityService {
 	public int likeCreate(HashMap<String, Object> hashMap) {
 		System.out.println("::likeCreateService::");
 		return dao.likeCreate(sqlSession,hashMap);
+	}
+
+	@Override
+	public List<Map<String, Object>> categoryFind(String community_category) {
+		return dao.categoryFind(sqlSession,community_category);
+	}
+
+	@Override
+	public List<Map<String, Object>> categoryAttFind(List<Integer> cno) {
+		return dao.categoryAttFind(sqlSession,cno);
+	}
+
+	@Override
+	public int reportWrite(Report report) {
+		return dao.reportWrite(sqlSession,report);
+	}
+
+	@Override
+	public int reportCountUp(String userid) {
+		System.out.println("::신고당한자 카운트 올리기 Service::");
+		return dao.reportCountUp(sqlSession,userid);
 	}
 	
 	/*@Override

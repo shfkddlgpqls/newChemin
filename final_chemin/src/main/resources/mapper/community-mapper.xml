@@ -72,7 +72,7 @@
 		delete from community_comment where commentno=#{comment_no}
 	</delete>
 	
-	<select id="search" parameterType="String" resultMap="communityMap">
+	<select id="search" parameterType="string" resultMap="communityMap">
 		select * from community where hashtag like '%'||#{community_hashTag}||'%' order by communityno desc
 	</select>
 	
@@ -89,7 +89,7 @@
 	</update>
 	
 	<!-- 내 글만 보기 -->
-	<select id="myCommunityList" resultMap="communityMap" parameterType="String">
+	<select id="myCommunityList" resultMap="communityMap" parameterType="string">
 		select c.*,
 		(select count(*) from community_comment cc where c.communityno=cc.communityno) as ccount
 		from community c 
@@ -155,4 +155,27 @@
 		VALUES 
 		(seq_liekto.nextval,#{community_no},#{like_id},0)
 	</insert>
+	
+	<!-- 카테고리 분류하기 -->
+	<select id="categoryFind" parameterType="string" resultMap="communityMap">
+		select * from community where category=#{community_category}
+	</select>
+	
+	<select id="categoryAttFind" parameterType="list" resultMap="attachmentMap">
+		select * from attachment where communityno in
+		<foreach item="a" collection="list" open="(" separator="," close=")">
+		#{a}
+		</foreach>
+	</select>
+	
+	<!-- 신고하기 -->
+	<insert id="reportWrite" parameterType="report">
+		INSERT INTO REPORT(RNO,CATEGORY,RWRITER,CONTENT) 
+		VALUES
+		(seq_reportno.nextval,#{category},#{rwriter},#{content})
+	</insert>
+	
+	<update id="reportCountUp" parameterType="string">
+		update member_info set rgcount = rgcount + 1 where userid=#{userId}
+	</update>
 </mapper>

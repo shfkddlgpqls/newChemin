@@ -13,10 +13,7 @@ function fn_file() {
 			alert("사진은 2개까지 등록가능합니다.");
 			return false;
 		}
-		if(length==0) {
-			alert("반드시 1개이상은 등록해야합니다.");
-			return false;
-		}
+		
 		var fm=document.communityFrm;
 		var fnm=fm.upFile;
 		var ext=fnm.value;
@@ -50,7 +47,6 @@ function fn_file() {
                               <option value="집수리">집수리</option>
                               <option value="보안">보안</option>
                               <option value="1인레시피">1인레시피</option>
-                              <option value="청소">청소</option>
                            </select> 
                    </div>
                 </div><br>
@@ -92,7 +88,7 @@ function fn_file() {
                    </div>
                    <div class="col-md-10">
                        <div class="form-group middleSize">
-                          <input multiple="multiple" id="upFile" name="upFile" type="file" class="file" data-preview-file-type="any"/> 
+                          <input multiple="multiple" id="upFile" name="upFile" type="file" class="file" data-preview-file-type="any" required/> 
                           <p style="font-size:12px;">사진과 동영상 합쳐서 2개까지만 등록 가능합니다<p>
                      </div> 
       
