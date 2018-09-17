@@ -7,6 +7,9 @@
   
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <jsp:include page="/WEB-INF/views/mypage/myMenuBar.jsp"/>
+ <!-- 마이페이지 css-->
+    <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/mypage.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     
  
 <script>
@@ -16,7 +19,6 @@
 	}
 </script>   
     
-
 	
 <section>
 		<div class="container">
@@ -84,4 +86,6 @@
 		</div> 	
 		</div>
 		</section> 
+	
+	
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>  

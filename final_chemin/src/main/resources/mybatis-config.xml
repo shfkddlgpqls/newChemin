@@ -7,10 +7,10 @@
 		<typeAlias type="com.kh.chemin.community.model.vo.Community" alias="community"/>
 		<typeAlias type="com.kh.chemin.community.model.vo.Attachment" alias="attachment"/>
 		<typeAlias type="com.kh.chemin.community.model.vo.Comment" alias="comment"/>
-
 		<typeAlias type="java.util.List" alias="list"/>
 		<typeAlias type="com.kh.chemin.community.model.vo.LikeTo" alias="liketo"/>
 		<typeAlias type="java.util.HashMap" alias="hashMap"/>
+		<typeAlias type="com.kh.chemin.community.model.vo.Report" alias="report"/>
 
 		
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcBook" alias="acbook"/>	
@@ -18,7 +18,8 @@
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcExType" alias="acextype"/>
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcType" alias="actype"/>
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcCom" alias="accom"/>
-
+		<typeAlias type="com.kh.chemin.acbook.model.vo.Reply" alias="reply"/>
+		
 		<typeAlias type="com.kh.chemin.map.model.vo.Place" alias="place"/>
 		<typeAlias type="com.kh.chemin.map.model.vo.PlaceAttachment" alias="placeAttach"/>
 		<typeAlias type="com.kh.chemin.map.model.vo.PlaceMenu" alias="placeMenu"/>
@@ -30,11 +31,12 @@
 		<typeAlias type="com.kh.chemin.mall.model.vo.Cart" alias="cart"/>
 		<typeAlias type="com.kh.chemin.mall.model.vo.OrderDetail" alias="orderDetail"/>
 		<typeAlias type="com.kh.chemin.mall.model.vo.QnA_board" alias="qna"/>
-		
+			<typeAlias alias="review" type="com.kh.chemin.mall.model.vo.Review"/>
 		
 
 </typeAliases>
  
 
 </configuration>
+
 

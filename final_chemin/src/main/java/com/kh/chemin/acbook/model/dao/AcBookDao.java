@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 
 import com.kh.chemin.acbook.model.vo.AcBook;
 import com.kh.chemin.acbook.model.vo.AcCom;
+import com.kh.chemin.acbook.model.vo.Reply;
 
 public interface AcBookDao {
 	
@@ -54,6 +55,10 @@ public interface AcBookDao {
 	List<Model> preSelectDailySum(SqlSessionTemplate sqlSession, String userId);
 
 	List<Model> prePreSelectDailySum(SqlSessionTemplate sqlSession, String userId);
+
+	int insertReply(SqlSessionTemplate sqlSession,Reply rp);
+
+	List<Model> selectReply(SqlSessionTemplate sqlSession, String accNo);
 	
 	
 }

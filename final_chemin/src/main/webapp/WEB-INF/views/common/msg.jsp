@@ -8,9 +8,7 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <c:set value="${pageContext.request.contextPath }" var="path"/>
 <script>
-
 	 alert("${msg}"); 
 	location.href="${path}${loc}"; 
-
 	 
 </script>

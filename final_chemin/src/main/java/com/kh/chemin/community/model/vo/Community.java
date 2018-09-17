@@ -15,6 +15,7 @@ public class Community {
 	private String community_content;
 	private Date community_date;
 	private String community_hashTag;
+
 	/*댓글 수*/
 	private int community_cmcount;
 	private int community_likecnt;
@@ -119,4 +120,5 @@ public class Community {
 
 	
 	
+
 }

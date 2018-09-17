@@ -5,7 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <c:set value="${pageContext.request.contextPath }" var="path"/>
-<jsp:include page="/WEB-INF/views/common/header.jsp"/>
+<jsp:include page="/WEB-INF/views/common/header1.jsp"/>
 <section>
 <form name="communityFrm" action="${path }/community/communityUpdateEnd.do" method="post" onsubmit="return fn_file();" enctype="multipart/form-data">
    <div class="container" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
