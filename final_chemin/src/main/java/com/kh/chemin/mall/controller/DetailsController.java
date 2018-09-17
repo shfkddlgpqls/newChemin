@@ -1,5 +1,7 @@
 package com.kh.chemin.mall.controller;
 
+import java.io.PrintWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,10 +14,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kh.chemin.common.MallPageBar;
 import com.kh.chemin.mall.model.service.DetailsService;
 import com.kh.chemin.mall.model.vo.Product;
+import com.kh.chemin.mall.model.vo.QnA_board;
+import com.kh.chemin.mall.model.vo.Review;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 public class DetailsController 
@@ -52,6 +64,7 @@ public class DetailsController
 		    return mv;
 		}
 		*/
+	
 		//문의하기 등록
 		@RequestMapping("/mall/insert.do")
 		public String insertCart(String goods_code, String qna_option, String board_name, String qna_content, String userId, String user_input_pw,Model model)
@@ -99,12 +112,76 @@ public class DetailsController
 		 * */
 		
 		//QnA 페이징 처리
-		@RequestMapping("/mall/qnaPage.do")
-		public void qnaPaging(HttpServletResponse res, int pno, int cPage)
+		@RequestMapping(value="/mall/qnaPage.do",produces = "application/text; charset=utf8")
+	    @ResponseBody
+	      public String qnaPaging(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage,  int pno) throws Exception 
 		{
-			
-			
-			return;
-		}
+			  int numPerPage= 4;
+			  
+		         Map<String, Object> map = new HashMap<String, Object>();
+		         ObjectMapper mapper = new ObjectMapper();
+		         String jsonStr = null;
+		         List<QnA_board> list = service.selectQnaBoardList(cPage,numPerPage,pno);   
+		         //관리자 list를 따로 불러오기
+		         
+		         //문의게시판  글 갯수
+		         int qTotalCount = service.selectQnACount(pno);
+		         
+		         //페이지바
+		         String qnaPageBar = MallPageBar.getQnaPage(cPage, numPerPage, qTotalCount);
+		         
+		         System.out.println("list 값"+list);
+		         System.out.println("qTotalCount 값"+qTotalCount);
+		         System.out.println("qnaPageBar"+qnaPageBar);
+		            
+		         //json
+		      /*   JSONObject jsonRes = null;
+		          JSONArray jsonArr = new JSONArray();*/
+//		          Map map=new HashMap();
+//		          map.put("list", list);
+		         	          
+		         map.put("list", list);
+		         map.put("pageBar", qnaPageBar);
+		         /* ModelAndView mv=new ModelAndView();
+		          mv.addObject("list",list);
+		          mv.setViewName("jsonView");
+		          mv.addObject("pageBar",qnaPageBar);*/
+
+		         jsonStr = mapper.writeValueAsString(map);
+		         return jsonStr;
+
+		    
+		}	
+		
+	
+		@RequestMapping(value="/mall/reviewPage.do",produces = "application/text; charset=utf8")
+	    @ResponseBody
+	      public String reviewPaging(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, int pno) throws Exception 
+		{
+				int numPerPage= 4;
+			  
+		         Map<String, Object> map = new HashMap<String, Object>();
+		         ObjectMapper mapper = new ObjectMapper();
+		         String jsonStr = null;
+		         List<Review> list = service.selectReviewList(cPage,numPerPage,pno);
+       
+		         //문의게시판  글 갯수
+		         int rTotalCount = service.selectReviewCount(pno);
+		         
+		         //페이지바
+		         String reviewPageBar = MallPageBar.getReviewPage(cPage, numPerPage, rTotalCount);
+		         
+		         logger.debug("list 값"+list);
+		         logger.debug("rTotalCount 값"+rTotalCount);
+		         logger.debug("reviewPageBar 값"+reviewPageBar);
+		        
+		         	          
+		         map.put("list", list);
+		         map.put("pageBar", reviewPageBar);
+
+		         jsonStr = mapper.writeValueAsString(map);
+		         return jsonStr;
+   
+		}		
 		
 }

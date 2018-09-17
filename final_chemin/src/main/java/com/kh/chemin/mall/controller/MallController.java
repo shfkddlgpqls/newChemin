@@ -11,6 +11,8 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +21,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.chemin.common.MallPageBar;
+import com.kh.chemin.mall.model.service.DetailsService;
 import com.kh.chemin.mall.model.service.MallService;
 import com.kh.chemin.mall.model.vo.Cart;
 import com.kh.chemin.mall.model.vo.Product;
+import com.kh.chemin.mall.model.vo.QnA_board;
+import com.kh.chemin.mall.model.vo.Review;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -30,8 +35,13 @@ import net.sf.json.JSONObject;
 @Controller
 public class MallController 
 {
+	private Logger logger = LoggerFactory.getLogger(DetailsController.class);
+	
    @Autowired
    MallService service;
+   
+   @Autowired
+   DetailsService dservice;
    
    // 메인 쇼핑몰로 이동
    @RequestMapping("/mall/mainMall.do")
@@ -103,9 +113,28 @@ public class MallController
    @RequestMapping("/mall/detail.do")
    public ModelAndView mallDetail(ModelAndView mv, int no)
    {
+	   int numPerPage= 4;
+	   int cPage=1; 
+	   
       //해당 상품 리스트 보내기 
       Product p = service.selectProduct(no);
+      List<QnA_board> qlist = dservice.selectQnaBoardList(cPage,numPerPage,no);
+      List<Review> rlist = dservice.selectReviewList(cPage,numPerPage,no);
       
+      logger.debug("리뷰 리스트 불러오기"+rlist);
+      
+      //문의게시판  글 갯수
+      int qTotalCount = dservice.selectQnACount(no);
+      int rTotalCount = dservice.selectReviewCount(no);
+      
+      //페이지바
+      String qnaPageBar = MallPageBar.getQnaPage(cPage, numPerPage, qTotalCount);
+      String reviewPageBar = MallPageBar.getReviewPage(cPage, numPerPage, rTotalCount);
+      
+      mv.addObject("reviewbar",reviewPageBar);
+      mv.addObject("qnabar",qnaPageBar);      
+      mv.addObject("rlist",rlist);
+      mv.addObject("qlist",qlist);
       mv.addObject("product",p);
       mv.setViewName("mall/productDetail");
       

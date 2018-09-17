@@ -360,7 +360,7 @@
 		      	</div>
 	      	</div>
 	      	
-	      	<div class="row" ">
+	      	<div class="row">
 				<div class="review_sub_box" style="width:72%; float:left;">					
 					<div style="width:100%;height:20%; border-bottom:solid 1px #E5E8E8;">
 						<div class="star-rating" style="margin:2%">

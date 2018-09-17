@@ -36,9 +36,7 @@
 						    <li class="nav-item">
 						      <strong><a class="nav-link mypageAtag" href="${path }/mypage/myBoardList.do">게시글 관리</a></strong>
 						    </li>
-						    <li class="nav-item">
-						      <strong><a class="nav-link mypageAtag" href="${path }/mypage/myShoppingCart.do">장바구니</a></strong>
-						    </li>
+						    
 						    <li class="nav-item">
 						   		<strong><a class="nav-link mypageAtag" href="${path }/mypage/myWishList.do">찜 목록</a></strong>
 						    </li>

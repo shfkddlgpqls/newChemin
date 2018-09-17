@@ -13,6 +13,9 @@
 		<typeAlias type="com.kh.chemin.community.model.vo.Attachment" alias="attachment"/>
 		<typeAlias type="com.kh.chemin.community.model.vo.Comment" alias="comment"/>
 		
+		<typeAlias alias="qna" type="com.kh.chemin.mall.model.vo.QnA_board"/>
+		<typeAlias alias="review" type="com.kh.chemin.mall.model.vo.Review"/>
+		
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcBook" alias="AcBook"/>	
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcCategory" alias="AcCategory"/>
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcExType" alias="AcExType"/>

@@ -20,4 +20,27 @@
 	<delete id="placeDelete" parameterType="_int">
 		delete place where PLANO = #{plaNo}
 	</delete>
+	
+	<insert id="insertReview" parameterType="review">
+		INSERT INTO REVIEW values (REVIEW_SEQ.nextval,#{userId},#{pno},#{reContent},#{orImg},#{reImg},#{stars},sysdate)
+	</insert>
+	
+	<select id="selectQnaBoardList" parameterType="String" resultType="qna">
+		select qnano, userid,pno,qna_cate_no,qnatitle,qnacontent, reply_content,qnadate,qnastate,qnapw from qna FULL OUTER JOIN reply using(qnaNo) where userid= #{userId} order by qnadate desc 
+	</select>
+	
+	<select id="selectQnACount" resultType="_int">
+		select count(*) from qna where userId = #{userId}
+	</select>
+	
+	<!-- 리뷰  ajax 페이징 처리 -->
+	<select id="selectReviewList" parameterType="String" resultType="review">
+		select * from Review where userId = #{userId} order by redate desc
+	</select>
+	
+	<select id="selectReviewCount" resultType="_int">
+		select count(*) from review where userId = #{userId}
+	</select>
+	
+	
 </mapper>

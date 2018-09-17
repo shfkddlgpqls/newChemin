@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.kh.chemin.mall.model.vo.Product;
+import com.kh.chemin.mall.model.vo.QnA_board;
+import com.kh.chemin.mall.model.vo.Review;
 
 public interface DetailsService 
 {
@@ -17,6 +19,15 @@ public interface DetailsService
 		List<Map<String, String>> selectQnAList(int no);
 
 		//문의게시판 글의 총 갯수
-		int selectQnACount(int no);
+		int selectQnACount(int pno);
+
+		//문의게시판 페이징 처리(ajax)
+		List<QnA_board> selectQnaBoardList(int cPage, int numPerPage, int pno);
+
+		//리뷰 페이징 처리(ajax)
+		List<Review> selectReviewList(int cPage, int numPerPage, int pno);
+
+		//리뷰 총 갯수
+		int selectReviewCount(int pno);
 	
 }
