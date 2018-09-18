@@ -44,18 +44,84 @@
 		update place set PLAREMSG = #{plaReMsg}, PLASTATUS =#{plaStatus} where PLANO = #{plaNo}
 	</update>
 	
-	<select id="selectProductCount" resultType="_int">
+	<select id="selectProductCount" parameterType="map" resultType="_int">
 		select count(*) from product
+		where 1=1
+		<if test="cate!=null and cate!=''">
+			and cno=#{searchCate}
+		</if>
+		<if test="searchData!=null and searchData!=''">
+			and pname like '%'||#{searchData}||'%'
+		</if>
 	</select>
 	
 	<select id="selectProductList" resultMap="adminMap">
 		select * from product join mall_category using(cno)
+		where 1=1
+		<if test="cate!=null and cate!=''">
+			and cno=#{searchCate}
+		</if>
+		<if test="searchData!=null and searchData!=''">
+			and pname like '%'||#{searchData}||'%'
+		</if>
+		<if test="stype_n!=null and stype_n!=''">
+			order by pdate desc
+		</if>
+		<if test="stype_s!=null and stype_s!=''">
+			order by sales desc
+		</if>
+		<if test="stype_c!=null and stype_c!=''">
+			order by pcount desc
+		</if>
 	</select>
 	
 	<select id="selectMallCate" resultMap="adminMap">
 		select * from mall_category
 	</select>
 	
+	<select id="selectMapPno" resultType="_int">
+		select max(pno) from product
+	</select>
+	
+	<insert id="insertProduct" parameterType="product">
+		insert into product values(product_seq.nextval,#{cno},#{pName},#{details},#{oriImg},#{reImg},#{price},#{pCount},default,default)
+	</insert>
+	
+	<delete id="deleteProduct" parameterType="_int">
+		delete from product where pno=#{pno}
+	</delete>
+	
+	<select id="selectProduct" parameterType="_int" resultType="product">
+		select * from product where pno=#{pno}
+	</select>
+	
+	<update id="updateProduct" parameterType="product">
+		update product
+		set cno=#{cno}, pName=#{pName}, details=#{details}
+		<if test="reImg!=null and reImg!=''">
+			, oriImg=#{oriImg}, reImg=#{reImg}
+		</if>
+		, price=#{price}, pCount=#{pCount}
+		where pno=#{pno}
+	</update>
+	
+	<select id="productAuto" parameterType="string" resultType="string">
+		select pname from product where pname like '%'||#{search}||'%'
+	</select>
+	
+	<select id="selectOrderList" parameterType="string" resultMap="adminMap">
+		select distinct orderno, orderaddr, allprice, odate, userId from orderDetail join cart using(orderNo)
+		order by orderNo desc
+	</select>
+	
+	<select id="selectOrderdata" parameterType="string" resultMap="adminMap">
+		select * from cart join product using(pno)
+	</select>
+	
+	<select id="selectTotalCount" parameterType="string" resultType="_int">
+		select count(distinct orderno) from orderDetail join cart using(orderNo)
+	</select>
+
 	<select id="selectMemberCount" resultType="_int">
 		select count(*) from member_info
 	</select>
@@ -88,4 +154,36 @@
 		order by username
 
 	</select>  
+	
+	<!-- 문의게시판  총 갯수 -->   
+	<select id="selectQnACount" resultType="_int">
+		select count(*) from QNA
+	</select>
+	
+	<!-- 문의게시판 ajax 페이징 처리 -->
+	<select id="selectQnaBoardList" resultType="qna">
+		select qnano, userid,pno,qna_cate_no,qnatitle,qnacontent, reply_content,qnadate,qnastate,qnapw from qna FULL OUTER JOIN reply using(qnaNo)
+	</select>
+	
+	<!-- 답변 게시판 insert -->
+	<insert id="insertReply" parameterType="map">
+		insert into reply values (#{qnaNo},REPLY_SEQ.nextval,#{reply_content} )
+	</insert> 
+	
+	<!-- 상태 update -->
+	<update id="updateState" parameterType="String">
+		update qna set qnaState = '답변완료' where qnaNo = #{board_num} 
+	</update>
+	
+	<!-- 리뷰 리스트 불러오기 -->
+	<select id="selectReviewList" resultType="review">
+		select * from review order by redate desc
+	</select>
+	
+	
+	<!-- 문의게시판  총 갯수 -->   
+	<select id="selectReviewCount" resultType="_int">
+		select count(*) from review
+	</select>
+	
 </mapper>

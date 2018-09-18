@@ -571,3 +571,4 @@ public class CommunityController {
 		return mv;
 	}
 }
+

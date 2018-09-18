@@ -14,7 +14,7 @@
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
 
 <!-- Main Start -->
-<div class="col-md-10 col-sm-8">
+<div class="col-md-10 col-sm-8 main-content"  id="newMain">
 <!-- 삭제금지 -->
 <div class="container-fluid"><br><br>
 	<div class="row">	

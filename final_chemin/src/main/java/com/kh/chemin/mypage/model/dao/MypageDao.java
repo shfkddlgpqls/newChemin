@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 
+import com.kh.chemin.mall.model.vo.QnA_board;
+import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
@@ -22,7 +24,17 @@ public interface MypageDao {
 	int removeAttach(SqlSessionTemplate sqlSession, int plaNo);
 	int warnMsg(SqlSessionTemplate sqlSession, String userid);
 
+	List<Map<String, Object>> selectOrderList(SqlSessionTemplate sqlSession, String userId, int cPage, int numPerPage);
+	List<Map<String, Object>> selectOrderData(SqlSessionTemplate sqlSession, String userId);
+	int selectTotalCount(SqlSessionTemplate sqlSession, String userId);
+	List<Map<String, Object>> selectWishList(SqlSessionTemplate sqlSession, String userId);
+
 	int selectPlaceCount(SqlSessionTemplate sqlSession, Map map);
+	
+	int insertReview(SqlSessionTemplate sqlSession, Review review);
+	List<QnA_board> selectQnaBoardList(SqlSessionTemplate sqlSession, int cPage, int numPerPage, String userId);
+	int selectQnACount(SqlSessionTemplate sqlSession, String userId);
+	List<Review> selectReviewList(SqlSessionTemplate sqlSession, int cPage, int numPerPage, String userId);
+	int selectReviewCount(SqlSessionTemplate sqlSession, String userId);
 
 }
-

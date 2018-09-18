@@ -7,6 +7,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.chemin.mall.model.vo.QnA_board;
+import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
@@ -81,6 +83,7 @@ public class MypageServiceImpl implements MypageService {
 		return result;
 	}
 
+
 	@Override
 	public int warnMsg(String userId) {
 		System.out.println("::warnMsgService::"+userId);
@@ -93,6 +96,58 @@ public class MypageServiceImpl implements MypageService {
 		return totalCount;
 	}
 	
+	//리뷰 글쓰기
+		@Override
+		public int insertReview(Review review) 
+		{
+			int result = dao.insertReview(sqlSession,review);
+			
+			return result;
+		}
+
+		@Override
+		public List<QnA_board> selectQnaBoardList(int cPage, int numPerPage, String userId) 
+		{
+			return dao.selectQnaBoardList(sqlSession,cPage,numPerPage,userId); 
+		}
+
+	@Override
+	public List<Map<String, Object>> selectOrderList(String userId, int cPage, int numPerPage) {
+		return dao.selectOrderList(sqlSession, userId, cPage, numPerPage);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOrderData(String userId) {
+		return dao.selectOrderData(sqlSession, userId);
+	}
+
+	@Override
+	public int selectTotalCount(String userId) {
+		return dao.selectTotalCount(sqlSession, userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectWishList(String userId) {
+		return dao.selectWishList(sqlSession, userId);
+	}
+
+		@Override
+		public int selectQnACount(String userId) 
+		{
+			return dao.selectQnACount(sqlSession,userId);
+		}
+
+		@Override
+		public List<Review> selectReviewList(int cPage, int numPerPage, String userId) 
+		{
+			return dao.selectReviewList(sqlSession,cPage,numPerPage,userId); 
+		}
+
+		@Override
+		public int selectReviewCount(String userId) 
+		{
+			return dao.selectReviewCount(sqlSession,userId);
+		}	
 
 }
 

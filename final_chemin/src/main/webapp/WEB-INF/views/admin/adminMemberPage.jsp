@@ -259,5 +259,4 @@
 		<div class="row justify-content-center" id="mPageBar"></div>
  	</div>
  </div> 	
-	
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>  

@@ -6,7 +6,7 @@
 
 
 <c:set value="${pageContext.request.contextPath }" var="path"/>
-  <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+  <jsp:include page="/WEB-INF/views/common/header1.jsp"/>
   <style>
   	.container{
   		width:50%;

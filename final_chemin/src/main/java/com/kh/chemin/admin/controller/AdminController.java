@@ -1,5 +1,6 @@
 package com.kh.chemin.admin.controller;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +31,12 @@ import com.kh.chemin.common.MallPageBar;
 import com.kh.chemin.common.PlacePageBar;
 import com.kh.chemin.community.controller.CommunityController;
 import com.kh.chemin.mall.model.vo.Product;
+import com.kh.chemin.mall.model.vo.QnA_board;
+import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.member.model.vo.Member;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -206,15 +211,34 @@ public class AdminController {
 		mv.addObject("loc", loc);
 		mv.addObject("result", result);
 		mv.setViewName("common/msg");
+
 		return mv;
 	}
 	
 	@RequestMapping("/admin/adminProductData.do")
-	public void adminPData(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, HttpServletResponse response) throws Exception {
+	public void adminPData(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, HttpServletResponse response, int searchCate, String searchOrder, String searchData) throws Exception {
+		String cate = null;
+		String stype_n=null;
+		String stype_s=null;
+		String stype_c=null;
+		if(searchCate!=0) cate = "전체";
+		if(searchOrder.equals("new")) stype_n="최신순";
+		if(searchOrder.equals("sales")) stype_s="판매순";
+		if(searchOrder.equals("stock")) stype_c="재고순";
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("cate", cate);
+		map.put("searchCate", searchCate);
+		map.put("stype_n", stype_n);
+		map.put("stype_s", stype_s);
+		map.put("stype_c", stype_c);
+		map.put("searchOrder", searchOrder);
+		map.put("searchData", searchData);
+			
 		int numPerPage = 10;
-		int totalCount = service.selectProductCount();
+		int totalCount = service.selectProductCount(map);
 		String pageBar = MallPageBar.getPageAdmin(cPage, numPerPage, totalCount);
-		List<Map<String, Object>> list = service.selectProductList(cPage, numPerPage);
+		List<Map<String, Object>> list = service.selectProductList(map, cPage, numPerPage);
 		
 		JSONArray jsonArr = new JSONArray();
 		jsonArr.add(list);
@@ -226,7 +250,7 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/productEnroll.do", method = RequestMethod.POST)
-	public String productEnroll(Product product, @RequestParam("mainImg") MultipartFile mainImg, HttpServletRequest request) {
+	public String productEnroll(Model model, Product product, @RequestParam("mainImg") MultipartFile mainImg, HttpServletRequest request) {
 		// 대표이미지 저장경로 지정 및 서버에 이미지 저장
 		String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload/productImg");
 		
@@ -236,12 +260,112 @@ public class AdminController {
 			String ext = oriImg.substring(oriImg.lastIndexOf(".")+1);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 			String today = sdf.format(new Date(System.currentTimeMillis()));
-			String reImg = today+"_"+""+"."+ext;
+			int no = service.selectMaxPno();
+			String reImg = today+"_"+(no+1)+"."+ext;
+			try { // 서버의 해당경로에 파일을 저장하는 명령
+				mainImg.transferTo(new File(saveDir+"/"+reImg));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			product.setOriImg(oriImg);
+			product.setReImg(reImg);
 		}
+		service.insertProduct(product);
 		
-		return "";
+		return "redirect:/admin/adminProductList.do";
 	}
 	
+	@RequestMapping("/admin/productUpdate.do")
+	public String productUpdate(Model model, int pno) {
+		Product product = service.selectProduct(pno);
+		List<Map<String, String>> list = service.selectMallCate();
+		model.addAttribute("cate", list);
+		model.addAttribute("product", product);
+		return "admin/adminProductUpdate";
+	}
+	
+	@RequestMapping("/admin/productUpdateEnd.do")
+	public String productUpdateEnd(Model model, Product product, @RequestParam("mainImg") MultipartFile mainImg, HttpServletRequest request) {
+		String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload/productImg");
+		
+		if(!mainImg.isEmpty()) {
+			// 기존 파일 삭제
+			Product p = service.selectProduct(product.getPno());
+			String img = request.getSession().getServletContext().getRealPath("/resources/upload/productImg/"+p.getReImg());
+			File file = new File(img);
+			if(file.exists() == true){
+				file.delete();
+			}
+			
+			String oriImg = mainImg.getOriginalFilename();
+			// 확장자
+			String ext = oriImg.substring(oriImg.lastIndexOf(".")+1);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+			String today = sdf.format(new Date(System.currentTimeMillis()));
+			int no = product.getPno();
+			String reImg = today+"_"+no+"."+ext;
+			try { // 서버의 해당경로에 파일을 저장하는 명령
+				mainImg.transferTo(new File(saveDir+"/"+reImg));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			product.setOriImg(oriImg);
+			product.setReImg(reImg);
+		}
+		service.updateProduct(product);
+		
+		return "redirect:/admin/adminProductList.do";
+	}
+
+	@RequestMapping("/admin/productDelete.do")
+	public void productDelete(HttpServletRequest request, HttpServletResponse response, int pno) throws Exception {
+		// 기존 파일 삭제
+		Product product = service.selectProduct(pno);
+		int result = service.productDelete(pno);
+		
+		String img = request.getSession().getServletContext().getRealPath("/resources/upload/productImg/"+product.getReImg());
+		File file = new File(img);
+		if(file.exists() == true){
+			file.delete();
+		}
+		
+		response.setContentType("application/json;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(result);
+	}
+	
+	@RequestMapping("/admin/productAuto.do")
+	public void productAuto(String search, HttpServletResponse response) throws Exception {
+		List<String> nameList=null;
+		String csv="";
+		if(!search.trim().isEmpty())
+		{
+			nameList= service.productAuto(search);
+			if(!nameList.isEmpty()) {
+				for(int i=0;i<nameList.size();i++) {
+					if(i!=0) csv+=",";
+					csv+=nameList.get(i);
+				}
+			}
+		}
+		response.setContentType("text/csv;charset=utf-8");
+		PrintWriter out=response.getWriter();
+		out.print(csv);
+	}
+	
+	@RequestMapping("/admin/adminOrderList.do")
+	public String myOrderList(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, Model model)
+	{
+		int numPerPage = 5;
+		List<Map<String, Object>> list = service.selectOrderList(cPage, numPerPage);
+		List<Map<String, Object>> data = service.selectOrderData();
+		int totalCount = service.selectTotalCount();
+		model.addAttribute("pageBar", Page.getPage(cPage, numPerPage, totalCount, "adminOrderList.do"));
+		model.addAttribute("list", list);
+		model.addAttribute("data", data);
+		return "admin/adminOrderList";
+	}
+
 	/*회원관리*/
 	@RequestMapping(value="/admin/adminMemberList.do",produces="application/text; charset=utf-8",method=RequestMethod.GET)
 	@ResponseBody
@@ -342,6 +466,155 @@ public class AdminController {
 		hashmap.put("searchList",searchList);
 		jsonStr=mapper.writeValueAsString(hashmap);
 		return jsonStr;
+		
+	}
+	
+	@RequestMapping("/admin/adminBoardManage.do")
+	public ModelAndView adminBoardManage(ModelAndView mv)
+	{
+		int cPage = 1;
+		int numPerPage = 4;
+	
+		//qna리스트 불러오기
+		List<QnA_board> qlist = service.selectQnaBoardList(cPage,numPerPage);
+		//전체 qna게시글 수 
+		int qTotalCount = service.selectQnACount();
+		//페이지바
+		String qnaPageBar = MallPageBar.getAdminPage(cPage, numPerPage, qTotalCount);
+				
+		mv.addObject("qlist", qlist);
+		mv.addObject("qnaPageBar", qnaPageBar);
+		mv.setViewName("admin/adminBoard");
+			
+		return mv;
+	}
+	
+	@RequestMapping("/admin/adminReviewBoard.do")
+	public ModelAndView adminReviewBoardManage(ModelAndView mv)
+	{
+		int cPage = 1;
+		int numPerPage = 4;
+	
+		//리뷰리스트 불러오기
+		List<Review> rlist = service.selectReviewList(cPage,numPerPage);
+		//전체 리뷰 게시글 수 
+		int rTotalCount = service.selectReviewCount();
+		//페이지바
+		String reviewPageBar = MallPageBar.getReviewPage(cPage, numPerPage, rTotalCount);
+		
+		mv.addObject("rlist", rlist);
+		mv.addObject("reviewPageBar", reviewPageBar);
+		mv.setViewName("admin/adminReview");
+			
+		return mv;
+	}	
+		
+	//주리가 한거 (9/13)
+	@RequestMapping(value="/admin/adminBoard.do" ,produces = "application/text; charset=utf8")
+	@ResponseBody
+     public String adminBoard(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage) throws Exception 
+	{
+			int numPerPage= 4;
+		  
+	         Map<String, Object> map = new HashMap<String, Object>();
+	         ObjectMapper mapper = new ObjectMapper();
+	         String jsonStr = null;
+	         
+	         List<QnA_board> list = service.selectQnaBoardList(cPage,numPerPage);   
+	           
+	         //문의게시판  글 갯수
+	         int qTotalCount = service.selectQnACount();
+	         
+	         //페이지바
+	         String qnaPageBar = MallPageBar.getAdminPage(cPage, numPerPage, qTotalCount);
+	         
+	         map.put("list", list);
+	         map.put("qnaPageBar", qnaPageBar);
+
+	         jsonStr = mapper.writeValueAsString(map);
+	         return jsonStr;
+  
+	}	
+	
+	@RequestMapping(value="/admin/adminReview.do",produces = "application/text; charset=utf8")
+    @ResponseBody
+      public String reviewPaging(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage) throws Exception 
+	{
+			int numPerPage= 4;
+			String userId ="user";
+		  
+	         Map<String, Object> map = new HashMap<String, Object>();
+	         ObjectMapper mapper = new ObjectMapper();
+	         String jsonStr = null;
+	        
+	         //리뷰리스트 불러오기
+	 		List<Review> rlist = service.selectReviewList(cPage,numPerPage);
+	 		//전체 리뷰 게시글 수 
+	 		int rTotalCount = service.selectReviewCount();
+	 		//페이지바
+	 		String reviewPageBar = MallPageBar.getReviewPage(cPage, numPerPage, rTotalCount);
+	 	
+	 		
+	         logger.debug("list 값"+rlist);
+	         logger.debug("rTotalCount 값"+rTotalCount);
+	         logger.debug("reviewPageBar 값"+reviewPageBar);
+	           
+	         map.put("list", rlist);
+	         map.put("pageBar", reviewPageBar);
+
+	         jsonStr = mapper.writeValueAsString(map);
+	         return jsonStr;
+	}		
+	
+	
+	@RequestMapping("/admin/qnainsert.do")
+	public ModelAndView insertReply(String board_num, String admin_content)
+	{
+	
+		//insert할 때 보낼 내용들 map에다 넣기
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("qnaNo", board_num);
+		map.put("reply_content", admin_content);
+		
+		//서비스 다녀오자
+		int result = service.insertReply(map);  
+		
+		int result2; //>update용 result2변수
+		
+		//서비스 다녀왔어요
+		String msg = "";
+		String loc = "";
+		
+		if(result>0) //insert가 성공적으로 잘 되면
+		{
+			//update를 서비스로 보내기 
+			result2 = service.updateState(board_num);
+			
+			//update가 성공하면 (insert는 이미 성공한 상태)
+			if(result2>0)
+			{
+				msg = "답변 글이 등록되었습니다.";
+				loc = "/admin/adminBoardManage.do";
+			}
+			else
+			{
+				msg = "답변 글 등록에 실패하였습니다. 관리자에게 문의하세요.";
+				loc = "/admin/adminBoardManage.do";
+			}
+		}
+		else //insert가 실패하면
+		{
+			msg = "답변 글 등록에 실패하였습니다. 관리자에게 문의하세요.";
+			loc = "/admin/adminBoardManage.do";
+		}
+		
+		ModelAndView mv = new ModelAndView();
+		
+		mv.addObject("msg", msg);
+		mv.addObject("loc", loc);
+		mv.setViewName("common/msg");
+		
+		return mv;
 		
 	}
 	
