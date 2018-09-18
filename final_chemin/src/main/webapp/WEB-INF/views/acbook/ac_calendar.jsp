@@ -3,107 +3,23 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set value="${pageContext.request.contextPath}" var="path" />
-<!-- fullCalendar -->
-<link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
-<!-- header -->
-<jsp:include page="/WEB-INF/views/common/header.jsp" />
-<!-- sideBar -->
-<jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
-<!-- Side Bar -->
-<link rel="stylesheet" href="<c:url value= "/resources/acbook/css/bootstrap.min.css?var2"/>">
 <!-- Side Bar -->
 <link rel="stylesheet" href="<c:url value= "/resources/acbook/fullcalendar/fullcalendar.css"/>">
 <!-- Fullcalendar: ac_calenndar: ? -->
 <link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/bootstrap-datetimepicker.css"/>">
 <!--DatePicker: ac_inputIn-->
 <link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/bootstrap-datetimepicker.min.css"/>">
-
-<style>
-/* 캘린더 여백 */
-#calendarDiv{
-margin-top:3%;
-margin-bottom:3%;
-}
-.fc-event-container{
-background-color: salmon;
-}
-<!-- 모달테스트 -->
-.center {
-    margin-top:50px;   
-}
-
-.modal-header {
-	padding-bottom: 5px;
-}
-
-.modal-footer {
-    	padding: 0;
-	}
-    
-.modal-footer .btn-group button {
-	height:40px;
-	border-top-left-radius : 0;
-	border-top-right-radius : 0;
-	border: none;
-	border-right: 1px solid #ddd;
-}
-	
-.modal-footer .btn-group:last-child > button {
-	border-right: 0;
-}
-</style>
-<style>
-body {
-    padding-top: 50px;
-}
-.dropdown.dropdown-lg .dropdown-menu {
-    margin-top: -1px;
-    padding: 6px 20px;
-}
-.input-group-btn .btn-group {
-    display: flex !important;
-}
-.btn-group .btn {
-    border-radius: 0;
-    margin-left: -1px;
-}
-.btn-group .btn:last-child {
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-}
-.btn-group .form-horizontal .btn[type="submit"] {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-}
-.form-horizontal .form-group {
-    margin-left: 0;
-    margin-right: 0;
-}
-.form-group .form-control:last-child {
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-}
-
-@media screen and (min-width: 768px) {
-    #adv-search {
-        width: 500px;
-        margin: 0 auto;
-    }
-    .dropdown.dropdown-lg {
-        position: static !important;
-    }
-    .dropdown.dropdown-lg .dropdown-menu {
-        min-width: 500px;
-    }
-}
-</style>
-
+<!--DatePicker: ac_inputIn-->
+<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/ac_calendar.css?var?3"/>">
+<!-- header -->
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
+<!-- sideBar -->
+<jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
 <!-- Main Start -->
-<div class="col-md-10 col-sm-8 main-content">
+<div class="col-md-10 col-sm-8 main-content"  id="newMain">
 <!-- 여기서부터입력 -->
 <!------ Include the above in your HEAD tag ---------->
 <!-- details card section starts from here -->
-	<div class="container-fluid" id="newMain">
 	<input type="hidden" id="userId" name="userId" value="${memberLoggedIn.userId }">
       	<div class="row">
            <div class="col-md-8">
@@ -134,7 +50,6 @@ body {
 				</div>
 			</div>
     	</div>			          
-    </div>
 <!-- details card section starts from here -->
 
 	<!-- 여기서그만 -->

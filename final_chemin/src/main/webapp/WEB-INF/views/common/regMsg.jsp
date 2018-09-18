@@ -44,14 +44,5 @@ $(document).ready(function () {
 	    			
 	    		  }); 
 	    		});  
-
-
-
-	
- 
-
-	/* alert("${msg}"); 
-	location.href="${path}${loc}"; */
-
 	 
 </script>

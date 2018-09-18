@@ -261,7 +261,3 @@ public class MapController {
 	}
 }
 
-
-
-
-

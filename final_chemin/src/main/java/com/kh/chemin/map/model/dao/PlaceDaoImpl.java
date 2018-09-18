@@ -1,5 +1,4 @@
 package com.kh.chemin.map.model.dao;
-
 import java.util.List;
 import java.util.Map;
 
@@ -83,5 +82,4 @@ public class PlaceDaoImpl implements PlaceDao {
 	public int selectReviewCount(SqlSessionTemplate sqlSession, int plaNo) {
 		return sqlSession.selectOne("place.selectReviewCount", plaNo);
 	}
-	
 }

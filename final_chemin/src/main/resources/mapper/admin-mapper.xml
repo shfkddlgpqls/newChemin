@@ -4,6 +4,8 @@
 <!-- resultType은 vo에 있는것을 가져오는것을 말함/ resultMap은 db에 있는걸 바로 가져올때. jsp에 쏴줄땐 대문자로 적음 -->
 	<resultMap type="map" id="placeMap"></resultMap>
 	<resultMap type="map" id="adminMap"></resultMap>
+	<resultMap type="map" id="memberMap"></resultMap>
+	<resultMap type="map" id="reportMap"></resultMap>
 	
 	<select id="placeList" parameterType="map" resultMap="placeMap">
 		select*from place where 1=1
@@ -52,6 +54,75 @@
 	
 	<select id="selectMallCate" resultMap="adminMap">
 		select * from mall_category
+	</select>
+	
+	<select id="selectMemberCount" resultType="_int">
+		select count(*) from member_info
+	</select>
+	
+	<select id="selectMemberList" resultMap="memberMap" parameterType="hashMap">
+		select * from member_info order by username desc
+		
+	</select>
+	
+	<select id="selectReportList" parameterType="string" resultMap="reportMap">
+		select * from report where rwriter=#{rwriter}
+	</select>
+	
+	<select id="reportCount" parameterType="string" resultType="_int">
+		select count(*) from report where rwriter=#{rwriter}
+	</select>
+	
+	<delete id="adminMemberDelete" parameterType="string">
+		delete from member_info where userid=#{userId}
+	</delete>
+	
+	<select id="blackList" resultMap="reportMap">
+		select * from member_info where rgcount>=1
+	</select>
+	
+	<select id="searchList" resultMap="memberMap" parameterType="hashMap">
+		select * from member_info where 1=1
+		<!-- <if test="searchKey!=null and searchKey!=''"> -->
+			<if test="searchKey!=null and searchKey!='' and searchKey==memName">
+				and username like '%'||#{userName}||'%' 
+			</if>
+			<if test="searchKey!=null and searchKey!='' and searchKey==memId">
+				and userid like '%'||#{userId}||'%' 
+			</if>
+			order by username
+		<!-- </if> -->
+	</select>  
+	
+	<!-- 문의게시판  총 갯수 -->   
+	<select id="selectQnACount" resultType="_int">
+		select count(*) from QNA
+	</select>
+	
+	<!-- 문의게시판 ajax 페이징 처리 -->
+	<select id="selectQnaBoardList" resultType="qna">
+		select qnano, userid,pno,qna_cate_no,qnatitle,qnacontent, reply_content,qnadate,qnastate,qnapw from qna FULL OUTER JOIN reply using(qnaNo)
+	</select>
+	
+	<!-- 답변 게시판 insert -->
+	<insert id="insertReply" parameterType="map">
+		insert into reply values (#{qnaNo},REPLY_SEQ.nextval,#{reply_content} )
+	</insert> 
+	
+	<!-- 상태 update -->
+	<update id="updateState" parameterType="String">
+		update qna set qnaState = '답변완료' where qnaNo = #{board_num} 
+	</update>
+	
+	<!-- 리뷰 리스트 불러오기 -->
+	<select id="selectReviewList" resultType="review">
+		select * from review order by redate desc
+	</select>
+	
+	
+	<!-- 문의게시판  총 갯수 -->   
+	<select id="selectReviewCount" resultType="_int">
+		select count(*) from review
 	</select>
 	
 </mapper>

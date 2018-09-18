@@ -337,14 +337,14 @@ function fn_drawMap(address,categoryImg,contentArray){
 			 
 				     daum.maps.event.addListener(marker, 'click', function() {
 				    	
-				    	overlay.setMap(map);
+				    	 overlay.setMap(map);
 				    		   /*  for(var j=0; j<overlayArr.length; j++){   			
 				    			 	if(result.address_name==address[i]){
 				    			 		overlayArr[j].setMap(null); 
 				    			 	}else{
 				    			 		overlayArr[j].setMap(map);
 				    			 	}
-				    			}      */
+				    			}  */    
 				     });
 			    } 
 			});

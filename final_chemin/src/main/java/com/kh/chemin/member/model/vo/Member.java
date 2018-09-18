@@ -7,20 +7,19 @@ public class Member {
 	
 	private String userId;
 	private String password;
-	private String userName; 
+	private String userName;
 	private String gender;
 	private Date birthDay;
 	private String email;
 	private String phone;
-	private String address;
-	private String[] hobby;
+	private String hobby;
 	private String originalImg;
 	private String renameImage;
 	
 	public Member() {}
 
-	public Member(String userId, String password, String userName, String gender, Date birthDay, String email,
-			String phone, String address, String[] hobby, String originalImg, String renameImage) {
+	public Member(String userId, String password, String userName, String gender, Date birthDay,
+			String email, String phone, String hobby, String originalImg, String renameImage) {
 		super();
 		this.userId = userId;
 		this.password = password;
@@ -29,12 +28,12 @@ public class Member {
 		this.birthDay = birthDay;
 		this.email = email;
 		this.phone = phone;
-		this.address = address;
 		this.hobby = hobby;
 		this.originalImg = originalImg;
 		this.renameImage = renameImage;
 	}
 
+	
 	public String getUserId() {
 		return userId;
 	}
@@ -91,19 +90,11 @@ public class Member {
 		this.phone = phone;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String[] getHobby() {
+	public String getHobby() {
 		return hobby;
 	}
 
-	public void setHobby(String[] hobby) {
+	public void setHobby(String hobby) {
 		this.hobby = hobby;
 	}
 
@@ -125,9 +116,8 @@ public class Member {
 
 	@Override
 	public String toString() {
-		return "Member [userId=" + userId + ", password=" + password + ", userName=" + userName + ", gender=" + gender
-				+ ", birthDay=" + birthDay + ", email=" + email + ", phone=" + phone + ", address=" + address
-				+ ", hobby=" + Arrays.toString(hobby) + ", originalImg=" + originalImg + ", renameImage=" + renameImage
-				+ "]";
+		return "Member [ userId=" + userId + ", password=" + password + ", userName=" + userName
+				+ ", gender=" + gender + ", birthDay=" + birthDay + ", email=" + email + ", phone=" + phone + ", hobby="
+				+ hobby + ", originalImg=" + originalImg + ", renameImage=" + renameImage + "]";
 	}
 }

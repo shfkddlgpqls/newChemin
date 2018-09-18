@@ -7,7 +7,7 @@
 
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 
-	<!-- mall css -->
+   <!-- mall css -->
     <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="${path }/resources/mall/vendor/animate/animate.css">
     <!--===============================================================================================-->
@@ -35,11 +35,11 @@
 
     <!-- 구매할 상품 리스트 -->
     <!-- Cart -->
-	<section class="cart bgwhite p-t-70 p-b-100">
+   <section class="cart bgwhite p-t-70 p-b-100">
         <div class="container">
             <!-- Cart item -->
             <h4 class="m-text26 p-b-36 p-t-15">
-               	주문상품 정보
+                  주문상품 정보
             </h4>
             <div class="container-table-cart pos-relative">
                 <div class="wrap-table-shopping-cart bgwhite">
@@ -52,40 +52,40 @@
                             <th class="cloumn-6">Total</th>
                         </tr>
 
-						<c:forEach items="${list }" var="c">
-	                        <tr class="table-row">
-	                            <td class="column-1">
-	                                <div class="cart-img-product b-rad-4 o-f-hidden">
-	                                    <img src="${path}/resources/upload/productImg/${c.REIMG}" alt="IMG-PRODUCT" draggable="false">
-	                                </div>
-	                            </td>
-	                            <td class="column-2">${c.PNAME }</td>
-	                            <td class="column-3"><fmt:formatNumber value="${c.PRICE }" type="currency"/></td>
-	                            <td class="column-4">${c.AMOUNT }</td>
-	                            <td class="column-6"><fmt:formatNumber value="${c.TOTALPRICE }" type="currency"/></td>
-	                        </tr>
-	                        <input type="hidden" value="${c.ORDERNO }" id="orderNo"/>
-	                        <input type="hidden" value="${c.PNAME }" id="pName"/>
+                  <c:forEach items="${list }" var="c">
+                           <tr class="table-row">
+                               <td class="column-1">
+                                   <div class="cart-img-product b-rad-4 o-f-hidden">
+                                       <img src="${path}/resources/upload/productImg/${c.REIMG}" alt="IMG-PRODUCT" draggable="false">
+                                   </div>
+                               </td>
+                               <td class="column-2">${c.PNAME }</td>
+                               <td class="column-3"><fmt:formatNumber value="${c.PRICE }" type="currency"/></td>
+                               <td class="column-4">${c.AMOUNT }</td>
+                               <td class="column-6"><fmt:formatNumber value="${c.TOTALPRICE }" type="currency"/></td>
+                           </tr>
+                           <input type="hidden" value="${c.ORDERNO }" id="orderNo"/>
+                           <input type="hidden" value="${c.PNAME }" id="pName"/>
                         </c:forEach>
                         <input type="hidden" value="${memberLoggedIn.userId }" id="userId"/>
 
                     </table>
                 </div>
             </div>
-       	</div>
+          </div>
      </section>
 
             <!-- content page -->
-	<section class="bgwhite p-b-60" style="padding-top:0">
-		<div class="container">
-			<div class="row">
+   <section class="bgwhite p-b-60" style="padding-top:0">
+      <div class="container">
+         <div class="row">
                 <div class="col-md-6 p-b-30" style="padding-right: 5%">
-					<form class="leave-comment">
-						<h4 class="m-text26 p-b-36 p-t-15">
-                           	주문자 정보
+               <form class="leave-comment">
+                  <h4 class="m-text26 p-b-36 p-t-15">
+                              주문자 정보
                         </h4>
 
-						<table style="width: 100%;height: 100%;">
+                  <table style="width: 100%;height: 100%;">
                             <colgroup>
                                 <col style="width: 20%">
                                 <col style="width: 80%">
@@ -125,23 +125,23 @@
                         </table>
                     </form>
 
-				</div>
-				<div class="col-md-6 p-b-30">
-					<form class="leave-comment" name="orderData">
+            </div>
+            <div class="col-md-6 p-b-30">
+               <form class="leave-comment" name="orderData">
                         
-						<h4 class="m-text26 p-b-36 p-t-15">
-							배송지 정보
-							<span style="float:right;">
-								<table>
-									<tr style="width:120%;float:right;">
-										<td><input type="checkbox" id="sameInfo" name="sameInfo" style="width:20px;height:20px;"/></td>
-										<td style="width:120%"><label class="agree" for="sameInfo">&nbsp;주문자 정보와 동일</label></td>
-									</tr>
-								</table>
-							</span>
+                  <h4 class="m-text26 p-b-36 p-t-15">
+                     배송지 정보
+                     <span style="float:right;">
+                        <table>
+                           <tr style="width:120%;float:right;">
+                              <td><input type="checkbox" id="sameInfo" name="sameInfo" style="width:20px;height:20px;"/></td>
+                              <td style="width:120%"><label class="agree" for="sameInfo">&nbsp;주문자 정보와 동일</label></td>
+                           </tr>
+                        </table>
+                     </span>
                         </h4>
 
-						<table style="width: 100%;height: 100%;">
+                  <table style="width: 100%;height: 100%;">
                             <colgroup>
                                 <col style="width: 20%">
                                 <col style="width: 80%">
@@ -205,22 +205,22 @@
                             </tr>   
                         </table>
 
-					</form>
-				</div>
-			</div>
+               </form>
+            </div>
+         </div>
 
             <!-- Total -->
             <div class="row bo5 m-l-1 m-r-1">
 
                 <div class="p-l-40 p-r-40 p-t-30 p-b-38 m-t-30 m-r-0 p-lr-15-sm col-md-6">
                     <h4 class="m-text26 p-b-36">
-                    	결제 금액
+                       결제 금액
                     </h4>
                     
                     <!--  -->
                     <div class="flex-w flex-sb-m p-b-12">
                         <span class="s-text18 w-size19 w-full-sm">
-                           	총 상품금액 :
+                              총 상품금액 :
                         </span>
     
                         <span class="m-text21 w-size20 w-full-sm">
@@ -231,7 +231,7 @@
                     <!--  -->
                     <div class="flex-w flex-sb p-t-15 p-b-20">
                         <span class="s-text18 w-size19 w-full-sm">
-                           	배송비 :
+                              배송비 :
                         </span>
     
                         <span class="m-text21 w-size20 w-full-sm">
@@ -242,7 +242,7 @@
                     <!--  -->
                     <div class="flex-w flex-sb-m p-t-26 p-b-30 bo10">
                         <span class="m-text22 w-size19 w-full-sm">
-                           	최종결제금액 :
+                              최종결제금액 :
                         </span>
     
                         <span class="m-text21 w-size20 w-full-sm">
@@ -254,8 +254,8 @@
                 </div>
 
                 <div class="p-l-40 p-r-40 p-t-30 p-b-38 m-t-30 m-r-0 p-lr-15-sm col-md-6">
-    				<h4 class="m-text26">
-                    	주문자 동의
+                <h4 class="m-text26">
+                       주문자 동의
                     </h4>
                     <div class="flex-w flex-sb p-t-30 p-b-30">
                         <input type="checkbox" id="agree" name="agreePay" style="width:20px;height:20px">
@@ -271,7 +271,7 @@
                     <div class="size15 trans-0-4">
                         <!-- Button -->
                         <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4" onclick="fn_payment()" style="border: none;outline: none;">
-                           	결제하기
+                              결제하기
                         </button>
                     </div>
                 </div>
@@ -285,24 +285,24 @@
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 
 <script>
-	$(document).ready(function(){
-		// 결제 포트
-		IMP.init('imp03138552');
-		
-		$('input:checkbox[name=sameInfo]').on('click',function(){
-			if($(this).prop('checked')){
-				$('#orderName').val('${member.USERNAME}');
-				$('#orderPhone').val('${member.USERPHONE}');
-				$('#orderEmail').val('${member.USEREMAIL}');
-			} else {
-				$('#orderName').val('');
-				$('#orderPhone').val('');
-				$('#orderEmail').val('');
-			}
-		});
-	});
-	
-	function fn_postcode() {
+   $(document).ready(function(){
+      // 결제 포트
+      IMP.init('imp03138552');
+      
+      $('input:checkbox[name=sameInfo]').on('click',function(){
+         if($(this).prop('checked')){
+            $('#orderName').val('${member.USERNAME}');
+            $('#orderPhone').val('${member.USERPHONE}');
+            $('#orderEmail').val('${member.USEREMAIL}');
+         } else {
+            $('#orderName').val('');
+            $('#orderPhone').val('');
+            $('#orderEmail').val('');
+         }
+      });
+   });
+   
+   function fn_postcode() {
         new daum.Postcode({
             oncomplete: function(data) {
                 // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
@@ -343,69 +343,68 @@
             }
         }).open();
     }
-	
-	function fn_payment(){
-		var userId = $('#userId').val();
-		var orderNo = $('#orderNo').val();
-		var pName = $('#pName').val();
-		var name = $('#orderName').val();
-		var phone = $('#orderPhone').val();
-		var email = $('#orderEmail').val();
-		var postcode = $('#postcode').val();
-		var addr1 = $('#address1').val();
-		var addr2 = $('#address2').val();
-		var note = $('#orderNote').val();
-		var all = $('#all').val();
-		var cartCount = $('#cartCount').text();
-		
-		if(name=='') {
-			$('#orderName').focus();
-			return false;
-		}
-		if(phone=='') {
-			$('#orderPhone').focus();
-			return false;
-		}
-		if(email=='') {
-			$('#orderEmail').focus();
-			return false;
-		}
-		if(postcode=='' || addr1=='' || addr2=='') {
-			$('#address2').focus();
-			return false;
-		}
-			
-		if($('input:checkbox[name=agreePay]').prop('checked')){
-			var address = addr1+" "+addr2;
-			
-			IMP.request_pay({
-				merchant_uid : orderNo,
-			    name : cartCount==1?pName:pName+" 외 "+(cartCount-1)+"개",
-			    // amount : all,
-			    amount : 100,
-			    buyer_email : email,
-			    buyer_name : name,
-			    buyer_tel : phone,
-			    buyer_addr : address,
-			    buyer_postcode : postcode,
-			}, function(rsp) {
-				//결제 후 호출되는 callback함수
-				if ( rsp.success ) { //결제 성공
-					var msg="상품이 성공적으로 주문되었습니다\n";
-					msg += '주문번호 : ' + rsp.merchant_uid + '\n';
-					msg += '결제 금액 : ' + rsp.paid_amount + '원\n';
-					msg += '카드 승인번호 : ' + rsp.apply_num;
-					swal("결제 완료", msg, "success")
-					.then((value) => {
-						location.href= "<c:url value='/mall/orderConfirm.do?userId="+userId+"&orderNo="+rsp.merchant_uid+"&orderName="+name+"&orderPhone="+phone+"&zipcode="+postcode+"&orderAddr="+address+"&payment="+rsp.apply_num+"&allPrice="+all+"&orderNote="+note+"'/>";
-					});
-				    
-				} else {
-					swal("결제 실패", rsp.error_msg, "error");
-				}
-			})
-		} else {
-			alert("구매조건 확인 및 결제 진행에 동의해 주시기 바랍니다.");
-		}
-	}
+   
+   function fn_payment(){
+      var userId = $('#userId').val();
+      var orderNo = $('#orderNo').val();
+      var pName = $('#pName').val();
+      var name = $('#orderName').val();
+      var phone = $('#orderPhone').val();
+      var email = $('#orderEmail').val();
+      var postcode = $('#postcode').val();
+      var addr1 = $('#address1').val();
+      var addr2 = $('#address2').val();
+      var note = $('#orderNote').val();
+      var all = $('#all').val();
+      var cartCount = $('#cartCount').text();
+      
+      if(name=='') {
+         $('#orderName').focus();
+         return false;
+      }
+      if(phone=='') {
+         $('#orderPhone').focus();
+         return false;
+      }
+      if(email=='') {
+         $('#orderEmail').focus();
+         return false;
+      }
+      if(postcode=='' || addr1=='' || addr2=='') {
+         $('#address2').focus();
+         return false;
+      }
+         
+      if($('input:checkbox[name=agreePay]').prop('checked')){
+         var address = addr1+" "+addr2;
+         
+         IMP.request_pay({
+            merchant_uid : orderNo,
+             name : cartCount==1?pName:pName+" 외 "+(cartCount-1)+"개",
+             amount : all,
+             buyer_email : email,
+             buyer_name : name,
+             buyer_tel : phone,
+             buyer_addr : address,
+             buyer_postcode : postcode,
+         }, function(rsp) {
+            //결제 후 호출되는 callback함수
+            if ( rsp.success ) { //결제 성공
+               var msg="상품이 성공적으로 주문되었습니다\n";
+               msg += '주문번호 : ' + rsp.merchant_uid + '\n';
+               msg += '결제 금액 : ' + rsp.paid_amount + '원\n';
+               msg += '카드 승인번호 : ' + rsp.apply_num;
+               swal("결제 완료", msg, "success")
+               .then((value) => {
+                  location.href= "<c:url value='/mall/orderConfirm.do?userId="+userId+"&orderNo="+rsp.merchant_uid+"&orderName="+name+"&orderPhone="+phone+"&zipcode="+postcode+"&orderAddr="+address+"&payment="+rsp.apply_num+"&allPrice="+all+"&orderNote="+note+"'/>";
+               });
+                
+            } else {
+               swal("결제 실패", rsp.error_msg, "error");
+            }
+         })
+      } else {
+         alert("구매조건 확인 및 결제 진행에 동의해 주시기 바랍니다.");
+      }
+   }
 </script>

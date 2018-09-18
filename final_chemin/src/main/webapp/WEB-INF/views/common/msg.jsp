@@ -10,6 +10,7 @@
 <c:set value="${pageContext.request.contextPath }" var="path"/>
 <script>
 
+
 if('${status}'=="loginSuccess"){
 	swal({
 		  text: "${msg}",
@@ -29,5 +30,6 @@ if('${status}'=="loginSuccess"){
 			location.href="${path}${loc}";
 	  		  }); 
 }
+
 
 </script>

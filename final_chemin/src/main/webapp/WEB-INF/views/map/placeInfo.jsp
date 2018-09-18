@@ -172,7 +172,6 @@ padding:0;
       background-color : #ffd6f4; 
          color: white;
    }
-
    .pagination a:active 
    {
          background-color: #ffd6f4;
@@ -517,7 +516,6 @@ padding:0;
     			var mainRe="";
     			var sum=0;
     			var avg=0;
-
     			if(data!=null){
     				 for(var i=0; i<data.reviewList.length; i++){
     					sum+=data.reviewList[i].REVIEWSTAR;

@@ -13,7 +13,7 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
 <!-- Main Start -->
-<div class="col-md-10 col-sm-8 main-content">
+<div class="col-md-10 col-sm-8 main-content"  id="newMain">
 	<div class="container-fluid">
 <!-- 	여기서부터 내용 쓰면 됨 -->
 <!-- START: WHOLE TEMPLATE SECTION -->

@@ -7,6 +7,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.chemin.mall.model.vo.QnA_board;
+import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
@@ -80,13 +82,6 @@ public class MypageServiceImpl implements MypageService {
 		
 		return result;
 	}
-
-	@Override
-	public int selectPlaceCount(Map map) {
-		int totalCount = dao.selectPlaceCount(sqlSession, map);
-		return totalCount;
-	}
-	
 	
 
 }

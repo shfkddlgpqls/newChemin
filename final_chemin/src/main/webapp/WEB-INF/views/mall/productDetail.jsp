@@ -6,34 +6,38 @@
 <c:set var="path" value="<%=request.getContextPath()%>"/>
   
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 
 <!-- 상세보기 css-->
     <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/mall.css">
-     <script src="<c:url value="/resources/base/js/productDetail.js" />"></script>
+    <script src="<c:url value="/resources/base/js/productDetail.js" />"></script>
 
-<!--  <script type="text/javascript">  
-        $(document).ready(function(){
-            $("#review tr:odd").addClass("odd");
-            $("#review tr:not(.odd)").hide();
-            $("#review tr:first-child").show();
-            
-            $("#review tr.odd").click(function(){
-                $(this).next("tr").toggle();
-                $(this).find(".arrow").toggleClass("up");
-            });
-            //$("#report").jExpand();
-        });
-    </script>        
- -->
- 
+ <style>
+
+
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.pagination a:active {
+    background-color: #ffd6f4; !important;
+    color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+ </style>
+
+
  <script>
- 
+
  // 상품 정보를 장바구니에 넘기기 위해서 해당 상품 정보 전달 
  $(function () 
 {
-	 fn_qna(1); 
-	 fn_review(1);	
-	 
+ 	
+    
     $(".cart").click(function(){
        var amount =  $("#quantity_value").text();  
        var pno = $("#pNo").val();
@@ -47,11 +51,10 @@
           datatype:"json",
           success:function(data){
              if(data==1){
-             	fn_cartCount();
                 swal
                 ({
                    title: "["+pName+"] 추가",
-                    text: "장바구니 상품은 7일간 보관됩니다.\n확인하러 장바구니로 이동하시겠습니까?!",
+                    text: "장바구니 상품은 7일간 보관됩니다.\n확인하러 go?!",
                     icon: "success",
                     buttons: true,
                     dangerMode: true,
@@ -70,7 +73,7 @@
                 swal
                 ({
                    title: "["+pName+"] 존재",
-                    text: "장바구니에 상품이 이미 존재합니다.\n확인하러 장바구니로 이동하시겠습니까?!",
+                    text: "장바구니에 상품이 이미 존재합니다.\n확인하러 go?!",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
@@ -99,8 +102,8 @@
    
    function fn_pwCheck() 
    {
-   		var dbPW = $("pNo").val();
-   		alert(dbPW);
+         var dbPW = $("pNo").val();
+         alert(dbPW);
    };
    
    
@@ -131,107 +134,386 @@
       } 
    };
    
+ //비밀번호가 일치했을 때 글번호를 넣어주는 배열 생성
+   var boardArray = new Array();
+   
    //글 작성시 설정한 비밀번호 확인 창 띄워주기(pno에서 비밀번호로 바꿔주기)
-   function fn_inputPw() 
+   function fn_inputPw(no,obj) 
    {
-	   var pno = $("#pNo").val();
+	  var pw = $(obj).attr('value');
+//	  alert(pw);
+	   
+	  console.log(boardArray); 
 	  
-	  	$("#pwCheck").modal();
-		$('#pw_db').val(pno);	   	   
-   };
+	  $('#pw_db').val(pw);
+	  $('#modal_pno').val(no);
+	  
+	  /*
+	  1. 배열의 값이 0일 때 > 모달 창
+	  2. 배열이 값이 1이상이지만 일치하는 값이 없으면 > 모달창
+	  3. 일치하면 토글 열어주기
+	  */
+	  
+	  //관리자면 토글이 바로 내려오기
+	  if('$(memberLoggedIn.userId)'=='admin')
+	  {
+		  $("."+no).toggle();
+	  }	  
+	  else if(boardArray.length==0)
+	  {
+		  $("#pwCheck").modal();
+	  }	  
+	 //배열 중에 방금 클릭한 게시글의 글 번호가 없으면 모달 띄워주기
+	  else (boardArray.length>0)
+	  {	  
+		  if(!boardArray.some(function(ex) {return ex==no}))
+      	  {  
+		     $("#pwCheck").modal();	 
+	      }
+		  else
+		  {
+			 
+			  $("#pwCheck").modal("hide"); 
+			  $("."+no).toggle();
+			  $("."+no).attr('display','inline-block');
+			  
+		  }	  
+	  }	           
+   };  
    
    //글 작성시 설정한 비밀번호와 사용자가 지금 입력한 비밀번호가 맞는지 확인하는 함수
    function fn_pwConfirm() 
    {
-	   var db_pw = $("#pw_db").val().trim();
-	   var user_pw = $("#board_pw").val().trim();
+	  console.log(boardArray);
 	   
-	   //숫자만 가려내는 정규표현식
-	   regNumber = /^[0-9]*$/;
-	   
-	   //숫자가 아닌 문자 입력했을시에
-	   if(!regNumber.test(user_pw))
-	    {
-		   alert("숫자만 입력하세요");
-	       return;
-	    }
-	   //비밀번호가 4글자 미만일 때 : 4 숫자 바꿔줘야한다
-	   else if(user_pw.length<4)
-		{
-			 alert("비밀번호는 4자리입니다. 숫자 4자리를 입력해주세요.");
-		}
-	   else
-		{
-		   if(db_pw==user_pw)
-	 	   {
-				alert("비밀번호가 일치합니다.");  
-		   }
-		   else
-		   {
-			   alert("비밀번호가 틀렸습니다. 다시 입력해주세요"); return;
-		   }	   
-		}	      
+      var db_pw = $("#pw_db").val().trim();
+      var user_pw = $("#board_pw").val().trim();
+      var board_qno = $("#modal_pno").val();
+      
+      //숫자만 가려내는 정규표현식
+      regNumber = /^[0-9]*$/;
+      
+      //숫자가 아닌 문자 입력했을시에
+      if(!regNumber.test(user_pw))
+       {
+         alert("숫자만 입력하세요");
+          return;
+       }
+      //비밀번호가 4글자 미만일 때 : 4 숫자 바꿔줘야한다
+      else if(user_pw.length<4)
+      {
+          alert("비밀번호는 4자리입니다. 숫자 4자리를 입력해주세요.");
+      }
+      else
+      {
+         if(db_pw==user_pw)
+          {
+        	    boardArray.push(parseInt(board_qno));
+        	    console.log(boardArray);
+	            alert("비밀번호가 일치합니다."); 
+	            $("#pwCheck").modal("hide"); 
+         }
+         else
+         {
+            alert("비밀번호가 틀렸습니다. 다시 입력해주세요"); return;
+         }      
+         
+      }         
    };
    
    //입력하기 모달창에 제품 정보 넣어주기
    function fn_insertDetails() 
    {
-	   var pno = $("#pNo").val();
-	   var pName = $("#pName").val();
-		  
-	  	$("#question_modal").modal();
-		$('#goods_code').val(pno);	  
-		$('#goods_name').val(pName);
+      var pno = $("#pNo").val();
+      var pName = $("#pName").val();
+        
+      $("#question_modal").modal();
+      $('#goods_code').val(pno);     
+      $('#goods_name').val(pName);
    }
    
    function fn_checkUserPw() 
    {
-	  
-	   var user_content = $("#qna_content").val().trim();
-	   var user_pw = $("#user_input_pw").val().trim();
-	   var cate_name = $("#board_name").val().trim();
-	  
-	   //숫자만 가려내는 정규표현식
-	   regNumber = /^[0-9]*$/;
-	   
-	   if(cate_name.length==0)
-	   {
-		  alert("좌측의 문의 유형을 선택해주세요.");
-		  return;
-	   }	  
-	   else if(user_content.length==0)
-	   {
-			alert("문의 내용을 입력해주세요");	 
-			return;
-	   }
-	   //숫자가 아닌 문자 입력했을시
-	   else if(!regNumber.test(user_pw))
-	    {
-		   alert("숫자만 입력하세요");
-	       return;
-	    }
-	   //비밀번호가 4글자 미만일 때 : 4 숫자 바꿔줘야한다
-	   else if(user_pw.length<4)
-		{
-			 alert("비밀번호는 4자리입니다. 숫자 4자리를 입력해주세요.");
-			 return;
-		}
-	   else
-	   {
-		  $("#qnaFrm").submit();
-	   }   
+     
+      var user_content = $("#qna_content").val().trim();
+      var user_pw = $("#user_input_pw").val().trim();
+      var cate_name = $("#board_name").val().trim();
+     
+      //숫자만 가려내는 정규표현식
+      regNumber = /^[0-9]*$/;
+      
+      if(cate_name.length==0)
+      {
+        alert("좌측의 문의 유형을 선택해주세요.");
+        return;
+      }     
+      else if(user_content.length==0)
+      {
+         alert("문의 내용을 입력해주세요");    
+         return;
+      }
+      //숫자가 아닌 문자 입력했을시
+      else if(!regNumber.test(user_pw))
+       {
+         alert("숫자만 입력하세요");
+          return;
+       }
+      //비밀번호가 4글자 미만일 때 : 4 숫자 바꿔줘야한다
+      else if(user_pw.length<4)
+      {
+          alert("비밀번호는 4자리입니다. 숫자 4자리를 입력해주세요.");
+          return;
+      }
+      else
+      {
+        $("#qnaFrm").submit();
+      }   
    };
    
-   function fn_qna(cPage) 
+ function fn_qna(cPage) 
    {
-		//pno > var로 받기 ajax 	
-   }
+      //pno > var로 받기 
+      var pno = $("#pNo").val(); 
+      //userId > var로 받기
+      var userId = $("#userId").val();
+      
+      $.ajax
+      ({
+          url:"${path}/mall/qnaPage.do",
+          data:{pno:pno,cPage:cPage},
+          dataType:"json",    
+          success : function(data) 
+          {
+        	var view = "";
+         	console.log(data);
+         	
+            if(data!=null)
+            {
+               var num = data.length-1;
+               var qnaPageBar = data.pageBar; 
+              
+               //alert(qnaPageBar); undefined
+               console.log(qnaPageBar);
+                               
+               for(var i=0; i<data.list.length;i++)
+               {
+                  //화면 추가해주기
+                  if(i==0)
+                  {
+                		  view += "<tr><td class='text-center'>"+data.list[i].qnaNo+"</td>";
+                		  view +="<td class='text-center'>"+fn_cate(data.list[i].qna_cate_no)+"</td>";
+                		  view += "<td class='text-center'><a onclick='fn_inputPw("+data.list[i].qnaNo+",this)' value='"+data.list[i].qnaPw+"' >"+data.list[i].qnaTitle+"</a></td>";  
+                		  view += "<td class='text-center'>"+data.list[i].userId+"</td>";
+                		  view += "<td class='text-center'>"+data.list[i].qnaDate+"</td>";
+                		  
+                		  if(data.list[i].qnaState=='답변대기')
+                          {
+                       		view += "<td class='text-center'><span class='badge badge-warning'>답변대기</span></td>";
+                          }	   
+                          else view += "<td class='text-center'><span class='badge badge-primary'>답변완료</span></td>";
+                		  
+                		 
+                		  view += "<input type='hidden' id='db_pw' name='dn_pw' value='"+data.list[i].qnaPw+"'</tr>";                   
+                		  view += "<tr><td class='"+data.list[i].qnaNo+"' colspan='6' class='text-center' style='display:none;'>";
+                		  view+="<div><p class='text-center'><br>"+data.list[i].qnaContent+"</p><hr></div>"; 
+                      	  
+                      	  if(data.list[i].reply_content==null)
+                      	  {
+                      		 view+= "<div><p class='text-center'><br> 아직 답변이 작성되지 않았습니다. 조금만 기다려주세요! <br></p></div></td></tr>";
+                      	  }	  
+                      	  else
+                      	  {
+                      		  view+= "<div><p class='text-center'><br>안녕하세요,고객님. Free Fleuri의 스탭 영지니주리입니다 ^^ <br>"+data.list[i].reply_content+"</p></div></td></tr>";
+                      	  }
+                       
+
+                  }
+                  else
+                  {
+                	  view += "<tr><td class='text-center'>"+data.list[i].qnaNo+"</td>";
+            		  view +="<td class='text-center'>"+fn_cate(data.list[i].qna_cate_no)+"</td>";
+            		  view += "<td class='text-center'><a onclick='fn_inputPw("+data.list[i].qnaNo+",this)' value='"+data.list[i].qnaPw+"' >"+data.list[i].qnaTitle+"</a></td>";  
+            		  view += "<td class='text-center'>"+data.list[i].userId+"</td>";
+            		  view += "<td class='text-center'>"+data.list[i].qnaDate+"</td>";
+            		  
+            		  if(data.list[i].qnaState=='답변대기')
+                      {
+                   		view += "<td class='text-center'><span class='badge badge-warning'>답변대기</span></td>";
+                      }	   
+                      else view += "<td class='text-center'><span class='badge badge-primary'>답변완료</span></td>";
+            		  
+            		 
+            		  view += "<input type='hidden' id='db_pw' name='dn_pw' value='"+data.list[i].qnaPw+"'</tr>";                   
+            		  view += "<tr><td class='"+data.list[i].qnaNo+"' colspan='6' class='text-center' style='display:none;'>";
+            		  view+="<div><p class='text-center'><br>"+data.list[i].qnaContent+"</p><hr></div>"; 
+                  	  
+                  	  if(data.list[i].reply_content==null)
+                  	  {
+                  		 view+= "<div><p class='text-center'><br> 아직 답변이 작성되지 않았습니다. 조금만 기다려주세요! <br></p></div></td></tr>";
+                  	  }	  
+                  	  else
+                  	  {
+                  		  view+= "<div><p class='text-center'><br>안녕하세요,고객님. Free Fleuri의 스탭 영지니주리입니다 ^^ <br>"+data.list[i].reply_content+"</p></div></td></tr>";
+                  	  }
+                  }
+               }   
+           
+            }
+            else
+            {
+            	qnaList.innerHTML += "<td class='text-center'>아무것도 없어요</td>";
+            }   
+            
+            $("#qnaList").html(view);   
+            $("#qnaPageBar").html(qnaPageBar);   
+            
+          },
+          
+          error:function(jxhr,textStatus,error)
+          {
+              console.log("mainMall ajax 실패 : "+jxhr+" "+textStatus+" "+error); 
+         }         
+      });
+   } 
+   
+   //카테고리 번호를 카테고리 한글로 바꿔주기
+   function fn_cate(cate) 
+   {
+	   var name = "";
+	   
+	   if(cate==1)
+	   {
+		   name +="상품 문의";
+	   } 	   
+	   else if(cate==2)
+	   {
+		   name +="교환 문의";
+	   }
+	   else if(cate==3)
+	   {
+		   name +="환불 문의";
+	   }
+	   else if(cate==4)
+	   {
+		   name +="반품 문의";
+	   }
+	   else if(cate==5)
+	   {
+		   name +="기타 문의";
+	   }
+	   
+		return name;
+	}
    
    function fn_review(cPage)
    {
-	
-   }
-  
+    	//pno > var로 받기 
+        var pno = $("#pNo").val(); 
+        //userId > var로 받기
+        var userId = $("#userId").val();
+        
+        $.ajax
+        ({
+            url:"${path}/mall/reviewPage.do",
+            data:{pno:pno,cPage:cPage},
+            dataType:"json",    
+            success : function(data) 
+            {
+	          	var view = "";
+	           	console.log(data);
+	           	
+              if(data!=null)
+              {
+                 var num = data.length-1;
+                 var reviewPageBar = data.pageBar; 
+                
+                 //alert(qnaPageBar); undefined
+                 console.log(data);
+                                 
+                 for(var i=0; i<data.list.length;i++)
+                 {
+                    //화면 추가해주기
+                    if(i==0)//맨 처음에 값 삽입
+                    {
+                    	view += "<div class='card'> <div class='card-body'>  <div class='row'>";
+                    	view += "<div class='col-md-2'><img src='${path}/resources/upload/review/"+data.list[i].reImg+"' class='img img-rounded img-fluid'/></div>";          	
+                    	view += "<div class='col-md-10'><p><strong>"+data.list[i].userId+"</strong>님";
+                    	                    	
+                    	if(data.list[i].stars==5)
+                    	{
+                    		view += "<span style='margin-left : 5%'><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/></span>";
+                    	}
+                    	else if(data.list[i].stars==4)
+                    	{
+                    		view += "<span style='margin-left : 5%'><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/></span>";
+                    	}
+                    	else if(data.list[i].stars==3)
+                    	{
+                    		view += "<span style='margin-left : 5%'><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/></span>";
+                    	}
+                    	else if(data.list[i].stars==2)
+                    	{
+                    		view += "<span style='margin-left : 5%'><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/></span>";
+                    	}
+                    	else if (data.list[i].stars==1)
+                    	{
+                    		view += "<span style='margin-left : 5%'><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/></span>";
+                    	}
+                    		
+                    	view += "<span class='float-right'>"+data.list[i].reDate+"</p><div class='clearfix'>";
+                    	view += "<p>"+data.list[i].reContent+"</p></div></div></div></div></div></div>";
+                    
+                    }
+                    else//값이 2이상일 때 값들 삽입
+                    {
+                    	view += "<div class='card'> <div class='card-body'>  <div class='row'>";
+                    	view += "<div class='col-md-2'><img src='${path}/resources/upload/review/"+data.list[i].reImg+"' class='img img-rounded img-fluid'/></div>";          	
+                    	view += "<div class='col-md-10'><p><strong>"+data.list[i].userId+"</strong>님";
+                    	
+                    	if(data.list[i].stars==5)
+                    	{
+                    		view += "<span style='margin-left : 5%'><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/></span>";
+                    	}
+                    	else if(data.list[i].stars==4)
+                    	{
+                    		view += "<span style='margin-left : 5%'><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/></span>";
+                    	}
+                    	else if(data.list[i].stars==3)
+                    	{
+                    		view += "<span style='margin-left : 5%'><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/></span>";
+                    	}
+                    	else if(data.list[i].stars==2)
+                    	{
+                    		view += "<span style='margin-left : 5%'><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/></span>";
+                    	}
+                    	else if(data.list[i].stars==1)
+                    	{
+                    		view += "<span style='margin-left : 5%'><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/></span>";
+                    	}
+                    	
+                    	view += "<span class='float-right'>"+data.list[i].reDate+"</p><div class='clearfix'>";
+                    	view += "<p>"+data.list[i].reContent+"</p></div></div></div></div></div></div>";
+                    }
+                 }   
+             
+              }
+              else
+              {
+            	  reviewCard.innerHTML += "<td class='text-center'>아무것도 없어요</td>";
+              }   
+              
+              $("#reviewCard").html(view);   
+              $("#reviewPageBar").html(reviewPageBar);   
+              
+            },
+            
+            error:function(jxhr,textStatus,error)
+            {
+                console.log("mainMall ajax 실패 : "+jxhr+" "+textStatus+" "+error); 
+           }         
+        });
+   } 
+
  </script>
  
  
@@ -274,15 +556,6 @@
               
                </div>
                <!-- 포맷팅 끝 -->
-               
-               
-               <!-- <ul class="star_rating">
-                  <li><i class="fa fa-star" aria-hidden="true"></i></li>
-                  <li><i class="fa fa-star" aria-hidden="true"></i></li>
-                  <li><i class="fa fa-star" aria-hidden="true"></i></li>
-                  <li><i class="fa fa-star" aria-hidden="true"></i></li>
-                  <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
-               </ul> -->
 
                <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
                   <span>수량</span>
@@ -322,209 +595,223 @@
       <h2>Review</h2>   
          <h7>실제로 이 제품을 구입한 고객님들의 후기입니다.</h7>
       </div>
-
-         <div class="table-responsive">
-                <table id="review" class="table">
-                  <thead>
-                    <tr>
-                      <th>글 번호</th>
-                      <th>제목</th>
-                      <th>작성자(이름)</th>
-                      <th>별점</th>
-                      <th>등록일</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>너무 맛있어요</td>
-                      <td>원숭이</td>
-                      <td>
-
-                      </td>
-                      <td>2018-08-24</td>
-                      <td><button type="button" class="btn btn-danger">삭제</button></td>   
-                    </tr>         
-                 </tbody>
-          </table>
-          </div>
+      <hr>
+      
+      <div id="reviewCard">
+      	<c:forEach items="${rlist}" var="r">
+          	<div class='card'> 
+          		<div class='card-body'>  
+	            	<div class='row'>
+	               		<div class='col-md-2'>
+	               			<img src='${path}/resources/upload/review/${r.reImg}' class='img img-rounded img-fluid'/>
+	               		</div>          	
+	                   	<div class='col-md-10'>
+	                   		<p><strong>${r.userId}</strong>님 </p>${r.stars}
+	                   		
+	                   		<c:set var="star" value="${r.stars}"></c:set>
+	                   		
+	                   		<span style="margin-left : 5%"> 		
+	                   		<c:choose>
+	                   			<c:when test="$(star==1)">
+	                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+	                   			</c:when>	
+	                   			
+	                   			<c:when test="$(star==2)">
+	                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+	                   			</c:when>	
+	                   			
+	                   			<c:when test="$(star==3)">
+	                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+	                   			</c:when>	
+	                   			
+	                   			<c:when test="$(star==4)">
+	                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+	                   			   <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+	                   			</c:when>	
+	                   			
+	                   			<c:when test="$(star==5)">
+	                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+	                   			    
+	                   			</c:when>	
+	                   		</c:choose>
+	                   		
+	                   		</span>
+	                   		
+	                   		<span class='float-right'>${r.reDate}</span>
+		                   	<div class='clearfix'>
+		                   		<p>${r.reContent}</p>
+		                   	</div>
+	                   	</div>
+	                 </div>
+	             </div>
+           	</div>
+           	</c:forEach>
+    	</div>
+              
+          <br>
           
-          <div class="text-center">
-            <ul class="pagination justify-content-center" >
-               <li class="page-item">
-                  <a href="#" class="page-link" aria-label="Previous">
-                     <span aria-hidden="true">&laquo;</span>
-                  </a>
-               </li>
-               
-               <li class="page-item"><a href="#" class="page-link">1</a></li>
-               <li class="page-item"><a href="#" class="page-link">2</a></li>
-               <li class="page-item"><a href="#" class="page-link">3</a></li>
-               <li class="page-item active"><a href="#" class="page-link">4</a></li>
-               <li class="page-item"><a href="#" class="page-link">5</a></li>
-               
-               <li class="page-item">
-               <a href="#" class="page-link" aria-label="Next">
-               <span aria-hidden="true">&raquo;</span>
-               </a>
-               </li>
-            </ul>
-        </div>
-        
-        <hr>
-        
+          <!-- 페이징바 -->
+	      <div class="row justify-content-center" id="reviewPageBar">
+			<c:if test="${not empty reviewbar }">
+          		${reviewbar }
+          	</c:if>
+	      </div>
+     
      <div class="shadow-sm p-4 mb-4 bg-white">
       <h2>Q&A</h2>   
          <h7>상품에 대한 문의사항이 있다면 알려주세요.</h7><br>
           <h7>본인이 작성한 글의 제목을 클릭하면 작성한 내용을 볼 수 있습니다.</h7>
       </div>
       
-         <div class="table-responsive">
-                <table id="review" class="table">
+         <div class="table">
+                <table id="qna" class="table">
                   <thead>
-                  
                     <tr>
                       <th class="text-center">글 번호</th>
                       <th class="text-center">카테고리</th>
                       <th class="text-center">제목</th>
-                      <th class="text-center">내용</th>     
-                      <th class="text-center">관리자 답변</th>     
-                      <th class="text-center">작성자(이름)</th>            
+                      <th class="text-center">작성자</th>            
                       <th class="text-center">등록일</th>
                       <th class="text-center">답변 상태</th>
-                      <th class="text-center"></th>
                     </tr>
                   </thead>
                   
-                  <tbody>
+                  <tbody id="qnaList">
+                  <c:forEach items="${qlist }" var="q">
                   
-                   <c:forEach items="${qList }" var="q">
-	                    <tr>
-	                      <td class="text-center">${q.QNANO }</td>
-	                      <td class="text-center">
-	                      
-	                      <c:set var="cate" value="${q.QNA_CATE_NO }" />
-	                      
-		                      <c:choose>        
-		                      
-		                      	<c:when test="${cate==1 }">
-		                      		상품 문의
-		                      	</c:when>
-		                      	
-		                      	<c:when test="${cate==2 }">
-		                      		교환 문의
-		                      	</c:when>
-		                      	
-		                      	<c:when test="${cate==3 }">
-		                      		환불 문의
-		                      	</c:when>
-		                      	
-		                      	<c:when test="${cate==4 }">
-		                      		반품 문의
-		                      	</c:when>
-		                      	
-		                      	<c:when test="${cate==5 }">
-		                      		기타 문의
-		                      	</c:when>
-		                      
-		                      </c:choose>
-	                      
-	                      </td>
-	                      <td class="text-center"><a onclick="fn_inputPw(this); return false;" data-no="${product.pno }" >${q.QNATITLE }</a></td>
-	                      <td class="text-center">${q.QNACONTENT }</td>
-	                      <td class="text-center">${q.QNAREPLY }</td>
-	                      <td class="text-center">${q.USERID }</td>           
-	                      <td class="text-center">
-	                                         	
-	                      <fmt:formatDate type="date" value="${q.QNADATE }"/>	
-	                      
-	                      </td>
-	                      <td class="text-center">               
-	      
-	      				 <c:set var="reply" value="${q.QNAREPLY }" />
-	      				 
-	                      <c:choose>	                      	
-		                      	<c:when test="${!reply==null }">
-		                      		<span class="badge badge-secondary">답변 완료</span>
-		                      	</c:when>
-		                      	
-		                      	<c:when test="${reply==null }">
-		                      		<span class="badge badge-light">답변 대기</span>
-		                      	</c:when>	
-	                      </c:choose>
-                         
-                      </td>
-                      
-                       <!--   만약에 아이디가 관리자라면 
-                      <td class="text-center"><button type="button" class="btn btn-danger">삭제</button></td>    -->
-                   
-                    </tr>
-                    </c:forEach>
-             
+                     <tr>
+                     	<td class='text-center'>${q.qnaNo}
+                     	</td>
+		                    <c:choose>
+		  						<c:when test="${q.qna_cate_no==1 }">
+		  						 <td class='text-center'>상품문의</td>
+		  						</c:when>
+		  						<c:when test="${q.qna_cate_no==2 }">
+		  						 <td class='text-center'>교환문의</td>
+		  						</c:when>
+		  						<c:when test="${q.qna_cate_no==3 }">
+		  						 <td class='text-center'>환불문의</td>
+		  						</c:when>
+		  						<c:when test="${q.qna_cate_no==4 }">
+		  						 <td class='text-center'>반품문의</td>
+		  						</c:when>
+		  						<c:when test="${q.qna_cate_no==5 }">
+		  						 <td class='text-center'>기타문의</td>
+		  						</c:when>
+  					</c:choose>
+  					
+                          <td class='text-center'>
+                          	<a onclick='fn_inputPw("${q.qnaNo}", this)' value="${q.qnaPw}" >${q.qnaTitle}</a>
+                          </td> 
+                          
+                          <td class='text-center'>
+                        	  ${q.userId}
+                          </td>
+                          
+                          <td class='text-center'>
+                          	  ${q.qnaDate}
+                          </td>
+                          
+                          <td class='text-center'>
+                      	 	  <c:choose>
+			  							<c:when test="${q.qnaState=='답변대기'}">
+			  						 		<span class="badge badge-warning">답변대기</span>
+			  							</c:when>
+			  						
+			  						<c:otherwise> 	
+			  							<span class="badge badge-primary">답변완료</span>
+			  						</c:otherwise>
+			  						
+		  					</c:choose>
+                          </td>              
+                    </tr>          
+                    <tr>
+                          <td class='${q.qnaNo}' colspan='6' class='text-center' style='display:none;'>
+                         	 <div>
+                         	 	<p class='text-center'><br>${q.qnaContent}</p><hr>
+                         	 </div>
+                         	 
+                         	 <div>                       				
+                          		<c:choose>
+				  					<c:when test="${q.reply_content==null}">
+				  						<p class='text-center'><br>아직 답변이 작성되지 않았습니다. 조금만 기다려주세요! <br></p> 	
+				  					</c:when>
+				  						
+				  					<c:otherwise> 		
+				  						<p class='text-center'><br>안녕하세요, 고객님. Free Fleuri의 스탭 영지니주리입니다 ^^  <br>${q.reply_content}</p> 	
+				  					</c:otherwise>
+			  						
+		  						</c:choose>
+                          	</div>
+                         </td>
+                   </tr>                
                     
-                 </tbody>
-                 
-                 
+                    </c:forEach> 
+                    
+			    </tbody>              
           </table>
+          
+          <button style="margin-left:90%;"class="btn btn-default" onclick="fn_insertDetails()">문의하기</button>
           </div>
           
-          <div class="text-center">
+          <!-- 페이징바 -->
+          <div class="row justify-content-center" id="qnaPageBar">
+          <c:if test="${not empty qnabar }">
+          	${qnabar }
+          </c:if>
+         </div>
          
-          <button type="button" class="btn btn-default" onclick="fn_insertDetails();" style="margin-left:90%">글 쓰기</button>
-            <ul class="pagination justify-content-center" >
-               <li class="page-item">
-                  <a href="#" class="page-link" aria-label="Previous">
-                     <span aria-hidden="true">&laquo;</span>
-                  </a>
-               </li>
-               
-               <li class="page-item"><a href="#" class="page-link">1</a></li>
-               <li class="page-item"><a href="#" class="page-link">2</a></li>
-               <li class="page-item"><a href="#" class="page-link">3</a></li>
-               <li class="page-item active"><a href="#" class="page-link">4</a></li>
-               <li class="page-item"><a href="#" class="page-link">5</a></li>
-               
-               <li class="page-item">
-               <a href="#" class="page-link" aria-label="Next">
-               <span aria-hidden="true">&raquo;</span>
-               </a>
-               </li>
-            </ul>
-            
-           </div>   
+
         </div>
-        
+
         
           <!-- 문의하기 비밀번호 입력창 -->
-	<div class="modal fade" id="pwCheck">
+   <div class="modal fade" id="pwCheck">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Modal Heading</h4>
+          <h4 class="modal-title">비밀번호 확인</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
         <!-- Modal body -->
         <div class="modal-body">
-	              <div class="col-12">
-					글 작성시 입력했던 비밀번호 4자리를 입력해주세요.
-				  </div>
-				  
-				  <br>
-					
-					<div class="col-12">
-					<input type="text" name="pw_db" id="pw_db" value=""/>
-					 <input type="text" name="board_pw" id="board_pw" class="form-control" maxlength="4"/>
-					</div>
+                 <div class="col-12">
+               글 작성시 입력했던 비밀번호 4자리를 입력해주세요.
+              </div>
+              
+              <br>  
+               <div class="col-12">
+               <input type="hidden" name="modal_pno" id="modal_pno" value=""/>
+               <input type="hidden" name="pw_db" id="pw_db" value=""/>
+                <input type="text" name="board_pw" id="board_pw" class="form-control" maxlength="4"/>
+               </div>
         </div>    
         
         <!-- Modal footer -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" onclick="fn_pwConfirm()" >hidden value 확인</button>
+          <button type="button" class="btn btn-primary" onclick="fn_pwConfirm()" >확인</button>
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
         
@@ -569,7 +856,7 @@
             <div class="row">
                <div class="col-md-6"> 
                   <select class="form-control" id="qna_option" name="qna_option" onchange="fn_selectbox();">
-        	        <option value="0" disabled selected>문의 유형 선택 </option>
+                   <option value="0" disabled selected>문의 유형 선택 </option>
                     <option value="1">상품 문의 </option>
                     <option value="2">교환 문의</option> 
                     <option value="3">환불 문의</option>             
@@ -602,8 +889,8 @@
                  </div>
                
                <!-- userId들어가는 부분 -->
-			   <!-- <input type="hidden" name="userId" id="userId" value="user"/> -->
-			    <input type="hidden" id="userId" name="userId" value="${memberLoggedIn.userId }"> 
+            <!-- <input type="hidden" name="userId" id="userId" value="user"/> -->
+             <input type="hidden" id="userId" name="userId" value="${memberLoggedIn.userId }"> 
                 
               </div>
               
