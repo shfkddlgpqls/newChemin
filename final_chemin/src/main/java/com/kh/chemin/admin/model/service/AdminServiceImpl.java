@@ -96,11 +96,6 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public int reportCount(String userId) {
-		return dao.reportCount(sqlSession,userId);
-	}
-
-	@Override
 	public int adminMemberDelete(String userId) {
 		System.out.println("::adminMemberDelete::"+userId);
 		return dao.adminMemberDelete(sqlSession,userId);

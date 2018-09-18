@@ -325,22 +325,25 @@ public class CommunityController {
 	{
 		String hashTag=(String)request.getParameter("searchValue");
 		List<Map<String,Object>> list=service.communitySearch(hashTag);
-		
-		//입력한 hashTag에 해당되는 게시물 번호를 배열로 받기
-		List<Integer> cno=new ArrayList<Integer>();
-		//게시물 번호를 list의 사이즈대로 만들어줌
-		int[] no = new int[list.size()];
-		//list에 있는 게시물번호가 object라서 string으로 바꿔준 후 int로 바꿔줌. 이렇게 두번해준 이유는 바로 integer로 변환이 안됐기 때문.
-		for(int i=0;i<list.size();i++)
-		{
-			no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
-			//하나씩 받은 배열을 list안에 넣어줌
-			cno.add(no[i]);
-		}
-		List<Map<String,Object>> attList=service.communityAttSearch(cno);
 		mv.addObject("list",list);
-		mv.addObject("attList",attList);
-		mv.setViewName("/community/communityList");
+		if(list.size()>0)
+		{
+			//입력한 hashTag에 해당되는 게시물 번호를 배열로 받기
+			List<Integer> cno=new ArrayList<Integer>();
+			//게시물 번호를 list의 사이즈대로 만들어줌
+			int[] no = new int[list.size()];
+			//list에 있는 게시물번호가 object라서 string으로 바꿔준 후 int로 바꿔줌. 이렇게 두번해준 이유는 바로 integer로 변환이 안됐기 때문.
+			for(int i=0;i<list.size();i++)
+			{
+				no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
+				//하나씩 받은 배열을 list안에 넣어줌
+				cno.add(no[i]);
+			}
+			
+			List<Map<String,Object>> attList=service.communityAttSearch(cno);
+			mv.addObject("attList",attList);
+		}
+		mv.setViewName("community/communityList");
 		return mv;
 	}
 	
@@ -523,18 +526,19 @@ public class CommunityController {
 	public ModelAndView categoryFind(String community_category,ModelAndView mv)
 	{
 		List<Map<String,Object>> list=service.categoryFind(community_category);
-		
-		List<Integer> cno=new ArrayList<Integer>();
-		int[] no = new int[list.size()];
-		for(int i=0;i<list.size();i++)
-		{
-			no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
-			cno.add(no[i]);
-		}
-		List<Map<String,Object>> attList=service.categoryAttFind(cno);
-		
 		mv.addObject("list",list);
-		mv.addObject("attList",attList);
+		if(list.size()>0)
+		{
+			List<Integer> cno=new ArrayList<Integer>();
+			int[] no = new int[list.size()];
+			for(int i=0;i<list.size();i++)
+			{
+				no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
+				cno.add(no[i]);
+			}
+			List<Map<String,Object>> attList=service.categoryAttFind(cno);
+			mv.addObject("attList",attList);
+		}
 		mv.setViewName("community/communityList");
 		return mv;
 	}

@@ -37,6 +37,6 @@
  	</insert> -->
  	
  	<insert id="insertMember" parameterType="member">
- 		INSERT INTO MEMBER_INFO VALUES(#{userId},#{password},#{userName},#{gender},#{birthDay},#{email},#{phone},#{address},#{hobby, typeHandler=strArr},#{originalImg},#{renameImage})
+ 		INSERT INTO MEMBER_INFO VALUES(#{userId},#{password},#{userName},#{gender},#{birthDay},#{email},#{phone},#{address},#{hobby, typeHandler=strArr},#{originalImg},#{renameImage},0)
  	</insert>
 </mapper>

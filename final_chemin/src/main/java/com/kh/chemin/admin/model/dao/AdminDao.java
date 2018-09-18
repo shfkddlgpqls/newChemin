@@ -24,7 +24,6 @@ public interface AdminDao {
 	int selectMemberCount(SqlSessionTemplate sqlSession);
 	List<Map<String, Object>> selectMemberList(SqlSessionTemplate sqlSession, int cPage, int numPerPage);
 	List<Map<String,Object>> rpList(SqlSessionTemplate sqlSession, String userId);
-	int reportCount(SqlSessionTemplate sqlSession, String userId);
 	int adminMemberDelete(SqlSessionTemplate sqlSession, String userId);
 	List<Map<String,Object>> blackList(SqlSessionTemplate sqlSession);
 	List<Map<String,Object>> searchList(SqlSessionTemplate sqlSession,HashMap<String,Object> map);
