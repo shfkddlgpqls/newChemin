@@ -329,7 +329,7 @@ function fn_drawMap(address,categoryImg,contentArray){
 			        overlayArr.push(overlay);
 			        
 				     daum.maps.event.addListener(marker, 'click', function() {
-				       console.log(marker)
+				       
 				    	/* console.log(overlayArr[0].k.ib)
 				    	  overlay.setMap(map);   */ 
 				    		   for(var j=0; j<overlayArr.length; j++){

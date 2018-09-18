@@ -12,7 +12,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 
 <style>
-
 .gallery{
   width: 100%;
   max-width: 960px;
@@ -32,7 +31,6 @@
       -ms-flex-pack: center;
           justify-content: center;
 }
-
 .gallery-item{
   box-shadow: 2px 2px 8px -1px #3498DB;
   width: 100%;
@@ -43,7 +41,6 @@
   overflow: hidden;
   border:0;
 }
-
 .gallery-item-image{
   position: absolute;
   width: 100%;
@@ -53,13 +50,10 @@
   transition: all .5s ease;
   bottom:0;
   overflow: hidden;
-
 }
-
 .gallery-item:hover .gallery-item-image{
   bottom: 60%;
 }
-
 .gallery-item-description{
   color:black;
   font-size: .8rem;
@@ -82,7 +76,6 @@ a {
     background-color: transparent;
     -webkit-text-decoration-skip: objects;
 }
-
 .statusStyle{
 text-align:center;
 width:100%;
@@ -91,7 +84,6 @@ margin-top:8%;
 margin-bottom:8%;
 color:#999;
 }
-
 .pagination a 
     {
        color: black;
@@ -107,7 +99,6 @@ color:#999;
       background-color : #ffd6f4; 
          color: white;
    }
-
    .pagination a:active 
    {
          background-color: #ffd6f4;
@@ -128,7 +119,6 @@ div#select_box {
   
   /* 화살표 이미지 */
 }
-
 div#select_box label {
   position: absolute;
   font-size: 14px;
@@ -137,7 +127,6 @@ div#select_box label {
   left: 12px;
   letter-spacing: 1px;
 }
-
 div#select_box select#color {
   width: 100%;
   height: 32px;
@@ -208,7 +197,6 @@ function fn_modal(obj){
 		     }
 		
 		
-
 	
 	
 	$.ajax({
@@ -280,9 +268,7 @@ function fn_modal(obj){
             console.log(error);
          }
 	})
-
 }
-
 function fn_delete(){
 	var plaNo = $('[name=subNo]').val();
 	swal({
@@ -300,30 +286,20 @@ function fn_delete(){
 		  }
 		});
 }
-
 function fn_reMsg(msg){
 	$("#reMsg_modal").modal('show');
 	msgContent.innerHTML = $(msg).data("msg"); 
 }
-
 function fn_update(){
 	var plaNo = $('[name=subNo]').val();
 	location.href = "${path}/mypage/myPlaceSelect.do?plaNo="+plaNo;
 }
-<<<<<<< HEAD
-</script>
-<!-- 마이페이지 css-->
-    <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/mypage.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-=======
-
 function fn_plaStatus(status){
 	$('#category').text("카테고리 선택▼");
 	$('[name=category]').val('전체');
 	$('[name=plaStatus]').val(status);
 	fn_status(1);
 }
-
 $(function(){
 	//처음 장소내역을 눌렀을때 기본으로 승인대기의 값이 들어옴
 	$('[name=plaStatus]').val('${plaStatus}');
@@ -335,7 +311,6 @@ $(function(){
 	    $(this).siblings("label").text(select_name);
 	  });
 });
-
 function fn_status(cPage){
 	var userId = '${memberLoggedIn.userId}';
 	var plaStatus = $('[name=plaStatus]').val();
@@ -400,7 +375,6 @@ function fn_status(cPage){
 	})
 }
 </script>
->>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git
 		
 		<section>
 		<div class="container">

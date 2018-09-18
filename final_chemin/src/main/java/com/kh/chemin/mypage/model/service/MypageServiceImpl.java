@@ -22,7 +22,6 @@ public class MypageServiceImpl implements MypageService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-
 	@Override
 	public List<Place> selectPlaceList(Map map, int cPage, int numPerPage) {
 		List<Place> list = dao.selectPlaceList(sqlSession, map,cPage,numPerPage);
@@ -83,6 +82,7 @@ public class MypageServiceImpl implements MypageService {
 		
 		return result;
 	}
+
 
 	@Override
 	public int warnMsg(String userId) {
@@ -150,3 +150,4 @@ public class MypageServiceImpl implements MypageService {
 		}	
 
 }
+

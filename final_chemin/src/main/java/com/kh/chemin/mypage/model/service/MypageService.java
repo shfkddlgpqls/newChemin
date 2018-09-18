@@ -11,7 +11,6 @@ import com.kh.chemin.map.model.vo.PlaceMenu;
 
 public interface MypageService {
 
-	
 	int insertReview(Review review);
 	List<QnA_board> selectQnaBoardList(int cPage, int numPerPage, String userId);
 	int selectQnACount(String userId);
@@ -33,3 +32,8 @@ public interface MypageService {
 
 	int selectPlaceCount(Map map);
 }
+
+
+
+
+

@@ -19,7 +19,6 @@
 	    padding: 8px 16px;
 	    text-decoration: none;
 	}
-
 	.pagination a:active 
 	{
    		background-color: #ffd6f4; !important;
@@ -34,7 +33,6 @@
 	</style>   
 	
 <script>
-
 	//카테고리 번호를 카테고리 한글로 바꿔주기
 	function fn_cate(cate) 
 	{
@@ -63,14 +61,10 @@
 	   
 		return name;
 	}
-
 	function fn_toggle(no) 
     {
    		 $("."+no).toggle();
 	 }
-
-
-
 	function fn_delete() 
 	{
 		confirm("삭제하시겠습니까?");
@@ -281,13 +275,9 @@
 	           }         
 	        });
 	   } 
-
 </script>
-<<<<<<< HEAD
-=======
 
 		
->>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git
 		
 	<section>
 		<div class="container">
@@ -653,4 +643,3 @@
 
  
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>  
-    
