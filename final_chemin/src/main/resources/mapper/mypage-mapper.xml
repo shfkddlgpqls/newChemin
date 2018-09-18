@@ -91,5 +91,21 @@
 		and PLASTATUS =#{plaStatus}
 		and USERID =#{userId}
 	</select>
+	
+	<resultMap type="map" id="mallMap"></resultMap>
+	<select id="selectOrderList" parameterType="string" resultMap="mallMap">
+		select distinct orderno, ordername, orderaddr, allprice, odate from orderDetail join cart using(orderNo)
+		where userId=#{userId} 
+		order by orderNo desc
+	</select>
+	<select id="selectOrderdata" parameterType="string" resultMap="mallMap">
+		select * from cart join product using(pno) where userId=#{userId}
+	</select>
+	<select id="selectTotalCount" parameterType="string" resultType="_int">
+		select count(distinct orderno) from orderDetail join cart using(orderNo) where userId=#{userId}
+	</select>
+	<select id="selectWishList" parameterType="string" resultMap="mallMap">
+		select * from wishList join product using(pno) where userId=#{userId}
+	</select>
 
 </mapper>

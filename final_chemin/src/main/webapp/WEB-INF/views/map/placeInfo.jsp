@@ -172,6 +172,7 @@ padding:0;
       background-color : #ffd6f4; 
          color: white;
    }
+
    .pagination a:active 
    {
          background-color: #ffd6f4;
@@ -183,7 +184,7 @@ padding:0;
          background-color: #ffd6f4;
          color: white;
    }
-   
+
 </style>
 
 
@@ -195,21 +196,25 @@ padding:0;
       	<input type="hidden" name="plaName" value="${place.plaName}"/>
       	<h1 style="font-size:50px;border-top-style: solid;border-top-color:#FA6E9C;border-top-width : 50px;border-image: url("http://papers.co/wallpaper/papers.co-sj42-purple-soft-red-gradation-blur-35-3840x2160-4k-wallpaper.jpg") "><strong>${place.plaName}</strong></h1>
       
-      	<div class="row" style="width:40%;margin-left:auto; margin-right:auto;text-align:center">
+      	<div class="row" style="width:50%;margin-left:auto; margin-right:auto;text-align:center">
       			<div class="row" id="main_review" style="width:95%;margin-left:auto; margin-right:auto;text-align:center">
     
 			   	</div>
 			   <div class="row" style="width:100%;margin-left:auto; margin-right:auto;">
-				 <div style="margin-left:auto; margin-right:auto;">
+			   	<a href="http://map.daum.net/link/to/${place.plaName}" class="load" style="margin-left:auto; margin-right:auto;text-decoration:none">
+				 <div>
 				 	<i class="material-icons" style="font-size:2.5em;color:#FB6E9D">call_split</i>
-				 	<p>길찾기</p>
+				 	<p style="color:black">길찾기</p>
 				 </div>
-			   	 <div style="margin-left:auto; margin-right:auto;">
-			   	 <i class = "material-icons" style="font-size:2.5em;color:#FB6E9D"> pin_drop</i> 
-			   	 <p>위치</p>
+				 </a>
+				 
+				 <a href="#load_box" class="load" style="margin-left:auto; margin-right:auto;text-decoration:none">
+			   	 <div>
+				   	 <i class = "material-icons" style="font-size:2.5em;color:#FB6E9D"> pin_drop</i> 
+				   	 <p style="color:black">위치</p>
 		 		</div>
+		 		</a>
 			   </div>
-			  
 		  </div>
 		
       </div>
@@ -353,7 +358,7 @@ padding:0;
 	      </div>
 	      
 	      <!-- 찾아오기 -->
-	      <div class="box load_box">
+	      <div class="box load_box" id="load_box">
 	       <div style="height:6%; margin-top:5%; margin-bottom:1%">
 		      	<div style="margin-left:13%; float:left">
 		      		<span style="font-size:20px;text-transform:uppercase;"><strong>찾아가는 길</strong></span>
@@ -516,6 +521,7 @@ padding:0;
     			var mainRe="";
     			var sum=0;
     			var avg=0;
+
     			if(data!=null){
     				 for(var i=0; i<data.reviewList.length; i++){
     					sum+=data.reviewList[i].REVIEWSTAR;

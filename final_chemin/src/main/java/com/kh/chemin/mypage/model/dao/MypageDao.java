@@ -24,6 +24,11 @@ public interface MypageDao {
 	int removeAttach(SqlSessionTemplate sqlSession, int plaNo);
 	int warnMsg(SqlSessionTemplate sqlSession, String userid);
 
+	List<Map<String, Object>> selectOrderList(SqlSessionTemplate sqlSession, String userId, int cPage, int numPerPage);
+	List<Map<String, Object>> selectOrderData(SqlSessionTemplate sqlSession, String userId);
+	int selectTotalCount(SqlSessionTemplate sqlSession, String userId);
+	List<Map<String, Object>> selectWishList(SqlSessionTemplate sqlSession, String userId);
+
 	int selectPlaceCount(SqlSessionTemplate sqlSession, Map map);
 	
 	int insertReview(SqlSessionTemplate sqlSession, Review review);
