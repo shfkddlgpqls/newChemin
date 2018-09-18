@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ import com.kh.chemin.map.controller.MapController;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.member.model.vo.Member;
 import com.kh.chemin.mypage.model.service.MypageService;
 
 import net.sf.json.JSONArray;
@@ -119,7 +121,7 @@ public class MypageController
 		List<PlaceAttachment> attachList = service.selectAttachList(plaNo);
 		List<PlaceMenu> menuList = service.selectMenuList(plaNo);
 		
-		System.out.println(attachList);
+		
 		map.put("attachList", attachList);
 		map.put("menuList", menuList);
 
@@ -143,7 +145,7 @@ public class MypageController
 		}else {
 			msg="장소가 삭제 되지 않았습니다.";
 		}
-		loc="/mypage/myPlaceList.do?userId="+userId;
+		loc="/mypage/myPlaceList.do?plaStatus=N";
 		
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("msg", msg);
@@ -168,9 +170,11 @@ public class MypageController
 	
 	//마이페이지 장소 등록 수정
 	@RequestMapping("/mypage/placeUpdate.do")
-	public ModelAndView placeUpdate(Place place ,@RequestParam("mainImg")MultipartFile mainImg,@RequestParam("file")MultipartFile[] file,HttpServletRequest request,String[] menuName,String[] menuPrice,String[] menuCheck, String phoneFirst, String phoneMiddle, String phoneEnd,String postCode, String roadAddr, String jibunAddr,
+	public ModelAndView placeUpdate(HttpSession session,Place place ,@RequestParam("mainImg")MultipartFile mainImg,@RequestParam("file")MultipartFile[] file,HttpServletRequest request,String[] menuName,String[] menuPrice,String[] menuCheck, String phoneFirst, String phoneMiddle, String phoneEnd,String postCode, String roadAddr, String jibunAddr,
 			  String day, String startTime, String endTime,String subContent,String keyword1,String keyword2, String keyword3, String keyword4, String keyword5) {
 			
+			Member m = (Member)session.getAttribute("memberLoggedIn");
+			String userId = m.getUserId();
 			String phone=phoneFirst+"-"+phoneMiddle+"-"+phoneEnd;
 			String address=roadAddr+"/"+postCode+"/"+jibunAddr;
 			String time=day+"/"+startTime+"/"+endTime+"/"+subContent;
@@ -179,7 +183,7 @@ public class MypageController
 			place.setPlaAddr(address);
 			place.setPlaTime(time);
 			place.setPlaKeyword(keyword);
-			place.setUserId("hyebeen");
+			place.setUserId(userId);
 			
 			
 			//대표이미지 저장경로 지정 및 서버에 이미지 저장
@@ -236,7 +240,7 @@ public class MypageController
 			}else {
 			msg="장소 수정이 완료 되지 않았습니다.";
 			}
-			loc="/";
+			loc="/mypage/myPlaceList.do?plaStatus=N";
 			
 			ModelAndView mv = new ModelAndView();
 			mv.addObject("msg", msg);

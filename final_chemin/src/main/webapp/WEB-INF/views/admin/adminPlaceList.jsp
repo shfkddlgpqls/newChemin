@@ -180,12 +180,19 @@ function fn_modal(obj){
 	plaName.innerHTML = $(obj).data("name"); 	
  	plaPhone.innerHTML = $(obj).data("phone");
 	plaArea.innerHTML = $(obj).data("area");
-	plaContent.innerHTML = $(obj).data("content"); 
+	
 	plaCategory.innerHTML =$(obj).data("category"); 
 	var keyword = $(obj).data("keyword").split(" ");
 	var address = $(obj).data("address").split("/",2);
 	var time = $(obj).data("time").split("/");
 	
+	
+	//소개글 내용이 null일때를 비교
+	if($(obj).data("content")!=null && $(obj).data("content")!="undefined"){
+		plaContent.innerHTML = $(obj).data("content");
+	}else{
+		$("#contentTr").css("display", "none");
+	}
 	
 		for ( var i in address ) {		
 			if(i==0){
@@ -208,6 +215,7 @@ function fn_modal(obj){
 			}
 	     }
 		
+		
 		for ( var k in keyword ) {
 			if(keyword[k]!=null && (keyword[k].length)>0){
 				if(k==0){
@@ -226,7 +234,7 @@ function fn_modal(obj){
 		dataType:"json",
 		success:function(data)
 		{			
-				
+			if(data.attachList.length>0){
 			//상세보기 화면 캐러셀 사진 부분
 			attachmain.innerHTML='<div class="carousel-item active" id="attachmentOne">';
 			attachmentOne.innerHTML='<div class="row" id="subattachOne">';
@@ -261,6 +269,10 @@ function fn_modal(obj){
 		    attachmentOne.innerHTML+='</div>';
 	    	attachmain.innerHTML+='</div>';
 	    	//상세보기 화면 캐러셀 사진 부분 끝	
+			}else{
+				$("#photoTr").css("display", "none");
+				$("#photoSubTr").css("display", "none");
+			}
 		},
 		error:function(jxhr,textStatus,error)
         {
@@ -564,17 +576,17 @@ function fn_status(cPage){
 		        	   	  	<td>: </td>
 		        	   	  	<td id="plaPrice">아메리카노 2500원</td>
 		        	   	  </tr>
-		        	   	  <tr>
+		        	   	  <tr id="contentTr">
 		        	   	  	<td>소개글</td>
 		        	   	  	<td>: </td>
 		        	   	  	<td id="plaContent"></td>
 		        	   	  </tr>
-		        	   	  <tr>
+		        	   	  <tr id="photoTr">
 		        	   	  	<td>사진</td>
 		        	   	  	<td></td>
 		        	   	  	<td></td>
 		        	   	  </tr>
-		        	   	  <tr>
+		        	   	  <tr id="photoSubTr">
 		        	   	  	<td colspan="3"  align ="center">
 		        	   	  		 <div id="ThumbnailCarousel" class="carousel slide col-xs-12" data-ride="carousel">
 			  <div class="carousel-inner" id="attachmain">
@@ -593,7 +605,7 @@ function fn_status(cPage){
 		</div>
 		        	   	  	</td>
 		        	   	  </tr>
-		        	   	  <tr>
+		        	   	  <tr id="keywordTr">
 		        	   	  	<td>대표키워드</td>
 		        	   	  	<td>: </td>
 		        	   	  	<td id="plaKeyword"></td>

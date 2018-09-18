@@ -11,18 +11,19 @@ import com.kh.chemin.map.model.vo.PlaceMenu;
 
 public interface MypageService {
 
-	List<PlaceAttachment> selectAttachList(int plaNo);
-	List<PlaceMenu> selectMenuList(int plaNo);
-	int placeDelete(int plaNo);
+	
 	int insertReview(Review review);
 	List<QnA_board> selectQnaBoardList(int cPage, int numPerPage, String userId);
 	int selectQnACount(String userId);
 	List<Review> selectReviewList(int cPage, int numPerPage, String userId);
 	int selectReviewCount(String userId);
+	int warnMsg(String userId);
 	
 	List<Place> selectPlaceList(Map map, int cPage, int numPerPage);
+	List<PlaceAttachment> selectAttachList(int plaNo);
+	List<PlaceMenu> selectMenuList(int plaNo);
+	int placeDelete(int plaNo);
 	Place placeSelect(int plaNo);
 	int placeUpdate(Place place,List<PlaceMenu> menuList,List<PlaceAttachment> attList);
-	int warnMsg(String userId);
 	int selectPlaceCount(Map map);
 }

@@ -13,11 +13,10 @@
 	position:relative;
 	top:0px;left:0px;width:50px;
 	height:100%;
-	margin:0";
+	margin:0;
 	z-index:10;
-	border:1px solid black;
 	font-family:'Malgun Gothic','맑은 고딕',sans-serif;
-	font-size:12px; 
+	font-size:0.6rem; 
 	text-align:center;
 	background-color:#B6BDC8;
 }
@@ -55,6 +54,8 @@ color:#fff;
 	width:22px;
 	height:26px;
 }
+
+
 /* 마커위에 창 */
    .wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
     .wrap * {padding: 0;margin: 0;}
@@ -71,9 +72,12 @@ color:#fff;
     .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
     .info .link {color: #5085BB;}
     
+
 #mainNav .navbar-nav > li.nav-item > a.nav-link, #mainNav .navbar-nav > li.nav-item > a.nav-link:focus {
     color: black;
 }
+
+
 #mainNav .navbar-brand {
     color: #F05F40;
 }
@@ -81,8 +85,7 @@ color:#fff;
 <div class="main-content">
 <div  class="row" style="margin-top:55px">
   <div class="category col-md-2">
-  	<input type="hidden" name="primary" value="primary"/>
-  	 
+  	
         <ul class="list-group">
         	<li class="list-group-item" style="width:100%">
         		<span style="font-size:1.3em; width:30%;"><strong>지역선택</strong></span>        		
@@ -160,13 +163,17 @@ var movieMarkerImgSrc = 'https://i.imgur.com/5Gvp5eL.png';
 var beerMarkerImgSrc = 'https://i.imgur.com/BgXoOqa.png';
 var micMarkerImgSrc = 'https://i.imgur.com/GKf7xiJ.png';
 var sprotsMarkerImgSrc = 'https://i.imgur.com/UOxgFDv.png';
+
 //주소, 이미지, overlay내용 배열
 var address=[];
 var categoryImg=[];
 var contentArray=[];
+
+
 $(function(){
 	fn_mapView();
 })
+var coordsIb="";
 function fn_mapView(){
 	address.splice(0,address.length);
 	categoryImg.splice(0,categoryImg.length);
@@ -232,8 +239,8 @@ function fn_mapView(){
 					var addrStr = addr.split("/"); 
 					var time =data.plaList[i].plaTime;
 					var timeStr = time.split("/");
-					
-					
+
+					  	 
 					var content = document.createElement('div');
 					content.innerHTML ='<div class="wrap">' + 
 				    '    <div class="info">' + 
@@ -241,6 +248,8 @@ function fn_mapView(){
 				    			data.plaList[i].plaName + 
 				    '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' + 
 				    '        </div>' + 
+				    '		<input type="hidden" name="coordsIb" value=""/>'+
+				    '		<input type="hidden" name="coordsJb" value=""/>'+	
 				    '        <div class="body">' + 
 				    '            <div class="img">' +
 				    '                <img src="${path}/resources/upload/place/main/'+data.plaList[i].reImg+'" width="73" height="70">' +
@@ -249,7 +258,7 @@ function fn_mapView(){
 				    '                <div class="ellipsis">'+addrStr[0]+'</div>' + 
 				    '                <div class="phone"><i class="fa fa-phone" style="font-size:1em;color:#989898"></i>'+data.plaList[i].plaPhone+'</div>' + 
 				    '                <div class="time"><i class="fa fa-clock-o" style="font-size:1em;color:#989898;"></i>'+' '+timeStr[0]+' '+timeStr[1]+'~'+timeStr[2]+'</div>'+
-				    '                <div><a href="${path}/map/placeInfo.do?plaNo='+data.plaList[i].plaNo+'" class="link">'+data.plaList[i].plaName+'</a></div>' + 
+				    '                <div><a href="${path}/map/placeInfo.do?plaNo='+data.plaList[i].plaNo+'&coordsIb='+coordsIb+'" class="link">'+data.plaList[i].plaName+'</a></div>' + 
 				    '            </div>' + 
 				    '        </div>' + 
 				    '    </div>' +    
@@ -271,21 +280,25 @@ function fn_mapView(){
 	})
 		
 }
+
 // 마커이미지의 주소와, 크기, 옵션으로 마커 이미지를 생성하여 리턴하는 함수입니다
 function createMarkerImage(src, size, options) {
     var markerImage = new daum.maps.MarkerImage(src, size, options);
     return markerImage;            
 }
+
 var overlayArr=[];
 var coordsArr =[];
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
-mapOption = { 
-    center: new daum.maps.LatLng(37.551427, 126.920575), // 지도의 중심좌표 
-    level: 5 // 지도의 확대 레벨 
-}; 
-var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+
 function fn_drawMap(address,categoryImg,contentArray){
-	
+	var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
+	mapOption = { 
+	    center: new daum.maps.LatLng(37.551427, 126.920575), // 지도의 중심좌표 
+	    level: 5 // 지도의 확대 레벨 
+	}; 
+
+	var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 	
 	//주소-좌표 변환 객체를 생성합니다
 	var geocoder = new daum.maps.services.Geocoder();
@@ -316,13 +329,18 @@ function fn_drawMap(address,categoryImg,contentArray){
 			        overlayArr.push(overlay);
 			        
 				     daum.maps.event.addListener(marker, 'click', function() {
-				    	 overlay.setMap(map); 
-				    		 for(var j=0; j<overlayArr.length; j++){
-				    			
-				    			 	if(i!=j){
+				       console.log(marker)
+				    	/* console.log(overlayArr[0].k.ib)
+				    	  overlay.setMap(map);   */ 
+				    		   for(var j=0; j<overlayArr.length; j++){
+				    			 	if(marker.k.ib!=overlayArr[j].k.ib){
 				    			 		overlayArr[j].setMap(null); 
+				    			 	}else{
+				    			 		overlayArr[j].setMap(map);
+				    			 		 $('[name=coordsIb]').val(marker.k.ib);
+				    			 		$('[name=coordsJb]').val(marker.k.jb);
 				    			 	}
-				    			}
+				    			}  
 				     });
 			    } 
 			});
@@ -330,58 +348,16 @@ function fn_drawMap(address,categoryImg,contentArray){
   }
 	
 }
-/* //HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
-if (navigator.geolocation) {
-    
-    // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-    navigator.geolocation.getCurrentPosition(function(position) {
-        
-        var lat = position.coords.latitude, // 위도
-            lon = position.coords.longitude; // 경도
-        
-        var locPosition = new daum.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-            message = '<div style="padding:5px;">여기에 계신가요?!</div>'; // 인포윈도우에 표시될 내용입니다
-        
-        // 마커와 인포윈도우를 표시합니다
-        displayMarker(locPosition, message);
-            
-      });
-    
-} else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
-    
-    var locPosition = new daum.maps.LatLng(33.450701, 126.570667),    
-        message = 'geolocation을 사용할수 없어요..'
-        
-    displayMarker(locPosition, message);
-}
-// 지도에 마커와 인포윈도우를 표시하는 함수입니다
-function displayMarker(locPosition, message) {
-    // 마커를 생성합니다
-    var marker = new daum.maps.Marker({  
-        map: map, 
-        position: locPosition
-    }); 
-    
-    var iwContent = message, // 인포윈도우에 표시할 내용
-        iwRemoveable = true;
-    // 인포윈도우를 생성합니다
-    var infowindow = new daum.maps.InfoWindow({
-        content : iwContent,
-        removable : iwRemoveable
-    });
-    
-    // 인포윈도우를 마커위에 표시합니다 
-    infowindow.open(map, marker);
-    
-    // 지도 중심좌표를 접속위치로 변경합니다
-    map.setCenter(locPosition);      
-}     */
+
+
 function closeOverlay() {
 	for(var i=0; i<overlayArr.length; i++){
 		overlayArr[i].setMap(null);  
 	}
 	   
 } 
+
+
 // 카테고리를 클릭했을 때 type에 따라 카테고리의 스타일과 지도에 표시되는 마커를 변경합니다
 function changeMarker(type){
     
@@ -403,6 +379,7 @@ function changeMarker(type){
         sportsMenu.className = '';
         movieMenu.className = '';
         addMenu.className = '';
+
         $('[name=plaCategory]').val('식사');
         
     } else if (type === 'beer') { // 술 카테고리가 클릭됐을 때
@@ -424,6 +401,7 @@ function changeMarker(type){
         movieMenu.className = '';
         addMenu.className = '';
         $('[name=plaCategory]').val('노래방');
+
     } 
     else if (type === 'sports') { // 스포츠 카테고리가 클릭됐을 때
         foodMenu.className = '';
@@ -454,6 +432,7 @@ function changeMarker(type){
          location.href="${path}/map/placeReg.do";
     }
 } 
+
 function validate(){
 	var foodMenu = document.getElementById('foodMenu');
     var beerMenu = document.getElementById('beerMenu');
@@ -467,6 +446,7 @@ function validate(){
 	var mic = $('#micMenu').attr('class');
 	var sports = $('#sportsMenu').attr('class');
 	var movie = $('#movieMenu').attr('class');
+
 		if(food!='menu_selected'&&beer!='menu_selected'&&mic!='menu_selected'&&sports!='menu_selected'&&movie!='menu_selected'){
 			swal({
 				  text: "카테고리를 선택해주세요",
