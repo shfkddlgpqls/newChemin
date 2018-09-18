@@ -34,7 +34,6 @@ public interface AdminService {
 	int selectMemberCount();
 	List<Map<String,Object>> selectMemberList(int cPage, int numPerPage);
 	List<Map<String,Object>> rpList(String userId);
-	int reportCount(String userId);
 	int adminMemberDelete(String userId);
 	List<Map<String,Object>> blackList();
 	List<Map<String,Object>> searchList(HashMap<String,Object> map);

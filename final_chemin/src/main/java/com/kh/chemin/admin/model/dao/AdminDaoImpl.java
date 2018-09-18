@@ -126,10 +126,6 @@ public class AdminDaoImpl implements AdminDao {
 		return sqlSession.selectList("admin.selectReportList",userId);
 	}
 
-	@Override
-	public int reportCount(SqlSessionTemplate sqlSession, String userId) {
-		return sqlSession.selectOne("admin.reportCount",userId);
-	}
 
 	@Override
 	public int adminMemberDelete(SqlSessionTemplate sqlSession, String userId) {

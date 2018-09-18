@@ -375,7 +375,7 @@ public class AdminController {
 		int numPerPage = 5;
 		/*가입되어있는 회원 수 가져오기*/
 		int totalCount=service.selectMemberCount();
-		String pageBar = MallPageBar.getPageAdmin(cPage, numPerPage, totalCount);
+		String pageBar = MallPageBar.getPageAdminMember(cPage, numPerPage, totalCount);
 		List<Map<String, Object>> list = service.selectMemberList(cPage, numPerPage);
 		ObjectMapper mapper=new ObjectMapper();
 		String jsonStr=null;
@@ -389,17 +389,17 @@ public class AdminController {
 	
 	/*회원별 신고내용 가져오기*/
 	@RequestMapping("/admin/reportContent.do") 
-	public void reportContent(String userId,HttpServletResponse response) throws Exception
+	public ModelAndView reportContent(String userId,ModelAndView mv) throws Exception
 	{
 		logger.debug("::rpListController::"+userId);
 		List<Map<String,Object>> rpList=service.rpList(userId);
-		int count=service.reportCount(userId);
-		JSONArray jsonArr = new JSONArray();
-		jsonArr.add(rpList);
-		jsonArr.add(count);
-		response.setContentType("application/json;charset=UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print(jsonArr);
+		
+		
+		/*String loc="/admin/adminMemberReport";*/
+		mv.addObject("reportId",userId);
+		mv.addObject("rpList",rpList);
+		mv.setViewName("admin/adminMemberReport");
+		return mv;
 	}
 	
 	/*회원 삭제*/
@@ -441,20 +441,31 @@ public class AdminController {
 	}
 	
 	/*회원관리 검색*/
-	@RequestMapping("/admin/memberSearch.do")
-	public void memberSearch(String searchValue, String searchKey,HttpServletResponse response) throws Exception
+	@RequestMapping(value="/admin/memberSearch.do",produces="application/text; charset=utf-8",method=RequestMethod.GET)
+	@ResponseBody
+	public String memberSearch(String searchValue, String searchKey,HttpServletResponse response) throws Exception
 	{
+		ObjectMapper mapper=new ObjectMapper();
+		String jsonStr=null;
+		
 		logger.debug("::검색 key::"+searchKey);
 		logger.debug("::검색 value::"+searchValue);
+		
+		String mtype_name=null;
+		String mtype_id=null;
+		
+		if(searchKey.equals("memName")) mtype_name="memName";
+		if(searchKey.equals("memId")) mtype_id="memId";
+		
 		HashMap<String,Object> map=new HashMap<String,Object>();
-		map.put("searchKey", searchKey);
 		map.put("searchValue",searchValue);
+		map.put("mtype_name",mtype_name);
+		map.put("mtype_id",mtype_id);
 		List<Map<String,Object>> searchList=service.searchList(map);
-		JSONArray jsonArr=new JSONArray();
-		jsonArr.add(searchList);
-		response.setContentType("application/json; charest=utf-8");
-		PrintWriter out=response.getWriter();
-		out.print(jsonArr);
+		HashMap<String,Object> hashmap=new HashMap<String,Object>();
+		hashmap.put("searchList",searchList);
+		jsonStr=mapper.writeValueAsString(hashmap);
+		return jsonStr;
 		
 	}
 	

@@ -135,12 +135,8 @@
 		select * from report where rwriter=#{rwriter}
 	</select>
 	
-	<select id="reportCount" parameterType="string" resultType="_int">
-		select count(*) from report where rwriter=#{rwriter}
-	</select>
-	
 	<delete id="adminMemberDelete" parameterType="string">
-		delete from member_info where userid=#{userId}
+		drop table member_info where userid=#{userId} cascade constraints
 	</delete>
 	
 	<select id="blackList" resultMap="reportMap">
@@ -149,15 +145,14 @@
 	
 	<select id="searchList" resultMap="memberMap" parameterType="hashMap">
 		select * from member_info where 1=1
-		<!-- <if test="searchKey!=null and searchKey!=''"> -->
-			<if test="searchKey!=null and searchKey!='' and searchKey==memName">
-				and username like '%'||#{userName}||'%' 
-			</if>
-			<if test="searchKey!=null and searchKey!='' and searchKey==memId">
-				and userid like '%'||#{userId}||'%' 
-			</if>
-			order by username
-		<!-- </if> -->
+		<if test="mtype_name!=null and mtype_name!=''">
+			and username like '%'||#{searchValue}||'%' 
+		</if>
+		<if test="mtype_id!=null and mtype_id!=''">
+			and userid like '%'||#{searchValue}||'%' 
+		</if>
+		order by username
+
 	</select>  
 	
 	<!-- 문의게시판  총 갯수 -->   

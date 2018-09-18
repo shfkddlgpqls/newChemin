@@ -29,11 +29,11 @@ function fn_file() {
 <section>
 <form name="communityFrm" action="${path }/community/communityWriteEnd.do" method="post" onsubmit="return fn_file();" enctype="multipart/form-data">
    <div class="container" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
-      <div class="row" style="margin-top:55px">
+      <div class="row" style="margin-top:55px;">
 
               <h1 class="text-uppercase nanumFont">
                 <i class="fa fa-edit"></i> 게시판 등록
-             </h1>
+             </h1><br>
              <hr/>
              
              <div class="info col-md-12">

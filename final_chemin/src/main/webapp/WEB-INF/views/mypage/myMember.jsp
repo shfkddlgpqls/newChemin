@@ -51,7 +51,7 @@
 				{
 					value+="<div class='alert alert-danger alert-dismissible'>";
 					value+=" <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>";
-					value+="<strong>Warning!</strong> &nbsp 꿀팁 커뮤니티에서 올리신 글로 신고 당하셨습니다. &nbsp 3번이상 신고당하실 경우, 관리자의 권한으로 강제 탈퇴되실 수 있습니다.</div>";
+					value+="<strong>Warning!</strong> &nbsp 꿀팁 커뮤니티에서 올리신 글로 신고 당하셨습니다.<br>&nbsp 3번이상 신고당하실 경우, 관리자의 권한으로 제재되실 수 있습니다.</div>";
 					
 				}
 				$('#warningMsg').html(value);  
@@ -60,13 +60,8 @@
 	}
 
 </script>   
-
 		<!-- 신고 제재 메시지 -->
 		<div id="warningMsg">
-			<!-- <div class="alert alert-danger">
-			  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-			  <strong>Warning!</strong> &nbsp 꿀팁 커뮤니티에 광고글로 신고 당하셨습니다. &nbsp 3번이상 신고당하실 경우, 관리자의 권한으로 강제 탈퇴되실 수 있습니다.
-			</div> -->
 		<div>
 		<!-- 회원정보 수정 폼란 -->
 		<section>

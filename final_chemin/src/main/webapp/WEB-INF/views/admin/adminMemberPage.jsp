@@ -15,6 +15,8 @@
     <link rel="stylesheet" type="text/css" href="${path }/resources/mall/vendor/slick/slick.css">
 <link rel="stylesheet" type="text/css" href="${path }/resources/mall/css/util.css">
 <link rel="stylesheet" type="text/css" href="${path }/resources/mall/css/mall.css">
+
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR" rel="stylesheet">
 <style>
 .mphoto {
 	width: 47px; height: 47px;
@@ -36,7 +38,7 @@
 			data : {cPage:cPage},
 			success : function(data) {
 				var pageBar=data.pageBar;
-				console.log(data.list);
+				console.log("전체 리스트 보기::"+data.list);
 				var value='';
 				if(data!=null)
 				{
@@ -46,20 +48,20 @@
 						var fmDate=date.toISOString().slice(0,10);
 						var gender=data.list[i].GENDER=='F'?'여자':'남자';
 						var rgcount=data.list[i].RGCOUNT==0?'없음':data.list[i].RGCOUNT;
-						value+='<tr style="font-size:15px;" class="reportBtn" data-no="'+data.list[i].USERID+'" onclick="rpClick(this)"><td><img class="mphoto" src="${path}/resources/admin/memberEX.jpg"></td><td>'+data.list[i].USERNAME+'</td>';
+						value+='<tr style="font-size:15px;height:100px;"><td><img class="mphoto" src="${path}/resources/admin/memberEX.jpg"></td><td>'+data.list[i].USERNAME+'</td>';
 						value+='<td>'+data.list[i].USERID+'</td><td>'+gender+'</td><td>'+fmDate+'</td>';
 						value+='<td>'+data.list[i].USEREMAIL+'</td><td>'+data.list[i].USERPHONE+'</td>';
-						value+='<td>'+data.list[i].USERHOBBY+'</td><td>'+data.list[i].USERADDR+'</td><td id="rgcount">'+rgcount+'</td>';
+						value+='<td>'+data.list[i].USERADDR+'</td><td id="rgcount" name="rgcount" class="reportBtn" data-no="'+data.list[i].USERID+'" onclick="rpClick(this)">'+rgcount+'</td>';
 						
 						if(rgcount>=3)
 						{
-							value+='<td><button type="button" data-no="'+data.list[i].USERID+'" onclick="adminMemberDelete(this)" class="btn btn-danger">탈퇴</button></td></tr>';
+							value+='<td><button type="submit" data-no="'+data.list[i].USERID+'" onclick="adminMemberDelete(this)" class="btn btn-danger">탈퇴</button></td></tr>';
 						}
 						else
 						{
 							value+='<td><button type="button" class="btn btn-danger" disabled>탈퇴</button></td></tr>';
 						}
-						value+='<tr id="chkBox"></tr>';
+						value+='<div id="chkBox"></div>';
 					}
 					if(data.length==1){
 						value+="<h5 class='p-b-30'>회원정보가 존재하지 않습니다</h5>";
@@ -72,42 +74,26 @@
 	}
 	
 	/* 회원별 신고 내용 보기 */
-	$('#chkBox').hide(); 
 	function rpClick(obj) {
-		
-		$('#chkBox').show();
-		
 		var reportId=$(obj).data("no");
-		console.log(reportId);
+		var rgcount=$(obj).find("td").eq(8).html();
+		console.log(rgcount);
+		if(rgcount>0)
+		{
+			location.href="${path}/admin/reportContent.do?userId="+reportId;
+
+		}
+		else
+		{
+			swal({
+				text :"신고내용이 존재하지않습니다.",
+				icon : "error",
+				button : "확인"
+			});
+		}
 		
-		$.ajax({
-			dataType : "json",
-			type : "GET",
-			url : "${path}/admin/reportContent.do",
-			data : {userId:reportId},
-			success : function(data) {
-				console.log(data[0]);
-				console.log(data[1]);
-				
-				if(data[1]>0)
-				{
-					for(var i=0;i<data[0].length;i++)
-					{
-						/* $(obj).next('#chkBox').append('<tr>'); */
-						$(obj).next('#chkBox').append('<td></td><td><img style="width:50px;height:40px;" src="${path}/resources/admin/member화살표.JPG"/>');
-						$(obj).next('#chkBox').append('<td>'+data[0][i].CATEGORY+'</td><td colspan="7">'+data[0][i].CONTENT+'</td>');
-						/* $(obj).next('#chkBox').append('</tr>'); */
-					}
-				}
-				else
-				{
-					alert('신고내용이 없습니다.');
-				}
-				
-			}
-		});
-			
 	}
+	
 	
 	/* 관리자 권한으로 신고 3번이상 받은 회원 강제탈퇴 */
 	function adminMemberDelete(obj) {
@@ -128,12 +114,14 @@
 				{
 					for(var i=0;i<data[0].length;i++)
 					{
+						var date=new Date(data[0][i].USERBIRTH.time);
+						var fmDate=date.toISOString().slice(0,10);
 						var gender=data[0][i].GENDER=='F'?'여자':'남자';
 						var rgcount=data[0][i].RGCOUNT==0?'없음':data[0][i].RGCOUNT;
-						value+='<tr style="font-size:15px;" class="reportBtn" data-no="'+data[0][i].USERID+'" onclick="rpClick(this)"><td><img class="mphoto" src="${path}/resources/admin/memberEX.jpg"></td><td>'+data[0][i].USERNAME+'</td>';
-						value+='<td>'+data[0][i].USERID+'</td><td>'+gender+'</td><td>'+data[0][i].USERBIRTH+'</td>';
+						value+='<tr style="font-size:15px;height:100px;"><td><img class="mphoto" src="${path}/resources/admin/memberEX.jpg"></td><td>'+data[0][i].USERNAME+'</td>';
+						value+='<td>'+data[0][i].USERID+'</td><td>'+gender+'</td><td>'+fmDate+'</td>';
 						value+='<td>'+data[0][i].USEREMAIL+'</td><td>'+data[0][i].USERPHONE+'</td>';
-						value+='<td>'+data[0][i].USERHOBBY+'</td><td>'+data[0][i].USERADDR+'</td><td id="rgcount">'+rgcount+'</td>';
+						value+='<td>'+data[0][i].USERADDR+'</td><td id="rgcount" name="rgcount" class="reportBtn" data-no="'+data[0][i].USERID+'" onclick="rpClick(this)">'+rgcount+'</td>';
 						
 						if(rgcount>=3)
 						{
@@ -143,7 +131,7 @@
 						{
 							value+='<td><button type="button" class="btn btn-danger" disabled>탈퇴</button></td></tr>';
 						}
-						value+='<tr id="chkBox"></tr>';
+						value+='<div id="chkBox"></div>';
 					}
 					if(data.length==1){
 						value+="<h5 class='p-b-30'>회원정보가 존재하지 않습니다</h5>";
@@ -160,7 +148,11 @@
 		var sValue=$('#searchValue').val().trim();
 		if(sValue==''||sValue==null)
 		{
-			swal("검색할 내용을 입력해주세요");
+			swal({
+				text :"검색할 내용을 입력하세요.",
+				icon : "error",
+				button : "확인"
+			});
 			return false;
 		}
 	}
@@ -168,22 +160,51 @@
 	/* 회원관리 검색 */
 	function fn_mSearch()
 	{
-		var mValue=$('#searchValue').val();
-		var mKey=$('#searchKey').val();
+		var searchValue=$('#searchValue').val();
+		var searchKey=$('#searchKey').val();
 		$.ajax({
 			type : "GET",
 			dataType : "json",
 			url : "${path}/admin/memberSearch.do",
-			data : {searchKey:mKey,searchValue:mValue},
+			data : {searchKey:searchKey,searchValue:searchValue},
 			success : function(data) {
-				console.log(data[0]);
+				
+				var value='';
+				if(data!=null)
+				{
+					for(var i=0;i<data.searchList.length;i++)
+					{
+						var date=new Date(data.searchList[i].USERBIRTH);
+						var fmDate=date.toISOString().slice(0,10);
+						var gender=data.searchList[i].GENDER=='F'?'여자':'남자';
+						var rgcount=data.searchList[i].RGCOUNT==0?'없음':data.searchList[i].RGCOUNT;
+						value+='<tr style="font-size:15px;height:100px;"><td><img class="mphoto" src="${path}/resources/upload/member"'+data.searchList[i].RENAMEIMAGE+'"></td><td>'+data.searchList[i].USERNAME+'</td>';
+						value+='<td>'+data.searchList[i].USERID+'</td><td>'+gender+'</td><td>'+fmDate+'</td>';
+						value+='<td>'+data.searchList[i].USEREMAIL+'</td><td>'+data.searchList[i].USERPHONE+'</td>';
+						value+='<td>'+data.searchList[i].USERADDR+'</td><td id="rgcount" name="rgcount" class="reportBtn" data-no="'+data.searchList[i].USERID+'" onclick="rpClick(this)">'+rgcount+'</td>';
+						
+						if(rgcount>=3)
+						{
+							value+='<td><button type="button" data-no="'+data.searchList[i].USERID+'" onclick="adminMemberDelete(this)" class="btn btn-danger">탈퇴</button></td></tr>';
+						}
+						else
+						{
+							value+='<td><button type="button" class="btn btn-danger" disabled>탈퇴</button></td></tr>';
+						}
+						value+='<div id="chkBox"></div>';
+					}
+					if(data.length==1){
+						value+="<h5 class='p-b-30'>회원정보가 존재하지 않습니다</h5>";
+					}
+				}
+				$('#memberContent').html(value);
 			}
 		});
 	}  
 </script>
     
 	<div class="row p-t-50 justify-content-center">
-	    <!-- filter 조건 -->
+	   <!--  filter 조건 -->
 		    <div class="flex-sb-m flex-w p-t-10" style="float:left;">
 		    	<div class="rs2-select2 of-hidden w-size12" style="width:100px">
 		            <select class="selection" name="searchKey" id="searchKey">
@@ -191,7 +212,7 @@
 		                <option value="memId">아이디</option>
 		            </select>
 		        </div>
-		        <input id="searchValue" name="searchValue" type="text" class="m-r-20 s-text2" placeholder="검색할 내용 입력" style="border:none;outline:none;border-bottom: 1px solid gray;">
+		        <input id="searchValue" name="searchValue" type="text" class="m-r-20 s-text2-change" placeholder="검색할 내용 입력" style="border:none;outline:none;border-bottom: 1px solid gray;">
 		    </div>
 	           
 	        <div class="flex-sb-m flex-w p-t-10" style="float:right;">
@@ -201,21 +222,22 @@
 	                </button>
 	            </div>
 	        </div>
-    </div>
+    </div> 
 	<div class="container">
     	<div class="flex-w flex-sb-m p-t-25 p-l-35 p-r-60">
 	        <div class="flex-w flex-m w-full-sm"></div>
 	
 	        <div class="size10 trans-0-4 m-t-10">
 	            <!-- Button -->
-	            <a class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4" onclick="fn_blackList()" style="color:white">
+	            <a class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4" onclick="fn_blackList()" style="color:white;">
 	              	 블랙리스트
 	            </a>
 	        </div>
         </div>
-    </div><br><br>
-   <section>
-    <table class="table table-hover " style="width:70%;margin-left:15%;">
+    </div>
+   <div>
+   <p style="margin-left:5%;font-family: 'Noto Sans KR', sans-serif;"><img src="${path }/resources/admin/right-chevron.png">회원의 신고내용을 보려면 신고 갯수를 누르세요.</p>
+    <table class="table table-hover" style="width:700px;">
     	<thead>
     		<tr>
     			<th class="column1"></th>
@@ -225,10 +247,9 @@
     			<th class="column5">BIRTHDAY</th>
     			<th class="column6">EMAIL</th>
     			<th class="column7">PHONE</th>
-    			<th class="column8">HOBBY</th>
-    			<th class="column9">ADDRESS</th>
-    			<th class="column10">REPORT</th>
-    			<th class="column11">BUTTON</th>
+    			<th class="column8">ADDRESS</th>
+    			<th class="column9">REPORT</th>
+    			<th class="column10">BUTTON</th>
     		</tr>
     	</thead>
     	<tbody id="memberContent">
@@ -237,6 +258,5 @@
 	<div class="text-center">
 		<div class="row justify-content-center" id="mPageBar"></div>
  	</div>
- </section> 	
-	
+ </div> 	
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>  
