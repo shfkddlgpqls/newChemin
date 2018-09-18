@@ -21,11 +21,14 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.chemin.common.MallPageBar;
+import com.kh.chemin.mall.model.service.DetailsService;
 import com.kh.chemin.mall.model.service.MallService;
 import com.kh.chemin.mall.model.vo.Cart;
 import com.kh.chemin.mall.model.vo.OrderDetail;
 import com.kh.chemin.mall.model.vo.Product;
 import com.kh.chemin.member.model.vo.Member;
+import com.kh.chemin.mall.model.vo.QnA_board;
+import com.kh.chemin.mall.model.vo.Review;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -34,79 +37,82 @@ import net.sf.json.JSONObject;
 @Controller
 public class MallController 
 {
-	@Autowired
-	MallService service;
-	
-	// 메인 쇼핑몰로 이동
-	@RequestMapping("/mall/mainMall.do")
-	public ModelAndView mainMall()
-	{
-		ModelAndView mv = new ModelAndView();
+   @Autowired
+   MallService service;
+   
+   @Autowired
+   DetailsService dservice;
+   
+   // 메인 쇼핑몰로 이동
+   @RequestMapping("/mall/mainMall.do")
+   public ModelAndView mainMall()
+   {
+      ModelAndView mv = new ModelAndView();
 
-		mv.setViewName("mall/mainMall");
-		
-		return mv;
-	}
-	
-	// 카테고리별 상품 리스트 불러오기
-	@RequestMapping("/mall/mallList.do")
-	public void mallList(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, HttpServletResponse response, int cno, String searchType, String searchData, int lowValue, int highValue) throws Exception {
-		String ctype=null;
-		String stype_h=null;
-		String stype_n=null;
-		String stype_lv=null;
-		String stype_hv=null;
-		
-		if(cno!=0) ctype="카테고리 분류";
-		if(searchType.equals("hit")) stype_h="hit";
-		if(searchType.equals("new")) stype_n="new";
-		if(searchType.equals("low")) stype_lv="low";
-		if(searchType.equals("high")) stype_hv="high";
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("ctype", ctype);
-		map.put("cno", cno);
-		map.put("stype_h", stype_h);
-		map.put("stype_n", stype_n);
-		map.put("stype_lv", stype_lv);
-		map.put("stype_hv", stype_hv);
-		map.put("searchData", searchData);
-		map.put("lowValue", lowValue);
-		map.put("highValue", highValue);
+      mv.setViewName("mall/mainMall");
+      
+      return mv;
+   }
+   
+   // 카테고리별 상품 리스트 불러오기
+   @RequestMapping("/mall/mallList.do")
+   public void mallList(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, HttpServletResponse response, int cno, String searchType, String searchData, int lowValue, int highValue) throws Exception {
+      String ctype=null;
+      String stype_h=null;
+      String stype_n=null;
+      String stype_lv=null;
+      String stype_hv=null;
+      
+      if(cno!=0) ctype="카테고리 분류";
+      if(searchType.equals("hit")) stype_h="hit";
+      if(searchType.equals("new")) stype_n="new";
+      if(searchType.equals("low")) stype_lv="low";
+      if(searchType.equals("high")) stype_hv="high";
+      
+      Map<String, Object> map = new HashMap<String, Object>();
+      map.put("ctype", ctype);
+      map.put("cno", cno);
+      map.put("stype_h", stype_h);
+      map.put("stype_n", stype_n);
+      map.put("stype_lv", stype_lv);
+      map.put("stype_hv", stype_hv);
+      map.put("searchData", searchData);
+      map.put("lowValue", lowValue);
+      map.put("highValue", highValue);
 
-		int numPerPage = 8;
-		
-		List<Product> list = service.selectCateList(map, cPage, numPerPage);
+      int numPerPage = 8;
+      
+      List<Product> list = service.selectCateList(map, cPage, numPerPage);
 
-		int totalCount = service.selectCateCount(map);
+      int totalCount = service.selectCateCount(map);
 
-		String pageBar = MallPageBar.getPageMall(cPage, numPerPage, totalCount);
+      String pageBar = MallPageBar.getPageMall(cPage, numPerPage, totalCount);
 
-		JSONObject jsonRes = null;
-		JSONArray jsonArr = new JSONArray();
+      JSONObject jsonRes = null;
+      JSONArray jsonArr = new JSONArray();
 
-		DecimalFormat df = new DecimalFormat("#,###,###");
-		if(!list.isEmpty()) {
-			for(Product p : list) {
-				jsonRes = new JSONObject();
-				jsonRes.put("pno",p.getPno());
-				jsonRes.put("pName", p.getpName());
-				jsonRes.put("reImg", p.getReImg());
-				jsonRes.put("price", df.format(p.getPrice()));
-				jsonRes.put("pCount", p.getpCount());
-				jsonRes.put("sales", p.getSales());
-				jsonRes.put("pDate", p.getpDate());
-				jsonArr.add(jsonRes);
-			}
-		}
-		jsonArr.add(pageBar);
-		
-		response.setContentType("application/json;charset=UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print(jsonArr);
-	}
-	
-	// 상품 상세화면 이동
+      DecimalFormat df = new DecimalFormat("#,###,###");
+      if(!list.isEmpty()) {
+         for(Product p : list) {
+            jsonRes = new JSONObject();
+            jsonRes.put("pno",p.getPno());
+            jsonRes.put("pName", p.getpName());
+            jsonRes.put("reImg", p.getReImg());
+            jsonRes.put("price", df.format(p.getPrice()));
+            jsonRes.put("pCount", p.getpCount());
+            jsonRes.put("sales", p.getSales());
+            jsonRes.put("pDate", p.getpDate());
+            jsonArr.add(jsonRes);
+         }
+      }
+      jsonArr.add(pageBar);
+      
+      response.setContentType("application/json;charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      out.print(jsonArr);
+   }
+   
+   // 상품 상세화면 이동
    @RequestMapping("/mall/detail.do")
    public ModelAndView mallDetail(ModelAndView mv, int no, HttpSession session)
    {
@@ -125,46 +131,66 @@ public class MallController
 		if(userId!=null) {
 			wish = service.selectWishCk(map);
 		}
+	   
+	   int numPerPage= 4;
+	   int cPage=1; 
+	   
+      List<QnA_board> qlist = dservice.selectQnaBoardList(cPage,numPerPage,no);
+      List<Review> rlist = dservice.selectReviewList(cPage,numPerPage,no);
       
-		mv.addObject("product",p);
-		mv.addObject("wish", wish);
-		mv.setViewName("mall/productDetail");
-		
-		return mv;
+ //     logger.debug("리뷰 리스트 불러오기"+rlist);
+      
+      //문의게시판  글 갯수
+      int qTotalCount = dservice.selectQnACount(no);
+      int rTotalCount = dservice.selectReviewCount(no);
+      
+      //페이지바
+      String qnaPageBar = MallPageBar.getQnaPage(cPage, numPerPage, qTotalCount);
+      String reviewPageBar = MallPageBar.getReviewPage(cPage, numPerPage, rTotalCount);
+      
+      mv.addObject("reviewbar",reviewPageBar);
+      mv.addObject("qnabar",qnaPageBar);      
+      mv.addObject("rlist",rlist);
+      mv.addObject("qlist",qlist);
+      mv.addObject("product",p);
+      mv.addObject("wish", wish);
+      mv.setViewName("mall/productDetail");
+      
+      return mv;
    }
+   
+   // 장바구니에 데이터 추가
+   @RequestMapping("/mall/cartAdd.do")
+   public void cartAdd(HttpServletResponse response, String userId, int pno, int amount) throws Exception {
+	      // 상품 가져오기
+	  Product product = service.selectProduct(pno);
+	  int price = product.getPrice() * amount;
+	  
+	  Map<String, Object> map = new HashMap<String, Object>();
+	  map.put("userId", userId);
+	  map.put("pno", product.getPno());
+	  map.put("amount", amount);
+	  map.put("totalPrice", price);
+	  map.put("orderNo", ""); // order폼으로 넘어갈 때 생성하기
 	
-	// 장바구니에 데이터 추가
-	@RequestMapping("/mall/cartAdd.do")
-	public void cartAdd(HttpServletResponse response, String userId, int pno, int amount) throws Exception {
-		// 상품 가져오기
-		Product product = service.selectProduct(pno);
-		int price = product.getPrice() * amount;
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("userId", userId);
-		map.put("pno", product.getPno());
-		map.put("amount", amount);
-		map.put("totalPrice", price);
-		map.put("orderNo", ""); // order폼으로 넘어갈 때 생성하기
-
-		int result = 0;
-		// 로그인 한 경우에만 장바구니에 넣기
-		if(userId!=null && !userId.equals("")) {
-			// 장바구니에 데이터 추가! (장바구니에 이미 담긴 경우 제외)
-			Cart c = service.selectCartItem(map); // userId, pno, payYn이 n인 데이터 : 장바구니에 담긴 상태
-			if(c==null) // 장바구니에 없으면
-				result = service.insertCart(map);
-			else // 장바구니에 있으면
-				result = -1;
-		}
-
-		JSONArray jsonArr = new JSONArray();
-		jsonArr.add(result);
-		
-		response.setContentType("application/json;charset=UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print(jsonArr);
-	}
+	  int result = 0;
+	  // 로그인 한 경우에만 장바구니에 넣기
+	  if(userId!=null && !userId.equals("")) {
+	 // 장바구니에 데이터 추가! (장바구니에 이미 담긴 경우 제외)
+	 Cart c = service.selectCartItem(map); // userId, pno, payYn이 n인 데이터 : 장바구니에 담긴 상태
+	 if(c==null) // 장바구니에 없으면
+	    result = service.insertCart(map);
+	 else // 장바구니에 있으면
+	        result = -1;
+	  }
+	
+	  JSONArray jsonArr = new JSONArray();
+	  jsonArr.add(result);
+	  
+	  response.setContentType("application/json;charset=UTF-8");
+	      PrintWriter out = response.getWriter();
+	      out.print(jsonArr);
+   }
 
 	// 장바구니 이동
 	@RequestMapping("/mall/cartList.do")
@@ -347,6 +373,25 @@ public class MallController
 		response.setContentType("application/json;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		out.print(jsonArr);
+	}
+	
+	@RequestMapping("/mall/productAuto.do")
+	public void productAuto(String search, HttpServletResponse response) throws Exception {
+		List<String> nameList=null;
+		String csv="";
+		if(!search.trim().isEmpty())
+		{
+			nameList= service.productAuto(search);
+			if(!nameList.isEmpty()) {
+				for(int i=0;i<nameList.size();i++) {
+					if(i!=0) csv+=",";
+					csv+=nameList.get(i);
+				}
+			}
+		}
+		response.setContentType("text/csv;charset=utf-8");
+		PrintWriter out=response.getWriter();
+		out.print(csv);
 	}
 	
 }

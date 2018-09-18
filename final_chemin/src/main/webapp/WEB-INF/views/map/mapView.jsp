@@ -13,10 +13,10 @@
 	position:relative;
 	top:0px;left:0px;width:50px;
 	height:100%;
+	margin:0;
 	z-index:10;
-	border:1px solid black;
 	font-family:'Malgun Gothic','맑은 고딕',sans-serif;
-	font-size:12px; 
+	font-size:0.6rem; 
 	text-align:center;
 	background-color:#B6BDC8;
 }
@@ -55,6 +55,7 @@ color:#fff;
 	height:26px;
 }
 
+
 /* 마커위에 창 */
    .wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
     .wrap * {padding: 0;margin: 0;}
@@ -70,14 +71,26 @@ color:#fff;
     .info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
     .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
     .info .link {color: #5085BB;}
+    
+
+#mainNav .navbar-nav > li.nav-item > a.nav-link, #mainNav .navbar-nav > li.nav-item > a.nav-link:focus {
+    color: black;
+}
+
+
+#mainNav .navbar-brand {
+    color: #F05F40;
+}
 </style>
-<div class="row" style="margin-top:55px">
+<div class="main-content">
+<div  class="row" style="margin-top:55px">
   <div class="category col-md-2">
-  	 <form action="${path}/map/placeSearch.do" method="post" onsubmit="return validate();">
+  	
         <ul class="list-group">
         	<li class="list-group-item" style="width:100%">
         		<span style="font-size:1.3em; width:30%;"><strong>지역선택</strong></span>        		
 				  <select class="form-control" name="plaArea" style="width:70%;margin-left:16%;margin-top:3%">
+				  	  <option value="전체">전체</option>
 					  <option value="마포구">마포구</option>
 			   		  <option value="강남구">강남구</option>
 			   		  <option value="서초구">서초구</option>
@@ -130,112 +143,143 @@ color:#fff;
             
             <div class="row" >
             	 <li class="list-group-item "style="width:100%"> 
-             		<input type="submit" class="btn btn-primary" style="width:80%;height:75%" value="검색">
+             		<input type="submit" class="btn btn-primary" style="width:80%;height:75%" onclick="validate()" value="검색">
            		</li>
             	
             </div>
         </ul>
-        </form>
+    
     </div>
     <!-- 지도가 표시될 div -->
  		<div class="col-md-10" id="map" style="width:45%;height:100%;"></div>
   
 </div>
-
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eb4ae7857a625ec0a907f8f742645cfb&libraries=services"></script>
+</div>
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=eb4ae7857a625ec0a907f8f742645cfb&libraries=services"></script>
 <script>
+//카테고리별 이미지
 var foodMarkerImgSrc = 'https://i.imgur.com/kvSt5xU.png';
 var movieMarkerImgSrc = 'https://i.imgur.com/5Gvp5eL.png';
 var beerMarkerImgSrc = 'https://i.imgur.com/BgXoOqa.png';
 var micMarkerImgSrc = 'https://i.imgur.com/GKf7xiJ.png';
 var sprotsMarkerImgSrc = 'https://i.imgur.com/UOxgFDv.png';
 
-/* var size = '${plaList.size()}'; */
+//주소, 이미지, overlay내용 배열
 var address=[];
 var categoryImg=[];
 var contentArray=[];
 
 
 $(function(){
-	if('${plaList.size()}'==0){
-	swal({
-		  text: "검색결과가 없습니다.",
-		  icon: "error",
-		  button: "확인",
-		});
-	}
-	<c:forEach items="${plaList}" var="p">
-	address.push('${p.plaAddr}')
- 	if('${p.plaCategory}'=='식사'){
-		   var imageSize = new daum.maps.Size(32, 39),
-            imageOptions = {  
-        		offset: new daum.maps.Point(18, 60)  
-            };  
-		  var markerImage = createMarkerImage(foodMarkerImgSrc, imageSize, imageOptions)
-		  categoryImg.push(markerImage); 
-	}else if('${p.plaCategory}'=='술'){
-		var imageSize = new daum.maps.Size(32, 39),
-        imageOptions = {  
-    		offset: new daum.maps.Point(18, 60)  
-        };  
-	  	var markerImage = createMarkerImage(beerMarkerImgSrc, imageSize, imageOptions)
-	  	categoryImg.push(markerImage);
-	}
-	else if('${p.plaCategory}'=='노래방'){
-		var imageSize = new daum.maps.Size(32, 39),
-        imageOptions = {  
-    		offset: new daum.maps.Point(18, 60)  
-        };  
-	  	var markerImage = createMarkerImage(micMarkerImgSrc, imageSize, imageOptions)
-	  	categoryImg.push(markerImage);
-	} 
-	else if('${p.plaCategory}'=='스포츠'){
-		var imageSize = new daum.maps.Size(32, 39),
-        imageOptions = {  
-    		offset: new daum.maps.Point(18, 60)  
-        };  
-	  	var markerImage = createMarkerImage(sprotsMarkerImgSrc, imageSize, imageOptions)
-	  	categoryImg.push(markerImage);
-	}else if('${p.plaCategory}'=='영화/공연'){
-		var imageSize = new daum.maps.Size(32, 39),
-        imageOptions = {  
-    		offset: new daum.maps.Point(18, 60)  
-        };  
-	  	var markerImage = createMarkerImage(movieMarkerImgSrc, imageSize, imageOptions)
-	  	categoryImg.push(markerImage);
-	}
-
-	var addr = '${p.plaAddr}';
-	var addrStr = addr.split("/"); 
-	var time ='${p.plaTime}';
-	var timeStr = time.split("/");
-	
-	var content = document.createElement('div');
-	content.innerHTML ='<div class="wrap">' + 
-    '    <div class="info">' + 
-    '        <div class="title">' + 
-    '              ${p.plaName}' + 
-    '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' + 
-    '        </div>' + 
-    '        <div class="body">' + 
-    '            <div class="img">' +
-    '                <img src="${path}/resources/upload/place/main/${p.reImg}" width="73" height="70">' +
-    '           </div>' + 
-    '            <div class="desc">' + 
-    '                <div class="ellipsis">'+addrStr[0]+'</div>' + 
-    '                <div class="phone"><i class="fa fa-phone" style="font-size:1em;color:#989898"></i> ${p.plaPhone}</div>' + 
-    '                <div class="time"><i class="fa fa-clock-o" style="font-size:1em;color:#989898;"></i>'+' '+timeStr[0]+' '+timeStr[1]+'~'+timeStr[2]+'</div>'+
-    '                <div><a href="${path}/map/placeInfo.do?plaNo=${p.plaNo}" class="link">${p.plaName}</a></div>' + 
-    '            </div>' + 
-    '        </div>' + 
-    '    </div>' +    
-    '</div>';
-	    contentArray.push(content)
-	</c:forEach>
-
-	fn_drawMap(address,categoryImg,contentArray);
-	
+	fn_mapView();
 })
+var coordsIb="";
+function fn_mapView(){
+	address.splice(0,address.length);
+	categoryImg.splice(0,categoryImg.length);
+	contentArray.splice(0,contentArray.length);
+	overlayArr.splice(0,overlayArr.length);
+	coordsArr.splice(0,coordsArr.length);
+	
+	var plaCategory = $('[name=plaCategory]').val();
+	var plaArea = $('[name=plaArea]').val();
+	$.ajax({
+		url:"${path}/map/placeSearch.do",
+		data:{plaArea:plaArea,plaCategory:plaCategory},
+		dataType:"json",
+		success:function(data)
+		{	
+			if(data.plaList.length==0){
+				swal({
+					  text: "등록된 장소가 없습니다.",
+					  icon: "error",
+					  button: "확인",
+					});
+			}else{
+				for(var i=0; i<data.plaList.length; i++){
+					address.push(data.plaList[i].plaAddr);
+					if(data.plaList[i].plaCategory=='식사'){
+						var imageSize = new daum.maps.Size(32, 39),
+			            imageOptions = {  
+			        		offset: new daum.maps.Point(18, 60)  
+			            };  
+					  var markerImage = createMarkerImage(foodMarkerImgSrc, imageSize, imageOptions)
+					  categoryImg.push(markerImage); 
+					}else if(data.plaList[i].plaCategory=='술'){
+						var imageSize = new daum.maps.Size(32, 39),
+				        imageOptions = {  
+				    		offset: new daum.maps.Point(18, 60)  
+				        };  
+					  	var markerImage = createMarkerImage(beerMarkerImgSrc, imageSize, imageOptions)
+					  	categoryImg.push(markerImage);
+					}else if(data.plaList[i].plaCategory=='노래방'){
+						var imageSize = new daum.maps.Size(32, 39),
+				        imageOptions = {  
+				    		offset: new daum.maps.Point(18, 60)  
+				        };  
+					  	var markerImage = createMarkerImage(micMarkerImgSrc, imageSize, imageOptions)
+					  	categoryImg.push(markerImage);
+					}else if(data.plaList[i].plaCategory=='스포츠'){
+						var imageSize = new daum.maps.Size(32, 39),
+				        imageOptions = {  
+				    		offset: new daum.maps.Point(18, 60)  
+				        };  
+					  	var markerImage = createMarkerImage(sprotsMarkerImgSrc, imageSize, imageOptions)
+					  	categoryImg.push(markerImage);
+					}else if(data.plaList[i].plaCategory=='영화/공연'){
+						var imageSize = new daum.maps.Size(32, 39),
+				        imageOptions = {  
+				    		offset: new daum.maps.Point(18, 60)  
+				        };  
+					  	var markerImage = createMarkerImage(movieMarkerImgSrc, imageSize, imageOptions)
+					  	categoryImg.push(markerImage);
+					}
+					
+					var addr = data.plaList[i].plaAddr;
+					var addrStr = addr.split("/"); 
+					var time =data.plaList[i].plaTime;
+					var timeStr = time.split("/");
+
+					  	 
+					var content = document.createElement('div');
+					content.innerHTML ='<div class="wrap">' + 
+				    '    <div class="info">' + 
+				    '        <div class="title">' + 
+				    			data.plaList[i].plaName + 
+				    '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' + 
+				    '        </div>' + 
+				    '		<input type="hidden" name="coordsIb" value=""/>'+
+				    '		<input type="hidden" name="coordsJb" value=""/>'+	
+				    '        <div class="body">' + 
+				    '            <div class="img">' +
+				    '                <img src="${path}/resources/upload/place/main/'+data.plaList[i].reImg+'" width="73" height="70">' +
+				    '           </div>' + 
+				    '            <div class="desc">' + 
+				    '                <div class="ellipsis">'+addrStr[0]+'</div>' + 
+				    '                <div class="phone"><i class="fa fa-phone" style="font-size:1em;color:#989898"></i>'+data.plaList[i].plaPhone+'</div>' + 
+				    '                <div class="time"><i class="fa fa-clock-o" style="font-size:1em;color:#989898;"></i>'+' '+timeStr[0]+' '+timeStr[1]+'~'+timeStr[2]+'</div>'+
+				    '                <div><a href="${path}/map/placeInfo.do?plaNo='+data.plaList[i].plaNo+'&coordsIb='+coordsIb+'" class="link">'+data.plaList[i].plaName+'</a></div>' + 
+				    '            </div>' + 
+				    '        </div>' + 
+				    '    </div>' +    
+				    '</div>';
+				    contentArray.push(content)
+				}
+			}
+			
+			fn_drawMap(address,categoryImg,contentArray);
+		},
+		error:function(jxhr,textStatus,error)
+	    {
+	        console.log("ajax실패!");
+	        console.log(jxhr);
+	        console.log(textStatus);
+	        console.log(error);
+	     }
+		
+	})
+		
+}
 
 // 마커이미지의 주소와, 크기, 옵션으로 마커 이미지를 생성하여 리턴하는 함수입니다
 function createMarkerImage(src, size, options) {
@@ -244,15 +288,18 @@ function createMarkerImage(src, size, options) {
 }
 
 var overlayArr=[];
+var coordsArr =[];
+
+
 function fn_drawMap(address,categoryImg,contentArray){
-	
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
-    mapOption = { 
-        center: new daum.maps.LatLng(37.551427, 126.920575), // 지도의 중심좌표 
-        level: 4 // 지도의 확대 레벨 
-    }; 
-	
+	mapOption = { 
+	    center: new daum.maps.LatLng(37.551427, 126.920575), // 지도의 중심좌표 
+	    level: 5 // 지도의 확대 레벨 
+	}; 
+
 	var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+	
 	//주소-좌표 변환 객체를 생성합니다
 	var geocoder = new daum.maps.services.Geocoder();
  
@@ -271,6 +318,9 @@ function fn_drawMap(address,categoryImg,contentArray){
 			            image: categoryImg[i]
 			        });
 			        
+			        coordsArr.push(coords);
+			         
+			        map.panTo(coordsArr[0]); 
 			        var overlay = new daum.maps.CustomOverlay({
 				      content: contentArray[i],
 				      position: marker.getPosition()       
@@ -279,7 +329,18 @@ function fn_drawMap(address,categoryImg,contentArray){
 			        overlayArr.push(overlay);
 			        
 				     daum.maps.event.addListener(marker, 'click', function() {
-				    		 overlay.setMap(map);  
+				       console.log(marker)
+				    	/* console.log(overlayArr[0].k.ib)
+				    	  overlay.setMap(map);   */ 
+				    		   for(var j=0; j<overlayArr.length; j++){
+				    			 	if(marker.k.ib!=overlayArr[j].k.ib){
+				    			 		overlayArr[j].setMap(null); 
+				    			 	}else{
+				    			 		overlayArr[j].setMap(map);
+				    			 		 $('[name=coordsIb]').val(marker.k.ib);
+				    			 		$('[name=coordsJb]').val(marker.k.jb);
+				    			 	}
+				    			}  
 				     });
 			    } 
 			});
@@ -288,13 +349,13 @@ function fn_drawMap(address,categoryImg,contentArray){
 	
 }
 
+
 function closeOverlay() {
 	for(var i=0; i<overlayArr.length; i++){
 		overlayArr[i].setMap(null);  
 	}
 	   
 } 
-
 
 
 // 카테고리를 클릭했을 때 type에 따라 카테고리의 스타일과 지도에 표시되는 마커를 변경합니다
@@ -373,6 +434,13 @@ function changeMarker(type){
 } 
 
 function validate(){
+	var foodMenu = document.getElementById('foodMenu');
+    var beerMenu = document.getElementById('beerMenu');
+    var micMenu = document.getElementById('micMenu');
+    var sportsMenu = document.getElementById('sportsMenu');
+    var movieMenu = document.getElementById('movieMenu');
+    var addMenu = document.getElementById('addMenu');
+    
 	var food = $('#foodMenu').attr('class');
 	var beer = $('#beerMenu').attr('class');
 	var mic = $('#micMenu').attr('class');
@@ -385,9 +453,17 @@ function validate(){
 				  icon: "warning",
 				  button: "확인",
 				});
-			return false;
+		
+		}else{
+			foodMenu.className = '';
+	        beerMenu.className = '';
+	        micMenu.className = '';
+	        sportsMenu.className = '';
+	        movieMenu.className = '';
+	        addMenu.className = '';
+			fn_mapView();
 		}
-		return true;	
+	
 	}
 </script>
 

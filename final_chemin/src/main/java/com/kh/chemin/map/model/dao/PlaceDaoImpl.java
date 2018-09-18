@@ -1,8 +1,8 @@
 package com.kh.chemin.map.model.dao;
-
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -54,8 +54,8 @@ public class PlaceDaoImpl implements PlaceDao {
 	}
 
 	@Override
-	public List<PlaceReview> placeReviewList(SqlSessionTemplate sqlSession, int plaNo) {
-		return sqlSession.selectList("place.placeReviewList", plaNo);
+	public List<PlaceReview> placeReviewList(SqlSessionTemplate sqlSession, int plaNo, int cPage, int numPerPage) {
+		return sqlSession.selectList("place.placeReviewList", plaNo,new RowBounds((cPage-1)*numPerPage, numPerPage));
 	}
 
 	@Override
@@ -72,5 +72,14 @@ public class PlaceDaoImpl implements PlaceDao {
 	public int reviewDelete(SqlSessionTemplate sqlSession, int reviewNo) {
 		return sqlSession.delete("place.reviewDelete", reviewNo);
 	}
-	
+
+	@Override
+	public int reviewUpdate(SqlSessionTemplate sqlSession, PlaceReview review) {
+		return sqlSession.update("place.reviewUpdate", review);
+	}
+
+	@Override
+	public int selectReviewCount(SqlSessionTemplate sqlSession, int plaNo) {
+		return sqlSession.selectOne("place.selectReviewCount", plaNo);
+	}
 }

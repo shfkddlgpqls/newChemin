@@ -327,7 +327,7 @@
 	    	$('#searchData').keyup(function(){
 	    		var searchData = $('#searchData').val();
 				$.ajax({
-					url:"${path}/admin/productAuto.do",
+					url:"${path}/mall/productAuto.do",
 					type:"get",
 					data:{search:searchData},
 					dataType:'html',

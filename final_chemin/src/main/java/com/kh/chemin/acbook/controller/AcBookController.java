@@ -37,6 +37,7 @@ import com.kh.chemin.acbook.common.Page;
 import com.kh.chemin.acbook.model.service.AcBookService;
 import com.kh.chemin.acbook.model.vo.AcBook;
 import com.kh.chemin.acbook.model.vo.AcCom;
+import com.kh.chemin.acbook.model.vo.Reply;
 import com.kh.chemin.member.model.vo.Member;
 
 @Controller
@@ -163,7 +164,6 @@ public class AcBookController extends HttpServlet{
 		mv.addObject("list1",list1);
 		mv.addObject("list2",list2);
 		mv.addObject("list3",list3);
-		mv.setViewName("acbook/monthlyData");
 		response.setContentType("application/json; charset=UTF-8");
 		new Gson().toJson(mv, response.getWriter());
 	
@@ -262,6 +262,28 @@ public class AcBookController extends HttpServlet{
 		
 	}
 	
+	//댓글등록
+	@RequestMapping(value="acbook/ReplyWrite.do",method = RequestMethod.POST)
+	public void insertReply(@RequestParam(value="rDate")String rDate,@RequestParam(value="accNo")int accNo,@RequestParam(value="rNo")int rNo,@RequestParam(value="userId")String userId,@RequestParam(value="rContent")String rContent, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		ModelAndView mv = new ModelAndView();
+		Reply rp = new Reply(rNo,accNo,userId,rDate,rContent);
+		logger.debug("rp"+rp);
+		int result=service.insertReply(rp);
+		mv.addObject("rp",rp);
+		response.setContentType("application/json; charset=UTF-8");
+		new Gson().toJson(mv,response.getWriter());
+	}
+	//댓글 가져오기
+	@RequestMapping(value="acbook/GetReply.do", method=RequestMethod.POST)
+	public void selectReplyList(@RequestParam(value="accNo")String accNo, HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException {
+		List<Model> rpList = service.selectReply(accNo);
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("rpList",rpList);
+		logger.debug("rpList"+rpList);
+		response.setContentType("application/json; charset=UTF-8");
+		new Gson().toJson(mv,response.getWriter());
+		
+	}
 	//smartEditor
 	@RequestMapping(value = "acbook/insertBoard.do", method = RequestMethod.POST)
 	public ModelAndView insertBoard(AcCom acc) {

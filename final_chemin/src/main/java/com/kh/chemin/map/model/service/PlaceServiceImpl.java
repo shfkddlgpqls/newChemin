@@ -77,8 +77,8 @@ public class PlaceServiceImpl implements PlaceService {
 	}
 
 	@Override
-	public List<PlaceReview> placeReviewList(int plaNo) {
-		List<PlaceReview> reviewList = dao.placeReviewList(sqlSession, plaNo);
+	public List<PlaceReview> placeReviewList(int plaNo, int cPage, int numPerPage) {
+		List<PlaceReview> reviewList = dao.placeReviewList(sqlSession, plaNo,cPage,numPerPage);
 		return reviewList;
 	}
 
@@ -98,6 +98,18 @@ public class PlaceServiceImpl implements PlaceService {
 	public int reviewDelete(int reviewNo) {
 		int result = dao.reviewDelete(sqlSession, reviewNo);
 		return  result;
+	}
+
+	@Override
+	public int reviewUpdate(PlaceReview review) {
+		int result = dao.reviewUpdate(sqlSession, review);
+		return result;
+	}
+
+	@Override
+	public int selectReviewCount(int plaNo) {
+		int result = dao.selectReviewCount(sqlSession, plaNo);
+		return result;
 	}
 	
 }

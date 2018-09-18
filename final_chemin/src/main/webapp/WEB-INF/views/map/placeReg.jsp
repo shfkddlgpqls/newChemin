@@ -6,7 +6,7 @@
 
 
 <c:set value="${pageContext.request.contextPath }" var="path"/>
-  <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+  <jsp:include page="/WEB-INF/views/common/header1.jsp"/>
   <style>
   	.container{
   		width:50%;
@@ -233,8 +233,6 @@ function validate(){
 	var menuName =$('[name=menuName]').val();
 	var menuPrice =$('[name=menuPrice]').val();
 	
-	console.log(roadAddr)
-	console.log(plaName)
 		if(plaName.trim().length==0){
 			swal({
 				  text: "업체명을 입력해주세요",
@@ -272,10 +270,11 @@ function validate(){
 			return false;
 		}
 		
-	
+		var result ;
 	       $.ajax({
 			url:"${path}/map/placeMatch.do",
     		data:{plaAddr:roadAddr,plaName:plaName},
+    		async: false,
     		dataType:"json",
     		success:function(data){
     			console.log(data.plaMatch)
@@ -286,20 +285,19 @@ function validate(){
       					  icon: "error",
       					  button: "확인",
       					})
-    					return false;
+    					result = false;
     				}else if(data.plaMatch.plaStatus=='N'){
     					swal({
         					  text: "등록 요청 중인 장소입니다",
         					  icon: "error",
         					  button: "확인",
         					})
-    					return false
+        					result = false;
     				}
     			}
     			else
     			{
-    				alert("여기는 등록되지 않앗따!!")
-    				return true;
+    				result= true;
     			}
     		},
     		error:function(jxhr,textStatus,error)
@@ -310,7 +308,8 @@ function validate(){
                 console.log(error);
              }
 		})
-		
+		return result;
+	       
 	}
 
 
@@ -327,7 +326,7 @@ function validate(){
 <section>
 	<div class="container" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 		<div class="row" style="margin-top:55px">
-			<form action="${path}/map/placeInsert.do?userId=${memberLoggedIn.userId}" method="post" onsubmit="return validate();" enctype="multipart/form-data">
+			<form id="placeInsert" action="${path}/map/placeInsert.do?userId=${memberLoggedIn.userId}" method="post" onsubmit="return validate();" enctype="multipart/form-data">
 		    	 <h1 class="text-uppercase nanumFont">
 		    		<i class="fa fa-edit"></i> 장소 등록
 		    	</h1>
@@ -440,58 +439,58 @@ function validate(){
 			   						<option value="주말">주말</option>
 			   					</select> 
 			   					 <select class="form-control" id="time"  name="startTime">
-			   					 	<option value="09:00">00:00</option>
-			   						<option value="09:00">01:00</option>
-			   						<option value="09:00">02:00</option>
-			   						<option value="09:00">03:00</option>
-			   						<option value="00:00">04:00</option>
-			   						<option value="00:00">05:00</option>
-			   						<option value="00:00">06:00</option>
-			   						<option value="00:00">07:00</option>
-			   						<option value="01:00">08:00</option>
-			   						<option value="02:00">09:00</option>
-			   						<option value="03:00">10:00</option>
-			   						<option value="04:00">11:00</option>
-			   						<option value="05:00">12:00</option>
-			   						<option value="06:00">13:00</option>
-			   						<option value="07:00">14:00</option>
-			   						<option value="08:00">15:00</option>
-			   						<option value="09:00">16:00</option>
-			   						<option value="06:00">17:00</option>
-			   						<option value="07:00">18:00</option>
-			   						<option value="08:00">19:00</option>
-			   						<option value="09:00">20:00</option>
-			   						<option value="09:00">21:00</option>
-			   						<option value="09:00">22:00</option>
-			   						<option value="09:00">23:00</option>
-			   						<option value="09:00">24:00</option>
+			   					 	<option value="00:00">00:00</option>
+			   						<option value="01:00">01:00</option>
+			   						<option value="02:00">02:00</option>
+			   						<option value="03:00">03:00</option>
+			   						<option value="04:00">04:00</option>
+			   						<option value="05:00">05:00</option>
+			   						<option value="06:00">06:00</option>
+			   						<option value="07:00">07:00</option>
+			   						<option value="08:00">08:00</option>
+			   						<option value="09:00">09:00</option>
+			   						<option value="10:00">10:00</option>
+			   						<option value="11:00">11:00</option>
+			   						<option value="12:00">12:00</option>
+			   						<option value="13:00">13:00</option>
+			   						<option value="14:00">14:00</option>
+			   						<option value="15:00">15:00</option>
+			   						<option value="16:00">16:00</option>
+			   						<option value="17:00">17:00</option>
+			   						<option value="18:00">18:00</option>
+			   						<option value="19:00">19:00</option>
+			   						<option value="20:00">20:00</option>
+			   						<option value="21:00">21:00</option>
+			   						<option value="22:00">22:00</option>
+			   						<option value="23:00">23:00</option>
+			   						<option value="24:00">24:00</option>
 			   					</select>
 			   					<select class="form-control" id="time"  name="endTime">
-			   						<option value="09:00">00:00</option>
-			   						<option value="09:00">01:00</option>
-			   						<option value="09:00">02:00</option>
-			   						<option value="09:00">03:00</option>
-			   						<option value="00:00">04:00</option>
-			   						<option value="00:00">05:00</option>
-			   						<option value="00:00">06:00</option>
-			   						<option value="00:00">07:00</option>
-			   						<option value="01:00">08:00</option>
-			   						<option value="02:00">09:00</option>
-			   						<option value="03:00">10:00</option>
-			   						<option value="04:00">11:00</option>
-			   						<option value="05:00">12:00</option>
-			   						<option value="06:00">13:00</option>
-			   						<option value="07:00">14:00</option>
-			   						<option value="08:00">15:00</option>
-			   						<option value="09:00">16:00</option>
-			   						<option value="06:00">17:00</option>
-			   						<option value="07:00">18:00</option>
-			   						<option value="08:00">19:00</option>
-			   						<option value="09:00">20:00</option>
-			   						<option value="09:00">21:00</option>
-			   						<option value="09:00">22:00</option>
-			   						<option value="09:00">23:00</option>
-			   						<option value="09:00">24:00</option>
+			   						<option value="00:00">00:00</option>
+			   						<option value="01:00">01:00</option>
+			   						<option value="02:00">02:00</option>
+			   						<option value="03:00">03:00</option>
+			   						<option value="04:00">04:00</option>
+			   						<option value="05:00">05:00</option>
+			   						<option value="06:00">06:00</option>
+			   						<option value="07:00">07:00</option>
+			   						<option value="08:00">08:00</option>
+			   						<option value="09:00">09:00</option>
+			   						<option value="10:00">10:00</option>
+			   						<option value="11:00">11:00</option>
+			   						<option value="12:00">12:00</option>
+			   						<option value="13:00">13:00</option>
+			   						<option value="14:00">14:00</option>
+			   						<option value="15:00">15:00</option>
+			   						<option value="16:00">16:00</option>
+			   						<option value="17:00">17:00</option>
+			   						<option value="18:00">18:00</option>
+			   						<option value="19:00">19:00</option>
+			   						<option value="20:00">20:00</option>
+			   						<option value="21:00">21:00</option>
+			   						<option value="22:00">22:00</option>
+			   						<option value="23:00">23:00</option>
+			   						<option value="24:00">24:00</option>
 			   					</select>
 			   					<input class="form-control" style="width:25%" name="subContent" type="text" placeholder="ex)1월 1일 휴무"/>
 							</div>			    		

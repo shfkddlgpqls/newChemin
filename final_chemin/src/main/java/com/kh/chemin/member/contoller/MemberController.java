@@ -1,33 +1,20 @@
 package com.kh.chemin.member.contoller;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.kh.chemin.member.model.service.MemberService;
 import com.kh.chemin.member.model.vo.Member;
+
 @SessionAttributes(value = { "memberLoggedIn" })
 @Controller
 public class MemberController {
-	private Logger logger = LoggerFactory.getLogger(MemberController.class);
 
 	@Autowired
 	MemberService service;
@@ -66,6 +53,7 @@ public class MemberController {
 		loc = "/";
 		mv.addObject("msg", msg);
 		mv.addObject("loc", loc);
+		mv.addObject("status", "loginSuccess");
 		mv.setViewName("common/msg");
 		return mv;
 	}
@@ -82,104 +70,9 @@ public class MemberController {
 	public String memberEnroll() {
 		return "member/memberEnroll";
 	}
-
-	@RequestMapping(value = "/member/memberEnrollEnd.do", method = { RequestMethod.POST })
-	public String memberEnrollEnd(HttpServletRequest request, HttpServletResponse response, MultipartFile originalImg)
-			throws ServletException, IOException, ParseException {
-		
-		Member member=new Member();
-		
-			
-		SimpleDateFormat sdf=new SimpleDateFormat("yy/MM/dd");
-		
-		member.setUserId(request.getParameter("userId"));
-		member.setPassword(request.getParameter("password"));
-		member.setUserName(request.getParameter("userName"));
-		member.setGender(request.getParameter("gender"));
-		member.setBirthDay(sdf.parse(request.getParameter("birthDay").replaceAll("-", "/")));//데이트는 어떻게 가져오지??
-		member.setEmail(request.getParameter("email"));
-		member.setPhone(request.getParameter("phone"));
-		member.setAddress(request.getParameter("address1") + "," + request.getParameter("address2") + ","
-				+ request.getParameter("address3"));
-		member.setHobby(request.getParameterValues("hobby"));//배열은 어떻게 하지???
-		
-		
-		String saveDir=request.getSession().getServletContext().getRealPath("/resources/upload/member");
-		
-		String enPw=bCryptPasswordEncoder.encode(request.getParameter("password"));
-		member.setPassword(enPw);
-		bCryptPasswordEncoder.encode(enPw);
-		
-		File dir=new File(saveDir);
-		
-		if(dir.exists()==false) dir.mkdirs();
-		
-			if(!originalImg.isEmpty())
-			{
-				String originalFilename=originalImg.getOriginalFilename();
-				/*bs.html*/
-				String ext=originalFilename.substring(originalFilename.lastIndexOf(".")+1);
-				SimpleDateFormat sdf1=new SimpleDateFormat("yyyyMMdd_HHmmssSS");
-				int rndNum=(int)(Math.random()*1000);
-				String renamedFileName=sdf1.format(new Date(System.currentTimeMillis()));
-				renamedFileName+="_"+rndNum+"."+ext;
-				try 
-				{
-					/*서버의 해당경로에 파일을 저장하는 명령*/
-					originalImg.transferTo(new File(saveDir+"/"+renamedFileName));
-					member.setOriginalImg(originalFilename);
-					member.setRenameImage(renamedFileName);
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			
-			int result=service.insertMember(member);
-			
-			String msg="";
-			String loc="/";
-			if(result>0) {
-				msg="회원가입에 성공하였습니다.";
-				loc="/";
-			}
-				
-			else {
-				msg="회원가입에 실패하였습니다.";
-				loc="/views/member/memberEndroll";
-				
-				
-			}
-			return "common/msg";
-			
-		}
-	
-	@RequestMapping("/member/checkDuplicate.do")
-	public void duplicateId(String userId, HttpServletResponse res) throws IOException {
-		boolean idFlag = service.selectOne(userId) != null ? true : false;
-
-		res.getWriter().println(idFlag);
-	}
-	@RequestMapping("/member/checkEmail.do")
-	public void checkEmail(String email, HttpServletResponse res) throws IOException{
-		boolean emailFlag = service.checkEmail(email) != null ? true : false;
-		
-		res.getWriter().println(emailFlag);
-	}
-	@RequestMapping("/member/checkPhone.do")
-	public void checkPhone(String phone, HttpServletResponse res) throws IOException{
-		boolean phoneFlag=service.checkPhone(phone) !=null?true:false;
-		res.getWriter().println(phoneFlag);
-	}
-	
-
-	// @RequestMapping("/member/checkDuplicate.do")
-	// public ModelAndView duplicateId(String userId, ModelAndView mv) throws
-	// Exception {
-	// Map map = new HashMap();
-	//
-	// boolean flag = service.selectOne(userId) != null ? true : false;
-	// return mv;
+	// @RequestMapping("/login/memberlogout.do")
+	// public String updateMember(String userId, Model model) {
+	// Member
 	// }
-
+	
 }

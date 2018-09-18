@@ -6,6 +6,7 @@
 <c:set var="path" value="<%=request.getContextPath()%>"/>
   
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+<jsp:include page="/WEB-INF/views/mypage/myMenuBar.jsp"/>
 
  <!-- 마이페이지 css-->
     <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/mypage.css">
@@ -14,39 +15,12 @@
     
     <style>
     	a {
-    		color:gray;
+    		color:black;
     	}
+    	#pname{color:gray;}
     </style>
   
 	
-   <div class="mypage">
-      <h2 class="text-center">마이페이지 입니당</h2>
-   </div>
-      
-   
-   <div class="container">
-      <div class="row">
-         
-            <div class="col-md-12">
-               <hr>
-                  <ul class="nav justify-content-center">
-                      <li class="nav-item">
-                        <strong><a class="nav-link mypageAtag" href="${path }/mypage/myOrderList.do">주문 목록</a></strong>
-                      </li>
-                      <li class="nav-item">
-                        <strong><a class="nav-link mypageAtag" href="${path }/mypage/myBoardList.do">게시글 관리</a></strong>
-                      </li>
-                      <li class="nav-item">
-                           <strong><a class="nav-link mypageAtag" href="${path }/mypage/myWishList.do">찜 목록</a></strong>
-                      </li>
-                      <li class="nav-item">
-                           <strong><a class="nav-link mypageAtag" href="${path }/mypage/myPlaceList.do?userId=hyebeen">장소 등록 내역</a></strong>
-                      </li>
-                    </ul>
-                    <hr>
-            </div>
-         </div>   
-      </div>
       
 <section>
 		<div class="container">
@@ -120,12 +94,12 @@
 						view+='<img src="${path}/resources/upload/productImg/'+data[0][i].REIMG+'" alt="IMG-PRODUCT" draggable="false">';
 						view+='</div>';
 						view+='</td>';
-						view+='<td><a href="${path}/mall/detail.do?no='+data[0][i].PNO+'" class="color2 flex-2">'+data[0][i].PNAME+'</a></td>';
+						view+='<td><a id="pname" href="${path}/mall/detail.do?no='+data[0][i].PNO+'" class="color2 flex-2">'+data[0][i].PNAME+'</a></td>';
 						view+='<td>'+numberComma(data[0][i].PRICE)+'원</td>';
 						view+='<td><button type="button" class="btn btn-sm btn-info" onclick="fn_cartAdd('+data[0][i].PNO+')">장바구니에 추가</button>';
 						view+='</td>';
 						view+='<td>';
-						view+='<a href="#" onclick="fn_deleteWish('+data[0][i].PNO+')" class="color1 flex-2" draggable="false"><i class="fa fa-times"></i></a>';
+						view+='<a href="#" id="pname" onclick="fn_deleteWish('+data[0][i].PNO+')" class="color1 flex-2" draggable="false"><i class="fa fa-times"></i></a>';
 						view+='</td>';
 						view+='</tr>';
 					}

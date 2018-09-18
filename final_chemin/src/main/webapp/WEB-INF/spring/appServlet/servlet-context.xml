@@ -32,6 +32,8 @@
    			<mapping path="/community/**/*.do"/>
    			<mapping path="/mypage/**/*.do"/>
    			<mapping path="/map/**/*.do"/>
+   			<mapping path="/admin/**/*.do"/>
+   			<mapping path="/ac*.do"/>
    			<beans:bean id="LoginCheckInterceptor" class="com.kh.chemin.common.interceptor.LoginCheckInterceptor"></beans:bean>
    		</interceptor>
 	</interceptors>

@@ -157,4 +157,10 @@
 	<delete id="deleteWish" parameterType="map">
 		delete from wishList where userId=#{userId} and pno=#{pno}
 	</delete>
+	
+	<!-- 자동완성 -->
+	<select id="productAuto" parameterType="string" resultType="string">
+		select pname from product where pname like '%'||#{search}||'%'
+	</select>
+   
 </mapper>

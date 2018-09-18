@@ -7,6 +7,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.chemin.mall.model.vo.QnA_board;
+import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
@@ -20,9 +22,10 @@ public class MypageServiceImpl implements MypageService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
+
 	@Override
-	public List<Place> selectPlaceList(String userId) {
-		List<Place> list = dao.selectPlaceList(sqlSession, userId);
+	public List<Place> selectPlaceList(Map map, int cPage, int numPerPage) {
+		List<Place> list = dao.selectPlaceList(sqlSession, map,cPage,numPerPage);
 		return list;
 	}
 
@@ -80,16 +83,33 @@ public class MypageServiceImpl implements MypageService {
 		
 		return result;
 	}
-	
+
 	@Override
-	public List<Map<String, Object>> communityList(String userId) {
-		return dao.communityList(sqlSession,userId);
+	public int warnMsg(String userId) {
+		System.out.println("::warnMsgService::"+userId);
+		return dao.warnMsg(sqlSession,userId);
 	}
 
 	@Override
-	public List<Map<String, Object>> attachmentList(List<Integer> cno) {
-		return dao.attachmentList(sqlSession,cno);
+	public int selectPlaceCount(Map map) {
+		int totalCount = dao.selectPlaceCount(sqlSession, map);
+		return totalCount;
 	}
+	
+	//리뷰 글쓰기
+		@Override
+		public int insertReview(Review review) 
+		{
+			int result = dao.insertReview(sqlSession,review);
+			
+			return result;
+		}
+
+		@Override
+		public List<QnA_board> selectQnaBoardList(int cPage, int numPerPage, String userId) 
+		{
+			return dao.selectQnaBoardList(sqlSession,cPage,numPerPage,userId); 
+		}
 
 	@Override
 	public List<Map<String, Object>> selectOrderList(String userId, int cPage, int numPerPage) {
@@ -111,5 +131,22 @@ public class MypageServiceImpl implements MypageService {
 		return dao.selectWishList(sqlSession, userId);
 	}
 
-}
+		@Override
+		public int selectQnACount(String userId) 
+		{
+			return dao.selectQnACount(sqlSession,userId);
+		}
 
+		@Override
+		public List<Review> selectReviewList(int cPage, int numPerPage, String userId) 
+		{
+			return dao.selectReviewList(sqlSession,cPage,numPerPage,userId); 
+		}
+
+		@Override
+		public int selectReviewCount(String userId) 
+		{
+			return dao.selectReviewCount(sqlSession,userId);
+		}	
+
+}

@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 
 import com.kh.chemin.acbook.model.vo.AcBook;
 import com.kh.chemin.acbook.model.vo.AcCom;
+import com.kh.chemin.acbook.model.vo.Reply;
 
 @Repository
 public class AcBookDaoImpl implements AcBookDao {
@@ -123,6 +124,17 @@ public class AcBookDaoImpl implements AcBookDao {
 	public List<Model> prePreSelectDailySum(SqlSessionTemplate sqlSession, String userId) {
 		return sqlSession.selectList("ac.prePreSelectDailySum",userId);
 	}
+
+	@Override
+	public int insertReply(SqlSessionTemplate sqlSession, Reply rp) {
+		return sqlSession.insert("ac.insertReply",rp);
+	}
+
+	@Override
+	public List<Model> selectReply(SqlSessionTemplate sqlSession, String accNo) {
+		return sqlSession.selectList("ac.selectReply",accNo);
+	}
+	
 	
 	
 	

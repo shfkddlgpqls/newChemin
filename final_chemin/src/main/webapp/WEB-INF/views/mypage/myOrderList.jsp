@@ -6,6 +6,7 @@
 <c:set var="path" value="<%=request.getContextPath()%>"/>
   
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+<jsp:include page="/WEB-INF/views/mypage/myMenuBar.jsp"/>
 
 <!-- 마이페이지 css-->
     <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/mypage.css">
@@ -147,7 +148,8 @@
     <style>
 		.orderList {display:none;}
 		.orderNo {display:table-row;}
-		a {color:gray;}
+		#orderNo {color:gray;}
+		a{color:black;}
 	</style>
 	<script>
 		$(document).ready(function(){
@@ -158,35 +160,6 @@
 		})	
 	</script>
     
-    
-   <div class="mypage">
-      <h2 class="text-center">마이페이지 입니당</h2>
-   </div>
-      
-   
-   <div class="container">
-      <div class="row">
-         
-            <div class="col-md-12">
-               <hr>
-                  <ul class="nav justify-content-center">
-                      <li class="nav-item">
-                        <strong><a class="nav-link mypageAtag" href="${path }/mypage/myOrderList.do">주문 목록</a></strong>
-                      </li>
-                      <li class="nav-item">
-                        <strong><a class="nav-link mypageAtag" href="${path }/mypage/myBoardList.do">게시글 관리</a></strong>
-                      </li>
-                      <li class="nav-item">
-                           <strong><a class="nav-link mypageAtag" href="${path }/mypage/myWishList.do">찜 목록</a></strong>
-                      </li>
-                      <li class="nav-item">
-                           <strong><a class="nav-link mypageAtag" href="${path }/mypage/myPlaceList.do?userId=hyebeen">장소 등록 내역</a></strong>
-                      </li>
-                    </ul>
-                    <hr>
-            </div>
-         </div>   
-      </div>
       
       <section>
       <div class="container">
@@ -226,7 +199,7 @@
                  	<c:forEach items="${list }" var="od">
 	                 	
 	                    <tr class="orderNo">
-	                       <td><a href="#">${od.ORDERNO }</a></td>
+	                       <td><a id="orderNo" href="#">${od.ORDERNO }</a></td>
 	                       <td>${od.ORDERNAME }</td>
 	                       <td>${od.ORDERADDR }</td>
 	                       <td><fmt:formatNumber value="${od.ALLPRICE }" type="currency"/></td>

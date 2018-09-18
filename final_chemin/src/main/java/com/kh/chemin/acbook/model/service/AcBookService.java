@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 
 import com.kh.chemin.acbook.model.vo.AcBook;
 import com.kh.chemin.acbook.model.vo.AcCom;
+import com.kh.chemin.acbook.model.vo.Reply;
 
 public interface AcBookService {
 	//수입등록
@@ -49,6 +50,8 @@ public interface AcBookService {
 	List<Model> prePreMonthlyData(String userId);
 	List<Model> preSelectDailySum(String userId);
 	List<Model> prePreSelectDailySum(String userId);
+	int insertReply(Reply rp);
+	List<Model> selectReply(String accNo);
 	
 	
 	

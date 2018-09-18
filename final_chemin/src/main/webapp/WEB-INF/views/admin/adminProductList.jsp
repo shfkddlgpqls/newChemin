@@ -24,7 +24,7 @@
 	            <select class="selection-1" name="cate" id="cate">
 	                <option value="0" selected>전체</option>
 	                <option value="1">가구</option>
-	                <option value="2">침대</option>
+	                <option value="2">식품</option>
 	                <option value="3">방범</option>
 	            </select>
 	        </div>

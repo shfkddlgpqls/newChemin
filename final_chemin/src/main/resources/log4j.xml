@@ -22,9 +22,9 @@
    <!-- Application Loggers -->
    <!-- 패키지 하위에 있는 클래스들에 대한 로거가 찍혀있으면 출력; level이 info라는것은 info부터 출력한다는 뜻; level: debug<info<warn<error<fatal(저장공간 부족, 윈도우 이상) -->
    <logger name="com.kh.chemin.common.aop.LoggerAspect" additivity="false">
-		<level value="debug"/>
-		<appender-ref ref="loginLogger"/>
-	</logger>
+      <level value="debug"/>
+      <appender-ref ref="loginLogger"/>
+   </logger>
    <logger name="jdbc.sqlonly" additivity="false">
       <level value="info"/>
       <appender-ref ref="sqlLogger"/>
@@ -57,7 +57,7 @@
    <logger name="org.springframework.web">
       <level value="info" />
    </logger>
-	
+   
    <!-- Root Logger -->
    <root>
       <priority value="warn" />

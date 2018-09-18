@@ -16,12 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -30,7 +28,8 @@ import com.kh.chemin.community.model.service.CommunityService;
 import com.kh.chemin.community.model.vo.Attachment;
 import com.kh.chemin.community.model.vo.Comment;
 import com.kh.chemin.community.model.vo.Community;
-import com.kh.chemin.member.model.vo.Member;
+import com.kh.chemin.community.model.vo.LikeTo;
+import com.kh.chemin.community.model.vo.Report;
 
 import net.sf.json.JSONObject;
 
@@ -44,21 +43,38 @@ public class CommunityController {
 	
 	
 	@RequestMapping("/community/communityList.do")
+	@ResponseBody
 	public ModelAndView communityList(ModelAndView mv)
 	{
+		LikeTo liketo=new LikeTo();
 		List<Map<String,Object>> list=service.communityList();
 		List<Map<String,Object>> attList=service.attachmentList();
+		/*List<Map<String,Object>> likeList=service.likeList();*/
+		
+//		List<Integer> cno=new ArrayList<Integer>();
+//		int[] no = new int[list.size()];
+//		for(int i=0;i<list.size();i++)
+//		{
+//			no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
+//			cno.add(no[i]);
+//		}
+		
 		mv.addObject("list",list);
 		mv.addObject("attList",attList);
+		/*mv.addObject("likeList",likeList);*/
+		mv.addObject("like_check",liketo.getLike_check());
 		mv.setViewName("community/communityList");
 		return mv;
 	}
+	
+	
 	
 	@RequestMapping("/community/communityWrite.do")
 	public String communityWrite()
 	{
 		return "community/communityWrite";
 	}
+	
 	
 	@RequestMapping(value="/community/communityWriteEnd.do",method=RequestMethod.POST)
 	public ModelAndView communityWriteEnd(HttpServletRequest request,MultipartFile[] upFile,Community community) 
@@ -107,12 +123,12 @@ public class CommunityController {
 		String msg="";
 		String loc="";
 		if(result>0) {
-			msg="성공적으로 등록!!";
+			msg="게시물이 등록되었습니다.";
 			loc="/community/communityList.do";
 		}
 		else 
 		{
-			msg="등록 실패";
+			msg="게시물이 등록 실패하였습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityWrite.do";
 			
 		}
@@ -123,16 +139,17 @@ public class CommunityController {
 		return mv;
 	}
 	
+	
 	@RequestMapping("/community/communityUpdate.do")
 	public String communityUpdate(int community_no,Model model)
 	{
-		logger.debug("게시판 번호::"+community_no);
 		Map community=service.selectOne(community_no);
 		List<Map<String,String>> attachment=service.selectAttachmentsOne(community_no);
 		model.addAttribute("community",community);
 		model.addAttribute("attachment",attachment);
 		return "community/communityUpdate";
 	}
+	
 	
 	@RequestMapping("/community/communityUpdateEnd.do")
 	public ModelAndView communityUpdateEnd(Community community,HttpServletRequest request,MultipartFile[] upFile)
@@ -173,12 +190,12 @@ public class CommunityController {
 		String msg="";
 		String loc="";
 		if(result>0) {
-			msg="수정 완료";
+			msg="게시물이 수정 완료되었습니다.";
 			loc="/community/communityList.do";
 		}
 		else 
 		{
-			msg="수정 실패";
+			msg="게시물이 수정 실패되었습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityUpdate.do";
 			
 		}
@@ -197,12 +214,12 @@ public class CommunityController {
 		String msg="";
 		String loc="";
 		if(result>0) {
-			msg="게시물 삭제 완료";
+			msg="게시물이 삭제 완료되었습니다.";
 			loc="/community/communityList.do";
 		}
 		else 
 		{
-			msg="게시물 삭제 실패";
+			msg="게시물이 삭제 실패되었습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityList.do";
 			
 		}
@@ -222,7 +239,6 @@ public class CommunityController {
 		String jsonStr=null;
 		Map<String,Object> map=new HashMap<String,Object>();
 		List<Comment> commentList=service.commentList(communityno);
-		System.out.println("댓글::"+commentList);
 		map.put("commentList", commentList);
 		jsonStr=mapper.writeValueAsString(map);
 		return jsonStr;
@@ -235,27 +251,25 @@ public class CommunityController {
 	{
 		ModelAndView mv=new ModelAndView();
 		Comment comment =new Comment(0,community_no,writer,content,null);
-		logger.debug("Comment 전::"+comment);
 		int result=service.commentWrite(comment);
-		logger.debug("Comment 후::"+comment);
 		String msg="";
 		String loc="";
 		if(result>0) {
-			msg="성공적으로 등록!!";
+			msg="댓글이 등록이 성공되었습니다.";
 			loc="/community/communityList.do";
 		}
 		else 
 		{
-			msg="등록 실패";
+			msg="댓글이 등록 실패되었습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityList.do";
 			
 		}
-
 		mv.addObject("msg",msg);
 		mv.addObject("loc",loc);
 		mv.setViewName("common/msg");
 		return mv;
 	}
+	
 	
 	@RequestMapping("/community/adminDelete.do")
 	public ModelAndView adminDelete(int community_no)
@@ -265,12 +279,12 @@ public class CommunityController {
 		String msg="";
 		String loc="";
 		if(result>0) {
-			msg="게시물 삭제 완료";
+			msg="게시물 삭제가 완료되었습니다.";
 			loc="/community/communityList.do";
 		}
 		else 
 		{
-			msg="게시물 삭제 실패";
+			msg="게시물 삭제가 실패되었습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityList.do";
 			
 		}
@@ -279,6 +293,7 @@ public class CommunityController {
 		mv.setViewName("common/msg");
 		return mv;
 	}
+	
 	
 	/*댓글 삭제*/
 	@RequestMapping("/community/commentDelete.do")
@@ -289,12 +304,12 @@ public class CommunityController {
 		String msg="";
 		String loc="";
 		if(result>0) {
-			msg="댓글 삭제 완료";
+			msg="댓글 삭제가 완료되었습니다.";
 			loc="/community/communityList.do";
 		}
 		else 
 		{
-			msg="댓글 삭제 실패";
+			msg="댓글 삭제가 실패되었습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityList.do";
 			
 		}
@@ -304,11 +319,11 @@ public class CommunityController {
 		return mv;
 	}
 	
+	
 	@RequestMapping("/community/communitySearch.do")
 	public ModelAndView communitySearch(HttpServletRequest request,ModelAndView mv) 
 	{
 		String hashTag=(String)request.getParameter("searchValue");
-		System.out.println("검색 내용::::"+hashTag);
 		List<Map<String,Object>> list=service.communitySearch(hashTag);
 		
 		//입력한 hashTag에 해당되는 게시물 번호를 배열로 받기
@@ -329,6 +344,27 @@ public class CommunityController {
 		return mv;
 	}
 	
+	
+	@RequestMapping("/community/myCommunityList.do")
+	public ModelAndView myCommunityList(ModelAndView mv,String userId)
+	{
+		List<Map<String,Object>> list=service.mycommunityList(userId);
+		List<Integer> cno=new ArrayList<Integer>();
+		int[] no = new int[list.size()];
+		for(int i=0;i<list.size();i++)
+		{
+			no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
+			cno.add(no[i]);
+		}
+		List<Map<String,Object>> attList=service.myattachmentList(cno);
+		
+		mv.addObject("list",list);
+		mv.addObject("attList",attList);
+		mv.setViewName("community/communityList");
+		return mv;
+	}
+	
+	
 	@RequestMapping(value="/community/commentUpdate.do",method=RequestMethod.POST)
 	public ModelAndView commentUpdate(Comment comment, ModelAndView mv)
 	{
@@ -336,12 +372,12 @@ public class CommunityController {
 		String msg="";
 		String loc="";
 		if(result>0) {
-			msg="수정 완료";
+			msg="댓글 수정이 완료되었습니다.";
 			loc="/community/communityList.do";
 		}
 		else 
 		{
-			msg="수정 실패";
+			msg="댓글 수정이 실패하였습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityUpdate.do";
 			
 		}
@@ -351,45 +387,183 @@ public class CommunityController {
 		return mv;
 	}
 	
-	@RequestMapping(value="/community/like.do",method=RequestMethod.POST)
-	public ModelAndView like(int community_no, HttpSession session,ModelAndView mv)
+	
+	/*@RequestMapping(value="/community/likePlus.do", produces="application/text; charset=utf-8")
+	@ResponseBody
+	public String likePlus(int community_no) throws Exception
 	{
-		String userId=(String)session.getAttribute("memberLoggedIn");
-		JSONObject obj=new JSONObject();
-		
-		ArrayList<String> msgs=new ArrayList<String>();
 		HashMap<String,Object> map=new HashMap<String,Object>();
-		map.put("communityno", community_no);
-		map.put("userId",userId);
+		ObjectMapper mapper=new ObjectMapper();
+		String jsonStr=null;
+		int result=service.likePlus(community_no);
+		map.put("result", result);
+		jsonStr=mapper.writeValueAsString(map);
+		return jsonStr;
+	}
+	
+	@RequestMapping(value="/community/likeMinus.do", produces="application/text; charset=utf-8")
+	@ResponseBody
+	public String likeMinus(int community_no) throws Exception
+	{
+		HashMap<String,Object> map=new HashMap<String,Object>();
+		ObjectMapper mapper=new ObjectMapper();
+		String jsonStr=null;
+		int result=service.likeMinus(community_no);
+		map.put("result", result);
+		jsonStr=mapper.writeValueAsString(map);
+		return jsonStr;
+	}
+	
+	@RequestMapping(value="/community/likeInsert.do",method=RequestMethod.POST,produces="application/text; charset=utf-8")
+	@ResponseBody
+	public String likeInsert(int community_no,String like_id,String like_check) throws Exception
+	{
 		
-		int like_check=0;
-		int like_cnt=0;
+		ajax를 처리한 후 보내주려면 responsebody를 어노테이션 해줘야함
+		System.out.println("Controller::communityno::"+community_no);
+		System.out.println("Controller::userId::"+like_id);
+		System.out.println("Controller::like_check::"+like_check);
+
+		ObjectMapper mapper=new ObjectMapper();
+		String jsonStr=null;
+		HashMap<String,Object> map=new HashMap<String,Object>();
+		map.put("community_no", community_no);
+		map.put("like_id",like_id);
 		map.put("like_check", like_check);
+		
 		System.out.println(":::likeController::"+map);
-		int result=service.like(map);
-		String msg="";
-		String loc="";
-		if(result>0) {
-			msg="추가 완료";
+		HashMap<String,Object> resultMap=new HashMap<String,Object>();
+		int result=service.likeInsert(map);
+		resultMap.put("result", result);
+		결과값을 ajax success로 보내주기한 것, resultMap에 담긴 값을 json문자열로 바꿔서 보내준다는 뜻
+		jsonStr=mapper.writeValueAsString(resultMap);
+		return jsonStr;
+	}
+	
+	
+	@RequestMapping(value="/community/likeUpdate.do",method=RequestMethod.POST,produces="application/text; charset=utf-8")
+	@ResponseBody
+	public String likeUpdate(int community_no,String like_id) throws Exception
+	{
+		System.out.println("Controller::communityno::"+community_no);
+		System.out.println("Controller::userId::"+like_id);
+		
+		ObjectMapper mapper=new ObjectMapper();
+		String jsonStr=null;
+		HashMap<String,Object> map=new HashMap<String,Object>();
+		map.put("community_no", community_no);
+		map.put("like_id",like_id);
+
+		HashMap<String,Object> resultMap=new HashMap<String,Object>();
+		int result=service.likeUpdate(map);
+		resultMap.put("result", result);
+		jsonStr=mapper.writeValueAsString(resultMap);
+		return jsonStr;
+	}*/
+	
+	@RequestMapping(value="/community/like.do",produces="application/text; charset=utf-8")
+	@ResponseBody
+	public String like(int community_no,String like_id) 
+	{
+		System.out.println("::likeController::");
+		JSONObject obj=new JSONObject();
+		Community community=new Community();
+		LikeTo liketo=new LikeTo();
+		
+		HashMap<String,Object> hashMap=new HashMap<String,Object>();
+		hashMap.put("community_no",community_no);
+		hashMap.put("like_id",like_id);
+		
+		/*hashMap에 넣어둔 해당되는 하나의 row만 가져오기*/
+		/*liketo=service.read(hashMap);*/
+		/*community=service.communityRead(community_no);*/
+		
+		int like_cnt=community.getCommunity_likecnt();
+		int like_check=liketo.getLike_check();
+		System.out.println("::like_cnt::"+like_cnt);
+		
+		int result=service.likeCount(community_no);
+		System.out.println("::likeCount:result::"+result);
+		if(result==0) 
+		{
+			service.likeCreate(hashMap);
+		}
+		
+		/*하트 눌렀는지 여부  -  0:하트 안누른 상태, 1:하트 누름*/
+		/*like_check=liketo.getLike_check();*/
+		System.out.println("::like_check::"+like_check);
+		if(like_check == 0)
+		{
+			System.out.println("좋아요!");
+			service.likeCheckUp(hashMap);
+			like_check++;
+			like_cnt++;
+			service.likeCntUp(community_no);
+			System.out.println("좋아요:"+like_check);
+		}
+		else
+		{
+			System.out.println("좋아요 취소");
+			service.likeCheckDown(hashMap);
+			like_check--;
+			like_cnt--;
+			service.likeCntDown(community_no);
+			System.out.println("좋아요 취소:"+like_check);
+		}
+		
+		obj.put("community_no", community_no);
+		obj.put("like_check", like_check);
+		obj.put("like_cnt",like_cnt);
+		
+		return obj.toString();
+	}
+	
+	/*카테고리 분류*/
+	@RequestMapping("/community/categoryFind.do")
+	public ModelAndView categoryFind(String community_category,ModelAndView mv)
+	{
+		List<Map<String,Object>> list=service.categoryFind(community_category);
+		
+		List<Integer> cno=new ArrayList<Integer>();
+		int[] no = new int[list.size()];
+		for(int i=0;i<list.size();i++)
+		{
+			no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
+			cno.add(no[i]);
+		}
+		List<Map<String,Object>> attList=service.categoryAttFind(cno);
+		
+		mv.addObject("list",list);
+		mv.addObject("attList",attList);
+		mv.setViewName("community/communityList");
+		return mv;
+	}
+	
+	/*신고하기*/
+	@RequestMapping("/community/reportWrite.do")
+	public ModelAndView reportWrite(Report report,ModelAndView mv)
+	{
+		int result=service.reportWrite(report);
+		String userid=report.getRwriter();
+		int countUp=service.reportCountUp(userid);
+		String msg = "";
+		String loc = "";
+		
+		if(result>0)
+		{
+			msg="신고글이 성공적으로 등록되었습니다.";
 			loc="/community/communityList.do";
 		}
-		else 
+		else
 		{
-			msg="추가 실패";
-			loc="/community/communityUpdate.do";
-			
+			msg = "신고글 등록에 실패하였습니다. <br> 관리자에게 문의해보세요.";
+			loc="/community/communityList.do";
 		}
-		if(like_check==0) {
-			System.out.println("좋아요!!");
-			like_cnt++;
-		}
+		
+		
 		mv.addObject("msg",msg);
-		mv.addObject("loc",loc);
+		mv.addObject("loc", loc);
 		mv.setViewName("common/msg");
 		return mv;
 	}
 }
-
-
-
-
