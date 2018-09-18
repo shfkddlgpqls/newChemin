@@ -116,4 +116,28 @@ public class MallDaoImpl implements MallDao {
 		return sqlSession.selectList("mall.selectProductCount", userId);
 	}
 
+	// main에 best list 불러오기
+	@Override
+	public List<String> selectMainList(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectList("mall.selectMainList");
+	}
+
+	// 찜하기 여부
+	@Override
+	public Map<String, Object> selectWishCk(SqlSessionTemplate sqlSession, Map<String, Object> map) {
+		return sqlSession.selectOne("mall.selectWishCk", map);
+	}
+
+	// 찜 등록
+	@Override
+	public int insertWish(SqlSessionTemplate sqlSession, Map<String, Object> map) {
+		return sqlSession.insert("mall.insertWish", map);
+	}
+
+	// 찜 삭제
+	@Override
+	public int deleteWish(SqlSessionTemplate sqlSession, Map<String, Object> map) {
+		return sqlSession.delete("mall.deleteWish", map);
+	}
+
 }

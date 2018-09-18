@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import com.kh.chemin.mall.model.service.MallService;
 import com.kh.chemin.mall.model.vo.Cart;
 import com.kh.chemin.mall.model.vo.OrderDetail;
 import com.kh.chemin.mall.model.vo.Product;
+import com.kh.chemin.member.model.vo.Member;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -106,15 +108,29 @@ public class MallController
 	
 	// 상품 상세화면 이동
    @RequestMapping("/mall/detail.do")
-   public ModelAndView mallDetail(ModelAndView mv, int no)
+   public ModelAndView mallDetail(ModelAndView mv, int no, HttpSession session)
    {
-      //해당 상품 리스트 보내기 
-      Product p = service.selectProduct(no);
+		//해당 상품 리스트 보내기 
+		Product p = service.selectProduct(no);
+		
+		// 찜 하기 여부 불러오기
+		Member member = (Member)session.getAttribute("memberLoggedIn");
+		String userId = "";
+		if(member!=null)
+			userId = member.getUserId();
+		Map<String, Object> map = new HashMap<>();
+		map.put("userId", userId);
+		map.put("pno", no);
+		Map<String, Object> wish = new HashMap<>();
+		if(userId!=null) {
+			wish = service.selectWishCk(map);
+		}
       
-      mv.addObject("product",p);
-      mv.setViewName("mall/productDetail");
-      
-      return mv;
+		mv.addObject("product",p);
+		mv.addObject("wish", wish);
+		mv.setViewName("mall/productDetail");
+		
+		return mv;
    }
 	
 	// 장바구니에 데이터 추가
@@ -265,7 +281,7 @@ public class MallController
 			}
 		}
 		
-		return "mypage/myOrderList";
+		return "redirect:/mypage/myOrderList.do";
 	}
 	
 	// 장바구니 상품 개수
@@ -286,6 +302,48 @@ public class MallController
 		JSONArray jsonArr = new JSONArray();
 		jsonArr.add(list);
 		
+		response.setContentType("application/json;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(jsonArr);
+	}
+	
+	// main에 best list 불러오기
+	@RequestMapping("/mall/mainList.do")
+	public void mainList(HttpServletResponse response) throws IOException {
+		List<String> list = service.selectMainList();
+		
+		JSONArray jsonArr = new JSONArray();
+		jsonArr.add(list);
+		
+		response.setContentType("application/json;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(jsonArr);
+	}
+	
+	// 찜하기 여부
+	@RequestMapping("/mall/wishList.do")
+	public void wishList(HttpServletResponse response, HttpSession session, String pno) throws IOException {
+		Member member = (Member)session.getAttribute("memberLoggedIn");
+		int result=0; // 로그인 x
+		if(member!=null) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("userId", member.getUserId());
+			map.put("pno", pno);
+			Map<String, Object> wish = new HashMap<>();
+			wish = service.selectWishCk(map); // 찜이 되어있나 안되어있나 가져오기
+			if(wish==null) {
+				// 찜 추가
+				service.insertWish(map);
+				result=1; // 찜 등록했어요
+			} else {
+				// 찜 삭제
+				service.deleteWish(map);
+				result=-1; // 찜 취소했어요
+			}
+		}
+		
+		JSONArray jsonArr = new JSONArray();
+		jsonArr.add(result);
 		response.setContentType("application/json;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		out.print(jsonArr);

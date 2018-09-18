@@ -122,4 +122,28 @@ public class MallServiceImpl implements MallService {
 		return dao.selectProductCount(sqlSession, userId);
 	}
 
+	// main에 best list 불러오기
+	@Override
+	public List<String> selectMainList() {
+		return dao.selectMainList(sqlSession);
+	}
+
+	// 찜하기 여부
+	@Override
+	public Map<String, Object> selectWishCk(Map<String, Object> map) {
+		return dao.selectWishCk(sqlSession, map);
+	}
+
+	// 찜 등록
+	@Override
+	public int insertWish(Map<String, Object> map) {
+		return dao.insertWish(sqlSession, map);
+	}
+
+	// 찜 삭제
+	@Override
+	public int deleteWish(Map<String, Object> map) {
+		return dao.deleteWish(sqlSession, map);		
+	}
+
 }

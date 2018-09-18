@@ -3,6 +3,7 @@ package com.kh.chemin.mypage.model.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -73,5 +74,26 @@ public class MypageDaoImpl implements MypageDao {
 	public List<Map<String, Object>> attachmentList(SqlSessionTemplate sqlSession, List<Integer> cno) {
 		return sqlSession.selectList("mypage.attachmentList",cno);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectOrderList(SqlSessionTemplate sqlSession, String userId, int cPage, int numPerPage) {
+		return sqlSession.selectList("mypage.selectOrderList", userId, new RowBounds((cPage-1)*numPerPage, numPerPage));
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOrderData(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("mypage.selectOrderdata", userId);
+	}
+
+	@Override
+	public int selectTotalCount(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectOne("mypage.selectTotalCount", userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectWishList(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("mypage.selectWishList", userId);
+	}
+	
 }
 

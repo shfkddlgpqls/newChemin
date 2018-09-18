@@ -381,8 +381,7 @@
 			IMP.request_pay({
 				merchant_uid : orderNo,
 			    name : cartCount==1?pName:pName+" 외 "+(cartCount-1)+"개",
-			    // amount : all,
-			    amount : 100,
+			    amount : all,
 			    buyer_email : email,
 			    buyer_name : name,
 			    buyer_tel : phone,
@@ -405,7 +404,7 @@
 				}
 			})
 		} else {
-			alert("구매조건 확인 및 결제 진행에 동의해 주시기 바랍니다.");
+			swal("잠시만요!", "구매조건 확인 및 결제 진행에 동의해 주시기 바랍니다.", "warning");
 		}
 	}
 </script>

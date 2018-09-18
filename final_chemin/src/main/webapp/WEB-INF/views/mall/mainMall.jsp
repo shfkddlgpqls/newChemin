@@ -151,7 +151,8 @@
 	                        <option value="high">높은가격순</option>
 	                    </select>
 	                </div>
-	                <input id="searchData" name="searchData" type="text" class="m-r-30 s-text2" placeholder="검색할 상품명" style="border:none;outline:none;border-bottom: 1px solid gray;">
+	                <input id="searchData" name="searchData" list="autoComplete" type="text" class="m-r-30 s-text2" placeholder="검색할 상품명" style="border:none;outline:none;border-bottom: 1px solid gray;">
+	                <datalist id="autoComplete"></datalist>
 	            </div>
 	
 	            <div class="wra-filter-bar">
@@ -322,6 +323,25 @@
     <script>  
 	    $(function(){
 	    	list_ck(1);
+	    	
+	    	$('#searchData').keyup(function(){
+	    		var searchData = $('#searchData').val();
+				$.ajax({
+					url:"${path}/admin/productAuto.do",
+					type:"get",
+					data:{search:searchData},
+					dataType:'html',
+					success:function(data){
+						console.log(data);
+						var nameArr = data.split(",");
+						var html="";
+						for(var i=0;i<nameArr.length;i++){
+							html+="<option>"+nameArr[i]+"</option>";
+						}
+						$('#autoComplete').html(html);
+					}
+				});
+			});
 	    });
     
 	    function list_ck(cPage){

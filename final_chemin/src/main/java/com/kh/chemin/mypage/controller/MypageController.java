@@ -2,6 +2,7 @@ package com.kh.chemin.mypage.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,16 +23,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kh.chemin.acbook.common.Page;
+import com.kh.chemin.common.MallPageBar;
 import com.kh.chemin.map.controller.MapController;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.member.model.vo.Member;
 import com.kh.chemin.mypage.model.service.MypageService;
 
+import net.sf.json.JSONArray;
+
+@SessionAttributes(value = {"memberLoggedIn"})
 @Controller
 public class MypageController 
 {		
@@ -40,8 +50,17 @@ public class MypageController
 	
 	//주문 목록 페이지로 이동
 	@RequestMapping("/mypage/myOrderList.do")
-	public String myOrderList()
+	public String myOrderList(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, Model model, HttpSession session)
 	{
+		Member m = (Member)session.getAttribute("memberLoggedIn");
+		String userId = m.getUserId();
+		int numPerPage = 5;
+		List<Map<String, Object>> list = service.selectOrderList(userId, cPage, numPerPage);
+		List<Map<String, Object>> data = service.selectOrderData(userId);
+		int totalCount = service.selectTotalCount(userId);
+		model.addAttribute("pageBar", Page.getPage(cPage, numPerPage, totalCount, "myOrderList.do"));
+		model.addAttribute("list", list);
+		model.addAttribute("data", data);
 		return "mypage/myOrderList";
 	}
 	
@@ -65,6 +84,20 @@ public class MypageController
 	public String wishList()
 	{
 		return "mypage/myWishList";
+	}
+	
+	// 찜 목록 불러오기
+	@RequestMapping("/mypage/wishListData.do")
+	public void wishListData(HttpSession session, HttpServletResponse response) throws Exception {
+		Member m = (Member)session.getAttribute("memberLoggedIn");
+		String userId = m.getUserId();
+		List<Map<String, Object>> list = service.selectWishList(userId);
+		
+		JSONArray jsonArr = new JSONArray();
+		jsonArr.add(list);
+		response.setContentType("application/json;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(jsonArr);
 	}
 	
 	//장소 등록 페이지로 이동

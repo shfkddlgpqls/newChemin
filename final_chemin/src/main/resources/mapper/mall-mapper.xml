@@ -138,4 +138,23 @@
 		select * from cart join product using(pno) where userId=#{userId} and payYn='N'
 	</select>
 	
+	<!-- main에 best list 불러오기 -->
+	<select id="selectMainList" resultType="string">
+		select reImg from (select * from product order by sales desc) where ROWNUM <![CDATA[<=]]> 12
+	</select>
+	
+	<!-- 찜하기 여부 -->
+	<select id="selectWishCk" parameterType="map" resultMap="mallMap">
+		select * from wishList where userId=#{userId} and pno=#{pno}
+	</select>
+	
+	<!-- 찜 등록 -->
+	<insert id="insertWish" parameterType="map">
+		insert into wishList values(wishList_seq.nextval,#{userId},#{pno})
+	</insert>
+	
+	<!-- 찜 삭제 -->
+	<delete id="deleteWish" parameterType="map">
+		delete from wishList where userId=#{userId} and pno=#{pno}
+	</delete>
 </mapper>

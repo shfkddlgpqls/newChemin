@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.chemin.admin.model.dao.AdminDao;
+import com.kh.chemin.mall.model.vo.Product;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
@@ -58,18 +59,63 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public int selectProductCount() {
-		return dao.selectProductCount(sqlSession);
+	public int selectProductCount(Map<String, Object> map) {
+		return dao.selectProductCount(sqlSession, map);
 	}
 
 	@Override
-	public List<Map<String, Object>> selectProductList(int cPage, int numPerPage) {
-		return dao.selectProductList(sqlSession, cPage, numPerPage);
+	public List<Map<String, Object>> selectProductList(Map<String, Object> map, int cPage, int numPerPage) {
+		return dao.selectProductList(sqlSession, map, cPage, numPerPage);
 	}
 
 	@Override
 	public List<Map<String, String>> selectMallCate() {
 		return dao.selectMallCate(sqlSession);
+	}
+
+	@Override
+	public int selectMaxPno() {
+		return dao.selectMaxPno(sqlSession);
+	}
+
+	@Override
+	public int insertProduct(Product product) {
+		return dao.insertProduct(sqlSession, product);
+	}
+
+	@Override
+	public int productDelete(int pno) {
+		return dao.productDelete(sqlSession,pno);
+	}
+
+	@Override
+	public Product selectProduct(int pno) {
+		return dao.selectProduct(sqlSession,pno);
+	}
+
+	@Override
+	public int updateProduct(Product product) {
+		return dao.updateProduct(sqlSession, product);
+	}
+
+	@Override
+	public List<String> productAuto(String search) {
+		return dao.productAuto(sqlSession, search);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOrderList(int cPage, int numPerPage) {
+		return dao.selectOrderList(sqlSession, cPage, numPerPage);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOrderData() {
+		return dao.selectOrderData(sqlSession);
+	}
+
+	@Override
+	public int selectTotalCount() {
+		return dao.selectTotalCount(sqlSession);
 	}
 
 }

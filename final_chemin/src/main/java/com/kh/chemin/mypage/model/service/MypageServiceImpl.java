@@ -91,5 +91,25 @@ public class MypageServiceImpl implements MypageService {
 		return dao.attachmentList(sqlSession,cno);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectOrderList(String userId, int cPage, int numPerPage) {
+		return dao.selectOrderList(sqlSession, userId, cPage, numPerPage);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOrderData(String userId) {
+		return dao.selectOrderData(sqlSession, userId);
+	}
+
+	@Override
+	public int selectTotalCount(String userId) {
+		return dao.selectTotalCount(sqlSession, userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectWishList(String userId) {
+		return dao.selectWishList(sqlSession, userId);
+	}
+
 }
 

@@ -83,7 +83,9 @@
                <input type="hidden" id="userId" value="${memberLoggedIn.userId }"/>
                <script>
                $(window).load(function(){
-					fn_cartCount();
+            	   var userId=$('#userId').val();
+            	   if(userId!=null)
+						fn_cartCount();
 				});
 				
 				function fn_cartCount(){

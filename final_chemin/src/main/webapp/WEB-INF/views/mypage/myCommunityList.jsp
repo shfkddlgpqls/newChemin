@@ -43,37 +43,6 @@
 		});  
 	}
 </script>
-<div class="mypage">
-	<h2 class="text-center">마이페이지 입니당</h2>
-</div>
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<hr>
-				<ul class="nav justify-content-center">
-				    <li class="nav-item">
-				      <strong><a class="nav-link mypageAtag" href="${path }/mypage/myOrderList.do">주문 목록	</a></strong>
-				    </li>
-				    <li class="nav-item">
-				      <strong><a class="nav-link mypageAtag" href="${path }/mypage/myBoardList.do">게시글 관리</a></strong>
-				    </li>
-				    <li class="nav-item">
-				      <strong><a class="nav-link mypageAtag" href="${path }/mypage/myCommunityList.do?userId=${memberLoggedIn.userId}">커뮤니티 관리</a></strong>
-				    </li>
-				    <li class="nav-item">
-				      <strong><a class="nav-link mypageAtag" href="${path }/mypage/myShoppingCart.do">장바구니</a></strong>
-				    </li>
-				    <li class="nav-item">
-				   		<strong><a class="nav-link mypageAtag" href="${path }/mypage/myWishList.do">찜 목록</a></strong>
-				    </li>
-				    <li class="nav-item">
-				   		<strong><a class="nav-link mypageAtag" href="${path }/mypage/myPlaceList.do?userId=${memberLoggedIn.userId}">장소 등록 내역</a></strong>
-				    </li>
-				  </ul>
-				  <hr>
-			</div>
-		</div>	
-	</div>
 	
 
 		<div style="width:100px;height:20px;margin-left:75%;">

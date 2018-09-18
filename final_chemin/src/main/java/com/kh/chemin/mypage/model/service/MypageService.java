@@ -16,5 +16,9 @@ public interface MypageService {
 	int placeUpdate(Place place,List<PlaceMenu> menuList,List<PlaceAttachment> attList);
 	List<Map<String,Object>> communityList(String userId);
 	List<Map<String,Object>> attachmentList(List<Integer> cno);
+	List<Map<String, Object>> selectOrderList(String userId, int cPage, int numPerPage);
+	List<Map<String, Object>> selectOrderData(String userId);
+	int selectTotalCount(String userId);
+	List<Map<String, Object>> selectWishList(String userId);
 }
 

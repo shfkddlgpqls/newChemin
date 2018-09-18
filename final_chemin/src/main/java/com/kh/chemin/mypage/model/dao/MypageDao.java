@@ -23,5 +23,9 @@ public interface MypageDao {
 
 	List<Map<String,Object>> communityList(SqlSessionTemplate sqlSession,String userId);
 	List<Map<String,Object>> attachmentList(SqlSessionTemplate sqlSession, List<Integer> cno);
+	List<Map<String, Object>> selectOrderList(SqlSessionTemplate sqlSession, String userId, int cPage, int numPerPage);
+	List<Map<String, Object>> selectOrderData(SqlSessionTemplate sqlSession, String userId);
+	int selectTotalCount(SqlSessionTemplate sqlSession, String userId);
+	List<Map<String, Object>> selectWishList(SqlSessionTemplate sqlSession, String userId);
 }
 

@@ -43,4 +43,12 @@ public interface MallService {
 
 	List<Map<String, Object>> selectProductCount(String userId);
 
+	List<String> selectMainList();
+
+	Map<String, Object> selectWishCk(Map<String, Object> map);
+
+	int insertWish(Map<String, Object> map);
+
+	int deleteWish(Map<String, Object> map);
+
 }

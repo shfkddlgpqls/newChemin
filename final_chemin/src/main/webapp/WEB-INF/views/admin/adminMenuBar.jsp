@@ -26,6 +26,9 @@
 						    <li class="nav-item">
 						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminProductList.do">상품 관리</a></strong>
 						    </li>
+						    <li class="nav-item">
+						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminOrderList.do">주문 관리</a></strong>
+						    </li>
 						  </ul>
 						  <hr>
 				</div>
