@@ -77,6 +77,26 @@ public class MypageDaoImpl implements MypageDao {
 	public int selectPlaceCount(SqlSessionTemplate sqlSession, Map map) {
 		return sqlSession.selectOne("mypage.selectPlaceCount", map);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectOrderList(SqlSessionTemplate sqlSession, String userId, int cPage, int numPerPage) {
+		return sqlSession.selectList("mypage.selectOrderList", userId, new RowBounds((cPage-1)*numPerPage, numPerPage));
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOrderData(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("mypage.selectOrderdata", userId);
+	}
+
+	@Override
+	public int selectTotalCount(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectOne("mypage.selectTotalCount", userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectWishList(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("mypage.selectWishList", userId);
+	}
 	
 	//리뷰 넣기
 		@Override

@@ -25,5 +25,11 @@ public interface MypageService {
 	int placeDelete(int plaNo);
 	Place placeSelect(int plaNo);
 	int placeUpdate(Place place,List<PlaceMenu> menuList,List<PlaceAttachment> attList);
+
+	List<Map<String, Object>> selectOrderList(String userId, int cPage, int numPerPage);
+	List<Map<String, Object>> selectOrderData(String userId);
+	int selectTotalCount(String userId);
+	List<Map<String, Object>> selectWishList(String userId);
+
 	int selectPlaceCount(Map map);
 }

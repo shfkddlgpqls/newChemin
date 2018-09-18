@@ -3,6 +3,10 @@ package com.kh.chemin.mypage.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,10 +27,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.kh.chemin.acbook.common.Page;
+import com.kh.chemin.common.MallPageBar;
 import com.kh.chemin.community.model.vo.Report;
 import com.kh.chemin.mall.model.vo.QnA_board;
 import com.kh.chemin.mall.model.vo.Review;
@@ -41,6 +49,7 @@ import com.kh.chemin.mypage.model.service.MypageService;
 
 import net.sf.json.JSONArray;
 
+@SessionAttributes(value = {"memberLoggedIn"})
 @Controller
 public class MypageController 
 {		
@@ -51,8 +60,17 @@ public class MypageController
 	
 	//주문 목록 페이지로 이동
 	@RequestMapping("/mypage/myOrderList.do")
-	public String myOrderList()
+	public String myOrderList(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, Model model, HttpSession session)
 	{
+		Member m = (Member)session.getAttribute("memberLoggedIn");
+		String userId = m.getUserId();
+		int numPerPage = 5;
+		List<Map<String, Object>> list = service.selectOrderList(userId, cPage, numPerPage);
+		List<Map<String, Object>> data = service.selectOrderData(userId);
+		int totalCount = service.selectTotalCount(userId);
+		model.addAttribute("pageBar", Page.getPage(cPage, numPerPage, totalCount, "myOrderList.do"));
+		model.addAttribute("list", list);
+		model.addAttribute("data", data);
 		return "mypage/myOrderList";
 	}
 
@@ -69,6 +87,20 @@ public class MypageController
 	public String wishList()
 	{
 		return "mypage/myWishList";
+	}
+	
+	// 찜 목록 불러오기
+	@RequestMapping("/mypage/wishListData.do")
+	public void wishListData(HttpSession session, HttpServletResponse response) throws Exception {
+		Member m = (Member)session.getAttribute("memberLoggedIn");
+		String userId = m.getUserId();
+		List<Map<String, Object>> list = service.selectWishList(userId);
+		
+		JSONArray jsonArr = new JSONArray();
+		jsonArr.add(list);
+		response.setContentType("application/json;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(jsonArr);
 	}
 	
 	//장소 등록 페이지로 이동

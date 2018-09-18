@@ -45,6 +45,14 @@ public interface MallDao {
 
    List<Map<String, Object>> selectProductCount(SqlSessionTemplate sqlSession, String userId);
 
-   List<String> selectMainList(SqlSessionTemplate sqlSession);
+	List<String> selectMainList(SqlSessionTemplate sqlSession);
+
+	Map<String, Object> selectWishCk(SqlSessionTemplate sqlSession, Map<String, Object> map);
+
+	int insertWish(SqlSessionTemplate sqlSession, Map<String, Object> map);
+
+	int deleteWish(SqlSessionTemplate sqlSession, Map<String, Object> map);
+
+	List<String> productAuto(SqlSessionTemplate sqlSession, String search);
 
 }

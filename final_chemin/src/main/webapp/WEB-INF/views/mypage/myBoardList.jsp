@@ -283,8 +283,11 @@
 	   } 
 
 </script>
+<<<<<<< HEAD
+=======
 
 		
+>>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git
 		
 	<section>
 		<div class="container">
