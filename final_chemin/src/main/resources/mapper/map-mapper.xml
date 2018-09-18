@@ -52,7 +52,7 @@
 	</select>
 	
 	<insert id="placeInsertReview" parameterType="placeReview">
-		insert into pla_review values(seq_review_no.nextval,#{userId},#{plaNo},#{reStar},#{reContent},default,null,null)
+		insert into pla_review values(seq_review_no.nextval,#{userId},#{plaNo},#{reStar},#{reContent},default)
 	</insert>
 	
 	<select id="placeMatch" parameterType="map" resultType="place">
