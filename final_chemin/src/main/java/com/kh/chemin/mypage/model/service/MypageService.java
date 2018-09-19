@@ -11,16 +11,7 @@ import com.kh.chemin.map.model.vo.PlaceMenu;
 import com.kh.chemin.member.model.vo.Member;
 
 public interface MypageService {
-
-
-	List<PlaceAttachment> selectAttachList(int plaNo);
-	List<PlaceMenu> selectMenuList(int plaNo);
-	int placeDelete(int plaNo);	
-	int insertReview(Review review);
-	List<QnA_board> selectQnaBoardList(int cPage, int numPerPage, String userId);
-	int selectQnACount(String userId);
-	List<Review> selectReviewList(int cPage, int numPerPage, String userId);
-	int selectReviewCount(String userId);
+;
 	int warnMsg(String userId);
 	
 
