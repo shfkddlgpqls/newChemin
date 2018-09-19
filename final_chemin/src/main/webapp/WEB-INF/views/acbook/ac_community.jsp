@@ -25,12 +25,12 @@
 					<div class="panel-body">
 						<div class="pull-right">
 							<div class="btn-group">
-								<button type="button" class="btn btn-info btn-filter" data-target="pagado">10's</button>
-								<button type="button" class="btn btn-warning btn-filter" data-target="pendiente">20's</button>
-								<button type="button" class="btn btn-default btn-filter" data-target="all">30's</button>
-								<button type="button" class="btn btn-primary btn-filter" data-target="pagado">40's</button>
-								<button type="button" class="btn btn-danger btn-filter" data-target="pendiente">50's</button>
-								<button type="button" class="btn btn-info btn-filter" data-target="pagado">60's</button>
+								<button type="button" class="btn btn-info btn-filter" data-target="a">10's</button>
+								<button type="button" class="btn btn-warning btn-filter" data-target="b">20's</button>
+								<button type="button" class="btn btn-default btn-filter" data-target="c">30's</button>
+								<button type="button" class="btn btn-primary btn-filter" data-target="d">40's</button>
+								<button type="button" class="btn btn-danger btn-filter" data-target="e">50's</button>
+								<button type="button" class="btn btn-info btn-filter" data-target="f">60's</button>
 							</div>
 						</div>
 						<div class="table-container">
@@ -38,7 +38,7 @@
 							<div  id="pageBar"></div>
 							<div id="totalCounts"></div>
 						</div>
-						<div class="container" style="magin:10%;">
+						<div class="container" style="magin:10%;padding:5%;">
 							<button type="button" class="btn btn-info btn-filter" id="writeAc">write</button>
 						</div>
 					</div>
@@ -103,9 +103,9 @@ function fn_list(cPage){
 		type:"get",
 		dataType:"json",
 		success: function(data){
-			console.log(data);
+			console.log(data+"데이터");
 			console.log("load (BoardList) success");
-			
+
 			/* var html1=$("#totalCounts").html();
 			var totalCounts= data.model.totalCounts;
 			$("#totalCounts").html(html1+totalCounts).show(); */
@@ -117,9 +117,32 @@ function fn_list(cPage){
 			if(data!=null){
 				var html3= $("#tbl-comlist").html();
 				var html;
+				var birth;
+				var ages;
 				for(var i=0;i<data.model.list.length;i++){
+					
+					if((data.model.list[i].BIRTHDAY).substr(0,4)<1960){
+						ages="f";
+					}
+					if((data.model.list[i].BIRTHDAY).substr(0,4)<1970 && (data.model.list[i].BIRTHDAY).substr(0,4)>=1960){
+						ages="e";
+					}
+					if((data.model.list[i].BIRTHDAY).substr(0,4)<1980 && (data.model.list[i].BIRTHDAY).substr(0,4)>=1970){
+						ages="d";
+					}
+					if((data.model.list[i].BIRTHDAY).substr(0,4)<1990 && (data.model.list[i].BIRTHDAY).substr(0,4)>=1980){
+						ages="c";
+					}
+					if((data.model.list[i].BIRTHDAY).substr(0,4)<2000 && (data.model.list[i].BIRTHDAY).substr(0,4)>=1990){
+						ages="b";
+					}
+					if(((data.model.list[i].BIRTHDAY).substr(0,4))>=2000){
+						ages="a";
+					}
+			
+
 					html+="<tbody>";
-					html+="<tr data-status='pagado'>";
+					html+="<tr data-status="+ages+">";
 					html+="<td>";
 					html+="<div class='ckbox'>";
 					html+="<input type='checkbox' id='checkbox1'>";
