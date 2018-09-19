@@ -10,11 +10,12 @@ public class Review
 	private String reImg;       
     private String stars;     
     private String reDate;
+    private String pname;
     
     public Review() {}
 
 	public Review(int reNO, String userId, int pno, String reContent, String orImg, String reImg, String stars,
-			String reDate) {
+			String reDate,String pname) {
 		super();
 		this.reNO = reNO;
 		this.userId = userId;
@@ -24,6 +25,7 @@ public class Review
 		this.reImg = reImg;
 		this.stars = stars;
 		this.reDate = reDate;
+		this.pname = pname;
 	}
 
 	public int getReNO() {
@@ -89,12 +91,23 @@ public class Review
 	public void setReDate(String reDate) {
 		this.reDate = reDate;
 	}
+	
+	
+
+	public String getPname() {
+		return pname;
+	}
+
+	public void setPname(String pname) {
+		this.pname = pname;
+	}
 
 	@Override
 	public String toString() {
-		return "Review [reNO=" + reNO + ", userID=" + userId + ", pno=" + pno + ", reContent=" + reContent + ", orImg="
-				+ orImg + ", reImg=" + reImg + ", stars=" + stars + ", reDate=" + reDate + "]";
+		return "Review [reNO=" + reNO + ", userId=" + userId + ", pno=" + pno + ", reContent=" + reContent + ", orImg="
+				+ orImg + ", reImg=" + reImg + ", stars=" + stars + ", reDate=" + reDate + ", pname=" + pname + "]";
 	}
+
     
     
     

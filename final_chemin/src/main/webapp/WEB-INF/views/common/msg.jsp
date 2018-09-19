@@ -9,10 +9,13 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <c:set value="${pageContext.request.contextPath }" var="path"/>
 <script>
+
 <%
 	response.setContentType("text/html;charset=UTF-8");
 %>
+
 if('${status}'=="loginSuccess"){
+
    swal({
         text: "${msg}",
         icon: "success",

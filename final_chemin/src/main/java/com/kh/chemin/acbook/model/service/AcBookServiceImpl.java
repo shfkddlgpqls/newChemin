@@ -11,7 +11,8 @@ import org.springframework.ui.Model;
 import com.kh.chemin.acbook.model.dao.AcBookDao;
 import com.kh.chemin.acbook.model.vo.AcBook;
 import com.kh.chemin.acbook.model.vo.AcCom;
-import com.kh.chemin.acbook.model.vo.Reply;
+import com.kh.chemin.acbook.model.vo.AcReply;
+import com.kh.chemin.acbook.model.vo.PolaData;
 
 @Service
 public class AcBookServiceImpl implements AcBookService {
@@ -133,7 +134,7 @@ public class AcBookServiceImpl implements AcBookService {
 	}
 
 	@Override
-	public int insertReply(Reply rp) {
+	public int insertReply(AcReply rp) {
 		return dao.insertReply(sqlSession,rp);
 	}
 
@@ -141,6 +142,79 @@ public class AcBookServiceImpl implements AcBookService {
 	public List<Model> selectReply(String accNo) {
 		return dao.selectReply(sqlSession, accNo);
 	}
+
+	@Override
+	public int updateReply(AcReply rp) {
+		return dao.updateReply(sqlSession,rp);
+	}
+
+	@Override
+	public int deleteReply(int rNo) {
+		return dao.deleteReply(sqlSession,rNo);
+	}
+
+	@Override
+	public int updateAcCom(AcCom acc) {
+		return dao.updateAcCom(sqlSession, acc);
+	}
+
+	@Override
+	public int deleteBoard(int accNo) {
+		return dao.deleteBoard(sqlSession, accNo);
+	}
+
+	@Override
+	public int deleteBoardReply(int accNo) {
+		return dao.deleteBoardReply(sqlSession,accNo);
+	}
+
+	@Override
+	public int updateAcOne(AcBook ac) {
+		return dao.updateAcOne(sqlSession, ac);
+	}
+
+	@Override
+	public int deleteAcOne(AcBook ac) {
+		return dao.deleteAcOne(sqlSession, ac);
+	}
+
+	@Override
+	public List<PolaData> selectPolaData(String userId) {
+		return dao.selectPolaData(sqlSession, userId);
+	}
+
+	@Override
+	public List<Model> selectMemoLank(String userId) {
+		return dao.selectMemoLank(sqlSession,userId);
+	}
+
+	@Override
+	public List<Model> thisMonthlyData(String userId) {
+		return dao.thisMonthlyData(sqlSession,userId);
+	}
+
+	@Override
+	public List<Model> monthlyMemoLank(String userId) {
+		return dao.monthlyMemoLank(sqlSession,userId);
+	}
+
+	@Override
+	public List<Model> selectMonTime(String userId) {
+		return dao.selectMonTime(sqlSession,userId);
+	}
+
+	@Override
+	public List<Model> selectMuchDay(String userId) {
+		return dao.selectMuchDay(sqlSession,userId);
+	}
+
+	@Override
+	public List<Model> selectSavingCost(String userId) {
+		return dao.selectSavingCost(sqlSession,userId);
+	}
+	
+	
+	
 	
 	
 }

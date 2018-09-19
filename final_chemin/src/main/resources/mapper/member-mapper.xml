@@ -2,22 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="member">
  	<resultMap type="member" id="memberMap">
-       <result column="userid" property="userId"/>
-       <result column="userpw" property="password"/>
-       <result column="username" property="userName"/>
-       <result column="gender" property="gender"/>
-       <result column="userbirth" property="birthDay"/>
-       <result column="useremail" property="email"/>
-       <result column="userphone" property="phone"/>
-       <!--  하비typeHandler="strArr" -->
-       <result column="userhobby" property="hobby" typeHandler="strArr"/>
-       <result column="originalimg" property="originalImg"/>
-       <result column="renameimage" property="renameImage"/>
-
-    </resultMap>
+ 		<result column="userid" property="userId"/>
+ 		<result column="userpw" property="password"/>
+ 		<result column="username" property="userName"/>
+ 		<result column="gender" property="gender"/>
+ 		<result column="userbirth" property="birthDay"/>
+ 		<result column="useremail" property="email"/>
+ 		<result column="userphone" property="phone"/>
+ 		<!--  하비typeHandler="strArr" -->
+ 		<result column="userhobby" property="hobby" typeHandler="strArr"/>
+ 		<result column="originalimg" property="originalImg"/>
+ 		<result column="renameimage" property="renameImage"/>
+ 	</resultMap>
  	<select id="selectOne" resultMap="memberMap" parameterType="string">
  		SELECT * FROM MEMBER_INFO WHERE USERID=#{userId} 	
  	</select>
+ 	<update id="updateMember" parameterType="member">
+       UPDATE MEMBER_INFO SET USERID=#{userId},USERPW=#{password},USERNAME=#{userName},GENDER=#{gender},USERBIRTH=#{birthDay},USEREMAIL=#{email},USERPHONE=#{phone},USERADDR=#{address},USERHOBBY=#{hobby, typeHandler=strArr},ORIGINALIMG=#{originalImg},RENAMEIMAGE=#{renameImage} where userId=#{userId}
+    </update>
+ 	
+ 	<select id="selectFindId" parameterType="map" resultType="member">
+ 		select * from member_info where userName=#{userName} and userEmail=#{userEmail}
+ 	</select>
+ 	<select id="selectFindPw" parameterType="map" resultType="member">
+ 		select * from member_info where userId=#{userId} and userName=#{userName} and userEmail=#{userEmail}
+ 	</select>
+ 	<update id="updatePw" parameterType="map">
+ 		update member_info set userPw=#{password} where userId=#{userId}
+	</update>
  	<update id="memberInfoUpdate" parameterType="member">
  		UPDATE MEMBER_INFO SET ORIGINALIMG=#{originalImg},RENAMEIMAGE=#{originalImg}, USERPW=#{password},USERPHONE=#{phone} ,USEREMAIL=#{email},USERADDR=#{address},USERHOBBY=#{hobby,typeHandler=strArr} where USERID=#{userId}
  	</update>

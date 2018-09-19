@@ -385,9 +385,9 @@
                         	else{
 		                       	if(pdate>=(today-7))
 		                       		view+=" <span class='badge badge-info'>new</span>";
-		                       	if(data[i].sales>=10)
+		                       	if(data[i].sales>=30)
 		                       		view+=" <span class='badge badge-warning'>best</span>";
-		                       		// view+=" <span class='badge badge-danger'>hot</span>"; 리뷰많은순?
+		                       	// view+=" <span class='badge badge-danger'>hot</span>"; 리뷰많은순?
                         	}
 	                        view+="</a>";
 	                        view+="</div>";

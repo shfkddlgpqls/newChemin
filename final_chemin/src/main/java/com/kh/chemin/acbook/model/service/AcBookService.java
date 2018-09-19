@@ -7,7 +7,8 @@ import org.springframework.ui.Model;
 
 import com.kh.chemin.acbook.model.vo.AcBook;
 import com.kh.chemin.acbook.model.vo.AcCom;
-import com.kh.chemin.acbook.model.vo.Reply;
+import com.kh.chemin.acbook.model.vo.AcReply;
+import com.kh.chemin.acbook.model.vo.PolaData;
 
 public interface AcBookService {
 	//수입등록
@@ -50,8 +51,22 @@ public interface AcBookService {
 	List<Model> prePreMonthlyData(String userId);
 	List<Model> preSelectDailySum(String userId);
 	List<Model> prePreSelectDailySum(String userId);
-	int insertReply(Reply rp);
+	int insertReply(AcReply rp);
 	List<Model> selectReply(String accNo);
+	int updateReply(AcReply rp);
+	int deleteReply(int rNo);
+	int updateAcCom(AcCom acc);
+	int deleteBoard(int accNo);
+	int deleteBoardReply(int accNo);
+	int updateAcOne(AcBook ac);
+	int deleteAcOne(AcBook ac);
+	List<PolaData> selectPolaData(String userId);
+	List<Model> selectMemoLank(String userId);
+	List<Model> thisMonthlyData(String userId);
+	List<Model> monthlyMemoLank(String userId);
+	List<Model> selectMonTime(String userId);
+	List<Model> selectMuchDay(String userId);
+	List<Model> selectSavingCost(String userId);
 	
 	
 	

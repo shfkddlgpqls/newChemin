@@ -41,6 +41,8 @@ public interface AdminDao {
 	List<Map<String,Object>> searchList(SqlSessionTemplate sqlSession,HashMap<String,Object> map);
 	int adminMemberCancel(SqlSessionTemplate sqlSession, String userId);
 
+//	=======================주리가 한 부분  시작=======================	
+
 		//문의게시판 총 갯수
 		int selectQnACount(SqlSessionTemplate sqlSession);	
 		
@@ -55,5 +57,16 @@ public interface AdminDao {
 
 		List<Review> selectReviewList(SqlSessionTemplate sqlSession, int cPage, int numPerPage);
 		int selectReviewCount(SqlSessionTemplate sqlSession);
+		int adminQNADel(SqlSessionTemplate sqlSession, String modal_qno);
+		int AdminReviewDel(SqlSessionTemplate sqlSession, String modal_rno);
+		List<QnA_board> selectQnaSearchList(SqlSessionTemplate sqlSession, Map<String, Object> map, int cPage,
+				int numPerPage);
+		int selectQnASearchCount(SqlSessionTemplate sqlSession, Map<String, Object> map);
+
+		
+//		=======================주리가 한 부분  끝=======================	
+
+
 		
 }
+

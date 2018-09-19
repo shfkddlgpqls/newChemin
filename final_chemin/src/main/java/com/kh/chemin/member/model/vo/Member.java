@@ -1,7 +1,7 @@
+
 package com.kh.chemin.member.model.vo;
 
 import java.util.Arrays;
-import java.util.Date;
 
 public class Member {
    
@@ -9,7 +9,7 @@ public class Member {
    private String password;
    private String userName; 
    private String gender;
-   private Date birthDay;
+   private String birthDay;
    private String email;
    private String phone;
    private String address;
@@ -20,23 +20,23 @@ public class Member {
    
    public Member() {}
 
-	public Member(String userId, String password, String userName, String gender, Date birthDay, String email, String phone,
-			String address, String[] hobby, String originalImg, String renameImage, int mgrade) {
-		super();
-		this.userId = userId;
-		this.password = password;
-		this.userName = userName;
-		this.gender = gender;
-		this.birthDay = birthDay;
-		this.email = email;
-		this.phone = phone;
-		this.address = address;
-		this.hobby = hobby;
-		this.originalImg = originalImg;
-		this.renameImage = renameImage;
-		this.mgrade = mgrade;
-	}
-	
+   public Member(String userId, String password, String userName, String gender, String birthDay, String email, String phone,
+         String address, String[] hobby, String originalImg, String renameImage, int mgrade) {
+      super();
+      this.userId = userId;
+      this.password = password;
+      this.userName = userName;
+      this.gender = gender;
+      this.birthDay = birthDay;
+      this.email = email;
+      this.phone = phone;
+      this.address = address;
+      this.hobby = hobby;
+      this.originalImg = originalImg;
+      this.renameImage = renameImage;
+      this.mgrade = mgrade;
+   }
+   
 	public String getUserId() {
 		return userId;
 	}
@@ -69,11 +69,11 @@ public class Member {
 		this.gender = gender;
 	}
 	
-	public Date getBirthDay() {
+	public String getBirthDay() {
 		return birthDay;
 	}
 	
-	public void setBirthDay(Date birthDay) {
+	public void setBirthDay(String birthDay) {
 		this.birthDay = birthDay;
 	}
 	
@@ -140,5 +140,6 @@ public class Member {
 				+ Arrays.toString(hobby) + ", originalImg=" + originalImg + ", renameImage=" + renameImage + ", mgrade="
 				+ mgrade + "]";
 	}
-
+	   
+  
 }

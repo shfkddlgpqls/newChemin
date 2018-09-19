@@ -5,9 +5,9 @@
 <c:set value="${pageContext.request.contextPath}" var="path" />
 
 <!-- ProgressBar: ac_inputIn -->
-<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/pgBar.css?var3"/>">
+<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/pgBar.css?var4"/>">
 <!-- ProgressBar: ac_inputIn -->
-<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/ac_navBar.css"/>">
+<link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/ac_navBar.css?var1"/>">
 <!-- Fullcalendar: ac_calenndar: ? -->
 <link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/bootstrap-datetimepicker.css"/>">
 <!--DatePicker: ac_inputIn-->
@@ -196,7 +196,6 @@ $(document).on('click','#exCode',function(){
 	var a = $('input:hidden[name=exCode]').val($(this).attr("value"));	
 });
 </script>
-
 <script>
 var current_fs, next_fs, previous_fs;
 var left, opacity, scale;

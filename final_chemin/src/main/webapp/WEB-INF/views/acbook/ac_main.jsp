@@ -13,7 +13,26 @@
 <link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/acMain.css?var4"/>">
 <!-- Main Start -->
 <div class="col-md-10 col-sm-8 main-content"  id="newMain">
+<style>
+html { font-size: 60.5%; } 
+body { font-size: 1em;} 
 
+@media (max-width: 300px) { 
+    html { font-size: 70%; } 
+} 
+
+@media (min-width: 500px) { 
+    html { font-size: 80%; } 
+} 
+
+@media (min-width: 700px) { 
+    html { font-size: 80%; } 
+} 
+
+@media (min-width: 1200px) { 
+    html { font-size: 100%; } 
+}
+</style>
 	<!-- 여기서부터입력 -->
 <!------ Include the above in your HEAD tag ---------->
 <div class="innerpage-container-fluid">
@@ -23,8 +42,8 @@
 			<div class="row">
 				<div class="col-md-3">
 					<div class="acTop1" id="yesan">
-						<p class="font1">Budget</p><hr>
-						<h2 class="timer count-title count-number" data-to="${list[0].ALLCOST}" data-speed="2500"></h2>
+						<p class="font1">Saving</p><hr>
+						<h2 class="timer count-title count-number" data-to="${savCost[0].ACCOST }" data-speed="2500"></h2>
 					</div>
 				</div>
 				<div class="col-md-3">
@@ -42,8 +61,8 @@
 
 				<div class="col-md-3">
 					<div class="acTop1" id="settings">
-						<p class="font1">Settings</p><hr> 
-						<h2 class="timer count-title count-number" data-to="${lastDay }" data-speed="1000">$</h2>
+						<p class="font1">dailyAvg</p><hr> 
+						<h2 class="timer count-title count-number" data-to="${monAvg[0].AVGCOST }" data-speed="1000">$</h2>
 					</div>
 <!-- 					<script>
 					var a = ${list[0].ALLCOST}/${lastDay}
@@ -57,7 +76,7 @@
 						<div class="col-md-8">
 							<div class="aclayout" id="acid">
 								<div class="card-img">
-						 			<canvas id="dailyExChart" style="max-width:100%;padding:1%;"></canvas>
+						 			<canvas id="dailyExChart" style="max-width:100%;height:100%;"></canvas>
 								</div>
 								<div class="card-desc">
 								</div>
@@ -65,7 +84,7 @@
 						</div>
 						<div class="col-md-4">
 							<div class="aclayout" id="acid" >
-								<div class="canvas_container"></div>
+								<canvas id="timePola" style="width:100%;height:100%;"></canvas>
 							</div>
 						</div>
 					</div>
@@ -90,7 +109,7 @@
 			<div class="row">
 				<div class="col-md-3">
 					<div class="aclayout" id="acid">
-							<canvas id="cateLank" style="width:100%;height:100%;"></canvas>
+							<canvas id="cateLank" style="width:100%;height:100%;margin:1%;object-fit:contain;"></canvas>
 					</div>
 				</div>
 				<div class="col-md-3">
@@ -98,34 +117,21 @@
 							<canvas id="horizentals" style="width:100%;height:100%;"></canvas>
 					</div>
 				</div>
-				<div class="col-md-3">
-					<div class="aclayout" id="acid">
+				<div class="col-md-3" style="object-fit:contain;">
+					<div class="aclayout" id="acid" style="object-fit:contain;overflow:hidden;word-wrap:break-word;">
 						<div class="card-img">
-	                        <img src="https://placeimg.com/380/230/animals" alt="">
-	                    </div>
-						<div class="card-desc">
-							<h3>${memberLoggedIn.userId }님</h3>자산관리 확인<br><br><br>
-							<a href="#" class="btn-card" >search my dp</a>
+	                        <img src="https://image.flaticon.com/icons/svg/1029/1029879.svg" style="max-width:100%;object-fit:contain;">
 						</div>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<!-- 타임라인 -->
-  <div class="aclayout" id="timeline">
-            <ul class="timeline" style="margin:0%;">
-            <li class="event" data-date="2015/Present">
-              <h6>18-09-03 12:00:25</h6>
-              <h6>18000원: 노랑통닭 모란점</h6>
-            </li>
-           <li class="event" data-date="2015/Present">
-              <h6>18-09-03 12:00:25</h6>
-              <h6>18000원: 노랑통닭 모란점</h6>
-            </li>
-            <li class="event" data-date="2015/Present">
-              <h6>18-09-03 12:00:25</h6>
-              <h6>18000원: 노랑통닭 모란점</h6>
-            </li>
-  </div>
+					  <div class="aclayout" id="acid" style="border-top-style:solid;border-width:30px;border-color:violet;">
+					       <div class="card-desc">
+							<h3 style="margin:0%;">too Much Expenditure</h3>
+							<br><h1 class='monDay' style="font-size:100px;font-weight:bold;margin:0%;"></h1>
+						</div>
+					  </div>
 					<!-- 타임라인 -->
 				</div>
 			</div>
@@ -202,30 +208,24 @@ function drawDoughnut() {
 						break;
 					};
 				});
-				console.log(vsData[0]/vsData[1]);
-				
+
 				if(vsData[0]/vsData[1]>1.5){
-					console.log("1등급")
 					acGrade = "1"
 					acCons = "최상"
 					acDetails = "훌륭한 소비습관입니다!"
 				}else if(vsData[0]/vsData[1]>1){
-					console.log("2등급")
 					acGrade = "2"
 					acCons = "안심"
 					acDetails = "1등급이 멀지 않았어요!"
 				}else if(vsData[0]/vsData[1]>0.5){
-					console.log("3등급")
 					acGrade = "3"
 					acCons = "걱정"
 					acDetails = "현명한 소비습관이 필요합니다."
-				}else if(vsData[0]/vsData[1]>0){
-					console.log("4등급")
+				}else if(vsData[0]/vsData[1]>=0){
 					acGrade = "4"
 					acCons = "심각"
 					acDetails = "더이상의 지출은 No!"
 				}else{
-					console.log("5등급")
 					acGrade = "5"
 					acCons = "재정파탄"
 					acDetails = "아이고..."
@@ -302,8 +302,7 @@ function drawLine(){
 		dataType : "json",
 		success : function(d) {
 			console.log("load (ChartData_sum(plus)) success");
-			console.log(d);
-			
+
 			var addlabels=[];
 			var adddata=[];
 			$(d).each(function(){			
@@ -343,7 +342,7 @@ function drawLine(){
 				options: {
 					title:{
 						display: true,
-						text:'Daily Cumulative Dispenditure',
+						text:'Daily Cumulative Expenditure',
 						fontSize: 17,
 					},
 					responsive:true,
@@ -387,7 +386,7 @@ function drawDoughnut2() {
 		type : "get",
 		dataType : "json",
 		success : function(d) {
-			console.log("load (VSData) success");
+			console.log("load (Expenditure CateDoughnut) success");
 			var vsLabels = [];//CATENAME
 			var vsData = [];//CATESUM
 			var acGrade = "";
@@ -467,7 +466,7 @@ function drawDoughnut2() {
 				options : {
 					title:{
 						display: false,
-						text:'Monthly Dispenditure Lanking',
+						text:'Monthly Expenditure Lanking',
 						fontSize: 15,
 						position:'top'
 						},
@@ -510,178 +509,208 @@ $(document).ready(function() {
 </script>
 
 <script>
+$.ajax({
+	url : "${pageContext.request.contextPath}/acbook/selectMemoLank.do",
+	type : "get",
+	dataType : "json",
+	success : function(d) {
+		console.log("load memoData success");
+		var mLabels=[];
+		var mData=[];
+		
+		if(d!=null){
+			$(d).each(function() {
+				mLabels.push($(this).attr('COUNT'));
+				mData.push($(this).attr('MEMO'));
 
-var ctxHo = $("#horizentals");
+			})
+			
 
-function drawHo(){
-	
-	var horizentals = new Chart(
-			ctxHo,
-			{
-				type: 'horizontalBar',
-			    data: { 
-			    	labels: [
-			        "노랑통닭",
-			        "네네치킨",
-			        "편의점털기",
-			        "데일리먼데이",
-			        "준구동물병원",
-			        "교촌치킨",
-			        "저축"
-				    ],
-				    datasets: [
-				        {
-/* 				            label:[
-				            	
-						        ], */
-
-				            data: [100300,75020,83300,10280,53800,22200,44500],
-				            backgroundColor: ["#669911","#119966","#F94C45","rgb(252,217,32)","rgb(171,209,26)",
-								"rgb(160,171,188)","rgba(75,192,192,1)"],
-				            hoverBackgroundColor: ["#66A2EB", "#FCCE56","#F94C45","rgb(252,217,32)","rgb(171,209,26)",
-				            	"rgb(160,171,188)","rgba(75,192,192,1)"]
-				        }]
-				},
-			    options: {
-			        scales: {
-			            xAxes: [{
-			                ticks: {
-			                	min: 60,
-			                	max:100300,
-			                	beginAtZero: true,
-			                },
-			                gridLines: {
-			                    display: true,
-			                    color: "lightgray"
-			                 }
-			            }],
-			            yAxes: [{
-			                stacked: true,
-                            display: false,
-                            gridLines: {
-                            	display:true,
-                            	color:"lightgray",
-                            	borderDash: [2, 5],
-                            	borderTention:1
-                              },
-			                }]
-			        },
-			        title:{
-						display: true,
-						position:'top',
-						text:'memo lanking',
-						fontSize: 15,
-						},
-					responsive : true,
-					legend : {
-						display : false,
-						fontSize : 5,
-						position : 'bottom',
-						usePointStyle : true,
-						labels: {
-							display:false,
-							fontSize:5,
-			            	boxWidth: 10,
-			            }
-					},
-					animation: {
-			            duration: 3000,
-			        },
-			        hover: {
-			            animationDuration: 1000,
-			        },
-			        responsiveAnimationDuration: 2000,
-			    }
+		}
+			var ctxHo = $("#horizentals");
+			
+			function drawHo(){
+				
+				var horizentals = new Chart(
+						ctxHo,
+						{
+							type: 'horizontalBar',
+						    data: { 
+						    	labels: mData,
+							    datasets: [
+							        {
+							            data: mLabels,
+							            backgroundColor: ["#66A2EB",
+							            	"#119966",
+							            	"#F94C45",
+							            	"rgb(252,217,32)",
+							            	"rgb(171,209,26)",
+											"rgb(160,171,188)",
+											"rgba(75,192,192,1)",
+											"salmon",
+											"yellow",
+											"lightblue",
+											"lightpink"
+											],
+							            hoverBackgroundColor: ["salmon", "#FCCE56","#F94C45","rgb(252,217,32)","rgb(171,209,26)",
+							            	"rgb(160,171,188)","rgba(75,192,192,1)"]
+							        }]
+							},
+						    options: {
+						        scales: {
+						            xAxes: [{
+						                ticks: {
+						                	min: 0,
+						                	max:mLabels[0],
+						                	beginAtZero: true,
+						                },
+						                gridLines: {
+						                    display: true,
+						                    color: "lightgray"
+						                 }
+						            }],
+						            yAxes: [{
+						                stacked: true,
+			                            display: false,
+			                            gridLines: {
+			                            	display:true,
+			                            	color:"lightgray",
+			                            	borderDash: [2, 5],
+			                            	borderTention:1
+			                              },
+						                }]
+						        },
+						        title:{
+									display: true,
+									position:'top',
+									text:'memo lanking',
+									fontSize: 15,
+									},
+								responsive : true,
+								legend : {
+									display : false,
+									fontSize : 5,
+									position : 'bottom',
+									usePointStyle : true,
+									labels: {
+										display:false,
+										fontSize:5,
+						            	boxWidth: 10,
+						            }
+								},
+								animation: {
+						            duration: 3000,
+						        },
+						        hover: {
+						            animationDuration: 1000,
+						        },
+						        responsiveAnimationDuration: 2000,
+						    }
+						});
+			
+			};
+			$(document).ready(function() {
+				drawHo();
 			});
 
-};
-$(document).ready(function() {
-	drawHo();
+
+	}
+		
+	
 });
 </script>
 
 <script>
-function DataObject(data) {
-	  this.data = data;
+var ctxs4 = $("#timePola");
+
+function drawPola() {
+
+	$.ajax({
+		url:"${path}/acbook/timePolar.do",
+		type : "get",
+		dataType : "json",
+		success : function(d) {
+			console.log("load (polaData) success");
+			if(d!=null){
+  			var t0103= d.model.list1[0]==null?0:d.model.list1[0].acSum;
+			var t0306= d.model.list2[0]==null?0:d.model.list2[0].acSum;
+			var t0609= d.model.list3[0]==null?0:d.model.list3[0].acSum;
+			var t0912= d.model.list4[0]==null?0:d.model.list4[0].acSum;
+			var t1215= d.model.list5[0]==null?0:d.model.list5[0].acSum;
+			var t1518= d.model.list6[0]==null?0:d.model.list6[0].acSum;
+			var t1821= d.model.list7[0]==null?0:d.model.list7[0].acSum;
+			var t2124= d.model.list8[0]==null?0:d.model.list8[0].acSum;
+			var monDay = d.model.monDay[0]==null?0:d.model.monDay[0].ACDAY;			
+			var htmlMM=$(".monDay").html();
+			$(".monDay").html(htmlMM+monDay).show();
+
+
+			var drawPolas = new Chart(
+					ctxs4,
+					{
+		
+			  type: 'polarArea',
+			  data: {
+			    labels: ["01~03시", "03~06시", "06~09시", "09~12시", "12~15시","15~18시","18~21시","21~24시"],
+			    datasets: [
+			    	
+			      {
+			        backgroundColor: ['rgba(255, 159, 64, 0.7)',
+			                          'rgba(255, 99, 132, 0.7)',
+			                          'rgba(75, 192, 192, 0.7)',
+			                          'rgba(255, 205, 86, 0.7)',
+			                          'rgba(54, 162, 235, 0.7)',
+			                          'yellow',
+			                          'orange',
+			                          'lightgreen',
+			                          ],
+			        borderColor: ['#FF9F40',
+			                      '#FF6384',
+			                      '#4BC0C0',
+			                      '#FFCD56',
+			                      '#36A2EB',
+			                      'yellow',
+		                          'orange',
+		                          'lightgreen'],
+			        borderWidth: 1,
+			        data: [t0103, t0306, t0609, t0912, t1215, t1518, t1821, t2124],
+			        hoverBackgroundColor: ['#FF9F40',
+			                               '#FF6384',
+			                               '#4BC0C0',
+			                               '#FFCD56',
+			                               '#36A2EB',
+			                               'yellow',
+			 	                          'orange',
+			 	                          'lightgreen',],
+			        label: 'Label - example1'
+			      }
+			    ]
+			  },
+			  options: {
+			    startAngle: (Math.PI * -1),
+			    legend:{
+			    	labels:{boxWidth:10},
+			  		position:'top',
+			  		fontSize:5,
+			    },
+			    animation: {
+		            duration: 3000,
+		        },
+		        hover: {
+		            animationDuration: 1000,
+		        },
+		        responsiveAnimationDuration: 2000,
+			  }
+		
+		})
+		}
+	
 	}
-
-	DataObject.prototype.randomizeData = function() {
-	  let dataLength = this.data.length;
-	  
-	  for(let n = 0; n < dataLength; n++) {
-	    this.data[n] = Math.ceil((Math.random() * 20));
-	  }
-	}
-
-
-	function chartUpdate(chart, dataObjects) {
-	  dataObjects.forEach(function(dataObject) {
-	    dataObject.randomizeData();
-	  });
-
-	  chart.update();
-	}
-
-
-	const canvas = document.createElement('canvas'),
-	      canvasContainer = document.getElementsByClassName('canvas_container')[0];
-
-	canvas.setAttribute('height', 400);
-	canvas.setAttribute('width', 400);
-	canvasContainer.appendChild(canvas);
-
-	let ctxp = canvas.getContext('2d');
-	    
-	let dataObject1 = new DataObject([10, 5, 10, 20, 15]);
-
-
-	let chartSettings = {
-	  type: 'polarArea',
-	  data: {
-	    labels: ["0", "1", "2", "3", "4"],
-	    datasets: [
-	      {
-	        backgroundColor: ['rgba(255, 159, 64, 0.7)',
-	                          'rgba(255, 99, 132, 0.7)',
-	                          'rgba(75, 192, 192, 0.7)',
-	                          'rgba(255, 205, 86, 0.7)',
-	                          'rgba(54, 162, 235, 0.7)'],
-	        borderColor: ['#FF9F40',
-	                      '#FF6384',
-	                      '#4BC0C0',
-	                      '#FFCD56',
-	                      '#36A2EB'],
-	        borderWidth: 1,
-	        data: dataObject1.data,
-	        hoverBackgroundColor: ['#FF9F40',
-	                               '#FF6384',
-	                               '#4BC0C0',
-	                               '#FFCD56',
-	                               '#36A2EB'],
-	        label: 'Label - example1'
-	      }
-	    ]
-	  },
-	  options: {
-	    startAngle: (Math.PI * -1),
-	    legend:{
-	    	labels:{boxWidth:10}
-	    },
-	    animation: {
-            duration: 3000,
-        },
-        hover: {
-            animationDuration: 1000,
-        },
-        responsiveAnimationDuration: 2000,
-	  }
-	};
-
-	let chart = new Chart(ctxp, chartSettings);
-
-	setInterval(function() {
-	 chartUpdate(chart, [dataObject1])
-	}, 3000);
+})
+}
+$(document).ready(function() {
+	drawPola();
+});
 </script>
 <!-- Counter -->
 <script src="<c:url value="/resources/acbook/js/counter.js" />"></script>

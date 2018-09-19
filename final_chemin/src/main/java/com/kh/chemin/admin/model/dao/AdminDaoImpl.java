@@ -145,6 +145,9 @@ public class AdminDaoImpl implements AdminDao {
 		return sqlSession.selectList("admin.searchList",map);
 	}
 	
+	
+//	=======================주리가 한 부분  시작=======================	
+	
 	//문의게시판 총 갯수 출력
 		@Override
 		public int selectQnACount(SqlSessionTemplate sqlSession) 
@@ -186,9 +189,36 @@ public class AdminDaoImpl implements AdminDao {
 		}
 
 		@Override
+		public int adminQNADel(SqlSessionTemplate sqlSession, String modal_qno) 
+		{
+			return sqlSession.delete("admin.adminQNADel", modal_qno);
+		}
+
+		@Override
+		public int AdminReviewDel(SqlSessionTemplate sqlSession, String modal_rno) 
+		{
+			return sqlSession.delete("admin.AdminReviewDel", modal_rno);
+		}
+
+		@Override
+		public List<QnA_board> selectQnaSearchList(SqlSessionTemplate sqlSession, Map<String, Object> map, int cPage,
+				int numPerPage) 
+		{
+			 return sqlSession.selectList("admin.selectQnaSearchList", map, new RowBounds((cPage-1)*numPerPage, numPerPage));
+		}
+
+		@Override
+		public int selectQnASearchCount(SqlSessionTemplate sqlSession, Map<String, Object> map) 
+		{
+			return sqlSession.selectOne("admin.selectQnASearchCount", map);
+		}
+			
+//		=======================주리가 한 부분  끝=======================	
+
+		
+
 		public int adminMemberCancel(SqlSessionTemplate sqlSession, String userId) {
 			return sqlSession.update("admin.adminMemberCancel",userId);
 		}
-
 
 }
