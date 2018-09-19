@@ -3,6 +3,10 @@ package com.kh.chemin.mypage.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +33,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.kh.chemin.acbook.common.Page;
+import com.kh.chemin.common.MallPageBar;
 import com.kh.chemin.community.model.vo.Report;
 import com.kh.chemin.mall.model.vo.QnA_board;
 import com.kh.chemin.mall.model.vo.Review;
@@ -42,19 +50,32 @@ import com.kh.chemin.mypage.model.service.MypageService;
 
 import net.sf.json.JSONArray;
 
-@SessionAttributes(value= {"memberLoggedIn"})
+
+@SessionAttributes(value = {"memberLoggedIn"})
 @Controller
 public class MypageController 
 {		
 	private Logger logger=LoggerFactory.getLogger(MypageController.class);
-
+	
+	 @Autowired
+	   BCryptPasswordEncoder bCryptPasswordEncoder;
+	 
 	@Autowired
 	private MypageService service;
 	
 	//주문 목록 페이지로 이동
 	@RequestMapping("/mypage/myOrderList.do")
-	public String myOrderList()
+	public String myOrderList(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, Model model, HttpSession session)
 	{
+		Member m = (Member)session.getAttribute("memberLoggedIn");
+		String userId = m.getUserId();
+		int numPerPage = 5;
+		List<Map<String, Object>> list = service.selectOrderList(userId, cPage, numPerPage);
+		List<Map<String, Object>> data = service.selectOrderData(userId);
+		int totalCount = service.selectTotalCount(userId);
+		model.addAttribute("pageBar", Page.getPage(cPage, numPerPage, totalCount, "myOrderList.do"));
+		model.addAttribute("list", list);
+		model.addAttribute("data", data);
 		return "mypage/myOrderList";
 	}
 
@@ -71,6 +92,20 @@ public class MypageController
 	public String wishList()
 	{
 		return "mypage/myWishList";
+	}
+	
+	// 찜 목록 불러오기
+	@RequestMapping("/mypage/wishListData.do")
+	public void wishListData(HttpSession session, HttpServletResponse response) throws Exception {
+		Member m = (Member)session.getAttribute("memberLoggedIn");
+		String userId = m.getUserId();
+		List<Map<String, Object>> list = service.selectWishList(userId);
+		
+		JSONArray jsonArr = new JSONArray();
+		jsonArr.add(list);
+		response.setContentType("application/json;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(jsonArr);
 	}
 	
 	//장소 등록 페이지로 이동
@@ -123,7 +158,7 @@ public class MypageController
 		List<PlaceAttachment> attachList = service.selectAttachList(plaNo);
 		List<PlaceMenu> menuList = service.selectMenuList(plaNo);
 		
-		System.out.println(attachList);
+		
 		map.put("attachList", attachList);
 		map.put("menuList", menuList);
 
@@ -147,7 +182,7 @@ public class MypageController
 		}else {
 			msg="장소가 삭제 되지 않았습니다.";
 		}
-		loc="/mypage/myPlaceList.do?userId="+userId;
+		loc="/mypage/myPlaceList.do?plaStatus=N";
 		
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("msg", msg);
@@ -172,9 +207,11 @@ public class MypageController
 	
 	//마이페이지 장소 등록 수정
 	@RequestMapping("/mypage/placeUpdate.do")
-	public ModelAndView placeUpdate(Place place ,@RequestParam("mainImg")MultipartFile mainImg,@RequestParam("file")MultipartFile[] file,HttpServletRequest request,String[] menuName,String[] menuPrice,String[] menuCheck, String phoneFirst, String phoneMiddle, String phoneEnd,String postCode, String roadAddr, String jibunAddr,
+	public ModelAndView placeUpdate(HttpSession session,Place place ,@RequestParam("mainImg")MultipartFile mainImg,@RequestParam("file")MultipartFile[] file,HttpServletRequest request,String[] menuName,String[] menuPrice,String[] menuCheck, String phoneFirst, String phoneMiddle, String phoneEnd,String postCode, String roadAddr, String jibunAddr,
 			  String day, String startTime, String endTime,String subContent,String keyword1,String keyword2, String keyword3, String keyword4, String keyword5) {
 			
+			Member m = (Member)session.getAttribute("memberLoggedIn");
+			String userId = m.getUserId();
 			String phone=phoneFirst+"-"+phoneMiddle+"-"+phoneEnd;
 			String address=roadAddr+"/"+postCode+"/"+jibunAddr;
 			String time=day+"/"+startTime+"/"+endTime+"/"+subContent;
@@ -183,7 +220,7 @@ public class MypageController
 			place.setPlaAddr(address);
 			place.setPlaTime(time);
 			place.setPlaKeyword(keyword);
-			place.setUserId("hyebeen");
+			place.setUserId(userId);
 			
 			
 			//대표이미지 저장경로 지정 및 서버에 이미지 저장
@@ -240,7 +277,7 @@ public class MypageController
 			}else {
 			msg="장소 수정이 완료 되지 않았습니다.";
 			}
-			loc="/";
+			loc="/mypage/myPlaceList.do?plaStatus=N";
 			
 			ModelAndView mv = new ModelAndView();
 			mv.addObject("msg", msg);
@@ -252,8 +289,12 @@ public class MypageController
 	
 	/*회원 정보*/
 	@RequestMapping("/mypage/myMember.do")
-	public String myMember()
-	{
+	public String myMember(Model model, HttpSession session)
+	{	
+		Member m = (Member)session.getAttribute("memberLoggedIn");
+		String userId = m.getUserId();
+		Map<String, Object> member = service.memberList(userId);
+		model.addAttribute("member", member);
 		return "mypage/myMember";
 	}
 	

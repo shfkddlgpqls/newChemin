@@ -33,9 +33,12 @@
 						    
 						    <li class="nav-item">
 						   		<strong><a class="nav-link adminAtag" href="${path }/admin/adminReviewBoard.do">리뷰 관리</a></strong>
+
+						    <li class="nav-item">
+						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminOrderList.do">주문 관리</a></strong>
+
 						    </li>
 						  </ul>
 						  <hr>
 				</div>
 			</div>	
-		</div>

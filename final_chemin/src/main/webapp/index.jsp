@@ -105,7 +105,7 @@
           <div class="col-lg-3 col-md-6 text-center">
             <div class="service-box mt-5 mx-auto">
               <i class="fa fa-4x fa-cart-plus text-primary mb-3 sr-icons"></i>
-              <h3 class="mb-3 nanumFont">Chumin Mall</h3>
+              <h3 class="mb-3 nanumFont">Chemin Mall</h3>
               <p class="text-muted mb-0 nanumFont">1인 가구에 적합한 물품들을 구경해보고 구입할 수도 있습니다.</p>
             </div>
           </div>
@@ -132,7 +132,7 @@
  	 <div class="container-fluid">
         <div class="row" >
           <div class="col-lg-12 text-center">
-            <h4 class="section-heading nanumFont" style="color:white;">지금 이 시간, Mall의 best 상품들입니다</h4>
+            <h4 class="section-heading nanumFont" style="color:white;">지금 이 시간, Mall의 Best 상품들입니다</h4>
         	<hr>
           </div>
         </div>
@@ -140,41 +140,14 @@
 		<div class="row" style="margin-left:auto;margin-right:auto;">
 			<div id="ThumbnailCarousel" class="carousel slide col-xs-12" data-ride="carousel">
 			  <div class="carousel-inner">
-			    <div class="carousel-item active">
-			      <div class="row">
-			          <div class="col-md-3 col-sm-6"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/lisabo-lisabo-keopiteibeul__0452442_PE601394_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			          <div class="col-md-3 col-sm-6"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/frost-peuloseuteu-silnaeoegeonjodae-hwaiteu__0181565_PE333373_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			          <div class="col-md-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/isfjorden-iseupioleuden-jeonsingeoul__0633522_PE695897_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			          <div class="col-md-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/dekad-dekadeu-allamsigye-beullaeg__0110719_PE262840_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			      </div>
+			    <div class="carousel-item active" id="view1">
+			      
 			    </div>
-			    <div class="carousel-item">
-			      <div class="row">
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/vardagen-baleudagen-gyelyangkeob__0462815_PE608339_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/tokig-tokigeu-chaesotalsugi-hwaiteu__0095891_PE235176_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/plastis-peullaseutiseu-eol-eumteul-teokwoijeu__0092975_PE229787_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/bumerang-bumelang-osgeol-i-hwaiteu__0192382_PE347080_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			      </div>
+			    <div class="carousel-item" id="view2">
+			      
 			    </div>
-			    <div class="carousel-item">
-			      <div class="row">
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/PIAimages/0566046_PE664563_S3.JPG" alt="Image" class="img-fluid img-thumbnail"></a>
-			          </div>
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/fado-pado-tagsangseutaendeu-pingkeu__0606975_PE682644_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/koarp-koaleupeu-amcheeo-beiji__0522280_PE643185_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			          <div class="col-sm-3"><a href="#x" class="thumbnail"><img src="https://www.ikea.com/kr/ko/images/products/hemnes-hemneseu-geoulhwajangdae-hwaiteu__81064_PE205599_S4.JPG" alt="Image" class=" img-thumbnail"></a>
-			          </div>
-			      </div>
+			    <div class="carousel-item" id="view3">
+			      
 			    </div>
 			  </div>
 			  
@@ -191,6 +164,52 @@
 			</div>
 		 </div>
 		</div>
+	
+	<script>
+	$(function(){
+    	best_list();
+    });
+	function best_list(){
+		$.ajax({
+			type:"get",
+			url:"${path}/mall/mainList.do",
+			datatype:"json",
+			success:function(data){
+				var view1="";
+				var view2="";
+				var view3="";
+				if(data!=null){
+					view1+='<div class="row">';
+					view1+='<div class="col-md-3"><a href="#" class="thumbnail"><img src="${path}/resources/upload/productImg/'+data[0][0]+'" alt="Image" class=" img-thumbnail"></a></div>';
+					view1+='<div class="col-md-3"><a href="#" class="thumbnail"><img src="${path}/resources/upload/productImg/'+data[0][1]+'" alt="Image" class=" img-thumbnail"></a></div>';
+					view1+='<div class="col-md-3"><a href="#" class="thumbnail"><img src="${path}/resources/upload/productImg/'+data[0][2]+'" alt="Image" class=" img-thumbnail"></a></div>';
+					view1+='<div class="col-md-3"><a href="#" class="thumbnail"><img src="${path}/resources/upload/productImg/'+data[0][3]+'" alt="Image" class=" img-thumbnail"></a></div>';
+					view1+='</div>';
+					
+					view2+='<div class="row">';
+					view2+='<div class="col-md-3"><a href="#" class="thumbnail"><img src="${path}/resources/upload/productImg/'+data[0][4]+'" alt="Image" class=" img-thumbnail"></a></div>';
+					view2+='<div class="col-md-3"><a href="#" class="thumbnail"><img src="${path}/resources/upload/productImg/'+data[0][5]+'" alt="Image" class=" img-thumbnail"></a></div>';
+					view2+='<div class="col-md-3"><a href="#" class="thumbnail"><img src="${path}/resources/upload/productImg/'+data[0][6]+'" alt="Image" class=" img-thumbnail"></a></div>';
+					view2+='<div class="col-md-3"><a href="#" class="thumbnail"><img src="${path}/resources/upload/productImg/'+data[0][7]+'" alt="Image" class=" img-thumbnail"></a></div>';
+					view2+='</div>';
+					
+					view3+='<div class="row">';
+					view3+='<div class="col-md-3"><a href="#" class="thumbnail"><img src="${path}/resources/upload/productImg/'+data[0][8]+'" alt="Image" class=" img-thumbnail"></a></div>';
+					view3+='<div class="col-md-3"><a href="#" class="thumbnail"><img src="${path}/resources/upload/productImg/'+data[0][9]+'" alt="Image" class=" img-thumbnail"></a></div>';
+					view3+='<div class="col-md-3"><a href="#" class="thumbnail"><img src="${path}/resources/upload/productImg/'+data[0][10]+'" alt="Image" class=" img-thumbnail"></a></div>';
+					view3+='<div class="col-md-3"><a href="#" class="thumbnail"><img src="${path}/resources/upload/productImg/'+data[0][11]+'" alt="Image" class=" img-thumbnail"></a></div>';
+					view3+='</div>';
+				}
+				$('#view1').html(view1);
+				$('#view2').html(view2);
+				$('#view3').html(view3);
+			},
+			error:function(jxhr,textStatus,error){
+				console.log("mainMall ajax 실패 : "+jxhr+" "+textStatus+" "+error);
+			}
+		});
+	}
+	</script>
 	
 	</section>
     <!-- footer -->

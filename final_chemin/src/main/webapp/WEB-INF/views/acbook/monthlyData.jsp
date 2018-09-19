@@ -1,302 +1,3 @@
-<<<<<<< HEAD
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<c:set value="${pageContext.request.contextPath}" var="path" />
-<!-- chart -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
-<script	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-<!-- jQurery -->
-<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
-<!-- BootStrap -->
-<link rel="stylesheet"
-	href="<c:url value= "/resources/vendor/bootstrap/css/bootstrap.css"/>">
-<!-- header -->
-<jsp:include page="/WEB-INF/views/common/header.jsp" />
-<!-- sideBar -->
-<jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<!-- Main Start -->
-<div class="col-md-10 col-sm-8 main-content">
-	<div class="container-fluid">
-<!-- 	여기서부터 내용 쓰면 됨 -->
-<!-- START: WHOLE TEMPLATE SECTION -->
-<!------ Include the above in your HEAD tag ---------->
-<style>
-/* 메인 배경색 */
-#monthlyData{
-	margin:0;
-	padding:0;
-}
-#newMain {
-	margin:0;
-	background-color: rgba(236, 240, 241);
-}
-.aclayoutMD{
-	border: 1px solid white;
-	display:block;
-	padding:0%;
-	text-align:center;
-	background-color:white;
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
-	margin:0%;
-	object-fit:contain;
-	width: 100%;
-	height: 50%;
-}
-#acid{
-	border: 1px;
-	width: 100%;
-	heigth: 100%;
-	margin: 0;
-	margin-top:2%;
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
-}
-.about-heading > p{
-	font-size:24px;
-	font-weight:bold;
-}
-
-.about-txt > p{
-	font-size:18px;
-	text-align:center;
-	
-}
-.about-content-box{
-	padding-top:100px;
-	padding-bottom:100px;
-	padding-left:70px;
-	padding-right:70px;
-	color:#fff;
-}
-
-.about-bg-layer{
-	background-color:rgba(62,207,182,0.70);
-	height:100%;
-	margin:0px;
-}
-</style>
-
-<section id="monthlyData">
-	<div class="container-fluid" id="newMain">    
-       	<div class="row about-bg">
-             <div class="col-md-6">
-				<div class="aclayoutMD" id="acid">
-					<canvas id="monthlyDataChart" style="width:100%;height:100%;"></canvas>
-				</div>            
-             </div>
-	             <div class="col-md-6 col-sm-6 col-xs-12 about-bg-layer">
-	               <div class="">
-		             <div class="about-content-box">
-			             <div class="">			             
-			                 <h1>ABOUT</h1>
-			                 <h2>Monthly Dispenditure</h2>
-			                 <p>박은별님 의 한 달 소비패턴</p>
-			             </div>
-		                 <div class="about-txt">
-							<p>이번 달 지출에서 가장 많은 비중을 차지하는 것은</p>
-							<h1></h1>입니다<br>
-		                 </div>
-		              </div>	                
-		                  <div style="float:right; color:#fff;">
-		   				 		<h1></h1>
-		   				</div>           
-           			</div>
-				</div>
-       </div>       
-    </div>
-</section>
-
-<!-- END: WHOLE TEMPLATE SECTION -->
-	</div>
-</div>
-<!-- Main End -->
-</div>
-</div>
-<!-- Side Bar Div End -->
-
-<script>
-Chart.plugins.register({
-	  beforeDraw: function (chart) {
-	    if (chart.config.options.elements.center) {
-	       
-	        var ctx = chart.chart.ctx;
-
-	        var centerConfig = chart.config.options.elements.center;
-	        var fontSize = centerConfig.fontSize || '50';
-	        var fontStyle = centerConfig.fontStyle || 'Arial';
-	        var txt = centerConfig.text;
-	        var color = centerConfig.color || '#000';
-	        var sidePadding = centerConfig.sidePadding || 20;
-	        var sidePaddingCalculated = (sidePadding/100) * (chart.innerRadius * 2)
-
-	        ctx.font = fontSize + "px " + fontStyle;
-
-	        var stringWidth = ctx.measureText(txt).width;
-	        var elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated;
-
-	        var widthRatio = elementWidth / stringWidth;
-	        var newFontSize = Math.floor(30 * widthRatio);
-	        var elementHeight = (chart.innerRadius * 0.7);
-	 
-	        var fontSizeToUse = Math.min(newFontSize, elementHeight);
-	        
-	        ctx.textAlign = 'center';
-	        ctx.textBaseline = 'middle';
-	        var centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
-	        var centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
-	        ctx.font = fontSizeToUse+"px " + fontStyle;
-	        ctx.fillStyle = color;
-
-	        ctx.fillText(txt, centerX, centerY);
-	      }
-	  }
-	});
-	
-var ctx = $("#monthlyDataChart");
-
-function drawDoughnut2() {
-	$.ajax({
-		url :  "${pageContext.request.contextPath}/ajax/monthlyDispenditure",
-		type : "POST",
-		dataType : "json",
-		success : function(data){
-			console.log("load Success Chart data");
-			console.log(data);
-			var vsLabels = [];
-			var vsData = [];
-			$(data).each(function(){
-				vsLabels.push($(this).attr('CATENAME'));
-				var clue = $(this).attr('CATENAME');
-				switch(clue){
-				case '식비':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '교통비':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '문화생활':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '생필품':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '의류':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '미용':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '의료건강':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '교육':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '전화요금':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '경조사비':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '공과금':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '카드대금':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '저축':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '기타':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				
-				};
-				
-			});
-	var myDoughnut12 = new Chart(
-			ctx,
-			{
-				type : 'doughnut',
-				data : {
-						labels: vsLabels,	
-					datasets : [ {
-						data : vsData,
-						backgroundColor : [ "#F94C45",
-											"rgb(252,217,32)",
-											"rgb(171,209,26)",
-											"rgb(160,171,188)",
-											"rgba(75,192,192,1)",
-											"#F94C45",
-											"rgb(252,217,32)",
-											"rgb(171,209,26)",
-											"rgb(160,171,188)",
-											"rgba(75,192,192,1)",
-											"#F94C45",
-											"rgb(252,217,32)",
-											"rgb(171,209,26)",
-											"rgb(160,171,188)",
-											],
-						hoverBackgroundColor : "rgba(75,192,192,1)",
-						/* 						borderColor: "rgba(75,192,192,1)", */
-						borderWidth : 2
-					} ]
-				},
-				options : {
-					title:{
-						display: false,
-						text:'Monthly Dispenditure Lanking',
-						fontSize: 15,
-						position:'top'
-						},
-					responsive : true,
-					cutoutPercentage: 70,
-					legend : {
-						display : true,
-						fontSize : 10,
-						position : 'bottom',
-						usePointStyle : true,
-						labels: {
-			            	boxWidth: 10,
-			            }
-					},
-					elements: {
-						position:'center',
-						center: {
-							text: vsLabels[0] ,
-					      	color: '#FF6384', 
-					     	fontStyle: 'Arial', 
-					      	sidePadding:5,
-							}
-					},
-					animation: {
-			            duration: 3000,
-			        },
-			        hover: {
-			            animationDuration: 1000,
-			        },
-			        responsiveAnimationDuration: 2000,
-				}
-			});
-		},
-		error : function(jqxhr, textStatus, errorThrown) {
-			console.log("error");
-			console.log(jqxhr);
-			console.log(textStatus);
-			console.log(errorThrown);
-		}
-	});
-
-};
-$(document).ready(function() {
-	drawDoughnut2();
-});
-</script>
-=======
 <%@ page language="java" contentType="text/html; charset=UTF-8"	import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -315,15 +16,17 @@ $(document).ready(function() {
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <!-- sideBar -->
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
 <!-- Main Start -->
-<div class="col-md-10 col-sm-8 main-content">
+<div class="col-md-10 col-sm-8 main-content"  id="newMain">
 	<div class="container-fluid">
 <!-- 	여기서부터 내용 쓰면 됨 -->
 <!-- START: WHOLE TEMPLATE SECTION -->
 <!------ Include the above in your HEAD tag ---------->
 <!-- <div class="container-fluid"><span style="font-size:60px;margin-top:0;">Monthly Expenditure Pattern</span></div> -->
+<form name="imgForm" id="imgForm" action="acbook/download.do" method="post">
+    <input type="hidden" id="imgData" name="imgData">
+</form>
+<div class="row">
 <div class="col-md-6">
 <div class="printDiv">
 	<div class="content" id="newMain">             
@@ -666,9 +369,6 @@ $(document).ready(function() {
    </div> 
 </div>
 </div>
-<form name="imgForm" id="imgForm" action="acbook/download.do" method="post">
-    <input type="hidden" id="imgData" name="imgData">
-</form>
 <div class="col-md-6">
 <!--***************** 	여기서부터 내용 쓰면 됨 -->
 		<div class='' id="graph1">
@@ -682,10 +382,9 @@ $(document).ready(function() {
 			</div>
 		</div>
 	<hr style="margin:0;">
-		<div class="row">
 		<div class='' id="graph2_2">
 			<div id='ex23' style="text-align:left">
-				<div><span style="font-size:45px;margin:0;background-color:Coral;color:white;">Monthly Expenditure Pattern,&nbsp;</span></div>
+				<div><span style="font-size:40px;margin:0;background-color:Coral;color:white;">Monthly Expenditure Pattern,&nbsp;</span></div>
 				&nbsp;&nbsp;<p>${memberLoggedIn.userId }님 의 이번달 지출은 현재까지 ${monthlySumAvg[0].ALLCOST}원 입니다.<br>
 				수입은 ""원 이며, "이미 지출한계를 초과했습니다." 앞으로  매일 "0"원씩 사용해야 지출임계점을 넘지 않을 수 있습니다.<br>
 				"그러나", 지출비율중 "저축"의 비율이 "60%"로 "매우 높은 편입니다." 저축하는 좋은 습관을 기르고 있습니다.<br>
@@ -698,8 +397,9 @@ $(document).ready(function() {
 				
 			</div>
 		</div>
-		</div>
+	</div>
 	<!--**************Caution*********************** 이 아래 Div 건드리지말것 -->
+</div>
 </div>
 <!-- END: WHOLE TEMPLATE SECTION -->
 </div>
@@ -755,6 +455,7 @@ function drawLine(){
 			var addData1 = addData1;
 			var addData2 = addData2;
 			var addData3 = addData3;
+			var myColors = ["rgba(220,220,220,0.2)"]
 			var myLine = new Chart(ctx,{
 				type : 'line',
 				data :{
@@ -762,12 +463,13 @@ function drawLine(){
 					 datasets: [
 					        {
 					            label: "My First dataset",
-					            fillColor: "#ffc107",
-					            strokeColor: "#ffc107",
-					            pointColor: "#ffc107",
-					            pointStrokeColor: "#ffc107",
-					            pointHighlightFill: "#ffc107",
-					            pointHighlightStroke: "#ffc107",
+					            fillColor: "rgba(220,220,220,0.2)",
+					            borderColor: myColors,
+					            strokeColor: "rgba(220,220,220,0.2)",
+					            pointColor: "rgba(220,220,220,0.2)",
+					            pointStrokeColor: "rgba(220,220,220,0.2)",
+					            pointHighlightFill: "rgba(220,220,220,0.2)",
+					            pointHighlightStroke: "rgba(220,220,220,0.2)",
 					            data: addData1
 					        },
 					        {
@@ -782,12 +484,12 @@ function drawLine(){
 					        },
 					        {
 					            label: "My Second dataset",
-					            fillColor: "rgba(151,187,205,0.2)",
-					            strokeColor: "rgba(151,187,205,1)",
-					            pointColor: "rgba(151,187,205,1)",
+					            fillColor: "rgba(220,220,220,0.2)",
+					            strokeColor: "rgba(220,220,220,0.2)",
+					            pointColor: "rgba(220,220,220,0.2)",
 					            pointStrokeColor: "#fff",
 					            pointHighlightFill: "#fff",
-					            pointHighlightStroke: "rgba(151,187,205,1)",
+					            pointHighlightStroke: "rgba(220,220,220,0.2)",
 					            data: addData3
 					        }
 					    ]
@@ -803,6 +505,17 @@ function drawLine(){
 			            	boxWidth: 10,
 			            }
 			        },
+			        tooltips: {
+	                    yAlign: 'bottom',
+	                    callbacks: {
+	                        labelColor: function(tooltipItem, chart) {
+	                            return {
+	                                backgroundColor: 'rgb(255, 0, 0)'
+	                            }
+	                        },
+	                    },
+	            backgroundColor: '#227799'
+	                }
 
 				}
 			});
@@ -999,6 +712,5 @@ $(document).ready(function() {
 </script> -->
 <!-- jpg modify -->
 <script src="<c:url value="/resources/acbook/js/html2canvas.js" />"></script>
->>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git
 <!-- footer -->
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

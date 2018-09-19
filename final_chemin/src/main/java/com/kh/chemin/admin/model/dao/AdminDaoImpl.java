@@ -8,6 +8,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.chemin.mall.model.vo.Product;
 import com.kh.chemin.mall.model.vo.QnA_board;
 import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
@@ -53,13 +54,13 @@ public class AdminDaoImpl implements AdminDao {
 	}
 
 	@Override
-	public int selectProductCount(SqlSessionTemplate sqlSession) {
-		return sqlSession.selectOne("admin.selectProductCount");
+	public int selectProductCount(SqlSessionTemplate sqlSession,Map<String, Object> map) {
+		return sqlSession.selectOne("admin.selectProductCount",map);
 	}
 
 	@Override
-	public List<Map<String, Object>> selectProductList(SqlSessionTemplate sqlSession, int cPage, int numPerPage) {
-		return sqlSession.selectList("admin.selectProductList", null, new RowBounds((cPage-1)*numPerPage, numPerPage));
+	public List<Map<String, Object>> selectProductList(SqlSessionTemplate sqlSession, Map<String, Object> map, int cPage, int numPerPage) {
+		return sqlSession.selectList("admin.selectProductList", map, new RowBounds((cPage-1)*numPerPage, numPerPage));
 	}
 
 	@Override
@@ -68,6 +69,49 @@ public class AdminDaoImpl implements AdminDao {
 	}
 
 	@Override
+	public int selectMaxPno(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("admin.selectMapPno");
+	}
+
+	@Override
+	public int insertProduct(SqlSessionTemplate sqlSession, Product product) {
+		return sqlSession.insert("admin.insertProduct", product);
+	}
+
+	@Override
+	public int productDelete(SqlSessionTemplate sqlSession, int pno) {
+		return sqlSession.delete("admin.deleteProduct", pno);
+	}
+
+	@Override
+	public Product selectProduct(SqlSessionTemplate sqlSession, int pno) {
+		return sqlSession.selectOne("admin.selectProduct", pno);
+	}
+
+	@Override
+	public int updateProduct(SqlSessionTemplate sqlSession, Product product) {
+		return sqlSession.update("admin.updateProduct", product);
+	}
+
+	@Override
+	public List<String> productAuto(SqlSessionTemplate sqlSession, String search) {
+		return sqlSession.selectList("admin.productAuto", search);
+	}
+	
+	@Override
+	public List<Map<String, Object>> selectOrderList(SqlSessionTemplate sqlSession, int cPage, int numPerPage) {
+		return sqlSession.selectList("admin.selectOrderList", null, new RowBounds((cPage-1)*numPerPage, numPerPage));
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOrderData(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectList("admin.selectOrderdata");
+	}
+
+	@Override
+	public int selectTotalCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("admin.selectTotalCount");
+	}
 	public int selectMemberCount(SqlSessionTemplate sqlSession) {
 		return sqlSession.selectOne("admin.selectMemberCount");
 	}
@@ -82,15 +126,11 @@ public class AdminDaoImpl implements AdminDao {
 		return sqlSession.selectList("admin.selectReportList",userId);
 	}
 
-	@Override
-	public int reportCount(SqlSessionTemplate sqlSession, String userId) {
-		return sqlSession.selectOne("admin.reportCount",userId);
-	}
 
 	@Override
-	public int adminMemberDelete(SqlSessionTemplate sqlSession, String userId) {
-		System.out.println("::adminMemberDeleteDao::"+userId);
-		return sqlSession.delete("admin.adminMemberDelete",userId);
+	public int adminMemberUpdate(SqlSessionTemplate sqlSession, String userId) {
+		System.out.println("::adminMemberUpdateDao::"+userId);
+		return sqlSession.update("admin.adminMemberUpdate",userId);
 	}
 
 	@Override
@@ -172,14 +212,13 @@ public class AdminDaoImpl implements AdminDao {
 		{
 			return sqlSession.selectOne("admin.selectQnASearchCount", map);
 		}
-		
-		
-		
-		
+			
 //		=======================주리가 한 부분  끝=======================	
 
 		
-		
 
+		public int adminMemberCancel(SqlSessionTemplate sqlSession, String userId) {
+			return sqlSession.update("admin.adminMemberCancel",userId);
+		}
 
 }

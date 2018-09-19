@@ -12,6 +12,7 @@ import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.member.model.vo.Member;
 import com.kh.chemin.mypage.model.dao.MypageDao;
 
 @Service
@@ -22,7 +23,6 @@ public class MypageServiceImpl implements MypageService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-
 	@Override
 	public List<Place> selectPlaceList(Map map, int cPage, int numPerPage) {
 		List<Place> list = dao.selectPlaceList(sqlSession, map,cPage,numPerPage);
@@ -84,6 +84,7 @@ public class MypageServiceImpl implements MypageService {
 		return result;
 	}
 
+
 	@Override
 	public int warnMsg(String userId) {
 		System.out.println("::warnMsgService::"+userId);
@@ -111,6 +112,26 @@ public class MypageServiceImpl implements MypageService {
 		{
 			return dao.selectQnaBoardList(sqlSession,cPage,numPerPage,userId); 
 		}
+
+	@Override
+	public List<Map<String, Object>> selectOrderList(String userId, int cPage, int numPerPage) {
+		return dao.selectOrderList(sqlSession, userId, cPage, numPerPage);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOrderData(String userId) {
+		return dao.selectOrderData(sqlSession, userId);
+	}
+
+	@Override
+	public int selectTotalCount(String userId) {
+		return dao.selectTotalCount(sqlSession, userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectWishList(String userId) {
+		return dao.selectWishList(sqlSession, userId);
+	}
 
 		@Override
 		public int selectQnACount(String userId) 
@@ -158,11 +179,14 @@ public class MypageServiceImpl implements MypageService {
 			int result = dao.myReviewDel(sqlSession,modal_rno);
 			return result;
 		}
-		
-		
-		
-		
+
 		
 //		=======================주리가 한 부분  끝=======================	
 
+		@Override
+		public Map<String, Object> memberList(String userId) {
+			return dao.memberList(sqlSession,userId);
+		}	
+
 }
+

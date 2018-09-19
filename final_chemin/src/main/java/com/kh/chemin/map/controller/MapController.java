@@ -53,7 +53,7 @@ public class MapController {
 	
 	//장소 상세정보를 보여주는 화면
 	@RequestMapping("/map/placeInfo.do")
-	public String placeinfo(String plaNo, Model model, HttpServletRequest reqeust) {
+	public String placeinfo(String plaNo, Model model, HttpServletRequest reqeust,@RequestParam (value="addr") String addr) {
 		int no = Integer.parseInt(reqeust.getParameter("plaNo"));
 		Place place = service.placeSelect(no);
 		List<PlaceAttachment> attachList = service.selectAttachList(no);
@@ -61,6 +61,7 @@ public class MapController {
 		model.addAttribute("place", place);
 		model.addAttribute("attachList", attachList);
 		model.addAttribute("menuList", menuList);
+		model.addAttribute("address", addr);
 		return "/map/placeInfo";
 	}
 	

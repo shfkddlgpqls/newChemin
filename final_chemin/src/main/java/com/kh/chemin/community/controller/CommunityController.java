@@ -49,20 +49,9 @@ public class CommunityController {
 		LikeTo liketo=new LikeTo();
 		List<Map<String,Object>> list=service.communityList();
 		List<Map<String,Object>> attList=service.attachmentList();
-		/*List<Map<String,Object>> likeList=service.likeList();*/
-		
-//		List<Integer> cno=new ArrayList<Integer>();
-//		int[] no = new int[list.size()];
-//		for(int i=0;i<list.size();i++)
-//		{
-//			no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
-//			cno.add(no[i]);
-//		}
-		
+
 		mv.addObject("list",list);
 		mv.addObject("attList",attList);
-		/*mv.addObject("likeList",likeList);*/
-		mv.addObject("like_check",liketo.getLike_check());
 		mv.setViewName("community/communityList");
 		return mv;
 	}
@@ -122,19 +111,23 @@ public class CommunityController {
 		int result=service.communityWriteEnd(community,attList); //db에 삽입해주는 메소드
 		String msg="";
 		String loc="";
+		String status="";
 		if(result>0) {
 			msg="게시물이 등록되었습니다.";
 			loc="/community/communityList.do";
+			status="loginSuccess";
 		}
 		else 
 		{
 			msg="게시물이 등록 실패하였습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityWrite.do";
+			status="loginFail";
 			
 		}
 
 		mv.addObject("msg",msg);
 		mv.addObject("loc",loc);
+		mv.addObject("status",status);
 		mv.setViewName("common/msg");
 		return mv;
 	}
@@ -189,18 +182,22 @@ public class CommunityController {
 		int result=service.communityUpdateEnd(community,attList);
 		String msg="";
 		String loc="";
+		String status="";
 		if(result>0) {
 			msg="게시물이 수정 완료되었습니다.";
 			loc="/community/communityList.do";
+			status="loginSuccess";
 		}
 		else 
 		{
 			msg="게시물이 수정 실패되었습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityUpdate.do";
+			status="loginFail";
 			
 		}
 		mv.addObject("msg",msg);
 		mv.addObject("loc",loc);
+		mv.addObject("status",status);
 		mv.setViewName("common/msg");
 		return mv;
 	}
@@ -213,18 +210,22 @@ public class CommunityController {
 		int result=service.selectDelete(community_no);
 		String msg="";
 		String loc="";
+		String status="";
 		if(result>0) {
 			msg="게시물이 삭제 완료되었습니다.";
 			loc="/community/communityList.do";
+			status="loginSuccess";
 		}
 		else 
 		{
 			msg="게시물이 삭제 실패되었습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityList.do";
+			status="loginFail";
 			
 		}
 		mv.addObject("msg",msg);
 		mv.addObject("loc",loc);
+		mv.addObject("status",status);
 		mv.setViewName("common/msg");
 		return mv;
 	}
@@ -254,18 +255,22 @@ public class CommunityController {
 		int result=service.commentWrite(comment);
 		String msg="";
 		String loc="";
+		String status="";
 		if(result>0) {
 			msg="댓글이 등록이 성공되었습니다.";
 			loc="/community/communityList.do";
+			status="loginSuccess";
 		}
 		else 
 		{
 			msg="댓글이 등록 실패되었습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityList.do";
+			status="loginFail";
 			
 		}
 		mv.addObject("msg",msg);
 		mv.addObject("loc",loc);
+		mv.addObject("status",status);
 		mv.setViewName("common/msg");
 		return mv;
 	}
@@ -278,18 +283,21 @@ public class CommunityController {
 		int result=service.selectDelete(community_no);
 		String msg="";
 		String loc="";
+		String status="";
 		if(result>0) {
 			msg="게시물 삭제가 완료되었습니다.";
 			loc="/community/communityList.do";
+			status="loginSuccess";
 		}
 		else 
 		{
 			msg="게시물 삭제가 실패되었습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityList.do";
-			
+			status="loginFail";
 		}
 		mv.addObject("msg",msg);
 		mv.addObject("loc",loc);
+		mv.addObject("status",status);
 		mv.setViewName("common/msg");
 		return mv;
 	}
@@ -303,18 +311,21 @@ public class CommunityController {
 		int result=service.commentDelete(comment_no);
 		String msg="";
 		String loc="";
+		String status="";
 		if(result>0) {
 			msg="댓글 삭제가 완료되었습니다.";
 			loc="/community/communityList.do";
+			status="loginSuccess";
 		}
 		else 
 		{
 			msg="댓글 삭제가 실패되었습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityList.do";
-			
+			status="loginFail";
 		}
 		mv.addObject("msg",msg);
 		mv.addObject("loc",loc);
+		mv.addObject("status",status);
 		mv.setViewName("common/msg");
 		return mv;
 	}
@@ -325,22 +336,25 @@ public class CommunityController {
 	{
 		String hashTag=(String)request.getParameter("searchValue");
 		List<Map<String,Object>> list=service.communitySearch(hashTag);
-		
-		//입력한 hashTag에 해당되는 게시물 번호를 배열로 받기
-		List<Integer> cno=new ArrayList<Integer>();
-		//게시물 번호를 list의 사이즈대로 만들어줌
-		int[] no = new int[list.size()];
-		//list에 있는 게시물번호가 object라서 string으로 바꿔준 후 int로 바꿔줌. 이렇게 두번해준 이유는 바로 integer로 변환이 안됐기 때문.
-		for(int i=0;i<list.size();i++)
-		{
-			no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
-			//하나씩 받은 배열을 list안에 넣어줌
-			cno.add(no[i]);
-		}
-		List<Map<String,Object>> attList=service.communityAttSearch(cno);
 		mv.addObject("list",list);
-		mv.addObject("attList",attList);
-		mv.setViewName("/community/communityList");
+		if(list.size()>0)
+		{
+			//입력한 hashTag에 해당되는 게시물 번호를 배열로 받기
+			List<Integer> cno=new ArrayList<Integer>();
+			//게시물 번호를 list의 사이즈대로 만들어줌
+			int[] no = new int[list.size()];
+			//list에 있는 게시물번호가 object라서 string으로 바꿔준 후 int로 바꿔줌. 이렇게 두번해준 이유는 바로 integer로 변환이 안됐기 때문.
+			for(int i=0;i<list.size();i++)
+			{
+				no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
+				//하나씩 받은 배열을 list안에 넣어줌
+				cno.add(no[i]);
+			}
+			
+			List<Map<String,Object>> attList=service.communityAttSearch(cno);
+			mv.addObject("attList",attList);
+		}
+		mv.setViewName("community/communityList");
 		return mv;
 	}
 	
@@ -371,170 +385,45 @@ public class CommunityController {
 		int result=service.commentUpdate(comment);
 		String msg="";
 		String loc="";
+		String status="";
 		if(result>0) {
 			msg="댓글 수정이 완료되었습니다.";
 			loc="/community/communityList.do";
+			status="loginSuccess";
 		}
 		else 
 		{
 			msg="댓글 수정이 실패하였습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityUpdate.do";
-			
+			status="loginFail";
 		}
 		mv.addObject("msg",msg);
 		mv.addObject("loc",loc);
+		mv.addObject("status",status);
 		mv.setViewName("common/msg");
 		return mv;
 	}
 	
-	
-	/*@RequestMapping(value="/community/likePlus.do", produces="application/text; charset=utf-8")
-	@ResponseBody
-	public String likePlus(int community_no) throws Exception
-	{
-		HashMap<String,Object> map=new HashMap<String,Object>();
-		ObjectMapper mapper=new ObjectMapper();
-		String jsonStr=null;
-		int result=service.likePlus(community_no);
-		map.put("result", result);
-		jsonStr=mapper.writeValueAsString(map);
-		return jsonStr;
-	}
-	
-	@RequestMapping(value="/community/likeMinus.do", produces="application/text; charset=utf-8")
-	@ResponseBody
-	public String likeMinus(int community_no) throws Exception
-	{
-		HashMap<String,Object> map=new HashMap<String,Object>();
-		ObjectMapper mapper=new ObjectMapper();
-		String jsonStr=null;
-		int result=service.likeMinus(community_no);
-		map.put("result", result);
-		jsonStr=mapper.writeValueAsString(map);
-		return jsonStr;
-	}
-	
-	@RequestMapping(value="/community/likeInsert.do",method=RequestMethod.POST,produces="application/text; charset=utf-8")
-	@ResponseBody
-	public String likeInsert(int community_no,String like_id,String like_check) throws Exception
-	{
-		
-		ajax를 처리한 후 보내주려면 responsebody를 어노테이션 해줘야함
-		System.out.println("Controller::communityno::"+community_no);
-		System.out.println("Controller::userId::"+like_id);
-		System.out.println("Controller::like_check::"+like_check);
 
-		ObjectMapper mapper=new ObjectMapper();
-		String jsonStr=null;
-		HashMap<String,Object> map=new HashMap<String,Object>();
-		map.put("community_no", community_no);
-		map.put("like_id",like_id);
-		map.put("like_check", like_check);
-		
-		System.out.println(":::likeController::"+map);
-		HashMap<String,Object> resultMap=new HashMap<String,Object>();
-		int result=service.likeInsert(map);
-		resultMap.put("result", result);
-		결과값을 ajax success로 보내주기한 것, resultMap에 담긴 값을 json문자열로 바꿔서 보내준다는 뜻
-		jsonStr=mapper.writeValueAsString(resultMap);
-		return jsonStr;
-	}
-	
-	
-	@RequestMapping(value="/community/likeUpdate.do",method=RequestMethod.POST,produces="application/text; charset=utf-8")
-	@ResponseBody
-	public String likeUpdate(int community_no,String like_id) throws Exception
-	{
-		System.out.println("Controller::communityno::"+community_no);
-		System.out.println("Controller::userId::"+like_id);
-		
-		ObjectMapper mapper=new ObjectMapper();
-		String jsonStr=null;
-		HashMap<String,Object> map=new HashMap<String,Object>();
-		map.put("community_no", community_no);
-		map.put("like_id",like_id);
-
-		HashMap<String,Object> resultMap=new HashMap<String,Object>();
-		int result=service.likeUpdate(map);
-		resultMap.put("result", result);
-		jsonStr=mapper.writeValueAsString(resultMap);
-		return jsonStr;
-	}*/
-	
-	@RequestMapping(value="/community/like.do",produces="application/text; charset=utf-8")
-	@ResponseBody
-	public String like(int community_no,String like_id) 
-	{
-		System.out.println("::likeController::");
-		JSONObject obj=new JSONObject();
-		Community community=new Community();
-		LikeTo liketo=new LikeTo();
-		
-		HashMap<String,Object> hashMap=new HashMap<String,Object>();
-		hashMap.put("community_no",community_no);
-		hashMap.put("like_id",like_id);
-		
-		/*hashMap에 넣어둔 해당되는 하나의 row만 가져오기*/
-		/*liketo=service.read(hashMap);*/
-		/*community=service.communityRead(community_no);*/
-		
-		int like_cnt=community.getCommunity_likecnt();
-		int like_check=liketo.getLike_check();
-		System.out.println("::like_cnt::"+like_cnt);
-		
-		int result=service.likeCount(community_no);
-		System.out.println("::likeCount:result::"+result);
-		if(result==0) 
-		{
-			service.likeCreate(hashMap);
-		}
-		
-		/*하트 눌렀는지 여부  -  0:하트 안누른 상태, 1:하트 누름*/
-		/*like_check=liketo.getLike_check();*/
-		System.out.println("::like_check::"+like_check);
-		if(like_check == 0)
-		{
-			System.out.println("좋아요!");
-			service.likeCheckUp(hashMap);
-			like_check++;
-			like_cnt++;
-			service.likeCntUp(community_no);
-			System.out.println("좋아요:"+like_check);
-		}
-		else
-		{
-			System.out.println("좋아요 취소");
-			service.likeCheckDown(hashMap);
-			like_check--;
-			like_cnt--;
-			service.likeCntDown(community_no);
-			System.out.println("좋아요 취소:"+like_check);
-		}
-		
-		obj.put("community_no", community_no);
-		obj.put("like_check", like_check);
-		obj.put("like_cnt",like_cnt);
-		
-		return obj.toString();
-	}
 	
 	/*카테고리 분류*/
 	@RequestMapping("/community/categoryFind.do")
 	public ModelAndView categoryFind(String community_category,ModelAndView mv)
 	{
 		List<Map<String,Object>> list=service.categoryFind(community_category);
-		
-		List<Integer> cno=new ArrayList<Integer>();
-		int[] no = new int[list.size()];
-		for(int i=0;i<list.size();i++)
-		{
-			no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
-			cno.add(no[i]);
-		}
-		List<Map<String,Object>> attList=service.categoryAttFind(cno);
-		
 		mv.addObject("list",list);
-		mv.addObject("attList",attList);
+		if(list.size()>0)
+		{
+			List<Integer> cno=new ArrayList<Integer>();
+			int[] no = new int[list.size()];
+			for(int i=0;i<list.size();i++)
+			{
+				no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
+				cno.add(no[i]);
+			}
+			List<Map<String,Object>> attList=service.categoryAttFind(cno);
+			mv.addObject("attList",attList);
+		}
 		mv.setViewName("community/communityList");
 		return mv;
 	}
@@ -548,22 +437,27 @@ public class CommunityController {
 		int countUp=service.reportCountUp(userid);
 		String msg = "";
 		String loc = "";
-		
+		String status="";
 		if(result>0)
 		{
 			msg="신고글이 성공적으로 등록되었습니다.";
 			loc="/community/communityList.do";
+			status="loginSuccess";
 		}
 		else
 		{
 			msg = "신고글 등록에 실패하였습니다. <br> 관리자에게 문의해보세요.";
 			loc="/community/communityList.do";
+			status="loginFail";
 		}
 		
 		
 		mv.addObject("msg",msg);
 		mv.addObject("loc", loc);
+		mv.addObject("status",status);
 		mv.setViewName("common/msg");
 		return mv;
 	}
+	
 }
+

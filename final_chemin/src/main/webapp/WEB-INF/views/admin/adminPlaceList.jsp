@@ -12,7 +12,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	
 <style>
-
 .gallery{
   width: 100%;
   max-width: 960px;
@@ -32,7 +31,6 @@
       -ms-flex-pack: center;
           justify-content: center;
 }
-
 .gallery-item{
   box-shadow: 2px 2px 8px -1px #3498DB;
   width: 100%;
@@ -43,7 +41,6 @@
   overflow: hidden;
   border:0;
 }
-
 .gallery-item-image{
   position: absolute;
   width: 100%;
@@ -53,13 +50,10 @@
   transition: all .5s ease;
   bottom:0;
   overflow: hidden;
-
 }
-
 .gallery-item:hover .gallery-item-image{
   bottom: 60%;
 }
-
 .gallery-item-description{
   color:black;
   font-size: .8rem;
@@ -82,7 +76,6 @@ a {
     background-color: transparent;
     -webkit-text-decoration-skip: objects;
 }
-
 .statusStyle{
 text-align:center;
 width:100%;
@@ -91,7 +84,6 @@ margin-top:8%;
 margin-bottom:8%;
 color:#999;
 }
-
 .pagination a 
     {
        color: black;
@@ -107,7 +99,6 @@ color:#999;
       background-color : #ffd6f4; 
          color: white;
    }
-
    .pagination a:active 
    {
          background-color: #ffd6f4;
@@ -128,7 +119,6 @@ div#select_box {
   
   /* 화살표 이미지 */
 }
-
 div#select_box label {
   position: absolute;
   font-size: 14px;
@@ -137,7 +127,6 @@ div#select_box label {
   left: 12px;
   letter-spacing: 1px;
 }
-
 div#select_box select#color {
   width: 100%;
   height: 32px;
@@ -148,13 +137,10 @@ div#select_box select#color {
   filter: alpha(opacity=0);
   /* IE 8 */
 }
-
 </style>
 
 <script>
-
 function fn_modal(obj){	
-
 	var plaNo = $(obj).data("no");
 	var status = $(obj).data("status");
 	 
@@ -180,12 +166,19 @@ function fn_modal(obj){
 	plaName.innerHTML = $(obj).data("name"); 	
  	plaPhone.innerHTML = $(obj).data("phone");
 	plaArea.innerHTML = $(obj).data("area");
-	plaContent.innerHTML = $(obj).data("content"); 
+	
 	plaCategory.innerHTML =$(obj).data("category"); 
 	var keyword = $(obj).data("keyword").split(" ");
 	var address = $(obj).data("address").split("/",2);
 	var time = $(obj).data("time").split("/");
 	
+	
+	//소개글 내용이 null일때를 비교
+	if($(obj).data("content")!=null && $(obj).data("content")!="undefined"){
+		plaContent.innerHTML = $(obj).data("content");
+	}else{
+		$("#contentTr").css("display", "none");
+	}
 	
 		for ( var i in address ) {		
 			if(i==0){
@@ -208,6 +201,7 @@ function fn_modal(obj){
 			}
 	     }
 		
+		
 		for ( var k in keyword ) {
 			if(keyword[k]!=null && (keyword[k].length)>0){
 				if(k==0){
@@ -217,7 +211,6 @@ function fn_modal(obj){
 				}	
 			}
 	     }
-
 	
 	
 	$.ajax({
@@ -226,7 +219,7 @@ function fn_modal(obj){
 		dataType:"json",
 		success:function(data)
 		{			
-				
+			if(data.attachList.length>0){
 			//상세보기 화면 캐러셀 사진 부분
 			attachmain.innerHTML='<div class="carousel-item active" id="attachmentOne">';
 			attachmentOne.innerHTML='<div class="row" id="subattachOne">';
@@ -261,6 +254,10 @@ function fn_modal(obj){
 		    attachmentOne.innerHTML+='</div>';
 	    	attachmain.innerHTML+='</div>';
 	    	//상세보기 화면 캐러셀 사진 부분 끝	
+			}else{
+				$("#photoTr").css("display", "none");
+				$("#photoSubTr").css("display", "none");
+			}
 		},
 		error:function(jxhr,textStatus,error)
         {
@@ -271,9 +268,7 @@ function fn_modal(obj){
          }
 		
 	})
-
 }
-
 function fn_delete(){
 	var plaNo = $('[name=subNo]').val();
 	swal({
@@ -291,7 +286,6 @@ function fn_delete(){
 		});
 	
 }
-
 //승인버튼
 function fn_approve(){
 	var plaNo = $('[name=subNo]').val();
@@ -309,7 +303,6 @@ function fn_approve(){
 		  }
 		});
 }
-
 //승인취소버튼
 function fn_cancle(){
 	var plaNo = $('[name=subNo]').val();
@@ -327,7 +320,6 @@ function fn_cancle(){
 		  }
 		});
 }
-
 //승인거절버튼
  function fn_reject(){
 	var plaNo = $('[name=subNo]').val();
@@ -348,14 +340,12 @@ function fn_cancle(){
 		  }
 		}); 
 } 
-
 //거절메세지를 보낼때 실행되는 함수
 function fn_send(){
 	var plaNo = $('[name=subNo]').val();
 	var plaReMsg = $('[name=reMsg]').val();
 	 location.href = "${path}/admin/adminReMsg.do?plaNo="+plaNo+"&plaReMsg="+plaReMsg+"&plaStatus="+'R'; 	
 }
-
 /* 승인상태 변화에 따라 호출되는 함수 */
 function fn_plaStatus(status){
 	$('#category').text("카테고리 선택▼");
@@ -363,7 +353,6 @@ function fn_plaStatus(status){
 	$('[name=plaStatus]').val(status);
 	fn_status(1);
 }
-
 $(function(){
 	//처음 장소내역을 눌렀을때 기본으로 승인대기의 값이 들어옴
 	$('[name=plaStatus]').val('${plaStatus}');
@@ -375,7 +364,6 @@ $(function(){
 	    $(this).siblings("label").text(select_name);
 	  });
 });
-
 function fn_status(cPage){
 	
 	var plaStatus = $('[name=plaStatus]').val();
@@ -439,7 +427,6 @@ function fn_status(cPage){
 	     }
 	})
 }
-
 </script>
 
 	<section>
@@ -564,17 +551,17 @@ function fn_status(cPage){
 		        	   	  	<td>: </td>
 		        	   	  	<td id="plaPrice">아메리카노 2500원</td>
 		        	   	  </tr>
-		        	   	  <tr>
+		        	   	  <tr id="contentTr">
 		        	   	  	<td>소개글</td>
 		        	   	  	<td>: </td>
 		        	   	  	<td id="plaContent"></td>
 		        	   	  </tr>
-		        	   	  <tr>
+		        	   	  <tr id="photoTr">
 		        	   	  	<td>사진</td>
 		        	   	  	<td></td>
 		        	   	  	<td></td>
 		        	   	  </tr>
-		        	   	  <tr>
+		        	   	  <tr id="photoSubTr">
 		        	   	  	<td colspan="3"  align ="center">
 		        	   	  		 <div id="ThumbnailCarousel" class="carousel slide col-xs-12" data-ride="carousel">
 			  <div class="carousel-inner" id="attachmain">
@@ -593,7 +580,7 @@ function fn_status(cPage){
 		</div>
 		        	   	  	</td>
 		        	   	  </tr>
-		        	   	  <tr>
+		        	   	  <tr id="keywordTr">
 		        	   	  	<td>대표키워드</td>
 		        	   	  	<td>: </td>
 		        	   	  	<td id="plaKeyword"></td>

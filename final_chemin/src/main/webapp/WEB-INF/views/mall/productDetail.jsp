@@ -61,7 +61,7 @@
                 swal
                 ({
                    title: "["+pName+"] 추가",
-                    text: "장바구니 상품은 7일간 보관됩니다.\n확인하러 go?!",
+                    text: "장바구니 상품은 7일간 보관됩니다.\n확인하러 장바구니로 이동하시겠습니까?!",
                     icon: "success",
                     buttons: true,
                     dangerMode: true,
@@ -80,7 +80,7 @@
                 swal
                 ({
                    title: "["+pName+"] 존재",
-                    text: "장바구니에 상품이 이미 존재합니다.\n확인하러 go?!",
+                    text: "장바구니에 상품이 이미 존재합니다.\n확인하러 장바구니로 이동하시겠습니까?!",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
@@ -100,12 +100,66 @@
        });
     });   
  });
-   
+ 
    //찜 alert
    function fn_wishList() 
    {
-      alert("해당 상품이 마이페이지 - 찜 목록에 정상적으로 담겼습니다. ");   
+	   var pName = $("#goodsName").text();
+	   var pno = $('#pNo').val();
+	   $.ajax({
+	          type:"get",
+	          url:"${path}/mall/wishList.do",
+	          data:{pno:pno},
+	          datatype:"json",
+	          success:function(data){
+	        	  console.log(data);
+	        	  if(data==1){
+	        		  swal
+	                  ({
+	                     title: "["+pName+"] 찜 등록",
+	                      text: "상품을 찜하였습니다.\n확인하러 이동하시겠습니까?!",
+	                      icon: "success",
+	                      buttons: true,
+	                      dangerMode: true,
+	                  })
+	                  .then((willDelete) => {
+	                     if (willDelete) {
+	                        location.href="${path}/mypage/myWishList.do"; 
+	                     } else {
+	                        return;
+	                     }
+	                  });
+	        	  } else if(data==-1){
+	        		  swal
+	                  ({
+	                     title: "["+pName+"] 찜 취소",
+	                      text: "찜한 상품을 취소하였습니다.\n확인하러 이동하시겠습니까?!",
+	                      icon: "error",
+	                      buttons: true,
+	                      dangerMode: true,
+	                  })
+	                  .then((willDelete) => {
+	                     if (willDelete) {
+	                        location.href="${path}/mypage/myWishList.do"; 
+	                     } else {
+	                        return;
+	                     }
+	                  });
+	        	  } else if(data==0){
+	        		  swal("["+pName+"] 찜 실패", "찜 등록에 실패하였습니다.\n로그인 후 이용하세용", "error");
+	        	  }
+	          },
+             error:function(jxhr,textStatus,error){
+                 console.log("wish ajax 실패 : "+jxhr+" "+textStatus+" "+error);
+              }
+        }); 
    };
+   
+   $(document).ready(function(){
+	   $("#wishB").on('click', function(e){
+			$(this).removeClass("active");
+		});
+   });
    
    function fn_pwCheck() 
    {
@@ -657,11 +711,18 @@
 						</a>
                </div>
 
-               <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
+               <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center" id="wishBtn">
                    <div class="red_button add_to_cart_button"><a href="#" class="cart">장바구니</a></div> 
-                   <div class="product_favorite d-flex flex-column align-items-center justify-content-center" onclick="fn_wishList();"></div>      
-            
-               </div>
+                   		<c:if test="${memberLoggedIn==null}">
+                   			<div class="product_favorite d-flex flex-column align-items-center justify-content-center" id="wishB" onclick="fn_wishList();"></div>
+                   		</c:if>
+                   		<c:if test="${memberLoggedIn!=null && wish==null }">
+                   			<div class="product_favorite d-flex flex-column align-items-center justify-content-center" onclick="fn_wishList();"></div>
+                   		</c:if>
+                   		<c:if test="${memberLoggedIn!=null && wish!=null }">
+                   			<div class="product_favorite d-flex flex-column align-items-center justify-content-center active" onclick="fn_wishList();"></div>
+                   		</c:if>      
+            	</div>
             
             </div>
          </div>
