@@ -12,6 +12,7 @@ import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.member.model.vo.Member;
 import com.kh.chemin.mypage.model.dao.MypageDao;
 
 @Service
@@ -22,7 +23,6 @@ public class MypageServiceImpl implements MypageService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-
 	@Override
 	public List<Place> selectPlaceList(Map map, int cPage, int numPerPage) {
 		List<Place> list = dao.selectPlaceList(sqlSession, map,cPage,numPerPage);
@@ -84,6 +84,7 @@ public class MypageServiceImpl implements MypageService {
 		return result;
 	}
 
+
 	@Override
 	public int warnMsg(String userId) {
 		System.out.println("::warnMsgService::"+userId);
@@ -96,7 +97,8 @@ public class MypageServiceImpl implements MypageService {
 		return totalCount;
 	}
 	
-	//리뷰 글쓰기
+//	=======================주리가 한 부분  시작=======================
+		//리뷰 글쓰기
 		@Override
 		public int insertReview(Review review) 
 		{
@@ -147,6 +149,44 @@ public class MypageServiceImpl implements MypageService {
 		public int selectReviewCount(String userId) 
 		{
 			return dao.selectReviewCount(sqlSession,userId);
+		}
+
+		@Override
+		public int UpdateQna(Map<String, String> map) 
+		{
+			int result =  dao.UpdateQna(sqlSession,map);
+			return result;		
+		}
+
+		@Override
+		public int myQnaDel(String modal_qno) 
+		{
+			int result = dao.myQnaDel(sqlSession,modal_qno);
+			return result;
+		}
+
+		@Override
+		public int insertReviewEdit(Review review) 
+		{
+			int result = dao.insertReviewEdit(sqlSession,review);
+			
+			return result;
+		}
+
+		@Override
+		public int myReviewDel(String modal_rno) 
+		{
+			int result = dao.myReviewDel(sqlSession,modal_rno);
+			return result;
+		}
+
+		
+//		=======================주리가 한 부분  끝=======================	
+
+		@Override
+		public Map<String, Object> memberList(String userId) {
+			return dao.memberList(sqlSession,userId);
 		}	
 
 }
+

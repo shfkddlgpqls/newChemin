@@ -143,14 +143,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public int reportCount(String userId) {
-		return dao.reportCount(sqlSession,userId);
-	}
-
-	@Override
-	public int adminMemberDelete(String userId) {
+	public int adminMemberUpdate(String userId) {
 		System.out.println("::adminMemberDelete::"+userId);
-		return dao.adminMemberDelete(sqlSession,userId);
+		return dao.adminMemberUpdate(sqlSession,userId);
 	}
 
 	@Override
@@ -163,6 +158,9 @@ public class AdminServiceImpl implements AdminService {
 		System.out.println("::searchListService::"+map);
 		return dao.searchList(sqlSession,map);
 	}
+	
+//	=======================주리가 한 부분  시작=======================	
+
 	
 	//문의게시판 총 갯수 출력
 		@Override
@@ -205,5 +203,38 @@ public class AdminServiceImpl implements AdminService {
 			return dao.selectReviewCount(sqlSession);
 		}
 
+		@Override
+		public int adminQNADel(String modal_qno) 
+		{
+			int result = dao.adminQNADel(sqlSession,modal_qno);
+			return result;
+		}
+
+		@Override
+		public int AdminReviewDel(String modal_rno) 
+		{
+			int result = dao.AdminReviewDel(sqlSession,modal_rno);
+			return result;
+		}
+
+		@Override
+		public List<QnA_board> selectQnaSearchList(int cPage, int numPerPage, Map<String, Object> map) 
+		{
+			return dao.selectQnaSearchList(sqlSession, map, cPage, numPerPage);
+		}
+
+		@Override
+		public int selectQnASearchCount(Map<String, Object> map) 
+		{
+			 return dao.selectQnASearchCount(sqlSession, map);
+		}
+
+		
+		
+//		=======================주리가 한 부분 끝=======================	
+
+		public int adminMemberCancel(String userId) {
+			return dao.adminMemberCancel(sqlSession, userId);
+		}
 
 }

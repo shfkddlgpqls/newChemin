@@ -15,4 +15,9 @@ public interface MemberDao {
 	Member selectFindPw(SqlSessionTemplate sqlSession, Map<String, String> map);
 
 	int updatePw(SqlSessionTemplate sqlSession, Map<String, String> map);
+   
+   int insertMember(SqlSessionTemplate sqlSession, Member member);
+   Member checkEmail(SqlSessionTemplate sqlSession,String email);
+   Member checkPhone(SqlSessionTemplate sqlSession, String phone);
+  int memberInfoUpdate(SqlSessionTemplate sqlSession, Member member); 
 }

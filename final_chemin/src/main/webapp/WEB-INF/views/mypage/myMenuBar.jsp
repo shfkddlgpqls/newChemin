@@ -24,7 +24,7 @@
 					<hr>
 						<ul class="nav justify-content-center">
 						     <li class="nav-item">
-		                        <strong><a class="nav-link mypageAtag" href="${path }/mypage/myMember.do?userId=${memberLoggedIn.userId}">회원 정보   </a></strong>
+		                        <strong><a class="nav-link mypageAtag" href="${path }/mypage/myMember.do">회원 정보   </a></strong>
 		                      </li>
 		                      <li class="nav-item">
 		                        <strong><a class="nav-link mypageAtag" href="${path }/mypage/myOrderList.do">주문 목록   </a></strong>

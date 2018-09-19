@@ -3,28 +3,7 @@
 <mapper namespace="mypage">
 
 <!-- resultType은 vo에 있는것을 가져오는것을 말함/ resultMap은 db에 있는걸 바로 가져올때. jsp에 쏴줄땐 대문자로 적음 -->
-
-
-	<insert id="insertReview" parameterType="review">
-		INSERT INTO REVIEW values (REVIEW_SEQ.nextval,#{userId},#{pno},#{reContent},#{orImg},#{reImg},#{stars},sysdate)
-	</insert>
 	
-	<select id="selectQnaBoardList" parameterType="String" resultType="qna">
-		select qnano, userid,pno,qna_cate_no,qnatitle,qnacontent, reply_content,qnadate,qnastate,qnapw from qna FULL OUTER JOIN reply using(qnaNo) where userid= #{userId} order by qnadate desc 
-	</select>
-	
-	<select id="selectQnACount" resultType="_int">
-		select count(*) from qna where userId = #{userId}
-	</select>
-	
-	<!-- 리뷰  ajax 페이징 처리 -->
-	<select id="selectReviewList" parameterType="String" resultType="review">
-		select * from Review where userId = #{userId} order by redate desc
-	</select>
-	
-	<select id="selectReviewCount" resultType="_int">
-		select count(*) from review where userId = #{userId}
-	</select>
 	<!-- 장소관리 -->
 	<resultMap type="map" id="placeMap"></resultMap>
 	<select id="selectPlaceList" parameterType="map" resultMap="placeMap">
@@ -80,9 +59,9 @@
 	</delete>
 	
 	<!-- 신고하기 -->
-	<select id="warnMsg" parameterType="string" resultType="_int">
+    <select id="warnMsg" parameterType="string" resultType="_int">
 		SELECT RGCOUNT FROM MEMBER_INFO WHERE USERID=#{userId}
-	</select>
+	</select> 
 	
 	
 	<select id="selectPlaceCount" parameterType="map" resultType="_int">
@@ -92,6 +71,51 @@
 		and USERID =#{userId}
 	</select>
 	
+<!-- =======================주리가 한 부분 =======================-->	
+	
+	<insert id="insertReview" parameterType="review">
+		INSERT INTO REVIEW values (REVIEW_SEQ.nextval,#{userId},#{pno},#{reContent},#{orImg},#{reImg},#{stars},sysdate)
+	</insert>
+	
+	<select id="selectQnaBoardList" parameterType="String" resultType="qna">
+		select qnano, userid,pno, pname, qna_cate_no,qnatitle,qnacontent, reply_content,qnadate,qnastate,qnapw from qna 
+		FULL OUTER JOIN reply using(qnaNo) 
+		join product using(pno)
+		where userid= #{userId}
+		order by qnadate desc
+	</select>
+	
+	<select id="selectQnACount" resultType="_int">
+		select count(*) from qna where userId = #{userId}
+	</select>
+	
+	<!-- 리뷰  ajax 페이징 처리 select * from Review where userId = #{userId} order by redate-->
+	<select id="selectReviewList" parameterType="String" resultType="review">
+		select review.reno, review.userid,review.pno,product.pname,review.recontent,review.orimg, review.reimg, stars,redate from review join product on(review.pno=product.pno) where userId = #{userId} order by redate desc
+	</select>
+	
+	<select id="selectReviewCount" resultType="_int">
+		select count(*) from review where userId = #{userId}
+	</select>
+	
+	<update id="UpdateQna" parameterType="map">
+		update qna set qna_cate_no=#{QNA_CATE_NO},qnatitle=#{QNATITLE},qnacontent=#{QNACONTENT}, QNAPW=#{QNAPW} where qnano = #{QNO}
+	</update>
+	
+	<delete id="myQnaDel" parameterType="String">
+		delete from qna where qnano = #{modal_qno}
+	</delete>
+	
+	<insert id="insertReviewEdit" parameterType="review"  >
+		update review set reContent=#{reContent}, orImg=#{orImg}, reImg=#{reImg}, stars=#{stars} where reNo = #{reNO}
+	</insert>
+	
+	<delete id="myReviewDel"  parameterType="String">
+		delete from review where reno = #{modal_rno}
+	</delete>
+
+<!-- =======================주리가 한 부분 끝 =======================-->	
+
 	<resultMap type="map" id="mallMap"></resultMap>
 	<select id="selectOrderList" parameterType="string" resultMap="mallMap">
 		select distinct orderno, ordername, orderaddr, allprice, odate from orderDetail join cart using(orderNo)
@@ -107,5 +131,10 @@
 	<select id="selectWishList" parameterType="string" resultMap="mallMap">
 		select * from wishList join product using(pno) where userId=#{userId}
 	</select>
-
+	
+<resultMap type="map" id="memberMap"></resultMap>
+	<select id="memberList" resultMap="memberMap" parameterType="hashMap">
+		select*from member_info where USERID =#{userId}
+	</select>
+	
 </mapper>

@@ -38,8 +38,7 @@
                 <ul class="list">
                     <h5><strong>Menu</strong></h5>
                     <li><a class="a_tags" href="${path}/ac_monthlyData.do">MontlyData</a></li>
-                    <li><a class="a_tags" href="${path}/ac_savingChart.do">SavingChart</a></li>
-                    <li><a class="a_tags" href="${path}/ac_community.do">Community</a></li>
+                    <li><a class="a_tags" href="${path}/ac_community.do">ShareFluriBook</a></li>
                 </ul>
             </div>
         </div>

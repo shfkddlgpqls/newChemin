@@ -48,13 +48,22 @@ star-input>.input.focus{outline:1px dotted #ddd;}
 		text-decoration: none;
 		color: #F05F40 !important;
 	}
-	
+   outline: none !important;
+   border: none;
+   background: transparent;
+   }
+   
+   #orderNo:hover {
+      text-decoration: none;
+      color: #F05F40 !important;
+   }
    
 </style>
 
 <!-- 마이페이지 css-->
     <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/mypage.css">
    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>	
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>  
 
    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
 
@@ -182,29 +191,29 @@ star-input>.input.focus{outline:1px dotted #ddd;}
      
      function fn_review(no, name) 
      { 
-  	    $("#goods_code").val(no);
-  	    $("#goods_name").val(name);
-  	    
-  	    $("#review_modal").modal();
-  	    
-  	}
+         $("#goods_code").val(no);
+         $("#goods_name").val(name);
+         
+         $("#review_modal").modal();
+         
+     }
      
    </script>            
 
     <style>
-		.orderList {display:none;}
-		.orderNo {display:table-row;}
-		#orderNo {color:gray;}
-		a{color:black;}
-	</style>
-	<script>
-		$(document).ready(function(){
-			$(".orderNo a").click(function() {
-			    $(this).parent().parent().nextUntil(".orderNo").toggle(500);
-			    return false;
-			});
-		})	
-	</script>
+      .orderList {display:none;}
+      .orderNo {display:table-row;}
+      #orderNo {color:gray;}
+      a{color:black;}
+   </style>
+   <script>
+      $(document).ready(function(){
+         $(".orderNo a").click(function() {
+             $(this).parent().parent().nextUntil(".orderNo").toggle(500);
+             return false;
+         });
+      })   
+   </script>
     
       
       <section>
@@ -224,13 +233,13 @@ star-input>.input.focus{outline:1px dotted #ddd;}
            </div>      
               <div class="table-responsive">
                 <table id="review" class="table">
-                	<colgroup>
-                		<col width="18%">
-                		<col width="14%">
-                		<col width="40%">
-                		<col width="13%">
-                		<col width="15%">
-                	</colgroup>
+                   <colgroup>
+                      <col width="18%">
+                      <col width="14%">
+                      <col width="40%">
+                      <col width="13%">
+                      <col width="15%">
+                   </colgroup>
                   <thead>
                     <tr>
                       <th>주문 상세 번호</th>
@@ -242,32 +251,32 @@ star-input>.input.focus{outline:1px dotted #ddd;}
                   </thead>
 
                  <tbody>
-                 	<c:forEach items="${list }" var="od">
-	                 	
-	                    <tr class="orderNo">
-	                       <td><a id="orderNo" href="#">${od.ORDERNO }</a></td>
-	                       <td>${od.ORDERNAME }</td>
-	                       <td>${od.ORDERADDR }</td>
-	                       <td><fmt:formatNumber value="${od.ALLPRICE }" type="currency"/></td>
-	                       <td><fmt:formatDate value="${od.ODATE }" pattern="yy-MM-dd"/></td>
-	                    </tr>
-	                    
-	                    <c:forEach items="${data }" var="d">
-	                    	<c:if test="${od.ORDERNO eq d.ORDERNO }">
-			                    <tr class="orderList">
-			                    	<td></td>
-			                    	<td>
-							       		<div class="cart-img-product b-rad-4 o-f-hidden">
-							            	<img src="${path}/resources/upload/productImg/${d.REIMG}" alt="IMG-PRODUCT" draggable="false">
-							         	</div>
-							       	</td>
-			                    	<td><a href="${path}/mall/detail.do?no=${d.PNO}" class="color2 flex-2" id="detailMove" style="color:gray;text-decoration: none">${d.PNAME }</a>&nbsp;(${d.AMOUNT }개)</td>
-							       	<td><fmt:formatNumber value="${d.TOTALPRICE }" type="currency"/></td>
-							       	<td><button class="btn btn-sm btn-warning" onclick="fn_review(${d.PNO },'${d.PNAME }')" name="${d.PNAME }" id="${d.PNAME }">리뷰 작성</button></td>
-			                    </tr>
-		                    </c:if>
-	                    </c:forEach>
-	                    
+                    <c:forEach items="${list }" var="od">
+                       
+                       <tr class="orderNo">
+                          <td><a id="orderNo" href="#">${od.ORDERNO }</a></td>
+                          <td>${od.ORDERNAME }</td>
+                          <td>${od.ORDERADDR }</td>
+                          <td><fmt:formatNumber value="${od.ALLPRICE }" type="currency"/></td>
+                          <td><fmt:formatDate value="${od.ODATE }" pattern="yy-MM-dd"/></td>
+                       </tr>
+                       
+                       <c:forEach items="${data }" var="d">
+                          <c:if test="${od.ORDERNO eq d.ORDERNO }">
+                             <tr class="orderList">
+                                <td></td>
+                                <td>
+                                  <div class="cart-img-product b-rad-4 o-f-hidden">
+                                    <img src="${path}/resources/upload/productImg/${d.REIMG}" alt="IMG-PRODUCT" draggable="false">
+                                 </div>
+                               </td>
+                                <td><a href="${path}/mall/detail.do?no=${d.PNO}" class="color2 flex-2" id="detailMove" style="color:gray;text-decoration: none">${d.PNAME }</a>&nbsp;(${d.AMOUNT }개)</td>
+                               <td><fmt:formatNumber value="${d.TOTALPRICE }" type="currency"/></td>
+                               <td><button class="btn btn-sm btn-warning" onclick="fn_review(${d.PNO },'${d.PNAME }')" name="${d.PNAME }" id="${d.PNAME }">리뷰 작성</button></td>
+                             </tr>
+                          </c:if>
+                       </c:forEach>
+                       
                     </c:forEach>
                  </tbody>
                  

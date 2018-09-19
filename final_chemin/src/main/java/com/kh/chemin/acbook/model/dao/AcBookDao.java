@@ -8,7 +8,8 @@ import org.springframework.ui.Model;
 
 import com.kh.chemin.acbook.model.vo.AcBook;
 import com.kh.chemin.acbook.model.vo.AcCom;
-import com.kh.chemin.acbook.model.vo.Reply;
+import com.kh.chemin.acbook.model.vo.AcReply;
+import com.kh.chemin.acbook.model.vo.PolaData;
 
 public interface AcBookDao {
 	
@@ -56,9 +57,37 @@ public interface AcBookDao {
 
 	List<Model> prePreSelectDailySum(SqlSessionTemplate sqlSession, String userId);
 
-	int insertReply(SqlSessionTemplate sqlSession,Reply rp);
+	int insertReply(SqlSessionTemplate sqlSession,AcReply rp);
 
 	List<Model> selectReply(SqlSessionTemplate sqlSession, String accNo);
+
+	int updateReply(SqlSessionTemplate sqlSession, AcReply rp);
+
+	int deleteReply(SqlSessionTemplate sqlSession, int rNo);
+
+	int updateAcCom(SqlSessionTemplate sqlSession, AcCom acc);
+
+	int deleteBoard(SqlSessionTemplate sqlSession, int accNo);
+
+	int deleteBoardReply(SqlSessionTemplate sqlSession, int accNo);
+
+	int updateAcOne(SqlSessionTemplate sqlSession, AcBook ac);
+
+	int deleteAcOne(SqlSessionTemplate sqlSession, AcBook ac);
+
+	List<PolaData> selectPolaData(SqlSessionTemplate sqlSession, String userId);
+
+	List<Model> selectMemoLank(SqlSessionTemplate sqlSession, String userId);
+
+	List<Model> thisMonthlyData(SqlSessionTemplate sqlSession, String userId);
+
+	List<Model> monthlyMemoLank(SqlSessionTemplate sqlSession, String userId);
+
+	List<Model> selectMonTime(SqlSessionTemplate sqlSession, String userId);
+
+	List<Model> selectMuchDay(SqlSessionTemplate sqlSession, String userId);
+
+	List<Model> selectSavingCost(SqlSessionTemplate sqlSession, String userId);
 	
 	
 }

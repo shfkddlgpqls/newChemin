@@ -11,7 +11,6 @@ import com.kh.chemin.member.model.vo.Member;
 
 @Service
 public class MemberServiceImpl implements MemberService {
-
 	@Autowired
 	MemberDao dao;
 	
@@ -43,4 +42,21 @@ public class MemberServiceImpl implements MemberService {
 		return dao.updatePw(sqlSession, map);
 	}
 
+   @Override
+   public int insertMember(Member member) {
+      return dao.insertMember(sqlSession, member);
+   }
+   @Override
+   public Member checkEmail(String email) {
+      System.out.println(email);
+      return dao.checkEmail(sqlSession,email);
+   }
+   @Override
+   public Member checkPhone(String phone) {
+      return dao.checkPhone(sqlSession,phone);
+   }
+	@Override
+	public int memberInfoUpdate(Member member) {
+		return dao.memberInfoUpdate(sqlSession, member);
+	}
 }

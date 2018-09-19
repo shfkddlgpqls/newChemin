@@ -2,20 +2,101 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ac">
 	<resultMap type="map" id="acmap"></resultMap>
-
+	
+	<!-- 가계부 정보 수정 -->
+	<update id="updateAcOne" parameterType="acbook">
+		UPDATE ACBOOK SET TYPENUM = #{typeNum}, CATENUM = #{cateNum}, EXCODE = #{exCode}, ACCOST = #{acCost}, MEMO = #{memo}
+		WHERE ACNO = #{acNo} AND USERID= #{userId}
+	</update>
+	<delete id="deleteAcOne" parameterType="acbook">
+		DELETE FROM ACBOOK WHERE ACNO=#{acNo}
+		AND USERID=#{userId}
+	</delete>
+	<!-- 커뮤니티 댓글 삭제 -->
+	<delete id="deleteReply" parameterType="_int">
+		DELETE FROM ACREPLY WHERE RNO = #{rNo}
+	</delete>
+	<!-- 커뮤니티 글 댓글삭제 -->
+	<delete id="deleteBoardReply" parameterType="_int">
+		DELETE FROM ACREPLY WHERE ACCNO= #{accNo}
+	</delete>
+	<!-- 커뮤니티 글 삭제 -->
+	<delete id="deleteBoard" parameterType="_int">
+		DELETE FROM ACCOM WHERE ACCNO = #{accNo}
+	</delete>
+	<!-- 커뮤니티 댓글 수정 -->
+	<update id="updateReply" parameterType="reply">
+		UPDATE ACREPLY SET RCONTENT = #{rContent}, RDATE = SYSDATE WHERE RNO=#{rNo}
+	</update>
+	<!-- 커뮤니티 글 수정 -->
+ 	<update id="updateAcCom" parameterType="accom">
+ 		UPDATE ACCOM SET ACCTITLE=#{accTitle}, ACCDATE= SYSDATE, EDITOR = #{editor} WHERE ACCNO= ${accNo}
+ 	</update>
  	<insert id="insertIn" parameterType="acbook">
 		INSERT INTO ACBOOK VALUES(seq_ac_no.nextval,#{userId},#{acDate},#{typeNum},#{exCode},#{cateNum},#{acCost},#{memo})
 	</insert>
 	<insert id="insertEx">
 		INSERT INTO ACBOOK VALUES(seq_ac_no.nextval,#{userId},#{acDate},#{typeNum},#{exCode},#{cateNum},#{acCost},#{memo})
 	</insert>
-	
+	<!-- 커뮤니티 댓글 등록 -->
 	<insert id="insertReply" parameterType="reply">
-		INSERT INTO REPLY VALUES(SEQ_R_NO.NEXTVAL,#{accNo},#{userId},sysdate,#{rContent})
+		INSERT INTO ACREPLY VALUES(SEQ_R_NO.NEXTVAL,#{accNo},#{userId},sysdate,#{rContent})
 	</insert>
+	
+	<!-- 저축 총 합 가져오기 -->
+	<select id="selectSavingCost" parameterType="string" resultMap="acmap">
+		SELECT SUM(ACCOST)ACCOST
+        FROM ACBOOK
+        WHERE CATENUM='201_13' AND USERID= #{userId}
+	</select>
+	<!-- 연간 메모랭킹 가져오기 -->
+	<select id="selectMemoLank" resultMap="acmap">
+		SELECT * FROM
+		(SELECT MEMO, COUNT(*)AS COUNT
+		FROM ACBOOK
+		WHERE TYPENUM='201' AND USERID=#{userId}
+		GROUP BY MEMO ORDER BY COUNT(*) DESC)
+		where ROWNUM <![CDATA[<=]]> 10
+	</select>
+	<!-- 월간 메모랭킹 -->
+	<select id="monthlyMemoLank" resultMap="acmap">
+		SELECT * FROM
+		(SELECT MEMO, COUNT(*)AS COUNT
+		FROM ACBOOK
+		WHERE TYPENUM='201' AND TO_CHAR(ACDATE,('yy-MM')) = TO_CHAR(SYSDATE,('yy-MM')) AND USERID=#{userId}
+		GROUP BY MEMO ORDER BY COUNT(*) DESC)
+		where ROWNUM <![CDATA[<=]]> 2
+	</select>
+	<!-- 시간대별 합ㄱㅖ 가져오기 -->
+	<select id="selectPolaData" resultType="poladata">
+		SELECT DISTINCT TO_CHAR(ACDATE,'HH24')ACDATE, SUM(ACCOST)
+		OVER(PARTITION BY TO_CHAR(ACDATE,'HH24'),TYPENUM)ACSUM
+		FROM ACBOOK
+		WHERE TYPENUM='201' AND USERID=#{userId} AND TO_CHAR(ACDATE,('yy-MM-dd'))=TO_CHAR(SYSDATE,('yy-MM-dd'))
+	</select>
+	<!-- 이번달 최다 지출 시간대 -->
+	<select id="selectMonTime" resultMap="acmap">
+		SELECT * FROM
+        (SELECT DISTINCT TO_CHAR(A.ACDATE,'HH24')ACTIME,SUM(A.ACCOST)
+		OVER(PARTITION BY TO_CHAR(A.ACDATE,'HH24'),C.CATENAME)ACSUM
+		FROM ACBOOK A, AC_CATEGORY C
+		WHERE A.TYPENUM=C.TYPENUM AND C.TYPENUM='201' AND TO_CHAR(A.ACDATE,('yy-MM'))=TO_CHAR(SYSDATE,('yy-MM')) AND USERID=#{userId}
+        ORDER BY ACSUM DESC)
+        where ROWNUM <![CDATA[<=]]> 1
+	</select>
+	<!-- 이번 달 최다 지출 일 -->
+	<select id="selectMuchDay" resultMap="acmap">
+		SELECT * FROM
+        (SELECT DISTINCT TO_CHAR(A.ACDATE,'dd')ACDAY, TO_CHAR(SUM(A.ACCOST)
+		OVER(PARTITION BY TO_CHAR(A.ACDATE,'yy-MM-dd'),C.CATENAME),'999,999,999')ACSUM
+		FROM ACBOOK A, AC_CATEGORY C
+		WHERE A.TYPENUM=C.TYPENUM AND C.TYPENUM='201' AND USERID= #{userId} AND
+		TO_CHAR(A.ACDATE,('yy-MM'))=TO_CHAR(SYSDATE,('yy-MM'))ORDER BY ACSUM DESC)
+        where ROWNUM <![CDATA[<=]]> 1
+	</select>
 	<!-- 댓글리스트 불러오기 -->
 	<select id="selectReply" resultMap="acmap">
-		SELECT * FROM REPLY WHERE ACCNO=#{accNo} ORDER BY RDATE DESC
+		SELECT * FROM ACREPLY WHERE ACCNO=#{accNo} ORDER BY RDATE DESC
 	</select>
 	
 	<select id="selectEb" parameterType="string" resultMap="acmap">
@@ -28,7 +109,7 @@
 
 	<!-- calendar.jsp:load datalist -->
 	<select id="selectPageList"	resultMap="acmap">
-		SELECT ACNO, USERID, TO_CHAR(ACDATE,('yyyy-MM-dd hh:mm:ss'))AS ACDATE, T.TYPENUM, T.TYPENAME, E.EXCODE, E.EXNAME, C.CATENUM, C.CATENAME, ACCOST, MEMO
+		SELECT ACNO, USERID, TO_CHAR(ACDATE,('yyyy-MM-dd HH24:mi:ss'))AS ACDATE, T.TYPENUM, T.TYPENAME, E.EXCODE, E.EXNAME, C.CATENUM, C.CATENAME, ACCOST, MEMO
 		FROM ACBOOK A, AC_TYPE T, AC_CATEGORY C, AC_EXTYPE E
 		WHERE T.TYPENUM=A.TYPENUM AND C.CATENUM=A.CATENUM AND E.EXCODE=A.EXCODE AND USERID= #{userId}
 		ORDER BY ACDATE DESC
@@ -102,10 +183,19 @@
         FROM ACBOOK
         WHERE TYPENUM='201' AND TO_CHAR(ACDATE,'yy-MM')= TO_CHAR(ADD_MONTHS(sysdate,-2),'yy-MM') AND USERID=#{userId}
 	</select>
-	<!-- 이번달 카테고리별 지출 합계 -->	
+	<!-- 도넛차트 이번달 카테고리별 지출합계 -->
 	<select id="monthlyExpenditure" parameterType="string" resultMap="acmap">
-		SELECT DISTINCT C.CATENAME, SUM(A.ACCOST)
+		SELECT DISTINCT TO_CHAR(ACDATE,'MM')AS NOWDATE, C.CATENAME, SUM(A.ACCOST)
 		OVER(PARTITION BY C.CATENUM)CATESUM
+		FROM ACBOOK A, AC_CATEGORY C
+		WHERE A.CATENUM=C.CATENUM AND A.TYPENUM='201'
+		AND TO_CHAR(ACDATE,'yy-MM')= TO_CHAR(sysdate,'yy-MM')AND USERID= #{userId}
+		ORDER BY CATESUM DESC
+	</select>	
+	<!-- 이번달 카테고리별 지출 합계 -->	
+	<select id="thisMonthlyData" parameterType="string" resultMap="acmap">
+		SELECT DISTINCT TO_CHAR(ACDATE,'MM')AS NOWDATE, C.CATENAME, TO_CHAR(SUM(A.ACCOST)
+		OVER(PARTITION BY C.CATENUM),'999,999,999,999')CATESUM
 		FROM ACBOOK A, AC_CATEGORY C
 		WHERE A.CATENUM=C.CATENUM AND A.TYPENUM='201'
 		AND TO_CHAR(ACDATE,'yy-MM')= TO_CHAR(sysdate,'yy-MM')AND USERID= #{userId}
@@ -113,8 +203,8 @@
 	</select>	
 	<!-- 저번달 카테고리별 지출 합계 -->
 	<select id="preMonthlyData" parameterType="string" resultMap="acmap">
-		SELECT DISTINCT  TO_CHAR(ACDATE,'yy-MM'), C.CATENAME, SUM(A.ACCOST)
-		OVER(PARTITION BY C.CATENUM)CATESUM
+		SELECT DISTINCT  TO_CHAR(ACDATE,'MM')AS PREDATE, C.CATENAME, TO_CHAR(SUM(A.ACCOST)
+		OVER(PARTITION BY C.CATENUM),'999,999,999,999')CATESUM
 		FROM ACBOOK A, AC_CATEGORY C
 		WHERE A.CATENUM=C.CATENUM AND A.TYPENUM='201'
 		AND TO_CHAR(ACDATE,'yy-MM')= TO_CHAR(ADD_MONTHS(sysdate,-1),'yy-MM')AND USERID= #{userId}
@@ -122,8 +212,8 @@
 	</select>
 	<!-- 저저번달 카테고리별 지출 합계 -->
 	<select id="prePreMonthlyData" parameterType="string" resultMap="acmap">
-		SELECT DISTINCT  TO_CHAR(ACDATE,'yy-MM'), C.CATENAME, SUM(A.ACCOST)
-		OVER(PARTITION BY C.CATENUM)CATESUM
+		SELECT DISTINCT  TO_CHAR(ACDATE,'MM')AS PREPREDATE, C.CATENAME, TO_CHAR(SUM(A.ACCOST)
+		OVER(PARTITION BY C.CATENUM),'999,999,999,999')CATESUM
 		FROM ACBOOK A, AC_CATEGORY C
 		WHERE A.CATENUM=C.CATENUM AND A.TYPENUM='201'
 		AND TO_CHAR(ACDATE,'yy-MM')= TO_CHAR(ADD_MONTHS(sysdate,-2),'yy-MM')AND USERID= #{userId}
@@ -131,7 +221,7 @@
 	</select>
 	
 	<select id="acSelectOne" parameterType="_int"  resultMap="acmap">
-		SELECT ACNO, USERID, TO_CHAR(ACDATE,('yyyy-MM-dd hh:mm:ss'))AS ACDATE, T.TYPENUM, T.TYPENAME, E.EXCODE, E.EXNAME, C.CATENUM, C.CATENAME, ACCOST, MEMO
+		SELECT ACNO, USERID, TO_CHAR(ACDATE,('yyyy-MM-dd HH24:mi:ss'))AS ACDATE, T.TYPENUM, T.TYPENAME, E.EXCODE, E.EXNAME, C.CATENUM, C.CATENAME, ACCOST, MEMO
 		FROM ACBOOK A, AC_TYPE T, AC_CATEGORY C, AC_EXTYPE E
 		WHERE T.TYPENUM=A.TYPENUM AND C.CATENUM=A.CATENUM AND E.EXCODE=A.EXCODE AND ACNO= #{acNo}
 		ORDER BY ACDATE DESC 
@@ -139,7 +229,7 @@
 	
 	<!-- 게시판 글쓰기 -->
 	<insert id="insertAcCom" parameterType="accom">
-		INSERT INTO ACCOM VALUES(seq_acc_no.nextval,sysdate,#{accCount},#{accLike},#{userId},#{accTitle},#{editor})
+		INSERT INTO ACCOM VALUES(seq_acc_no.nextval,sysdate,#{accCount},#{userId},#{accTitle},#{editor},#{birthDay})
 	</insert>
 	
 	<select id="acComList" resultMap="acmap">

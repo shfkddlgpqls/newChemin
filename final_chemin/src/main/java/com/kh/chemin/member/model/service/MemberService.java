@@ -13,4 +13,8 @@ public interface MemberService {
 
 	int updatePw(Map<String, String> map);
 	
+   int insertMember(Member member);
+   Member checkEmail(String email);
+   Member checkPhone(String phone);
+   int memberInfoUpdate(Member mebmer);
 }
