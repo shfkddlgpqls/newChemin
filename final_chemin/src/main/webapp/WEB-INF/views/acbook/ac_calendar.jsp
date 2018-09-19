@@ -12,7 +12,7 @@
 <!--DatePicker: ac_inputIn-->
 <link rel="stylesheet" 	href="<c:url value= "/resources/acbook/css/ac_calendar.css?var?3"/>">
 <!-- header -->
-<jsp:include page="/WEB-INF/views/common/header.jsp" />
+<jsp:include page="/WEB-INF/views/common/header1.jsp" />
 <!-- sideBar -->
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
 <!-- Main Start -->

@@ -314,7 +314,6 @@ public class MypageController
 		return jsonStr;
 	}
 	
-	
 //	=======================주리가 한 부분 =======================	
 	
 		//리뷰 글 작성
@@ -371,36 +370,34 @@ public class MypageController
 				
 				review.setOrImg(originalFilename);
 				review.setReImg(renamedFileName);
-
-			}
-				
-			int result = service.insertReview(review);
-			
-			//서비스 갔다왔따
-			
-			String msg = "";
-			String loc = "";
-			
-			if(result>0)
-			{
-				msg = "성공적으로 등록하였습니다!";
-				loc = "/mypage/myOrderList.do";
-			}
-			else
-			{
-				msg = "등록을 실패하였습니다 ㅠㅠㅠ";
-				loc ="/mypage/myOrderList.do";
-			}
-			
-			ModelAndView mv = new ModelAndView();
-			
-			mv.addObject("msg",msg);
-			mv.addObject("loc", loc);
-			mv.setViewName("common/msg");
-			
-			return mv;
-		}
-		
+       }
+          
+       int result = service.insertReview(review);
+       
+       //서비스 갔다왔따
+       
+       String msg = "";
+       String loc = "";
+       
+       if(result>0)
+       {
+          msg = "성공적으로 등록하였습니다!";
+          loc = "/mypage/myOrderList.do";
+       }
+       else
+       {
+          msg = "등록을 실패하였습니다 ㅠㅠㅠ";
+          loc ="/mypage/myOrderList.do";
+       }
+       
+       ModelAndView mv = new ModelAndView();
+       
+       mv.addObject("msg",msg);
+       mv.addObject("loc", loc);
+       mv.setViewName("common/msg");
+       
+       return mv;
+    }
 		
 		//게시글 관리 페이지로 이동
 		@RequestMapping("/mypage/myBoardList.do")
@@ -687,10 +684,5 @@ public class MypageController
 		return mv;	
 
 	}
-	
-	
-		
-		
-//		=======================주리가 한 부분  끝=======================		
 	
 }

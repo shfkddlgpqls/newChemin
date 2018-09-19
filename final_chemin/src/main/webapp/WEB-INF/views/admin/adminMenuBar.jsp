@@ -28,7 +28,7 @@
 						    </li>
 						    
 						    <li class="nav-item">
-						   		<strong><a class="nav-link adminAtag" href="${path }/admin/adminBoardManage.do">게시글 관리</a></strong>
+						   		<strong><a class="nav-link adminAtag" href="${path }/admin/adminBoardManage.do">문의글 관리</a></strong>
 						    </li>
 						    
 						    <li class="nav-item">
