@@ -622,23 +622,6 @@ public class AcBookController extends HttpServlet{
 	 
 	    }
 
-	/*//ac_savingChart.jsp: 수입 지출 패턴
-	@RequestMapping("/ajax/selectInExPattern")
-	public void selectInExPattern(HttpServletResponse response, HttpServletRequest request) throws ServletException, IOException{
-		List<Model> list = service.selectPatternList();
-		response.setContentType("application/json; charset=UTF-8");
-		new Gson().toJson(list, response.getWriter());
-	}
-	
-	
-	//회원정보 검색
-	@RequestMapping("acbook/acSelectOne.do")
-	public void acSelectOne(String ac_date, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println(ac_date);
-		List<Model> list = service.acSelectList(ac_date);
-		response.setContentType("application/json;charset=UTF-8");
-		new Gson().toJson(list,response.getWriter());
-	}
-	*/
+
 
 }

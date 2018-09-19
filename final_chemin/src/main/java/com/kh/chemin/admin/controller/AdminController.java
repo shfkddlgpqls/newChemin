@@ -1,5 +1,6 @@
 package com.kh.chemin.admin.controller;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,7 @@ import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.member.model.vo.Member;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -208,15 +211,34 @@ public class AdminController {
 		mv.addObject("loc", loc);
 		mv.addObject("result", result);
 		mv.setViewName("common/msg");
+
 		return mv;
 	}
 	
 	@RequestMapping("/admin/adminProductData.do")
-	public void adminPData(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, HttpServletResponse response) throws Exception {
+	public void adminPData(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, HttpServletResponse response, int searchCate, String searchOrder, String searchData) throws Exception {
+		String cate = null;
+		String stype_n=null;
+		String stype_s=null;
+		String stype_c=null;
+		if(searchCate!=0) cate = "전체";
+		if(searchOrder.equals("new")) stype_n="최신순";
+		if(searchOrder.equals("sales")) stype_s="판매순";
+		if(searchOrder.equals("stock")) stype_c="재고순";
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("cate", cate);
+		map.put("searchCate", searchCate);
+		map.put("stype_n", stype_n);
+		map.put("stype_s", stype_s);
+		map.put("stype_c", stype_c);
+		map.put("searchOrder", searchOrder);
+		map.put("searchData", searchData);
+			
 		int numPerPage = 10;
-		int totalCount = service.selectProductCount();
+		int totalCount = service.selectProductCount(map);
 		String pageBar = MallPageBar.getPageAdmin(cPage, numPerPage, totalCount);
-		List<Map<String, Object>> list = service.selectProductList(cPage, numPerPage);
+		List<Map<String, Object>> list = service.selectProductList(map, cPage, numPerPage);
 		
 		JSONArray jsonArr = new JSONArray();
 		jsonArr.add(list);
@@ -228,7 +250,7 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/admin/productEnroll.do", method = RequestMethod.POST)
-	public String productEnroll(Product product, @RequestParam("mainImg") MultipartFile mainImg, HttpServletRequest request) {
+	public String productEnroll(Model model, Product product, @RequestParam("mainImg") MultipartFile mainImg, HttpServletRequest request) {
 		// 대표이미지 저장경로 지정 및 서버에 이미지 저장
 		String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload/productImg");
 		
@@ -238,12 +260,112 @@ public class AdminController {
 			String ext = oriImg.substring(oriImg.lastIndexOf(".")+1);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 			String today = sdf.format(new Date(System.currentTimeMillis()));
-			String reImg = today+"_"+""+"."+ext;
+			int no = service.selectMaxPno();
+			String reImg = today+"_"+(no+1)+"."+ext;
+			try { // 서버의 해당경로에 파일을 저장하는 명령
+				mainImg.transferTo(new File(saveDir+"/"+reImg));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			product.setOriImg(oriImg);
+			product.setReImg(reImg);
 		}
+		service.insertProduct(product);
 		
-		return "";
+		return "redirect:/admin/adminProductList.do";
 	}
 	
+	@RequestMapping("/admin/productUpdate.do")
+	public String productUpdate(Model model, int pno) {
+		Product product = service.selectProduct(pno);
+		List<Map<String, String>> list = service.selectMallCate();
+		model.addAttribute("cate", list);
+		model.addAttribute("product", product);
+		return "admin/adminProductUpdate";
+	}
+	
+	@RequestMapping("/admin/productUpdateEnd.do")
+	public String productUpdateEnd(Model model, Product product, @RequestParam("mainImg") MultipartFile mainImg, HttpServletRequest request) {
+		String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload/productImg");
+		
+		if(!mainImg.isEmpty()) {
+			// 기존 파일 삭제
+			Product p = service.selectProduct(product.getPno());
+			String img = request.getSession().getServletContext().getRealPath("/resources/upload/productImg/"+p.getReImg());
+			File file = new File(img);
+			if(file.exists() == true){
+				file.delete();
+			}
+			
+			String oriImg = mainImg.getOriginalFilename();
+			// 확장자
+			String ext = oriImg.substring(oriImg.lastIndexOf(".")+1);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+			String today = sdf.format(new Date(System.currentTimeMillis()));
+			int no = product.getPno();
+			String reImg = today+"_"+no+"."+ext;
+			try { // 서버의 해당경로에 파일을 저장하는 명령
+				mainImg.transferTo(new File(saveDir+"/"+reImg));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			product.setOriImg(oriImg);
+			product.setReImg(reImg);
+		}
+		service.updateProduct(product);
+		
+		return "redirect:/admin/adminProductList.do";
+	}
+
+	@RequestMapping("/admin/productDelete.do")
+	public void productDelete(HttpServletRequest request, HttpServletResponse response, int pno) throws Exception {
+		// 기존 파일 삭제
+		Product product = service.selectProduct(pno);
+		int result = service.productDelete(pno);
+		
+		String img = request.getSession().getServletContext().getRealPath("/resources/upload/productImg/"+product.getReImg());
+		File file = new File(img);
+		if(file.exists() == true){
+			file.delete();
+		}
+		
+		response.setContentType("application/json;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(result);
+	}
+	
+	@RequestMapping("/admin/productAuto.do")
+	public void productAuto(String search, HttpServletResponse response) throws Exception {
+		List<String> nameList=null;
+		String csv="";
+		if(!search.trim().isEmpty())
+		{
+			nameList= service.productAuto(search);
+			if(!nameList.isEmpty()) {
+				for(int i=0;i<nameList.size();i++) {
+					if(i!=0) csv+=",";
+					csv+=nameList.get(i);
+				}
+			}
+		}
+		response.setContentType("text/csv;charset=utf-8");
+		PrintWriter out=response.getWriter();
+		out.print(csv);
+	}
+	
+	@RequestMapping("/admin/adminOrderList.do")
+	public String myOrderList(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, Model model)
+	{
+		int numPerPage = 5;
+		List<Map<String, Object>> list = service.selectOrderList(cPage, numPerPage);
+		List<Map<String, Object>> data = service.selectOrderData();
+		int totalCount = service.selectTotalCount();
+		model.addAttribute("pageBar", Page.getPage(cPage, numPerPage, totalCount, "adminOrderList.do"));
+		model.addAttribute("list", list);
+		model.addAttribute("data", data);
+		return "admin/adminOrderList";
+	}
+
 	/*회원관리*/
 	@RequestMapping(value="/admin/adminMemberList.do",produces="application/text; charset=utf-8",method=RequestMethod.GET)
 	@ResponseBody
@@ -253,7 +375,7 @@ public class AdminController {
 		int numPerPage = 5;
 		/*가입되어있는 회원 수 가져오기*/
 		int totalCount=service.selectMemberCount();
-		String pageBar = MallPageBar.getPageAdmin(cPage, numPerPage, totalCount);
+		String pageBar = MallPageBar.getPageAdminMember(cPage, numPerPage, totalCount);
 		List<Map<String, Object>> list = service.selectMemberList(cPage, numPerPage);
 		ObjectMapper mapper=new ObjectMapper();
 		String jsonStr=null;
@@ -267,40 +389,40 @@ public class AdminController {
 	
 	/*회원별 신고내용 가져오기*/
 	@RequestMapping("/admin/reportContent.do") 
-	public void reportContent(String userId,HttpServletResponse response) throws Exception
+	public ModelAndView reportContent(String userId,ModelAndView mv) throws Exception
 	{
 		logger.debug("::rpListController::"+userId);
 		List<Map<String,Object>> rpList=service.rpList(userId);
-		int count=service.reportCount(userId);
-		JSONArray jsonArr = new JSONArray();
-		jsonArr.add(rpList);
-		jsonArr.add(count);
-		response.setContentType("application/json;charset=UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print(jsonArr);
+		
+		
+		/*String loc="/admin/adminMemberReport";*/
+		mv.addObject("reportId",userId);
+		mv.addObject("rpList",rpList);
+		mv.setViewName("admin/adminMemberReport");
+		return mv;
 	}
 	
-	/*회원 삭제*/
+	/*신고3회이상 회원 제제*/
 	@RequestMapping("/admin/adminMemberDelete.do")
-	public ModelAndView adminMemberDelete(String userId)
+	public ModelAndView adminMemberUpdate(String userId,ModelAndView mv)
 	{
-		logger.debug("::adminMemberDeleteController::"+userId);
-		int result=service.adminMemberDelete(userId);
+		int result=service.adminMemberUpdate(userId);
 		String msg="";
 		String loc="";
-
+		String status="";
 		if(result>0) {
-			msg="회원 삭제가 완료되었습니다.";
+			msg="회원 제재 처리가 완료되었습니다.";
+			loc="/admin/adminMemberList.do";
+			status="loginSuccess";
 		}else {
-			msg="회원 삭제가 실패되었습니다.";
+			msg="회원 제재 처리가 실패되었습니다.";
+			loc="/admin/adminMemberList.do";
+			status="loginFail";
 		}
 		
-		loc="/admin/adminMemberList.do";
-		
-		ModelAndView mv = new ModelAndView();
 		mv.addObject("msg", msg);
 		mv.addObject("loc", loc);
-		mv.addObject("result", result);
+		mv.addObject("status",status);
 		mv.setViewName("common/msg");
 		return mv;
 		
@@ -319,22 +441,35 @@ public class AdminController {
 	}
 	
 	/*회원관리 검색*/
-	@RequestMapping("/admin/memberSearch.do")
-	public void memberSearch(String searchValue, String searchKey,HttpServletResponse response) throws Exception
+	@RequestMapping(value="/admin/memberSearch.do",produces="application/text; charset=utf-8",method=RequestMethod.GET)
+	@ResponseBody
+	public String memberSearch(String searchValue, String searchKey,HttpServletResponse response) throws Exception
 	{
+		ObjectMapper mapper=new ObjectMapper();
+		String jsonStr=null;
+		
 		logger.debug("::검색 key::"+searchKey);
 		logger.debug("::검색 value::"+searchValue);
+		
+		String mtype_name=null;
+		String mtype_id=null;
+		
+		if(searchKey.equals("memName")) mtype_name="memName";
+		if(searchKey.equals("memId")) mtype_id="memId";
+		
 		HashMap<String,Object> map=new HashMap<String,Object>();
-		map.put("searchKey", searchKey);
 		map.put("searchValue",searchValue);
+		map.put("mtype_name",mtype_name);
+		map.put("mtype_id",mtype_id);
 		List<Map<String,Object>> searchList=service.searchList(map);
-		JSONArray jsonArr=new JSONArray();
-		jsonArr.add(searchList);
-		response.setContentType("application/json; charest=utf-8");
-		PrintWriter out=response.getWriter();
-		out.print(jsonArr);
+		HashMap<String,Object> hashmap=new HashMap<String,Object>();
+		hashmap.put("searchList",searchList);
+		jsonStr=mapper.writeValueAsString(hashmap);
+		return jsonStr;
 		
 	}
+	
+//	=======================주리가 한 부분  시작=======================		
 	
 	@RequestMapping("/admin/adminBoardManage.do")
 	public ModelAndView adminBoardManage(ModelAndView mv)
@@ -379,10 +514,10 @@ public class AdminController {
 	//주리가 한거 (9/13)
 	@RequestMapping(value="/admin/adminBoard.do" ,produces = "application/text; charset=utf8")
 	@ResponseBody
-     public String adminBoard(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage) throws Exception 
+     public String adminBoard(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, String option, String keyword) throws Exception 
 	{
 			int numPerPage= 4;
-		  
+						
 	         Map<String, Object> map = new HashMap<String, Object>();
 	         ObjectMapper mapper = new ObjectMapper();
 	         String jsonStr = null;
@@ -408,7 +543,6 @@ public class AdminController {
       public String reviewPaging(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage) throws Exception 
 	{
 			int numPerPage= 4;
-			String userId ="user";
 		  
 	         Map<String, Object> map = new HashMap<String, Object>();
 	         ObjectMapper mapper = new ObjectMapper();
@@ -422,7 +556,7 @@ public class AdminController {
 	 		String reviewPageBar = MallPageBar.getReviewPage(cPage, numPerPage, rTotalCount);
 	 	
 	 		
-	         logger.debug("list 값"+rlist);
+	         logger.debug("리뷰 list 값"+rlist);
 	         logger.debug("rTotalCount 값"+rTotalCount);
 	         logger.debug("reviewPageBar 값"+reviewPageBar);
 	           
@@ -485,4 +619,134 @@ public class AdminController {
 		
 	}
 	
+
+	//문의 글 삭제하기 
+	@RequestMapping("/admin/adminQNADel.do")
+	public ModelAndView adminQnaDel(ModelAndView mv,@RequestParam(value = "modal_qno") String modal_qno )
+	{
+		int result = service.adminQNADel(modal_qno);
+		
+		//서비스 갔다왔따
+		
+		String msg = "";
+		String loc = "";
+		
+		if(result>0)
+		{
+			msg = "선택하신 문의글이 성공적으로 삭제 되었습니다.";
+			loc = "/admin/adminBoardManage.do";
+		}
+		else
+		{
+			msg = "삭제 작업을 실패하였습니다. 관리자에게 문의하세요";
+			loc ="/admin/adminBoardManage.do";
+		}
+		
+		mv.addObject("msg",msg);
+		mv.addObject("loc", loc);
+		mv.setViewName("common/msg");
+		
+		return mv;	
+
+	}
+	
+	//리뷰 삭제하기 
+	@RequestMapping("/admin/AdminreviewDel.do")
+	public ModelAndView myReviewDel(ModelAndView mv,@RequestParam(value = "modal_rno") String modal_rno )
+	{
+		int result = service.AdminReviewDel(modal_rno);
+		
+		//서비스 갔다왔따
+		
+		String msg = "";
+		String loc = "";
+		String status ="";
+		
+		
+		if(result>0)
+		{
+			msg = "선택하신 문의글이 성공적으로 삭제 되었습니다.";
+			loc = "/admin/adminReviewBoard.do";
+			status = "loginSuccess";
+		}
+		else
+		{
+			msg = "삭제 작업을 실패하였습니다. 관리자에게 문의하세요";
+			loc ="/admin/adminReviewBoard.do";
+			status = "loginFailed";
+		}
+		
+		mv.addObject("status", status);
+		mv.addObject("msg",msg);
+		mv.addObject("loc", loc);
+		mv.setViewName("common/msg");
+		
+	
+		
+		return mv;	
+
+	}
+	
+	   //주리가 한거 (9/13)
+	/*	@RequestMapping(value="/admin/adminBoardSearch.do" ,produces = "application/text; charset=utf8")
+		@ResponseBody
+	     public String adminBoardSearch(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, String option, String keyword) throws Exception 
+		{
+				int numPerPage= 4;
+			
+				String searchType = null;
+				
+				if(option.equals("code")) searchType= "PNO";
+				if(option.equals("bNo")) searchType= "QNANO";
+				if(option.equals("writer")) searchType= "USERID";
+
+				 Map<String, Object> map = new HashMap<String, Object>();
+		         ObjectMapper mapper = new ObjectMapper();
+		         String jsonStr = null;
+		         
+		         map.put("searchType", searchType);
+		         map.put("keyword", keyword);
+		      
+		         
+		         List<QnA_board> list = service.selectQnaSearchList(cPage,numPerPage,map);   
+		           
+		         //문의게시판  글 갯수
+		         int qTotalCount = service.selectQnASearchCount(map);
+		         
+		         //페이지바
+		         String qnaPageBar = MallPageBar.getAdminPage(cPage, numPerPage, qTotalCount);
+		         
+		         map.put("list", list);
+		         map.put("qnaPageBar", qnaPageBar);
+
+		         jsonStr = mapper.writeValueAsString(map);
+		         return jsonStr;
+	  
+		}	*/
+//	=======================주리가 한 부분  끝=======================			
+
+	@RequestMapping("/admin/adminMemberCancel.do")
+	public ModelAndView adminMemberCancel(String userId,ModelAndView mv)
+	{
+		int result=service.adminMemberCancel(userId);
+		String msg="";
+		String loc="";
+		String status="";
+		if(result>0) {
+			msg="회원 제재 취소가 완료되었습니다.";
+			loc="/admin/adminMemberList.do";
+			status="loginSuccess";
+		}else {
+			msg="회원 제재 취소가 실패되었습니다.";
+			loc="/admin/adminMemberList.do";
+			status="loginFail";
+		}
+		
+		mv.addObject("msg", msg);
+		mv.addObject("loc", loc);
+		mv.addObject("status",status);
+		mv.setViewName("common/msg");
+		return mv;
+	}
+
 }

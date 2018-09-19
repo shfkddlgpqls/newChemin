@@ -3,630 +3,402 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
-<c:set var="path" value="<%=request.getContextPath()%>"/>
-  
+<c:set var="path" value="${pageContext.request.contextPath}"/>
+
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 
-<!-- 상세보기 css-->
-    <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/mall.css">
-     <script src="<c:url value="/resources/base/js/productDetail.js" />"></script>
-
-<!--  <script type="text/javascript">  
-        $(document).ready(function(){
-            $("#review tr:odd").addClass("odd");
-            $("#review tr:not(.odd)").hide();
-            $("#review tr:first-child").show();
-            
-            $("#review tr.odd").click(function(){
-                $(this).next("tr").toggle();
-                $(this).find(".arrow").toggleClass("up");
-            });
-            //$("#report").jExpand();
-        });
-    </script>        
- -->
- 
- <script>
- 
- // 상품 정보를 장바구니에 넘기기 위해서 해당 상품 정보 전달 
- $(function () 
-{
-    fn_qna(1); 
-    fn_review(1);   
+	<!-- mall css -->
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="${path }/resources/mall/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="${path }/resources/mall/vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="${path }/resources/mall/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="${path }/resources/mall/vendor/slick/slick.css">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="${path }/resources/mall/vendor/noui/nouislider.min.css">
+    <link rel="stylesheet" type="text/css" href="${path }/resources/mall/css/util.css">
+    <link rel="stylesheet" type="text/css" href="${path }/resources/mall/css/mall.css">
     
-    $(".cart").click(function(){
-       var amount =  $("#quantity_value").text();  
-       var pno = $("#pNo").val();
-       var pName = $("#goodsName").text();
-       var userId = $("input:hidden[name=userId]").val();
-       
-       $.ajax({
-          type:"get",
-          url:"${path}/mall/cartAdd.do",
-          data:{pno:pno,amount:amount,userId:userId},
-          datatype:"json",
-          success:function(data){
-             if(data==1){
-                fn_cartCount();
-                swal
-                ({
-                   title: "["+pName+"] 추가",
-                    text: "장바구니 상품은 7일간 보관됩니다.\n확인하러 장바구니로 이동하시겠습니까?!",
-                    icon: "success",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                   if (willDelete) {
-                      location.href="${path}/mall/cartList.do"; 
-                   } else {
-                      return;
-                   }
-                });
-             } else if(data==0){
-                swal("["+pName+"] 추가 실패", "장바구니에 상품 추가를 실패하였습니다.\n로그인 후 이용하세용", "error");
-             } else {
-                /* 상품이 이미 들어있는 경우 */
-                swal
-                ({
-                   title: "["+pName+"] 존재",
-                    text: "장바구니에 상품이 이미 존재합니다.\n확인하러 장바구니로 이동하시겠습니까?!",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                   if (willDelete) {
-                      location.href="${path}/mall/cartList.do"; 
-                   } else {
-                      return;
-                   }
-                });
-             }
-          },
-             error:function(jxhr,textStatus,error){
-                console.log("productDetail ajax 실패 : "+jxhr+" "+textStatus+" "+error);
-             }
-       });
-    });   
- });
-   
-   //찜 alert
-   function fn_wishList() 
-   {
-      alert("해당 상품이 마이페이지 - 찜 목록에 정상적으로 담겼습니다. ");   
-   };
-   
-   function fn_pwCheck() 
-   {
-         var dbPW = $("pNo").val();
-         alert(dbPW);
-   };
-   
-   
-   //문의하기 모달에 문의 유형 카테고리 값 받기
-   function fn_selectbox()
-   {
-       var target = $("#qna_option option:selected").val();
-       
-       if(target==1)
-      {
-          $("#board_name").val("상품 문의 글입니다.");
-      }
-       else if(target==2)
-      {
-          $("#board_name").val("교환 문의 글입니다.");
-      }
-       else if(target==3)
-      {
-          $("#board_name").val("환불 문의 글입니다.");
-      }
-       else if(target==4)
-       {
-           $("#board_name").val("반품 문의 글입니다.");
-       }
-       else 
-      {
-          $("#board_name").val("기타 문의 글입니다.");
-      } 
-   };
-   
-   //글 작성시 설정한 비밀번호 확인 창 띄워주기(pno에서 비밀번호로 바꿔주기)
-   function fn_inputPw() 
-   {
-      var pno = $("#pNo").val();
-     
-        $("#pwCheck").modal();
-      $('#pw_db').val(pno);            
-   };
-   
-   //글 작성시 설정한 비밀번호와 사용자가 지금 입력한 비밀번호가 맞는지 확인하는 함수
-   function fn_pwConfirm() 
-   {
-      var db_pw = $("#pw_db").val().trim();
-      var user_pw = $("#board_pw").val().trim();
-      
-      //숫자만 가려내는 정규표현식
-      regNumber = /^[0-9]*$/;
-      
-      //숫자가 아닌 문자 입력했을시에
-      if(!regNumber.test(user_pw))
-       {
-         alert("숫자만 입력하세요");
-          return;
-       }
-      //비밀번호가 4글자 미만일 때 : 4 숫자 바꿔줘야한다
-      else if(user_pw.length<4)
-      {
-          alert("비밀번호는 4자리입니다. 숫자 4자리를 입력해주세요.");
-      }
-      else
-      {
-         if(db_pw==user_pw)
-          {
-            alert("비밀번호가 일치합니다.");  
-         }
-         else
-         {
-            alert("비밀번호가 틀렸습니다. 다시 입력해주세요"); return;
-         }      
-      }         
-   };
-   
-   //입력하기 모달창에 제품 정보 넣어주기
-   function fn_insertDetails() 
-   {
-      var pno = $("#pNo").val();
-      var pName = $("#pName").val();
-        
-        $("#question_modal").modal();
-      $('#goods_code').val(pno);     
-      $('#goods_name').val(pName);
-   }
-   
-   function fn_checkUserPw() 
-   {
-     
-      var user_content = $("#qna_content").val().trim();
-      var user_pw = $("#user_input_pw").val().trim();
-      var cate_name = $("#board_name").val().trim();
-     
-      //숫자만 가려내는 정규표현식
-      regNumber = /^[0-9]*$/;
-      
-      if(cate_name.length==0)
-      {
-        alert("좌측의 문의 유형을 선택해주세요.");
-        return;
-      }     
-      else if(user_content.length==0)
-      {
-         alert("문의 내용을 입력해주세요");    
-         return;
-      }
-      //숫자가 아닌 문자 입력했을시
-      else if(!regNumber.test(user_pw))
-       {
-         alert("숫자만 입력하세요");
-          return;
-       }
-      //비밀번호가 4글자 미만일 때 : 4 숫자 바꿔줘야한다
-      else if(user_pw.length<4)
-      {
-          alert("비밀번호는 4자리입니다. 숫자 4자리를 입력해주세요.");
-          return;
-      }
-      else
-      {
-        $("#qnaFrm").submit();
-      }   
-   };
-   
-   function fn_qna(cPage) 
-   {
-      //pno > var로 받기 ajax    
-   }
-   
-   function fn_review(cPage)
-   {
-   
-   }
-  
- </script>
- 
- 
+    <!-- 우편번호 -->
+    <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+    <!-- 결제 -->
+    <script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.2.js"></script>
 
+    <!-- Title Page -->
+    <section class="bg-title-page p-t-40 p-b-50 flex-col-c-m" style="background-image: url(${path}/resources/mall/img/food.jpg);">
+        <h2 class="l-text2 t-center">
+            Order
+        </h2>
+    </section>
 
-<section>
-<div class="container single_product_container">
-      <div class="row">
-         <div class="col-lg-7">
-            <div class="single_product_pics">
-               <div class="row">
-                  <div class="col-lg-9 image_col order-lg-2 order-1">
-                     <div class="single_product_image">
-                           
-                        <img src="${path}/resources/upload/productImg/${product.reImg }">
-                     </div>
-                  </div>
-               </div>
+    <!-- 구매할 상품 리스트 -->
+    <!-- Cart -->
+	<section class="cart bgwhite p-t-70 p-b-100">
+        <div class="container">
+            <!-- Cart item -->
+            <h4 class="m-text26 p-b-36 p-t-15">
+               	주문상품 정보
+            </h4>
+            <div class="container-table-cart pos-relative">
+                <div class="wrap-table-shopping-cart bgwhite">
+                    <table class="table-shopping-cart">
+                        <tr class="table-head">
+                            <th class="column-1"></th>
+                            <th class="column-2">Product</th>
+                            <th class="column-3">Price</th>
+                            <th class="column-4">Quantity</th>
+                            <th class="cloumn-6">Total</th>
+                        </tr>
+
+						<c:forEach items="${list }" var="c">
+	                        <tr class="table-row">
+	                            <td class="column-1">
+	                                <div class="cart-img-product b-rad-4 o-f-hidden">
+	                                    <img src="${path}/resources/upload/productImg/${c.REIMG}" alt="IMG-PRODUCT" draggable="false">
+	                                </div>
+	                            </td>
+	                            <td class="column-2">${c.PNAME }</td>
+	                            <td class="column-3"><fmt:formatNumber value="${c.PRICE }" type="currency"/></td>
+	                            <td class="column-4">${c.AMOUNT }</td>
+	                            <td class="column-6"><fmt:formatNumber value="${c.TOTALPRICE }" type="currency"/></td>
+	                        </tr>
+	                        <input type="hidden" value="${c.ORDERNO }" id="orderNo"/>
+	                        <input type="hidden" value="${c.PNAME }" id="pName"/>
+                        </c:forEach>
+                        <input type="hidden" value="${memberLoggedIn.userId }" id="userId"/>
+
+                    </table>
+                </div>
             </div>
-         </div> 
+       	</div>
+     </section>
 
-         <div class="col-lg-5">
-            <div class="product_details">
-               <div class="product_details_title">
-               
-                  <h2 id="goodsName">${product.pName }</h2>
-                  <p id="goodsDetails">${product.details }</p>
-                  
-               </div>
-               
-               <!-- fmt tag : 원화 표시로 바꿔주기 -->
-               <c:set var='price' value='${product.price }' />
+            <!-- content page -->
+	<section class="bgwhite p-b-60" style="padding-top:0">
+		<div class="container">
+			<div class="row">
+                <div class="col-md-6 p-b-30" style="padding-right: 5%">
+					<form class="leave-comment">
+						<h4 class="m-text26 p-b-36 p-t-15">
+                           	주문자 정보
+                        </h4>
 
-               <div id="goodsPrice" class="product_price">         
-                  <fmt:formatNumber value="${price }" type="currency"/>      
-                       
-                  <input type="hidden" id="pNo" name="pNo" value="${product.pno } ">
-                  <input type="hidden" id="pName" name="pName" value="${product.pName } ">
+						<table style="width: 100%;height: 100%;">
+                            <colgroup>
+                                <col style="width: 20%">
+                                <col style="width: 80%">
+                            </colgroup>
+                            <tr>
+                                <th>이름</th>
+                                <td>
+                                    <div class="bo4 of-hidden size15 m-b-20">
+                                        <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="name" id="name" placeholder="주문자명" value="${member.USERNAME }">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>연락처</th>
+                                <td>
+                                    <div class="bo4 of-hidden size15 m-b-20">
+                                        <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="phone-number" id="phone" placeholder="(-) 제외하고 입력" value="${member.USERPHONE }">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>이메일</th>
+                                <td>
+                                    <div class="bo4 of-hidden size15 m-b-20">
+                                        <input class="sizefull s-text7 p-l-22 p-r-22" type="email" name="email" id="email" placeholder="ex) 아이디@gmail.com" value="${member.USEREMAIL }">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td>
+                                    <div class="of-hidden size15 m-b-20">
+                                        <p>* 입력된 메일주소로 주문확인 메일을 발송해드립니다</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
 
-              
-               </div>
-               <!-- 포맷팅 끝 -->
-               
-               
-               <!-- <ul class="star_rating">
-                  <li><i class="fa fa-star" aria-hidden="true"></i></li>
-                  <li><i class="fa fa-star" aria-hidden="true"></i></li>
-                  <li><i class="fa fa-star" aria-hidden="true"></i></li>
-                  <li><i class="fa fa-star" aria-hidden="true"></i></li>
-                  <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
-               </ul> -->
+				</div>
+				<div class="col-md-6 p-b-30">
+					<form class="leave-comment" name="orderData">
+                        
+						<h4 class="m-text26 p-b-36 p-t-15">
+							배송지 정보
+							<span style="float:right;">
+								<table>
+									<tr style="width:120%;float:right;">
+										<td><input type="checkbox" id="sameInfo" name="sameInfo" style="width:20px;height:20px;"/></td>
+										<td style="width:120%"><label class="agree" for="sameInfo">&nbsp;주문자 정보와 동일</label></td>
+									</tr>
+								</table>
+							</span>
+                        </h4>
 
-               <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
-                  <span>수량</span>
-                  <div class="quantity_selector">
-                     <span class="minus"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                     <span id="quantity_value">1</span>
-                     <span class="plus"><i class="fa fa-plus" aria-hidden="true"></i></span>
-                  </div>
-               </div> 
-               
-                <div style="margin-top:5%">
-                <span><h7>해당 상품은 1인당 최대 10개까지 구매 가능합니다.</h7></span>
-                </div> 
-                
-               <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
-                  <span style="margin-right:20px">공유하기</span>
-                     <div>
-                        <i class="fa fa-2x fa-instagram"  style="margin-right:10px" aria-hidden="true"></i>
-                        <i class="fa fa-2x fa-facebook-official"  style="margin-right:10px" aria-hidden="true"></i>
-                     </div>
-               </div>
+						<table style="width: 100%;height: 100%;">
+                            <colgroup>
+                                <col style="width: 20%">
+                                <col style="width: 80%">
+                            </colgroup>
+                            <tr>
+                                <th>이름</th>
+                                <td>
+                                    <div class="bo4 of-hidden size15 m-b-20">
+                                        <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="name" id="orderName" placeholder="Full Name" required="required">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>연락처</th>
+                                <td>
+                                    <div class="bo4 of-hidden size15 m-b-20">
+                                        <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="phone-number" id="orderPhone" placeholder="Phone Number" required="required">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>이메일</th>
+                                <td>
+                                    <div class="bo4 of-hidden size15 m-b-20">
+                                        <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="email" id="orderEmail" placeholder="Email Address" required="required">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>주소</th>
+                                <td>
+                                    <div class="bo4 of-hidden size15 m-b-20">
+                                        <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="address" id="postcode" placeholder="우편번호" style="width:60%" readonly required="required">
+                                        <a href="#;return false;" onclick="fn_postcode()" class="m-text22 p-l-30" style="width:40%" draggable="false">우편번호 검색</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td>
+                                    <div class="bo4 of-hidden size15 m-b-20">
+                                        <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="address" id="address1" placeholder="주소 입력" required="required" readonly="readonly">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td>
+                                    <div class="bo4 of-hidden size15 m-b-20">
+                                        <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="address" id="address2" placeholder="상세주소 입력" required="required">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>배송메시지</th>
+                                <td>
+                                    <div class="bo4 of-hidden size15 m-b-20">
+                                        <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="name" id="orderNote" placeholder="ex) 부재시 경비실">
+                                    </div>
+                                </td>
+                            </tr>   
+                        </table>
 
-               <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
-                   <div class="red_button add_to_cart_button"><a href="#" class="cart">장바구니</a></div> 
-                   <div class="product_favorite d-flex flex-column align-items-center justify-content-center" onclick="fn_wishList();"></div>      
-            
-               </div>
-            
-            </div>
-         </div>
-      </div>
-   </div>
-   
-   <div class="container">
-   
-      <div class="shadow-sm p-4 mb-4 bg-white">
-      <h2>Review</h2>   
-         <h7>실제로 이 제품을 구입한 고객님들의 후기입니다.</h7>
-      </div>
+					</form>
+				</div>
+			</div>
 
-         <div class="table-responsive">
-                <table id="review" class="table">
-                  <thead>
-                    <tr>
-                      <th>글 번호</th>
-                      <th>제목</th>
-                      <th>작성자(이름)</th>
-                      <th>별점</th>
-                      <th>등록일</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>너무 맛있어요</td>
-                      <td>원숭이</td>
-                      <td>
+            <!-- Total -->
+            <div class="row bo5 m-l-1 m-r-1">
 
-                      </td>
-                      <td>2018-08-24</td>
-                      <td><button type="button" class="btn btn-danger">삭제</button></td>   
-                    </tr>         
-                 </tbody>
-          </table>
-          </div>
-          
-          <div class="text-center">
-            <ul class="pagination justify-content-center" >
-               <li class="page-item">
-                  <a href="#" class="page-link" aria-label="Previous">
-                     <span aria-hidden="true">&laquo;</span>
-                  </a>
-               </li>
-               
-               <li class="page-item"><a href="#" class="page-link">1</a></li>
-               <li class="page-item"><a href="#" class="page-link">2</a></li>
-               <li class="page-item"><a href="#" class="page-link">3</a></li>
-               <li class="page-item active"><a href="#" class="page-link">4</a></li>
-               <li class="page-item"><a href="#" class="page-link">5</a></li>
-               
-               <li class="page-item">
-               <a href="#" class="page-link" aria-label="Next">
-               <span aria-hidden="true">&raquo;</span>
-               </a>
-               </li>
-            </ul>
-        </div>
-        
-        <hr>
-        
-     <div class="shadow-sm p-4 mb-4 bg-white">
-      <h2>Q&A</h2>   
-         <h7>상품에 대한 문의사항이 있다면 알려주세요.</h7><br>
-          <h7>본인이 작성한 글의 제목을 클릭하면 작성한 내용을 볼 수 있습니다.</h7>
-      </div>
-      
-         <div class="table-responsive">
-                <table id="review" class="table">
-                  <thead>
-                  
-                    <tr>
-                      <th class="text-center">글 번호</th>
-                      <th class="text-center">카테고리</th>
-                      <th class="text-center">제목</th>
-                      <th class="text-center">내용</th>     
-                      <th class="text-center">관리자 답변</th>     
-                      <th class="text-center">작성자(이름)</th>            
-                      <th class="text-center">등록일</th>
-                      <th class="text-center">답변 상태</th>
-                      <th class="text-center"></th>
-                    </tr>
-                  </thead>
-                  
-                  <tbody>
-                  
-                   <c:forEach items="${qList }" var="q">
-                       <tr>
-                         <td class="text-center">${q.QNANO }</td>
-                         <td class="text-center">
-                         
-                         <c:set var="cate" value="${q.QNA_CATE_NO }" />
-                         
-                            <c:choose>        
-                            
-                               <c:when test="${cate==1 }">
-                                  상품 문의
-                               </c:when>
-                               
-                               <c:when test="${cate==2 }">
-                                  교환 문의
-                               </c:when>
-                               
-                               <c:when test="${cate==3 }">
-                                  환불 문의
-                               </c:when>
-                               
-                               <c:when test="${cate==4 }">
-                                  반품 문의
-                               </c:when>
-                               
-                               <c:when test="${cate==5 }">
-                                  기타 문의
-                               </c:when>
-                            
-                            </c:choose>
-                         
-                         </td>
-                         <td class="text-center"><a onclick="fn_inputPw(this); return false;" data-no="${product.pno }" >${q.QNATITLE }</a></td>
-                         <td class="text-center">${q.QNACONTENT }</td>
-                         <td class="text-center">${q.QNAREPLY }</td>
-                         <td class="text-center">${q.USERID }</td>           
-                         <td class="text-center">
-                                               
-                         <fmt:formatDate type="date" value="${q.QNADATE }"/>   
-                         
-                         </td>
-                         <td class="text-center">               
-         
-                      <c:set var="reply" value="${q.QNAREPLY }" />
-                      
-                         <c:choose>                            
-                               <c:when test="${!reply==null }">
-                                  <span class="badge badge-secondary">답변 완료</span>
-                               </c:when>
-                               
-                               <c:when test="${reply==null }">
-                                  <span class="badge badge-light">답변 대기</span>
-                               </c:when>   
-                         </c:choose>
-                         
-                      </td>
-                      
-                       <!--   만약에 아이디가 관리자라면 
-                      <td class="text-center"><button type="button" class="btn btn-danger">삭제</button></td>    -->
-                   
-                    </tr>
-                    </c:forEach>
-             
+                <div class="p-l-40 p-r-40 p-t-30 p-b-38 m-t-30 m-r-0 p-lr-15-sm col-md-6">
+                    <h4 class="m-text26 p-b-36">
+                    	결제 금액
+                    </h4>
                     
-                 </tbody>
-                 
-                 
-          </table>
-          </div>
-          
-          <div class="text-center">
-         
-          <button type="button" class="btn btn-default" onclick="fn_insertDetails();" style="margin-left:90%">글 쓰기</button>
-            <ul class="pagination justify-content-center" >
-               <li class="page-item">
-                  <a href="#" class="page-link" aria-label="Previous">
-                     <span aria-hidden="true">&laquo;</span>
-                  </a>
-               </li>
-               
-               <li class="page-item"><a href="#" class="page-link">1</a></li>
-               <li class="page-item"><a href="#" class="page-link">2</a></li>
-               <li class="page-item"><a href="#" class="page-link">3</a></li>
-               <li class="page-item active"><a href="#" class="page-link">4</a></li>
-               <li class="page-item"><a href="#" class="page-link">5</a></li>
-               
-               <li class="page-item">
-               <a href="#" class="page-link" aria-label="Next">
-               <span aria-hidden="true">&raquo;</span>
-               </a>
-               </li>
-            </ul>
-            
-           </div>   
-        </div>
-        
-        
-          <!-- 문의하기 비밀번호 입력창 -->
-   <div class="modal fade" id="pwCheck">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-      
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Modal Heading</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <!-- Modal body -->
-        <div class="modal-body">
-                 <div class="col-12">
-               글 작성시 입력했던 비밀번호 4자리를 입력해주세요.
-              </div>
-              
-              <br>
-               
-               <div class="col-12">
-               <input type="text" name="pw_db" id="pw_db" value=""/>
-                <input type="text" name="board_pw" id="board_pw" class="form-control" maxlength="4"/>
-               </div>
-        </div>    
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" onclick="fn_pwConfirm()" >hidden value 확인</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
-        
-      </div>
-    </div>
-  </div>
-        <!-- 비밀번호 입력 창 끝 -->
-        
-
-       <!-- 문의하기 모달 시작 -->
-        <!-- The Modal -->
-        <div class="modal fade" id="question_modal">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-            
-              <!-- Modal Header -->
-              <div class="modal-header">
-                <h4 class="modal-title">문의하기</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-              </div>
-              
-              <!-- Modal body -->
-<form action="${path }/mall/insert.do" id="qnaFrm" name="qnaFrm">              
-              <div class="modal-body">
-                  <div class="form-group row">
-                   <div class="input-group col-6">
-                     <div class="input-group-prepend">
-                    
-                       <span class="input-group-text">제품 코드 </span>
-                     </div>
-                     <input type="text" class="form-control input-sm" placeholder="제품 코드" id="goods_code" name="goods_code" readonly>
-                 </div>
-                 
-                 <div class="input-group col-6">
-                     <div class="input-group-prepend">
-                       <span class="input-group-text">제품 이름</span>
-                     </div>
-                     <input type="text" class="form-control input-sm" placeholder="제품 이름" id="goods_name" name="goods_name" readonly>
-                 </div>
-               </div>
-               
-            <div class="row">
-               <div class="col-md-6"> 
-                  <select class="form-control" id="qna_option" name="qna_option" onchange="fn_selectbox();">
-                   <option value="0" disabled selected>문의 유형 선택 </option>
-                    <option value="1">상품 문의 </option>
-                    <option value="2">교환 문의</option> 
-                    <option value="3">환불 문의</option>             
-                    <option value="4">반품 문의</option>
-                    <option value="5">기타 문의 </option>
-                  </select>
-                  
-          
-               </div>
-           
-           <div class="col-md-6">
-                  <div class="form-group">
-                <input type="text" class="form-control" placeholder="좌측 문의유형 선택 " id="board_name" name="board_name" readonly>
-               </div>
-               </div>
-               
-               </div>
-               
-               <div class="col-12">
-                  <div class="form-group">
-                 <textarea class="form-control" rows="5" id="qna_content" name="qna_content" placeholder="문의 내용을 입력해주세요" required></textarea>
-               </div>
-               </div>
-               
-               <div class="input-group col-12">
-                     <div class="input-group-prepend">
-                       <span class="input-group-text">비밀번호 설정(숫자 4자리)</span>
-                     </div>
-                     <input type="text" class="form-control input-sm" placeholder="비밀번호 4자리 입력" id="user_input_pw" name="user_input_pw" maxlength="4" />
-                 </div>
-               
-               <!-- userId들어가는 부분 -->
-            <!-- <input type="hidden" name="userId" id="userId" value="user"/> -->
-             <input type="hidden" id="userId" name="userId" value="${memberLoggedIn.userId }"> 
-                
-              </div>
-              
-              <!-- Modal footer -->
-              <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="fn_checkUserPw();">등록하기</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
-</form>              
-            </div>
-          </div>
-        </div>
-        <!-- 문의하기 모달 끝 -->
-        
-
-   
-</section>
-
-
-
+                    <!--  -->
+                    <div class="flex-w flex-sb-m p-b-12">
+                        <span class="s-text18 w-size19 w-full-sm">
+                           	총 상품금액 :
+                        </span>
     
- 
- 
- 
-<jsp:include page="/WEB-INF/views/common/footer.jsp"/>  
- 
+                        <span class="m-text21 w-size20 w-full-sm">
+                            <fmt:formatNumber value="${pay.total }" type="currency"/>
+                        </span>
+                    </div>
+    
+                    <!--  -->
+                    <div class="flex-w flex-sb p-t-15 p-b-20">
+                        <span class="s-text18 w-size19 w-full-sm">
+                           	배송비 :
+                        </span>
+    
+                        <span class="m-text21 w-size20 w-full-sm">
+                            <fmt:formatNumber value="${pay.delivery }" type="currency"/>
+                        </span>
+                    </div>
+    
+                    <!--  -->
+                    <div class="flex-w flex-sb-m p-t-26 p-b-30 bo10">
+                        <span class="m-text22 w-size19 w-full-sm">
+                           	최종결제금액 :
+                        </span>
+    
+                        <span class="m-text21 w-size20 w-full-sm">
+                            <fmt:formatNumber value="${pay.all }" type="currency"/>
+                        </span>
+                        <input type="hidden" value="${pay.all }" id="all"/>
+                    </div>
+    
+                </div>
+
+                <div class="p-l-40 p-r-40 p-t-30 p-b-38 m-t-30 m-r-0 p-lr-15-sm col-md-6">
+    				<h4 class="m-text26">
+                    	주문자 동의
+                    </h4>
+                    <div class="flex-w flex-sb p-t-30 p-b-30">
+                        <input type="checkbox" id="agree" name="agreePay" style="width:20px;height:20px">
+                        <label class="agree" for="agree" style="color: black">결제정보를 확인하였으며, 구매진행에 동의합니다</label>
+                        <br><br>
+                        <ul style="list-style-type: circle;font-size: 15px;color: gray">
+                            <li>구매조건 확인 및 결제 진행 동의</li>
+                            <li>개인정보 수집 이용 및 제3자 정보 제공 동의</li>
+                            <li>결제대행서비스 이용약관 동의</li>
+                        </ul>
+                    </div>
+    
+                    <div class="size15 trans-0-4">
+                        <!-- Button -->
+                        <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4" onclick="fn_payment()" style="border: none;outline: none;">
+                           	결제하기
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            
+
+        </div>
+    </section>
+
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+
+<script>
+	$(document).ready(function(){
+		// 결제 포트
+		IMP.init('imp03138552');
+		
+		$('input:checkbox[name=sameInfo]').on('click',function(){
+			if($(this).prop('checked')){
+				$('#orderName').val('${member.USERNAME}');
+				$('#orderPhone').val('${member.USERPHONE}');
+				$('#orderEmail').val('${member.USEREMAIL}');
+			} else {
+				$('#orderName').val('');
+				$('#orderPhone').val('');
+				$('#orderEmail').val('');
+			}
+		});
+	});
+	
+	function fn_postcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var fullAddr = ''; // 최종 주소 변수
+                var extraAddr = ''; // 조합형 주소 변수
+                // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    fullAddr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    fullAddr = data.jibunAddress;
+                }
+                // 사용자가 선택한 주소가 도로명 타입일때 조합한다.
+                if(data.userSelectedType === 'R'){
+                    //법정동명이 있을 경우 추가한다.
+                    if(data.bname !== ''){
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있을 경우 추가한다.
+                    if(data.buildingName !== ''){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
+                    fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
+                }
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('postcode').value = data.zonecode; //5자리 새우편번호 사용
+                document.getElementById('address1').value = fullAddr;
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById('address2').focus();
+            }
+        }).open();
+    }
+	
+	function fn_payment(){
+		var userId = $('#userId').val();
+		var orderNo = $('#orderNo').val();
+		var pName = $('#pName').val();
+		var name = $('#orderName').val();
+		var phone = $('#orderPhone').val();
+		var email = $('#orderEmail').val();
+		var postcode = $('#postcode').val();
+		var addr1 = $('#address1').val();
+		var addr2 = $('#address2').val();
+		var note = $('#orderNote').val();
+		var all = $('#all').val();
+		var cartCount = $('#cartCount').text();
+		
+		if(name=='') {
+			$('#orderName').focus();
+			return false;
+		}
+		if(phone=='') {
+			$('#orderPhone').focus();
+			return false;
+		}
+		if(email=='') {
+			$('#orderEmail').focus();
+			return false;
+		}
+		if(postcode=='' || addr1=='' || addr2=='') {
+			$('#address2').focus();
+			return false;
+		}
+			
+		if($('input:checkbox[name=agreePay]').prop('checked')){
+			var address = addr1+" "+addr2;
+			
+			IMP.request_pay({
+				merchant_uid : orderNo,
+			    name : cartCount==1?pName:pName+" 외 "+(cartCount-1)+"개",
+			    amount : all,
+			    buyer_email : email,
+			    buyer_name : name,
+			    buyer_tel : phone,
+			    buyer_addr : address,
+			    buyer_postcode : postcode,
+			}, function(rsp) {
+				//결제 후 호출되는 callback함수
+				if ( rsp.success ) { //결제 성공
+					var msg="상품이 성공적으로 주문되었습니다\n";
+					msg += '주문번호 : ' + rsp.merchant_uid + '\n';
+					msg += '결제 금액 : ' + rsp.paid_amount + '원\n';
+					msg += '카드 승인번호 : ' + rsp.apply_num;
+					swal("결제 완료", msg, "success")
+					.then((value) => {
+						location.href= "<c:url value='/mall/orderConfirm.do?userId="+userId+"&orderNo="+rsp.merchant_uid+"&orderName="+name+"&orderPhone="+phone+"&zipcode="+postcode+"&orderAddr="+address+"&payment="+rsp.apply_num+"&allPrice="+all+"&orderNote="+note+"'/>";
+					});
+				    
+				} else {
+					swal("결제 실패", rsp.error_msg, "error");
+				}
+			})
+		} else {
+			swal("잠시만요!", "구매조건 확인 및 결제 진행에 동의해 주시기 바랍니다.", "warning");
+		}
+	}
+</script>

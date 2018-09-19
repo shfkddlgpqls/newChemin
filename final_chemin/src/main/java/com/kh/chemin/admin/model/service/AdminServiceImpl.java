@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.chemin.admin.model.dao.AdminDao;
+import com.kh.chemin.mall.model.vo.Product;
 import com.kh.chemin.mall.model.vo.QnA_board;
 import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
@@ -67,13 +68,13 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public int selectProductCount() {
-		return dao.selectProductCount(sqlSession);
+	public int selectProductCount(Map<String, Object> map) {
+		return dao.selectProductCount(sqlSession, map);
 	}
 
 	@Override
-	public List<Map<String, Object>> selectProductList(int cPage, int numPerPage) {
-		return dao.selectProductList(sqlSession, cPage, numPerPage);
+	public List<Map<String, Object>> selectProductList(Map<String, Object> map, int cPage, int numPerPage) {
+		return dao.selectProductList(sqlSession, map, cPage, numPerPage);
 	}
 
 	@Override
@@ -81,6 +82,50 @@ public class AdminServiceImpl implements AdminService {
 		return dao.selectMallCate(sqlSession);
 	}
 
+	@Override
+	public int selectMaxPno() {
+		return dao.selectMaxPno(sqlSession);
+	}
+
+	@Override
+	public int insertProduct(Product product) {
+		return dao.insertProduct(sqlSession, product);
+	}
+
+	@Override
+	public int productDelete(int pno) {
+		return dao.productDelete(sqlSession,pno);
+	}
+
+	@Override
+	public Product selectProduct(int pno) {
+		return dao.selectProduct(sqlSession,pno);
+	}
+
+	@Override
+	public int updateProduct(Product product) {
+		return dao.updateProduct(sqlSession, product);
+	}
+
+	@Override
+	public List<String> productAuto(String search) {
+		return dao.productAuto(sqlSession, search);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOrderList(int cPage, int numPerPage) {
+		return dao.selectOrderList(sqlSession, cPage, numPerPage);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOrderData() {
+		return dao.selectOrderData(sqlSession);
+	}
+
+	@Override
+	public int selectTotalCount() {
+		return dao.selectTotalCount(sqlSession);
+	}
 
 	@Override
 	public int selectMemberCount() {
@@ -98,14 +143,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public int reportCount(String userId) {
-		return dao.reportCount(sqlSession,userId);
-	}
-
-	@Override
-	public int adminMemberDelete(String userId) {
+	public int adminMemberUpdate(String userId) {
 		System.out.println("::adminMemberDelete::"+userId);
-		return dao.adminMemberDelete(sqlSession,userId);
+		return dao.adminMemberUpdate(sqlSession,userId);
 	}
 
 	@Override
@@ -118,6 +158,9 @@ public class AdminServiceImpl implements AdminService {
 		System.out.println("::searchListService::"+map);
 		return dao.searchList(sqlSession,map);
 	}
+	
+//	=======================주리가 한 부분  시작=======================	
+
 	
 	//문의게시판 총 갯수 출력
 		@Override
@@ -160,5 +203,38 @@ public class AdminServiceImpl implements AdminService {
 			return dao.selectReviewCount(sqlSession);
 		}
 
+		@Override
+		public int adminQNADel(String modal_qno) 
+		{
+			int result = dao.adminQNADel(sqlSession,modal_qno);
+			return result;
+		}
+
+		@Override
+		public int AdminReviewDel(String modal_rno) 
+		{
+			int result = dao.AdminReviewDel(sqlSession,modal_rno);
+			return result;
+		}
+
+		@Override
+		public List<QnA_board> selectQnaSearchList(int cPage, int numPerPage, Map<String, Object> map) 
+		{
+			return dao.selectQnaSearchList(sqlSession, map, cPage, numPerPage);
+		}
+
+		@Override
+		public int selectQnASearchCount(Map<String, Object> map) 
+		{
+			 return dao.selectQnASearchCount(sqlSession, map);
+		}
+
+		
+		
+//		=======================주리가 한 부분 끝=======================	
+
+		public int adminMemberCancel(String userId) {
+			return dao.adminMemberCancel(sqlSession, userId);
+		}
 
 }

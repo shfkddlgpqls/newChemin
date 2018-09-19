@@ -26,11 +26,6 @@ public class CommunityDaoImpl implements CommunityDao {
       return sqlSession.selectList("community.attachmentList");
    }
    
-   /*@Override
-   public List<Map<String, Object>> likeList(SqlSessionTemplate sqlSession) {
-      return sqlSession.selectList("community.likeList");
-   }*/
-   
    @Override
    public int communityWriteEnd(SqlSessionTemplate sqlSession, Community community) {
       return sqlSession.insert("community.communityWriteEnd",community);
@@ -79,7 +74,6 @@ public class CommunityDaoImpl implements CommunityDao {
    /*댓글 삭제*/
    @Override
    public int commentDelete(SqlSessionTemplate sqlSession, int comment_no) {
-      System.out.println("::::commentDao::::");
       return sqlSession.delete("community.commentDelete", comment_no);
    }
 
@@ -112,56 +106,6 @@ public class CommunityDaoImpl implements CommunityDao {
    }
 
    @Override
-   public LikeTo read(SqlSessionTemplate sqlSession, HashMap<String, Object> hashMap) {
-      System.out.println("::likeReadRow::"+hashMap);
-      return sqlSession.selectOne("community.likeRead",hashMap);
-   }
-
-   @Override
-   public Community communityRead(SqlSessionTemplate sqlSession, int community_no) {
-      System.out.println("communityReadRow:"+community_no);
-      return sqlSession.selectOne("community.communityRead",community_no);
-   }
-
-   @Override
-   public int likeCount(SqlSessionTemplate sqlSession, int community_no) {
-      System.out.println("::likeCountDao::");
-      return sqlSession.selectOne("community.likeCount",community_no);
-   }
-
-   @Override
-   public int likeCheckUp(SqlSessionTemplate sqlSession, HashMap<String, Object> hashMap) {
-      System.out.println("::likeCheckUpDao::");
-      return sqlSession.update("community.likeCheckUp",hashMap);
-   }
-
-   @Override
-   public int likeCntUp(SqlSessionTemplate sqlSession, int community_no) {
-      System.out.println("::likeCntUpDao::");
-      return sqlSession.update("community.likeCntUp",community_no);
-   }
-
-   @Override
-   public int likeCheckDown(SqlSessionTemplate sqlSession, HashMap<String, Object> hashMap) {
-      System.out.println("::likeCheckDown::");
-      return sqlSession.update("community.likeCheckDown",hashMap);
-   }
-
-   @Override
-   public int likeCntDown(SqlSessionTemplate sqlSession, int community_no) {
-      System.out.println("::likeCntDown::");
-      return sqlSession.update("community.likeCntDown",community_no);
-   }
-
-   @Override
-   public int likeCreate(SqlSessionTemplate sqlSession, HashMap<String, Object> hashMap) {
-      System.out.println("::likeCreateDao::");
-      int result=sqlSession.insert("community.likeCreate",hashMap);
-      System.out.println("::likeCreateResult::");
-      return result;
-   }
-
-   @Override
    public List<Map<String, Object>> categoryFind(SqlSessionTemplate sqlSession, String community_category) {
       return sqlSession.selectList("community.categoryFind",community_category);
    }
@@ -178,32 +122,8 @@ public class CommunityDaoImpl implements CommunityDao {
 
    @Override
    public int reportCountUp(SqlSessionTemplate sqlSession, String userid) {
-      System.out.println("::신고당한자 카운트 올리기Dao::");
       return sqlSession.update("community.reportCountUp",userid);
    }
 
-   /*@Override
-   public int likeInsert(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
-      System.out.println("::likeDao::"+map);
-      return sqlSession.insert("community.like",map);
-   }
-
-   @Override
-   public int likeUpdate(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
-      System.out.println("::likeUpdateDao::"+map);
-      return sqlSession.update("community.likeUpdate",map);
-   }
-
-   @Override
-   public int likePlus(SqlSessionTemplate sqlSession, int community_no) {
-      System.out.println("::likePlusDao::"+community_no);
-      return sqlSession.update("community.likePlus",community_no);
-   }
-
-   @Override
-   public int likeMinus(SqlSessionTemplate sqlSession, int community_no) {
-      System.out.println("::likeMinusDao::"+community_no);
-      return sqlSession.update("community.likeMinus",community_no);
-   }*/
-
+  
 }

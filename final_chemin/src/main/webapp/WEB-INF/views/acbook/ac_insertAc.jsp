@@ -119,7 +119,7 @@
 							<img src="${path}/resources/acbook/images/201_14.png"><span>기타</span>
 						</button>
 						<button type="button" class="next phone-bx" id="cateNum" value="201_15">
-							<img src="${path}/resources/acbook/images/201_14.png"><span>기타</span>
+							<img src="${path}/resources/acbook/images/201_15.png"><span>기타</span>
 						</button>				
 					</fieldset>
 					<fieldset>

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 
+import com.kh.chemin.mall.model.vo.Product;
 import com.kh.chemin.mall.model.vo.QnA_board;
 import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
@@ -20,16 +21,27 @@ public interface AdminDao {
 	int placeDelete(SqlSessionTemplate sqlSession, int plaNo);
 	int plaStatusChange(SqlSessionTemplate sqlSession, Map map);
 	int adminReMsg(SqlSessionTemplate sqlSession, Map map);
-	int selectProductCount(SqlSessionTemplate sqlSession);
-	List<Map<String, Object>> selectProductList(SqlSessionTemplate sqlSession, int cPage, int numPerPage);
+	int selectProductCount(SqlSessionTemplate sqlSession, Map<String, Object> map);
+	List<Map<String, Object>> selectProductList(SqlSessionTemplate sqlSession, Map<String, Object> map, int cPage, int numPerPage);
 	List<Map<String, String>> selectMallCate(SqlSessionTemplate sqlSession);
+	int selectMaxPno(SqlSessionTemplate sqlSession);
+	int insertProduct(SqlSessionTemplate sqlSession, Product product);
+	int productDelete(SqlSessionTemplate sqlSession, int pno);
+	Product selectProduct(SqlSessionTemplate sqlSession, int pno);
+	int updateProduct(SqlSessionTemplate sqlSession, Product product);
+	List<String> productAuto(SqlSessionTemplate sqlSession, String search);
+	List<Map<String, Object>> selectOrderList(SqlSessionTemplate sqlSession, int cPage, int numPerPage);
+	List<Map<String, Object>> selectOrderData(SqlSessionTemplate sqlSession);
+	int selectTotalCount(SqlSessionTemplate sqlSession);
 	int selectMemberCount(SqlSessionTemplate sqlSession);
 	List<Map<String, Object>> selectMemberList(SqlSessionTemplate sqlSession, int cPage, int numPerPage);
 	List<Map<String,Object>> rpList(SqlSessionTemplate sqlSession, String userId);
-	int reportCount(SqlSessionTemplate sqlSession, String userId);
-	int adminMemberDelete(SqlSessionTemplate sqlSession, String userId);
+	int adminMemberUpdate(SqlSessionTemplate sqlSession, String userId);
 	List<Map<String,Object>> blackList(SqlSessionTemplate sqlSession);
 	List<Map<String,Object>> searchList(SqlSessionTemplate sqlSession,HashMap<String,Object> map);
+	int adminMemberCancel(SqlSessionTemplate sqlSession, String userId);
+
+//	=======================주리가 한 부분  시작=======================	
 
 		//문의게시판 총 갯수
 		int selectQnACount(SqlSessionTemplate sqlSession);	
@@ -45,4 +57,16 @@ public interface AdminDao {
 
 		List<Review> selectReviewList(SqlSessionTemplate sqlSession, int cPage, int numPerPage);
 		int selectReviewCount(SqlSessionTemplate sqlSession);
+		int adminQNADel(SqlSessionTemplate sqlSession, String modal_qno);
+		int AdminReviewDel(SqlSessionTemplate sqlSession, String modal_rno);
+		List<QnA_board> selectQnaSearchList(SqlSessionTemplate sqlSession, Map<String, Object> map, int cPage,
+				int numPerPage);
+		int selectQnASearchCount(SqlSessionTemplate sqlSession, Map<String, Object> map);
+
+		
+//		=======================주리가 한 부분  끝=======================	
+
+
+		
 }
+

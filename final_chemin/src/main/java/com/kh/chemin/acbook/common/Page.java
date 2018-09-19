@@ -50,7 +50,7 @@ public class Page {
       }
       else
       {
-         pageBar+="<li class='page-item'>";
+         pageBar+="<li class='page-item disabled'>";
          pageBar+="<a class='page-link' href='javascript:fn_paging("+pageNo+")'>다음</a>";
          pageBar+="</li>";
       }

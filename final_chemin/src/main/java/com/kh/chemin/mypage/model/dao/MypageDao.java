@@ -10,6 +10,7 @@ import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.member.model.vo.Member;
 
 public interface MypageDao {
 	List<Place> selectPlaceList(SqlSessionTemplate sqlSession, Map map, int cPage, int numPerPage);
@@ -24,12 +25,25 @@ public interface MypageDao {
 	int removeAttach(SqlSessionTemplate sqlSession, int plaNo);
 	int warnMsg(SqlSessionTemplate sqlSession, String userid);
 
+	List<Map<String, Object>> selectOrderList(SqlSessionTemplate sqlSession, String userId, int cPage, int numPerPage);
+	List<Map<String, Object>> selectOrderData(SqlSessionTemplate sqlSession, String userId);
+	int selectTotalCount(SqlSessionTemplate sqlSession, String userId);
+	List<Map<String, Object>> selectWishList(SqlSessionTemplate sqlSession, String userId);
+
 	int selectPlaceCount(SqlSessionTemplate sqlSession, Map map);
 	
+//	=======================주리가 한 부분  시작=======================		
 	int insertReview(SqlSessionTemplate sqlSession, Review review);
 	List<QnA_board> selectQnaBoardList(SqlSessionTemplate sqlSession, int cPage, int numPerPage, String userId);
 	int selectQnACount(SqlSessionTemplate sqlSession, String userId);
 	List<Review> selectReviewList(SqlSessionTemplate sqlSession, int cPage, int numPerPage, String userId);
 	int selectReviewCount(SqlSessionTemplate sqlSession, String userId);
+	int UpdateQna(SqlSessionTemplate sqlSession, Map<String, String> map);
+	int myQnaDel(SqlSessionTemplate sqlSession, String modal_qno);
+	int insertReviewEdit(SqlSessionTemplate sqlSession, Review review);
+	int myReviewDel(SqlSessionTemplate sqlSession, String modal_rno);
+//	=======================주리가 한 부분  끝=======================
+
+	Map<String, Object> memberList(SqlSessionTemplate sqlSession, String userId);
 
 }

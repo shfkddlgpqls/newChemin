@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.kh.chemin.mall.model.vo.Product;
 import com.kh.chemin.mall.model.vo.QnA_board;
 import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
@@ -18,18 +19,30 @@ public interface AdminService {
 	int placeDelete(int plaNo);
 	int plaStatusChange(Map map);
 	int adminReMsg(Map map);
-	int selectProductCount();
-	List<Map<String, Object>> selectProductList(int cPage, int numPerPage);
+	int selectProductCount(Map<String, Object> map);
+	List<Map<String, Object>> selectProductList(Map<String, Object> map, int cPage, int numPerPage);
 	List<Map<String, String>> selectMallCate();
+	int selectMaxPno();
+	int insertProduct(Product product);
+	int productDelete(int pno);
+	Product selectProduct(int pno);
+	int updateProduct(Product product);
+	List<String> productAuto(String search);
+	List<Map<String, Object>> selectOrderList(int cPage, int numPerPage);
+	List<Map<String, Object>> selectOrderData();
+	int selectTotalCount();
 	int selectMemberCount();
 	List<Map<String,Object>> selectMemberList(int cPage, int numPerPage);
 	List<Map<String,Object>> rpList(String userId);
-	int reportCount(String userId);
-	int adminMemberDelete(String userId);
+	int adminMemberUpdate(String userId);
 	List<Map<String,Object>> blackList();
 	List<Map<String,Object>> searchList(HashMap<String,Object> map);
+	int adminMemberCancel(String userId);
 	
-	//문의게시판 글의 총 갯수
+	
+//	=======================주리가 한 부분  시작=======================	
+	
+		//문의게시판 글의 총 갯수
 		int selectQnACount();
 		
 		//게시글 관리 처음 페이지 게시글 불러올 때 
@@ -43,5 +56,11 @@ public interface AdminService {
 		
 		List<Review> selectReviewList(int cPage, int numPerPage);
 		int selectReviewCount();
+		int adminQNADel(String modal_qno);
+		int AdminReviewDel(String modal_rno);
+		List<QnA_board> selectQnaSearchList(int cPage, int numPerPage, Map<String, Object> map);
+		int selectQnASearchCount(Map<String, Object> map);
+		
+//		=======================주리가 한 부분  끝======================	
 	
 }

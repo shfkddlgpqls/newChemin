@@ -13,7 +13,7 @@
     
     
 	<div class="mypage">
-		<h2 class="text-center">마이페이지 입니당</h2>
+		<h2 class="text-center nanumFont" style="color:white">마이페이지 </h2>
 	</div>
 		
 	
@@ -23,21 +23,18 @@
 				<div class="col-md-12">
 					<hr>
 						<ul class="nav justify-content-center">
-						    <li class="nav-item">
-						      <strong><a class="nav-link mypageAtag" href="${path }/mypage/myOrderList.do">주문 목록	</a></strong>
-						    </li>
-						    <li class="nav-item">
-						      <strong><a class="nav-link mypageAtag" href="${path }/mypage/myBoardList.do">게시글 관리</a></strong>
-						    </li>
-						    <li class="nav-item">
-						      <strong><a class="nav-link mypageAtag" href="${path }/mypage/myCommunityList.do?userId=hyeran">커뮤니티 관리</a></strong>
-						    </li>
-						    <li class="nav-item">
-						      <strong><a class="nav-link mypageAtag" href="${path }/mypage/myShoppingCart.do">장바구니</a></strong>
-						    </li>
-						    <li class="nav-item">
-						   		<strong><a class="nav-link mypageAtag" href="${path }/mypage/myWishList.do">찜 목록</a></strong>
-						    </li>
+						     <li class="nav-item">
+		                        <strong><a class="nav-link mypageAtag" href="${path }/mypage/myMember.do">회원 정보   </a></strong>
+		                      </li>
+		                      <li class="nav-item">
+		                        <strong><a class="nav-link mypageAtag" href="${path }/mypage/myOrderList.do">주문 목록   </a></strong>
+		                      </li>
+		                      <li class="nav-item">
+		                           <strong><a class="nav-link mypageAtag" href="${path }/mypage/myWishList.do">찜 목록</a></strong>
+		                      </li>
+		                      <li class="nav-item">
+		                        <strong><a class="nav-link mypageAtag" href="${path }/mypage/myBoardList.do">게시글 관리</a></strong>
+		                      </li>
 						    <li class="nav-item">
 						   		<strong><a class="nav-link mypageAtag" href="${path }/mypage/myPlaceList.do?plaStatus=N">장소 등록 내역</a></strong>
 						    </li>
