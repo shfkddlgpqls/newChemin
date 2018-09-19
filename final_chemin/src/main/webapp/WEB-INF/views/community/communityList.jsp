@@ -264,13 +264,13 @@ input[type="radio"] {display:none;}
 								<c:forTokens items="${a.RENAMEDFILENAME }" delims="." var="v" varStatus="status">
 									<c:if test="${status.last }">
                                              <c:choose>
-                                                 <c:when test="${v eq 'mp4'}">
+                                                 <c:when test="${v eq 'mp4' or v eq 'MP4'}">
                                                  <video controls="controls" width="460px" height="366px">
                                                      <source class="list_pic" style="position:relative;float:left;top:0.1%;" src="${path }/resources/upload/community/${a.RENAMEDFILENAME}"/>
                                                  </video>
                                                  </c:when>
-                                                 <c:when test="${v eq 'jpg'}">
-                                                     <img class="list_pic" style="position:relative;float:left;top:0.1%;" src="${path }/resources/upload/community/${a.RENAMEDFILENAME}"> 					
+                                                 <c:when test="${v eq 'jpg' or v eq 'png' or v eq 'JPG' or v eq 'PNG'}">
+                                                     <img style="width:460px;height:366px;" class="list_pic" style="position:relative;float:left;top:0.1%;" src="${path }/resources/upload/community/${a.RENAMEDFILENAME}"> 					
                                                  </c:when>
                                              </c:choose>
 									</c:if>
@@ -284,7 +284,7 @@ input[type="radio"] {display:none;}
 						</c:if>
 						<c:if test="${memberLoggedIn.userId == c.WRITER}">
 						<div class="dropdown">
-							<img class="dropdown-toggle" data-toggle="dropdown" src="https://icongr.am/jam/more-f.svg?color=d5d5d5" style="float:right;padding-right:1%;">
+							<img class="dropdown-toggle" data-toggle="dropdown" src="${path }/resources/community/image/dots (3).png" style="float:right;padding-right:1%;">
 							<ul class="dropdown-menu">
 								<li><a style="color:black;" data-no="${c.COMMUNITYNO }" onclick="munityUpdate(this)">수정</li>
 								<li><a style="color:black;" data-no="${c.COMMUNITYNO }" onclick="munityDelete(this)">삭제</li>
@@ -292,7 +292,7 @@ input[type="radio"] {display:none;}
 						</div>
 						</c:if>
 						<c:if test="${memberLoggedIn.userId == 'admin'}">
-							<img src="https://icongr.am/clarity/times.svg" style="float:right" data-no="${c.COMMUNITYNO }" onclick="adminDelete(this)">
+							<img src="${path }/resources/community/image/close.png" style="float:right;width:20px;height:20px;" data-no="${c.COMMUNITYNO }" onclick="adminDelete(this)">
 						</c:if>
 						<div style="float:left;margin-right:1%;"><img class="cphoto" src="${path}/resources/admin/memberEX.jpg"></div>
 						<p id="writer" name="writer" style="float:left;right:1%;color:white;font-size:22px;">
@@ -319,7 +319,7 @@ input[type="radio"] {display:none;}
 				<tr>
 					<td height="13%">
 						<button type="button" id="showComment" class="showComment btn btn-outline-light" alt="false" data-no="${c.COMMUNITYNO }" onclick="showComment(this)">
-							<img class="post-img button" src="https://icongr.am/jam/message.svg" style="height:50px;width:50px;float:left;"/>
+							<img class="post-img button" src="${path }/resources/community/image/speech-bubble.png" style="height:50px;width:50px;float:left;"/>
 						</button>
 						<p class="post-likenumber" style="font-size:20px;margin-top:2%;float:right;">
 						댓글 ${c.CCOUNT }개 </p>
@@ -409,7 +409,6 @@ input[type="radio"] {display:none;}
       </form>
     </div>
   </div>
->>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git
 </section>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 

@@ -54,8 +54,9 @@
 						value+='<td>'+data.list[i].USERADDR+'</td><td id="rgcount" name="rgcount" class="reportBtn" data-no="'+data.list[i].USERID+'" onclick="rpClick(this)">'+rgcount+'<input type="hidden" name="rg" id="rg" value="'+rgcount+'"/></td>';
 						
 						if(rgcount>=3)
-						{
+						{	
 							value+='<td><button type="submit" data-no="'+data.list[i].USERID+'" onclick="adminMemberDelete(this)" class="btn btn-danger">제재</button>';
+							
 							if(data.list[i].MGRADE == 1)
 							{
 								value+='<button type="button" data-no="'+data.list[i].USERID+'" onclick="adminMemberCancel(this)" class="btn btn-default">취소</button></td></tr>';
@@ -108,13 +109,65 @@
 	/* 관리자 권한으로 신고 3번이상 받은 회원 로그인 불가능 */
 	function adminMemberDelete(obj) {
 		var userId=$(obj).data("no");
-		location.href="${path}/admin/adminMemberDelete.do?userId="+userId;
-	}
+		$.ajax({
+			dataType:'json',
+			type : "GET",
+			data:{userId:userId},
+			url:'${path}/admin/adminMemberDelete.do',
+			success:function(data){
+				if(data>0)
+				{
+					swal({
+				
+						text :"회원 제재 처리가 성공되었습니다.",
+						icon : "success",
+						button : "확인"
+						});
+				}
+				else
+				{
+					swal({
+						
+						text :"회원 제재 처리가 실패되었습니다.",
+						icon : "warning",
+						button : "확인"
+						});	
+				}
+				fn_listMember($('.active-pagination').html());
+			}
+		});
+	};
 	
 	/* 아이디 정지 풀기 */
 	function adminMemberCancel(obj) {
 		var userId=$(obj).data("no");
-		location.href="${path}/admin/adminMemberCancel.do?userId="+userId;
+		$.ajax({
+			dataType:'json',
+			type : "GET",
+			data:{userId:userId},
+			url:'${path}/admin/adminMemberCancel.do',
+			success:function(data){
+				if(data>0)
+				{
+					swal({
+				
+						text :"회원 제재 취소가 성공되었습니다.",
+						icon : "success",
+						button : "확인"
+						});
+				}
+				else
+				{
+					swal({
+						
+						text :"회원 제재 취소가 실패되었습니다.",
+						icon : "warning",
+						button : "확인"
+						});	
+				}
+				fn_listMember($('.active-pagination').html());
+			}
+		});
 	}
 	
 	/* 블랙리스트 분류 */

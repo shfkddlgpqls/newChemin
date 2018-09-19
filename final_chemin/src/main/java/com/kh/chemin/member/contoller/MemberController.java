@@ -60,11 +60,9 @@ public class MemberController {
 	}
 
    @RequestMapping("/login/loginCheck.do")
-   public ModelAndView loginCheck(String userId, String password, Model model) {
+   public ModelAndView loginCheck(String userId, String password, Model model,ModelAndView mv) {
       Member m = service.selectOne(userId);
-
-      ModelAndView mv = new ModelAndView();
-      
+     
       String msg = "";
       String loc = "";
       String status="";
@@ -175,10 +173,7 @@ public class MemberController {
 	public String memberEnroll() {
 		return "member/memberEnroll";
 	}
-	// @RequestMapping("/login/memberlogout.do")
-	// public String updateMember(String userId, Model model) {
-	// Member
-	// }
+	
 	
 	@RequestMapping("/login/findId.do")
 	public String findId() {

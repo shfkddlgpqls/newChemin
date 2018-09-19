@@ -47,10 +47,10 @@ margin-right:2%
 
 </style>
 <script>
-/* 	$(window).load(function(){
+ 	$(document).ready(function(){
 		fn_warningMsg();
 	});
-	function fn_warningMsg() {
+ 	/* function fn_warningMsg() {
 		var userid="${memberLoggedIn.userId}";
 		console.log(userid);
 		$.ajax({
@@ -70,7 +70,7 @@ margin-right:2%
 				$('#warningMsg').html(value);  
 			}
 		});
-	} */
+	}   */
 </script> 
 
 
@@ -193,7 +193,7 @@ function  fn_infoChange(){
 								}
 							
 						}
-					}); */
+					}); 
 				});
 	/*	$("#email").keyup(function()
 				{	
@@ -376,9 +376,13 @@ function  fn_infoChange(){
 </script>   
 
 		<!-- 신고 제재 메시지 -->
-		<div id="warningMsg">
-		
+	<c:if test="${warnNum eq 1}">
+		<div id="warningMsg" style="width:100%;font-size:15px;">
+			<div class='alert alert-danger alert-dismissible'>
+			<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>
+			<strong>Warning!</strong> &nbsp 꿀팁 커뮤니티에서 올리신 글로 신고 당하셨습니다.<br>3번이상 신고당하실 경우, 관리자의 권한으로 강제 탈퇴되실 수 있습니다.</div>
 		<div>
+	</c:if>
 		<!-- 회원정보 수정 폼란 -->
 <section>
 <div class="container bootstrap snippet">

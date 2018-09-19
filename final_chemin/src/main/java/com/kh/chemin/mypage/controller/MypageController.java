@@ -294,6 +294,8 @@ public class MypageController
 		Member m = (Member)session.getAttribute("memberLoggedIn");
 		String userId = m.getUserId();
 		Map<String, Object> member = service.memberList(userId);
+		int warnNum=service.warnMsg(userId);
+		model.addAttribute("warnNum",warnNum);
 		model.addAttribute("member", member);
 		return "mypage/myMember";
 	}
@@ -314,9 +316,7 @@ public class MypageController
 		return jsonStr;
 	}
 	
-//	=======================주리가 한 부분 =======================	
-	
-		//리뷰 글 작성
+
 		@RequestMapping(value ="/mypage/review.do",method = RequestMethod.POST) 
 		public ModelAndView insertReview(Review review, MultipartFile review_file, HttpServletRequest request)
 		{
