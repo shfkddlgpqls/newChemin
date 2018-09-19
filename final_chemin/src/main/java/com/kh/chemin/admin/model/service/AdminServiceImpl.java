@@ -143,9 +143,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public int adminMemberDelete(String userId) {
+	public int adminMemberUpdate(String userId) {
 		System.out.println("::adminMemberDelete::"+userId);
-		return dao.adminMemberDelete(sqlSession,userId);
+		return dao.adminMemberUpdate(sqlSession,userId);
 	}
 
 	@Override
@@ -198,6 +198,11 @@ public class AdminServiceImpl implements AdminService {
 		public int selectReviewCount() 
 		{
 			return dao.selectReviewCount(sqlSession);
+		}
+
+		@Override
+		public int adminMemberCancel(String userId) {
+			return dao.adminMemberCancel(sqlSession, userId);
 		}
 
 

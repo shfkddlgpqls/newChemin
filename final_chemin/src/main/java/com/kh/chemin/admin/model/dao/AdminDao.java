@@ -36,9 +36,10 @@ public interface AdminDao {
 	int selectMemberCount(SqlSessionTemplate sqlSession);
 	List<Map<String, Object>> selectMemberList(SqlSessionTemplate sqlSession, int cPage, int numPerPage);
 	List<Map<String,Object>> rpList(SqlSessionTemplate sqlSession, String userId);
-	int adminMemberDelete(SqlSessionTemplate sqlSession, String userId);
+	int adminMemberUpdate(SqlSessionTemplate sqlSession, String userId);
 	List<Map<String,Object>> blackList(SqlSessionTemplate sqlSession);
 	List<Map<String,Object>> searchList(SqlSessionTemplate sqlSession,HashMap<String,Object> map);
+	int adminMemberCancel(SqlSessionTemplate sqlSession, String userId);
 
 		//문의게시판 총 갯수
 		int selectQnACount(SqlSessionTemplate sqlSession);	
@@ -54,4 +55,5 @@ public interface AdminDao {
 
 		List<Review> selectReviewList(SqlSessionTemplate sqlSession, int cPage, int numPerPage);
 		int selectReviewCount(SqlSessionTemplate sqlSession);
+		
 }
