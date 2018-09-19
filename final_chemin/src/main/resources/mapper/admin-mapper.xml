@@ -155,6 +155,9 @@
 
 	</select>  
 	
+<!-- =======================주리가 한 부분 =======================-->	
+	
+	
 	<!-- 문의게시판  총 갯수 -->   
 	<select id="selectQnACount" resultType="_int">
 		select count(*) from QNA
@@ -177,7 +180,7 @@
 	
 	<!-- 리뷰 리스트 불러오기 -->
 	<select id="selectReviewList" resultType="review">
-		select * from review order by redate desc
+		select review.reno, review.userid,review.pno,product.pname,review.recontent,review.orimg, review.reimg, stars,redate from review join product on(review.pno=product.pno) order by redate desc
 	</select>
 	
 	
@@ -186,6 +189,24 @@
 		select count(*) from review
 	</select>
 	
+	<delete id="adminQNADel" parameterType="String">
+		delete from qna where qnano = #{modal_qno}
+	</delete>
+	
+	<delete id="AdminReviewDel"  parameterType="String">
+		delete from review where reno = #{modal_rno}
+	</delete>
+	
+	<select id="selectQnaSearchList" parameterType="map" resultType="qna">
+		select * from qna WHERE ${searchType} LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	<select id="selectQnASearchCount" parameterType="map" resultType="_int">
+		select count(*) from qna WHERE ${searchType} LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	<!-- =======================주리가 한 끝 =======================-->	
+
 	<update id="adminMemberCancel" parameterType="String">
 		update member_info set mgrade = 0 where userid=#{userId}
 	</update>

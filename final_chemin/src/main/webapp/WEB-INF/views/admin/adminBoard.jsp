@@ -11,7 +11,7 @@
     <!-- admin css-->
     <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/adminPage.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-       
+	    
        
     <style>
     .pagination a 
@@ -37,6 +37,7 @@
        
         
     <script>
+
     
     //카테고리 번호를 카테고리 한글로 바꿔주기
     function fn_cate(cate) 
@@ -69,6 +70,8 @@
     
    function fn_ad_qna(cPage)
     {     
+	    
+	   
        $.ajax
        ({
            url:"${path}/admin/adminBoard.do",
@@ -106,9 +109,10 @@
   
                   		if(data.list[i].qnaState=='답변대기')
                   		{
-                  			view+= "<td class='text-center'>"+"<button class='btn btn-default' onclick='fn_modal("+data.list[i].qnaNo+",this);' value='"+data.list[i].pno+"'>답변하기</button></td></tr>";
+                  			view+= "<td class='text-center'>"+"<button class='btn btn-default' onclick='fn_modal("+data.list[i].qnaNo+",this);' value='"+data.list[i].pno+"'>답변하기</button>";
+                  			view+="<button class='btn btn-default' onclick='fn_modalDel("+data.list[i].qnaNo+");'>삭제하기</button></td></tr>"
                   		}
-                  		else view+="<td class='text-center'></td></tr>" ;
+                  		else view+="<td class='text-center'><button class='btn btn-default' onclick='fn_modalDel("+data.list[i].qnaNo+");'>삭제하기</button></td></tr>" ;
                   		
                   	  view+="<tr><td class='"+data.list[i].qnaNo+"' colspan='8' class='text-center' style='display:none;'>";
                   	  view+="<div><p class='text-center'><br>"+data.list[i].qnaContent+"</p><hr></div>"; 
@@ -140,9 +144,10 @@
   
                   		if(data.list[i].qnaState=='답변대기')
                   		{
-                  			view+= "<td class='text-center'>"+"<button class='btn btn-default' onclick='fn_modal("+data.list[i].qnaNo+",this);' value='"+data.list[i].pno+"'>답변하기</button></td>";
+                  			view+= "<td class='text-center'>"+"<button class='btn btn-default' onclick='fn_modal("+data.list[i].qnaNo+",this);' value='"+data.list[i].pno+"'>답변하기</button>";
+                  			view+="<button class='btn btn-default' onclick='fn_modalDel("+data.list[i].qnaNo+");'>삭제하기</button></td></tr>"
                   		}
-                  		else view+="<td class='text-center'></td>" ;
+                  		else view+="<td class='text-center'><button class='btn btn-default' onclick='fn_modalDel("+data.list[i].qnaNo+");'>삭제하기</button></td></tr>" ;
                   		
                   	  view+="<tr><td class='"+data.list[i].qnaNo+"' colspan='8' class='text-center' style='display:none;'>";
                   	  view+="<div><p class='text-center'><br>"+data.list[i].qnaContent+"</p><hr></div>";      
@@ -161,7 +166,7 @@
              }
              else
              {
-             	qnaList.innerHTML += "<td class='text-center'>아무것도 없어요</td>";
+             	view += "<td class='text-center'>아무것도 없어요</td>";
              }   
              
              $("#qnaList").html(view);
@@ -214,6 +219,23 @@
 		$("#answer_modal").modal();
 		
    	 }
+     
+     //삭제하기
+     function fn_modalDel(qno) 
+     {
+		$("#modal_qno").val(qno);
+		
+		$("#adminQnaDel").modal();
+		
+	 }
+     
+     function fn_adminQnaDelConfirm() 
+     {
+		$("#adminQnaDelFrm").submit();
+     }
+    
+     
+    
     </script>
     
     
@@ -228,7 +250,26 @@
 				  	<div>
 				  		<h3>문의 게시글 관리</h3>
 				  		<br>
-				  	</div>		
+				  	</div>	
+				  	
+				  	<!-- <div style='margin-left:65%'>
+				
+			               <div class="input-group col-12">
+		                     <div class="input-group-prepend">   
+		                      
+		                       		<select class="form-control" id="search_option" name="search_option">
+					                   <option value="0" disabled selected>검색 조건 </option>
+					                    <option value="code">상품 코드 </option>
+					                    <option value="bNo">글 번호</option> 
+					                    <option value="writer">작성자</option>             
+					                  </select>
+		                     </div>
+		                     <input type="text" class="form-control input-sm" placeholder="검색어 입력" name="searchText" id="searchText">
+		                  	 <button class="btn btn-default searchBtn" onclick='fn_search();' style='border-radius:0'>검색</button>
+		                  	</div>
+              		 </div> -->
+					<br>
+							
 				  	
 						<div class="table">
 			                <table>
@@ -307,9 +348,11 @@
                       	    		<c:choose>
 			  							<c:when test="${q.qnaState=='답변대기'}">
 			  						 		<button class="btn btn-default" onclick="fn_modal(${q.qnaNo},this);" value="${q.pno}">답변하기</button>
+			  						 		<button class="btn btn-default" onclick="fn_modalDel(${q.qnaNo});">삭제하기</button>
 			  							</c:when>
 			  						
 			  						<c:otherwise> 		
+			  							<button class="btn btn-default" onclick="fn_modalDel(${q.qnaNo});" >삭제하기</button>
 			  						</c:otherwise>
 			  						
 		  							</c:choose>
@@ -395,14 +438,49 @@
               
               <!-- Modal footer -->
               <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="fn_adminFrmCheck();">등록하기</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button class="btn btn-success" onclick="return fn_adminFrmCheck();">등록하기</button>
+                <button class="btn btn-secondary" data-dismiss="modal">Close</button>
               </div>
 </form>              
             </div>
           </div>
         </div>
-        <!-- 문의하기 모달 끝 -->
+        <!-- 답변 하기 모달 끝 -->
+        
+<!-- 문의 글삭제하기 -->       
+   <div class="modal fade" id="adminQnaDel">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">문의글 삭제</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        	
+        <!-- Modal body -->
+        <div class="modal-body">
+             <div class="col-12">
+          		<p class="text-center">해당 글을 삭제하시겠습니까? <br>삭제한 글은 복구되지 않습니다. </p> 
+          		
+          		<form action="${path }/admin/adminQNADel.do" id="adminQnaDelFrm" name="adminQnaDelFrm">  
+          		<input type="hidden" name="modal_qno" id="modal_qno" value=""/> 
+          		</form>
+          		  
+              </div>
+     
+        </div>    
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button class="btn btn-primary" onclick="fn_adminQnaDelConfirm()" >삭제하기</button>
+          <button class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+        <!-- 삭제하기 끝 --> 
         
 		
 		

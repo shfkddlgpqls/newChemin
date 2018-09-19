@@ -14,11 +14,12 @@ public class QnA_board
 	private String qnaDate;
 	private String qnaState;
 	private int qnaPw;
+	private String pname;
 	
 	public QnA_board() {}
 
 	public QnA_board(int qnaNo, String userId, int pno, int qna_cate_no, String qnaTitle, String qnaContent,
-			String reply_content, String qnaDate, String qnaState, int qnaPw) {
+			String reply_content, String qnaDate, String qnaState, int qnaPw, String pname) {
 		super();
 		this.qnaNo = qnaNo;
 		this.userId = userId;
@@ -30,6 +31,7 @@ public class QnA_board
 		this.qnaDate = qnaDate;
 		this.qnaState = qnaState;
 		this.qnaPw = qnaPw;
+		this.pname = pname;
 	}
 
 	public int getQnaNo() {
@@ -84,7 +86,7 @@ public class QnA_board
 		return reply_content;
 	}
 
-	public void setQnaReply(String reply_content) {
+	public void setReply_content(String reply_content) {
 		this.reply_content = reply_content;
 	}
 
@@ -112,13 +114,20 @@ public class QnA_board
 		this.qnaPw = qnaPw;
 	}
 
+	public String getPname() {
+		return pname;
+	}
+
+	public void setPname(String pname) {
+		this.pname = pname;
+	}
+
 	@Override
 	public String toString() {
 		return "QnA_board [qnaNo=" + qnaNo + ", userId=" + userId + ", pno=" + pno + ", qna_cate_no=" + qna_cate_no
-				+ ", qnaTitle=" + qnaTitle + ", qnaContent=" + qnaContent + ", reply_content=" + reply_content + ", qnaDate="
-				+ qnaDate + ", qnaState=" + qnaState + ", qnaPw=" + qnaPw + "]";
+				+ ", qnaTitle=" + qnaTitle + ", qnaContent=" + qnaContent + ", reply_content=" + reply_content
+				+ ", qnaDate=" + qnaDate + ", qnaState=" + qnaState + ", qnaPw=" + qnaPw + ", pname=" + pname + "]";
 	}
-	
-	
+
 	
 }

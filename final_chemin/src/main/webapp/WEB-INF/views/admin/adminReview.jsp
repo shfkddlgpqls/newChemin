@@ -7,9 +7,14 @@
    <jsp:include page="/WEB-INF/views/admin/adminMenuBar.jsp"/>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 	
-	    <!-- admin css-->
+ <!-- admin css-->
     <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/adminPage.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	
+	<!-- 이미지팝업 -->
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.4.1/jquery.fancybox.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.4.1/jquery.fancybox.min.js"></script>
 
 
    <style>
@@ -32,9 +37,20 @@
 		background-color : #ffd6f4; !important;
   	    color: white;
 	}
+	
+	.cardAtag
+	{
+		color : hotpink;
+	}
+	.cardAtag:hover
+	{
+		background-color : white; 
+		color : #ffd6f4;
+	}
 	</style>   
 	
 	<script>
+	
 	function fn_review(cPage)
 	   {
 	        
@@ -47,6 +63,7 @@
 	            {
 		          	var view = "";
 		           	console.log(data);
+		           	console.log(data.list[0].reNO);
 		           	
 	              if(data!=null)
 	              {
@@ -62,7 +79,17 @@
 	                    if(i==0)//맨 처음에 값 삽입
 	                    {
 	                    	view += "<div class='card'> <div class='card-body'>  <div class='row'>";
-	                    	view += "<div class='col-md-2'><img src='${path}/resources/upload/review/"+data.list[i].reImg+"' class='img img-rounded img-fluid'/></div>";          	
+	                    	view += "<div class='col-md-2'>";
+	                    	
+	                    	if(data.list[i].orImg != null && data.list[i].reImg != null)
+	                    	{
+//	                    		view+= "<img src='${path}/resources/upload/review/"+data.list[i].reImg+"' class='img img-rounded img-fluid'/></div>";          
+
+	                    		view+="<a data-fancybox='gallery' href='${path}/resources/upload/review/"+data.list[i].reImg+" '>";
+	                    		view+="<img src='${path}/resources/upload/review/"+data.list[i].reImg+"' class='img img-rounded img-fluid'/></a></div>";
+	                    	}
+	                    	else view+="<img src='${path}/resources/base/img/noImg.png' class='img img-rounded img-fluid'/></div>";
+	                    	
 	                    	view += "<div class='col-md-10'><p><strong>"+data.list[i].userId+"</strong>님";
 	                    	                    	
 	                    	if(data.list[i].stars==5)
@@ -86,16 +113,28 @@
 	                    		view += "<span style='margin-left : 5%'><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/></span>";
 	                    	}
 	                    		
-	                    	view += "<span class='float-right'>"+data.list[i].reDate+"</p><div class='clearfix'>";
-	                    	view += "<p>"+data.list[i].reContent+"</p><span class='float-right'>"+data.list[i].pno+"</span></div></div></div></div></div></div>";
+	                    	view += "<span class='float-right'>"+data.list[i].reDate+"</p><span><div class='clearfix'>";
+	                    	view += "<p>"+data.list[i].reContent+"</p><span class='float-right'><a class='cardAtag' href='${path }/mall/detail.do?no="+data.list[i].pno+"'><strong>>> 상품 코드 : "+data.list[i].pno+" / 상품 명 : "+ data.list[i].pname+"</strong></a></span></div>";
+		                   	view += "<div class='clearfix float-right'><br><button class='btn btn-default' onclick='fn_reviewDel("+data.list[i].reNO+")' value='"+data.list[i].reNo+"'>삭제</button></div>"		
+							view += "</div></div></div></div></div>";
 	                    
 	                    }
 	                    else//값이 2이상일 때 값들 삽입
 	                    {
 	                    	view += "<div class='card'> <div class='card-body'>  <div class='row'>";
-	                    	view += "<div class='col-md-2'><img src='${path}/resources/upload/review/"+data.list[i].reImg+"' class='img img-rounded img-fluid'/></div>";          	
-	                    	view += "<div class='col-md-10'><p><strong>"+data.list[i].userId+"</strong>님";
+	                    	view += "<div class='col-md-2'>";
 	                    	
+	                    	if(data.list[i].orImg != null && data.list[i].reImg != null)
+	                    	{
+	//                    		view+= "<img src='${path}/resources/upload/review/"+data.list[i].reImg+"' class='img img-rounded img-fluid'/></div>";          	
+	                    
+	                    		view+="<a data-fancybox='gallery' href='${path}/resources/upload/review/"+data.list[i].reImg+" '>";
+	                    		view+="<img src='${path}/resources/upload/review/"+data.list[i].reImg+"' class='img img-rounded img-fluid'/></a></div>";
+	                    	}
+	                    	else view+="<img src='${path}/resources/base/img/noImg.png' class='img img-rounded img-fluid'/></div>";
+	                    	
+	                    	view += "<div class='col-md-10'><p><strong>"+data.list[i].userId+"</strong>님";
+	                    	                    	
 	                    	if(data.list[i].stars==5)
 	                    	{
 	                    		view += "<span style='margin-left : 5%'><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/></span>";
@@ -116,9 +155,11 @@
 	                    	{
 	                    		view += "<span style='margin-left : 5%'><img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/><img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/></span>";
 	                    	}
-	                    	
-	                    	view += "<span class='float-right'>"+data.list[i].reDate+"</p><div class='clearfix'>";
-	                    	view += "<p>"+data.list[i].reContent+"</p><span class='float-right'>"+data.list[i].pno+"</span></div></div></div></div></div></div>";
+	                    		
+	                    	view += "<span class='float-right'>"+data.list[i].reDate+"</p><span><div class='clearfix'>";
+	                    	view += "<p>"+data.list[i].reContent+"</p><span class='float-right'><a class='cardAtag' href='${path }/mall/detail.do?no="+data.list[i].pno+"'><strong>>> 상품 코드 : "+data.list[i].pno+" / 상품 명 : "+ data.list[i].pname+"</strong></a></span></div>";
+		                   	view += "<div class='clearfix float-right'><br><button class='btn btn-default' onclick='fn_reviewDel("+data.list[i].reNO+")' value='"+data.list[i].reNO+"'>삭제</button></div>"		
+							view += "</div></div></div></div></div>";
 	                    }
 	                 }   
 	             
@@ -141,6 +182,18 @@
 	   } 
 
 	
+	function fn_reviewDel(reNo) 
+	{
+		$("#modal_rno").val(reNo);	
+		$("#adminReviewDel").modal();
+	}
+	
+	function fn_adminReviewDelConfirm() 
+	{
+		$("#adminReviewDelFrm").submit();
+	}
+	
+	
 	</script>
     
 
@@ -159,65 +212,92 @@
           		<div class='card-body'>  
 	            	<div class='row'>
 	               		<div class='col-md-2'>
-	               			<img src='${path}/resources/upload/review/${r.reImg}' class='img img-rounded img-fluid'/>
+	               			<c:set var="picRe" value="${r.reImg}"></c:set>
+	               			<c:set var="picOr" value="${r.orImg}"></c:set>
+			               		
+			               		<c:choose>
+			               			<c:when test="${not empty picRe && not empty picOr}">
+			               				<%-- <img src='${path}/resources/upload/review/${r.reImg}' class='img img-rounded img-fluid'/> --%>
+			               			
+			               				<a data-fancybox="gallery" href="${path}/resources/upload/review/${r.reImg}">
+					               			<img src='${path}/resources/upload/review/${r.reImg}' class='img img-rounded img-fluid'/>
+					               		</a>
+			               			</c:when>
+			               			
+			               			<c:otherwise>
+			               				<img src='${path}/resources/base/img/noImg.png' class='img img-rounded img-fluid'/>
+			               			</c:otherwise>
+			               		</c:choose>	
 	               		</div>          	
+	               		
 	                   	<div class='col-md-10'>
-	                   		<p><strong>${r.userId}</strong>님 </p>${r.stars}
-	                   		
-	                   		<c:set var="star" value="${r.stars}"></c:set>
+	                   		<p><strong>${r.userId}</strong>님 
 	                   		
 	                   		<span style="margin-left : 5%"> 		
-	                   		<c:choose>
-	                   			<c:when test="$(star==1)">
-	                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
-	                   			</c:when>	
-	                   			
-	                   			<c:when test="$(star==2)">
-	                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
-	                   			</c:when>	
-	                   			
-	                   			<c:when test="$(star==3)">
-	                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
-	                   			</c:when>	
-	                   			
-	                   			<c:when test="$(star==4)">
-	                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
-	                   			   <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
-	                   			</c:when>	
-	                   			
-	                   			<c:when test="$(star==5)">
-	                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
-	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
-	                   			    
-	                   			</c:when>	
-	                   		</c:choose>
-	                   		
+	                   	 
+	                   	 		<c:set var="star" value="${r.stars}"></c:set>
+				                   			
+				                   		<c:choose>
+				                   			<c:when test="${ star==1}">
+				                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+				                   			</c:when>	
+				                   			
+				                   			<c:when test="${ star==2}">
+				                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+				                   			</c:when>	
+				                   			
+				                   			<c:when test="${ star==3}">
+				                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+				                   			</c:when>	
+				                   			
+				                   			<c:when test="${ star==4}">
+				                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+				                   			   <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
+				                   			</c:when>	
+				                   			
+				                   			<c:otherwise>
+				                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+				                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
+				                   			    
+				                   			</c:otherwise>	
+				                   		</c:choose>    		
 	                   		</span>
 	                   		
-	                   		<span class='float-right'>${r.reDate}</span>
+	                   		<span class='float-right'>
+	                   			${r.reDate} </p>
+	                   		</span>
+	                   		
 		                   	<div class='clearfix'>
 		                   		<p>${r.reContent}</p>
 		                   		
-		                   		<span class='float-right'>${r.pno }</span>
+		                   		<span class='float-right'>
+		                   		<a class='cardAtag' href='${path }/mall/detail.do?no=${r.pno }'><strong>>> 상품 코드 : ${r.pno } / 상품 명 :  ${r.pname }</strong></a>
+		                   		</span>
 		                   	</div>
+		                   	
+		                   	<div class='clearfix float-right'>
+				                   	<br>
+				                   <button class="btn btn-default" onclick="fn_reviewDel(${r.reNO})" value="${r.reNO}">삭제</button>
+				           </div>
+				           
 	                   	</div>
 	                 </div>
 	             </div>
@@ -233,6 +313,41 @@
           		${reviewPageBar }
           	</c:if>
 	      </div>	
+	      
+<!-- 리뷰 삭제하기 -->       
+   <div class="modal fade" id="adminReviewDel">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">리뷰 삭제</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        	
+        <!-- Modal body -->
+        <div class="modal-body">
+             <div class="col-12">
+          		<p class="text-center">리뷰 글을 삭제하시겠습니까? <br>삭제한 글은 복구되지 않습니다. </p> 
+          		
+          		<form action="${path }/admin/AdminreviewDel.do" id="adminReviewDelFrm" name="adminReviewDelFrm">  
+          		<input type="text" name="modal_rno" id="modal_rno" value=""/> 
+          		</form>
+          		  
+              </div>
+     
+        </div>    
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="fn_adminReviewDelConfirm()" >삭제하기</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+<!-- 리뷰 삭제하기 끝 -->
 		</div>
 	
  

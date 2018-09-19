@@ -57,15 +57,6 @@ public class MypageDaoImpl implements MypageDao {
       return sqlSession.insert("mypage.updateAttach",a);
    }
 
-   @Override
-   public int removeMenu(SqlSessionTemplate sqlSession, int plaNo) {
-      return sqlSession.delete("mypage.removeMenu",plaNo);
-   }
-
-   @Override
-   public int removeAttach(SqlSessionTemplate sqlSession, int plaNo) {
-      return sqlSession.delete("mypage.removeAttach",plaNo);
-   }
 
    @Override
    public int warnMsg(SqlSessionTemplate sqlSession, String userId) {
@@ -99,13 +90,6 @@ public class MypageDaoImpl implements MypageDao {
       return sqlSession.selectList("mypage.selectWishList", userId);
    }
    
-   //리뷰 넣기
-      @Override
-      public int insertReview(SqlSessionTemplate sqlSession, Review review) 
-      {
-         return sqlSession.insert("mypage.insertReview", review);
-      }
-
       @Override
       public List<QnA_board> selectQnaBoardList(SqlSessionTemplate sqlSession, int cPage, int numPerPage, String userId) 
       {
@@ -135,4 +119,54 @@ public class MypageDaoImpl implements MypageDao {
 		return sqlSession.selectOne("mypage.memberList", userId);
 	}
 
+
+	@Override
+	public int removeMenu(SqlSessionTemplate sqlSession, int plaNo) {
+		return sqlSession.delete("mypage.removeMenu",plaNo);
+	}
+
+	@Override
+	public int removeAttach(SqlSessionTemplate sqlSession, int plaNo) {
+		return sqlSession.delete("mypage.removeAttach",plaNo);
+	}
+
+	
+//	=======================주리가 한 부분  시작=======================	
+	
+		//리뷰 넣기
+		@Override
+		public int insertReview(SqlSessionTemplate sqlSession, Review review) 
+		{
+			return sqlSession.insert("mypage.insertReview", review);
+		}
+
+		@Override
+		public int UpdateQna(SqlSessionTemplate sqlSession, Map<String, String> map) 
+		{
+			return sqlSession.update("mypage.UpdateQna", map);
+		}
+
+		@Override
+		public int myQnaDel(SqlSessionTemplate sqlSession, String modal_qno) 
+		{
+			return sqlSession.delete("mypage.myQnaDel", modal_qno);
+		}
+
+		@Override
+		public int insertReviewEdit(SqlSessionTemplate sqlSession, Review review) 
+		{
+			return sqlSession.insert("mypage.insertReviewEdit", review);
+		}
+
+		@Override
+		public int myReviewDel(SqlSessionTemplate sqlSession, String modal_rno) 
+		{
+			return sqlSession.delete("mypage.myReviewDel", modal_rno);
+		}
+		
+		
+		
+
+//		=======================주리가 한 부분  끝=======================
 }
+

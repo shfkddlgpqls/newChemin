@@ -32,11 +32,18 @@ public interface MypageDao {
 
 	int selectPlaceCount(SqlSessionTemplate sqlSession, Map map);
 	
+//	=======================주리가 한 부분  시작=======================		
 	int insertReview(SqlSessionTemplate sqlSession, Review review);
 	List<QnA_board> selectQnaBoardList(SqlSessionTemplate sqlSession, int cPage, int numPerPage, String userId);
 	int selectQnACount(SqlSessionTemplate sqlSession, String userId);
 	List<Review> selectReviewList(SqlSessionTemplate sqlSession, int cPage, int numPerPage, String userId);
 	int selectReviewCount(SqlSessionTemplate sqlSession, String userId);
+	int UpdateQna(SqlSessionTemplate sqlSession, Map<String, String> map);
+	int myQnaDel(SqlSessionTemplate sqlSession, String modal_qno);
+	int insertReviewEdit(SqlSessionTemplate sqlSession, Review review);
+	int myReviewDel(SqlSessionTemplate sqlSession, String modal_rno);
+//	=======================주리가 한 부분  끝=======================
+
 	Map<String, Object> memberList(SqlSessionTemplate sqlSession, String userId);
 
 }

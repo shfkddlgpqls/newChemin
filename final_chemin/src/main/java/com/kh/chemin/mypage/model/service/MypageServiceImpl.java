@@ -97,7 +97,8 @@ public class MypageServiceImpl implements MypageService {
 		return totalCount;
 	}
 	
-	//리뷰 글쓰기
+//	=======================주리가 한 부분  시작=======================
+		//리뷰 글쓰기
 		@Override
 		public int insertReview(Review review) 
 		{
@@ -149,6 +150,38 @@ public class MypageServiceImpl implements MypageService {
 		{
 			return dao.selectReviewCount(sqlSession,userId);
 		}
+
+		@Override
+		public int UpdateQna(Map<String, String> map) 
+		{
+			int result =  dao.UpdateQna(sqlSession,map);
+			return result;		
+		}
+
+		@Override
+		public int myQnaDel(String modal_qno) 
+		{
+			int result = dao.myQnaDel(sqlSession,modal_qno);
+			return result;
+		}
+
+		@Override
+		public int insertReviewEdit(Review review) 
+		{
+			int result = dao.insertReviewEdit(sqlSession,review);
+			
+			return result;
+		}
+
+		@Override
+		public int myReviewDel(String modal_rno) 
+		{
+			int result = dao.myReviewDel(sqlSession,modal_rno);
+			return result;
+		}
+
+		
+//		=======================주리가 한 부분  끝=======================	
 
 		@Override
 		public Map<String, Object> memberList(String userId) {

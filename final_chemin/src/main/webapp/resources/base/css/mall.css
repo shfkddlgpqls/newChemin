@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 .pagination {
   margin: 0 0;
 }
@@ -223,17 +223,6 @@
 }
 
 
-
-/* /* 페이징 */
-/* .pagination
-{
-   display : block;
-   text-align : center;
-}
-
-.pagination > li > a
-{
-   float:none; */
    
     .star-input>.input,
 .star-input>.input>label:hover,
@@ -460,14 +449,4 @@ star-input>.input.focus{outline:1px dotted #ddd;}
 
 
 
-/* 페이징 */
-/* .pagination
-{
-   display : block;
-   text-align : center;
-}
 
-.pagination > li > a
-{
-   float:none;
->>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git
