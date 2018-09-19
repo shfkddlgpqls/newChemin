@@ -12,7 +12,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	
 <style>
-
 .gallery{
   width: 100%;
   max-width: 960px;
@@ -32,7 +31,6 @@
       -ms-flex-pack: center;
           justify-content: center;
 }
-
 .gallery-item{
   box-shadow: 2px 2px 8px -1px #3498DB;
   width: 100%;
@@ -43,7 +41,6 @@
   overflow: hidden;
   border:0;
 }
-
 .gallery-item-image{
   position: absolute;
   width: 100%;
@@ -53,13 +50,10 @@
   transition: all .5s ease;
   bottom:0;
   overflow: hidden;
-
 }
-
 .gallery-item:hover .gallery-item-image{
   bottom: 60%;
 }
-
 .gallery-item-description{
   color:black;
   font-size: .8rem;
@@ -82,7 +76,6 @@ a {
     background-color: transparent;
     -webkit-text-decoration-skip: objects;
 }
-
 .statusStyle{
 text-align:center;
 width:100%;
@@ -91,7 +84,6 @@ margin-top:8%;
 margin-bottom:8%;
 color:#999;
 }
-
 .pagination a 
     {
        color: black;
@@ -107,7 +99,6 @@ color:#999;
       background-color : #ffd6f4; 
          color: white;
    }
-
    .pagination a:active 
    {
          background-color: #ffd6f4;
@@ -128,7 +119,6 @@ div#select_box {
   
   /* 화살표 이미지 */
 }
-
 div#select_box label {
   position: absolute;
   font-size: 14px;
@@ -137,7 +127,6 @@ div#select_box label {
   left: 12px;
   letter-spacing: 1px;
 }
-
 div#select_box select#color {
   width: 100%;
   height: 32px;
@@ -148,13 +137,10 @@ div#select_box select#color {
   filter: alpha(opacity=0);
   /* IE 8 */
 }
-
 </style>
 
 <script>
-
 function fn_modal(obj){	
-
 	var plaNo = $(obj).data("no");
 	var status = $(obj).data("status");
 	 
@@ -225,7 +211,6 @@ function fn_modal(obj){
 				}	
 			}
 	     }
-
 	
 	
 	$.ajax({
@@ -283,9 +268,7 @@ function fn_modal(obj){
          }
 		
 	})
-
 }
-
 function fn_delete(){
 	var plaNo = $('[name=subNo]').val();
 	swal({
@@ -303,7 +286,6 @@ function fn_delete(){
 		});
 	
 }
-
 //승인버튼
 function fn_approve(){
 	var plaNo = $('[name=subNo]').val();
@@ -321,7 +303,6 @@ function fn_approve(){
 		  }
 		});
 }
-
 //승인취소버튼
 function fn_cancle(){
 	var plaNo = $('[name=subNo]').val();
@@ -339,7 +320,6 @@ function fn_cancle(){
 		  }
 		});
 }
-
 //승인거절버튼
  function fn_reject(){
 	var plaNo = $('[name=subNo]').val();
@@ -360,14 +340,12 @@ function fn_cancle(){
 		  }
 		}); 
 } 
-
 //거절메세지를 보낼때 실행되는 함수
 function fn_send(){
 	var plaNo = $('[name=subNo]').val();
 	var plaReMsg = $('[name=reMsg]').val();
 	 location.href = "${path}/admin/adminReMsg.do?plaNo="+plaNo+"&plaReMsg="+plaReMsg+"&plaStatus="+'R'; 	
 }
-
 /* 승인상태 변화에 따라 호출되는 함수 */
 function fn_plaStatus(status){
 	$('#category').text("카테고리 선택▼");
@@ -375,7 +353,6 @@ function fn_plaStatus(status){
 	$('[name=plaStatus]').val(status);
 	fn_status(1);
 }
-
 $(function(){
 	//처음 장소내역을 눌렀을때 기본으로 승인대기의 값이 들어옴
 	$('[name=plaStatus]').val('${plaStatus}');
@@ -387,7 +364,6 @@ $(function(){
 	    $(this).siblings("label").text(select_name);
 	  });
 });
-
 function fn_status(cPage){
 	
 	var plaStatus = $('[name=plaStatus]').val();
@@ -451,7 +427,6 @@ function fn_status(cPage){
 	     }
 	})
 }
-
 </script>
 
 	<section>

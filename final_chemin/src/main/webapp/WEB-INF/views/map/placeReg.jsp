@@ -8,9 +8,7 @@
 <c:set value="${pageContext.request.contextPath }" var="path"/>
   <jsp:include page="/WEB-INF/views/common/header1.jsp"/>
   <style>
-  	.container{
-  		width:50%;
-  	}
+  	
 	.box {
         min-height: 150px;
          margin-left:auto;
@@ -325,7 +323,7 @@ function validate(){
 
 <section>
 	<div class="container" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
-		<div class="row" style="margin-top:55px">
+		<div class="row" style="margin-top:5%">
 			<form id="placeInsert" action="${path}/map/placeInsert.do?userId=${memberLoggedIn.userId}" method="post" onsubmit="return validate();" enctype="multipart/form-data">
 		    	 <h1 class="text-uppercase nanumFont">
 		    		<i class="fa fa-edit"></i> 장소 등록

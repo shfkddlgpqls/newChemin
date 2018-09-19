@@ -62,7 +62,6 @@
                }
            );    
        });
-
        $(function() {
           
            // Create the close button

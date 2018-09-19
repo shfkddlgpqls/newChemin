@@ -27,4 +27,8 @@ public class MemberDaoImpl implements MemberDao {
    public Member checkPhone(SqlSessionTemplate sqlSession, String phone) {
       return sqlSession.selectOne("member.checkphone", phone);
    }
+@Override
+public int memberInfoUpdate(SqlSessionTemplate sqlSession, Member member) {
+	return sqlSession.update("member.memberInfoUpdate", member);
+}
 }

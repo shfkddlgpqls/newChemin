@@ -8,6 +8,7 @@ import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.member.model.vo.Member;
 
 public interface MypageService {
 
@@ -31,6 +32,7 @@ public interface MypageService {
 	List<Map<String, Object>> selectWishList(String userId);
 
 	int selectPlaceCount(Map map);
+	Map<String, Object> memberList(String userId);
 }
 
 
