@@ -5,16 +5,23 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <c:set var="path" value="<%=request.getContextPath()%>"/>
   
-<jsp:include page="/WEB-INF/views/common/header.jsp"/>
+<jsp:include page="/WEB-INF/views/common/header1.jsp"/>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 
 <!-- 상세보기 css-->
     <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/mall.css">
     <script src="<c:url value="/resources/base/js/productDetail.js" />"></script>
 
+<!-- 공유하기 api 사용하기 - js key : fb1957973452653c04d55b57355b0da5 -->
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+
+<!-- 이미지팝업 -->
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.4.1/jquery.fancybox.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.4.1/jquery.fancybox.min.js"></script>
+
+
  <style>
-
-
 .pagination a {
     color: black;
     float: left;
@@ -28,6 +35,8 @@
 }
 
 .pagination a:hover:not(.active) {background-color: #ddd;}
+
+
  </style>
 
 
@@ -36,9 +45,7 @@
  // 상품 정보를 장바구니에 넘기기 위해서 해당 상품 정보 전달 
  $(function () 
 {
- 	
-    
-    $(".cart").click(function(){
+  $(".cart").click(function(){
        var amount =  $("#quantity_value").text();  
        var pno = $("#pNo").val();
        var pName = $("#goodsName").text();
@@ -224,12 +231,25 @@
    //입력하기 모달창에 제품 정보 넣어주기
    function fn_insertDetails() 
    {
-      var pno = $("#pNo").val();
-      var pName = $("#pName").val();
-        
-      $("#question_modal").modal();
-      $('#goods_code').val(pno);     
-      $('#goods_name').val(pName);
+	   
+	   if(${memberLoggedIn.userId != null && memberLoggedIn.userId !=""}) 
+	      {
+			  var pno = $("#pNo").val();
+	     	  var pName = $("#pName").val();
+	        
+		      $("#question_modal").modal();
+		      $('#goods_code').val(pno);     
+		      $('#goods_name').val(pName);
+	      }
+		  else
+	      {
+			  swal
+			  ({
+				  title: "로그인 후 이용해주세요.",
+				  icon: "error",
+				});
+	      }		
+      
    }
    
    function fn_checkUserPw() 
@@ -250,19 +270,19 @@
       else if(user_content.length==0)
       {
          alert("문의 내용을 입력해주세요");    
-         return;
+         return false;
       }
       //숫자가 아닌 문자 입력했을시
       else if(!regNumber.test(user_pw))
        {
          alert("숫자만 입력하세요");
-          return;
+          return false;
        }
       //비밀번호가 4글자 미만일 때 : 4 숫자 바꿔줘야한다
       else if(user_pw.length<4)
       {
           alert("비밀번호는 4자리입니다. 숫자 4자리를 입력해주세요.");
-          return;
+          return false;
       }
       else
       {
@@ -436,7 +456,20 @@
                     if(i==0)//맨 처음에 값 삽입
                     {
                     	view += "<div class='card'> <div class='card-body'>  <div class='row'>";
-                    	view += "<div class='col-md-2'><img src='${path}/resources/upload/review/"+data.list[i].reImg+"' class='img img-rounded img-fluid'/></div>";          	
+                    	
+                    	view += "<div class='col-md-2'>";          	
+                    	
+                    	if(data.list[i].orImg != null && data.list[i].reImg != null)
+                    	{
+ //                   		view+= "<img src='${path}/resources/upload/review/"+data.list[i].reImg+"' class='img img-rounded img-fluid'/></div>";          	
+                  		
+                    		view+="<a data-fancybox='gallery' href='${path}/resources/upload/review/"+data.list[i].reImg+" '>";
+                    		view+="<img src='${path}/resources/upload/review/"+data.list[i].reImg+"' class='img img-rounded img-fluid'/></a></div>";
+                    	}
+                    	else view+="<img src='${path}/resources/base/img/noImg.png' class='img img-rounded img-fluid'/></div>";
+                    	
+                    	
+                    	
                     	view += "<div class='col-md-10'><p><strong>"+data.list[i].userId+"</strong>님";
                     	                    	
                     	if(data.list[i].stars==5)
@@ -467,7 +500,18 @@
                     else//값이 2이상일 때 값들 삽입
                     {
                     	view += "<div class='card'> <div class='card-body'>  <div class='row'>";
-                    	view += "<div class='col-md-2'><img src='${path}/resources/upload/review/"+data.list[i].reImg+"' class='img img-rounded img-fluid'/></div>";          	
+						view += "<div class='col-md-2'>";          	
+                    	
+                    	if(data.list[i].orImg != null && data.list[i].reImg != null)
+                    	{	
+                    		//view+= "<img src='${path}/resources/upload/review/"+data.list[i].reImg+"' class='img img-rounded img-fluid'/></div>";          	
+                    	
+                    		view+="<a data-fancybox='gallery' href='${path}/resources/upload/review/"+data.list[i].reImg+" '>";
+                    		view+="<img src='${path}/resources/upload/review/"+data.list[i].reImg+"' class='img img-rounded img-fluid'/></a></div>";
+                    	}
+                    	else view+="<img src='${path}/resources/base/img/noImg.png' class='img img-rounded img-fluid'/></div>";
+                    	
+                    	
                     	view += "<div class='col-md-10'><p><strong>"+data.list[i].userId+"</strong>님";
                     	
                     	if(data.list[i].stars==5)
@@ -514,7 +558,42 @@
         });
    } 
 
+
  </script>
+ 
+
+<script type='text/javascript'>
+    //<![CDATA[
+      // // 사용할 앱의 JavaScript 키를 설정해 주세요.
+      Kakao.init('fb1957973452653c04d55b57355b0da5');
+      // // 카카오링크 버튼을 생성합니다. 처음 한번만 호출하면 됩니다.
+      function sendLink() 
+      {
+        Kakao.Link.sendDefault({
+          objectType: 'feed',
+          content: {
+            title: '${product.pName }',
+            description: '${product.details }',
+            imageUrl: '${path}/resources/upload/productImg/${product.reImg }',
+            link: {
+              mobileWebUrl: 'http://localhost:9091/chemin/mall/detail.do?no=${product.pno }',
+              webUrl: 'http://localhost:9091/chemin/mall/detail.do?no=${product.pno }'
+            }
+          },
+          
+          buttons: [
+            {
+              title: '웹으로 보기',
+              link: {
+                mobileWebUrl: 'http://localhost:9091/chemin/mall/detail.do?no=${product.pno }',
+                webUrl: 'http://localhost:9091/chemin/mall/detail.do?no=${product.pno }'
+              }
+            }
+          ]
+        });
+      }
+    //]]>
+  </script>
  
  
 
@@ -572,10 +651,10 @@
                 
                <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
                   <span style="margin-right:20px">공유하기</span>
-                     <div>
-                        <i class="fa fa-2x fa-instagram"  style="margin-right:10px" aria-hidden="true"></i>
-                        <i class="fa fa-2x fa-facebook-official"  style="margin-right:10px" aria-hidden="true"></i>
-                     </div>
+                     
+                      <a id="kakao-link-btn" href="javascript:sendLink()">
+						<img src="${path }/resources/base/img/kakaolink_btn_small.png"/>
+						</a>
                </div>
 
                <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
@@ -602,17 +681,32 @@
           	<div class='card'> 
           		<div class='card-body'>  
 	            	<div class='row'>
-	               		<div class='col-md-2'>
-	               			<img src='${path}/resources/upload/review/${r.reImg}' class='img img-rounded img-fluid'/>
+	               		<div class='col-md-2'>		
+	               				<c:set var="picRe" value="${r.reImg}"></c:set>
+	               			    <c:set var="picOr" value="${r.orImg}"></c:set>
+			               		
+			               		<c:choose>
+			               			<c:when test="${not empty picRe && not empty picOr}">
+			               				<%-- <img src='${path}/resources/upload/review/${r.reImg}' class='img img-rounded img-fluid'/> --%>
+					               		<a data-fancybox="gallery" href="${path}/resources/upload/review/${r.reImg}">
+					               			<img src='${path}/resources/upload/review/${r.reImg}' class='img img-rounded img-fluid'/>
+					               		</a>
+			               				
+			               			</c:when>
+			               			
+			               			<c:otherwise>
+			               				<img src='${path}/resources/base/img/noImg.png' class='img img-rounded img-fluid'/>
+			               			</c:otherwise>
+			               		</c:choose>	
 	               		</div>          	
 	                   	<div class='col-md-10'>
-	                   		<p><strong>${r.userId}</strong>님 </p>${r.stars}
+	                   		<p><strong>${r.userId}</strong>님 
 	                   		
 	                   		<c:set var="star" value="${r.stars}"></c:set>
 	                   		
 	                   		<span style="margin-left : 5%"> 		
 	                   		<c:choose>
-	                   			<c:when test="$(star==1)">
+	                   			<c:when test="${ star==1}">
 	                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
 	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
 	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
@@ -620,7 +714,7 @@
 	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
 	                   			</c:when>	
 	                   			
-	                   			<c:when test="$(star==2)">
+	                   			<c:when test="${ star==2}">
 	                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
 	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
 	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
@@ -628,7 +722,7 @@
 	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
 	                   			</c:when>	
 	                   			
-	                   			<c:when test="$(star==3)">
+	                   			<c:when test="${ star==3}">
 	                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
 	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
 	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
@@ -636,7 +730,7 @@
 	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
 	                   			</c:when>	
 	                   			
-	                   			<c:when test="$(star==4)">
+	                   			<c:when test="${ star==4}">
 	                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
 	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
 	                   			   <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
@@ -644,7 +738,7 @@
 	                   			    <img src='${path}/resources/base/img/star_e.png' aria-hidden='true'/>
 	                   			</c:when>	
 	                   			
-	                   			<c:when test="$(star==5)">
+	                   			<c:when test="${ star==5}">
 	                   				<img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
 	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
 	                   			    <img src='${path}/resources/base/img/star_f.png' aria-hidden='true'/>
@@ -656,7 +750,7 @@
 	                   		
 	                   		</span>
 	                   		
-	                   		<span class='float-right'>${r.reDate}</span>
+	                   		<span class='float-right'>${r.reDate}</p></span>
 		                   	<div class='clearfix'>
 		                   		<p>${r.reContent}</p>
 		                   	</div>
@@ -896,7 +990,7 @@
               
               <!-- Modal footer -->
               <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="fn_checkUserPw();">등록하기</button>
+                <button type="button" class="btn btn-success" onclick="return fn_checkUserPw();">등록하기</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               </div>
 </form>              
@@ -904,7 +998,6 @@
           </div>
         </div>
         <!-- 문의하기 모달 끝 -->
-        
 
    
 </section>

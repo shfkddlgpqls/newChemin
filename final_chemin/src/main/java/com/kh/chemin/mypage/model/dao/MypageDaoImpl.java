@@ -78,7 +78,10 @@ public class MypageDaoImpl implements MypageDao {
 		return sqlSession.selectOne("mypage.selectPlaceCount", map);
 	}
 	
-	//리뷰 넣기
+	
+//	=======================주리가 한 부분  시작=======================	
+	
+		//리뷰 넣기
 		@Override
 		public int insertReview(SqlSessionTemplate sqlSession, Review review) 
 		{
@@ -109,4 +112,32 @@ public class MypageDaoImpl implements MypageDao {
 			return sqlSession.selectOne("mypage.selectReviewCount", userId);
 		}
 
+		@Override
+		public int UpdateQna(SqlSessionTemplate sqlSession, Map<String, String> map) 
+		{
+			return sqlSession.update("mypage.UpdateQna", map);
+		}
+
+		@Override
+		public int myQnaDel(SqlSessionTemplate sqlSession, String modal_qno) 
+		{
+			return sqlSession.delete("mypage.myQnaDel", modal_qno);
+		}
+
+		@Override
+		public int insertReviewEdit(SqlSessionTemplate sqlSession, Review review) 
+		{
+			return sqlSession.insert("mypage.insertReviewEdit", review);
+		}
+
+		@Override
+		public int myReviewDel(SqlSessionTemplate sqlSession, String modal_rno) 
+		{
+			return sqlSession.delete("mypage.myReviewDel", modal_rno);
+		}
+		
+		
+		
+
+//		=======================주리가 한 부분  끝=======================
 }

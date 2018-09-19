@@ -26,6 +26,14 @@
 						    <li class="nav-item">
 						      <strong><a class="nav-link adminAtag" href="${path }/admin/adminProductList.do">상품 관리</a></strong>
 						    </li>
+						    
+						    <li class="nav-item">
+						   		<strong><a class="nav-link adminAtag" href="${path }/admin/adminBoardManage.do">게시글 관리</a></strong>
+						    </li>
+						    
+						    <li class="nav-item">
+						   		<strong><a class="nav-link adminAtag" href="${path }/admin/adminReviewBoard.do">리뷰 관리</a></strong>
+						    </li>
 						  </ul>
 						  <hr>
 				</div>

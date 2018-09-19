@@ -336,6 +336,8 @@ public class AdminController {
 		
 	}
 	
+//	=======================주리가 한 부분  시작=======================		
+	
 	@RequestMapping("/admin/adminBoardManage.do")
 	public ModelAndView adminBoardManage(ModelAndView mv)
 	{
@@ -379,10 +381,10 @@ public class AdminController {
 	//주리가 한거 (9/13)
 	@RequestMapping(value="/admin/adminBoard.do" ,produces = "application/text; charset=utf8")
 	@ResponseBody
-     public String adminBoard(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage) throws Exception 
+     public String adminBoard(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, String option, String keyword) throws Exception 
 	{
 			int numPerPage= 4;
-		  
+						
 	         Map<String, Object> map = new HashMap<String, Object>();
 	         ObjectMapper mapper = new ObjectMapper();
 	         String jsonStr = null;
@@ -408,7 +410,6 @@ public class AdminController {
       public String reviewPaging(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage) throws Exception 
 	{
 			int numPerPage= 4;
-			String userId ="user";
 		  
 	         Map<String, Object> map = new HashMap<String, Object>();
 	         ObjectMapper mapper = new ObjectMapper();
@@ -422,7 +423,7 @@ public class AdminController {
 	 		String reviewPageBar = MallPageBar.getReviewPage(cPage, numPerPage, rTotalCount);
 	 	
 	 		
-	         logger.debug("list 값"+rlist);
+	         logger.debug("리뷰 list 값"+rlist);
 	         logger.debug("rTotalCount 값"+rTotalCount);
 	         logger.debug("reviewPageBar 값"+reviewPageBar);
 	           
@@ -485,4 +486,109 @@ public class AdminController {
 		
 	}
 	
+	//문의 글 삭제하기 
+	
+	@RequestMapping("/admin/adminQNADel.do")
+	public ModelAndView adminQnaDel(ModelAndView mv,@RequestParam(value = "modal_qno") String modal_qno )
+	{
+		int result = service.adminQNADel(modal_qno);
+		
+		//서비스 갔다왔따
+		
+		String msg = "";
+		String loc = "";
+		
+		if(result>0)
+		{
+			msg = "선택하신 문의글이 성공적으로 삭제 되었습니다.";
+			loc = "/admin/adminBoardManage.do";
+		}
+		else
+		{
+			msg = "삭제 작업을 실패하였습니다. 관리자에게 문의하세요";
+			loc ="/admin/adminBoardManage.do";
+		}
+		
+		mv.addObject("msg",msg);
+		mv.addObject("loc", loc);
+		mv.setViewName("common/msg");
+		
+		return mv;	
+
+	}
+	
+	//리뷰 삭제하기 
+	@RequestMapping("/admin/AdminreviewDel.do")
+	public ModelAndView myReviewDel(ModelAndView mv,@RequestParam(value = "modal_rno") String modal_rno )
+	{
+		int result = service.AdminReviewDel(modal_rno);
+		
+		//서비스 갔다왔따
+		
+		String msg = "";
+		String loc = "";
+		String status ="";
+		
+		
+		if(result>0)
+		{
+			msg = "선택하신 문의글이 성공적으로 삭제 되었습니다.";
+			loc = "/admin/adminReviewBoard.do";
+			status = "loginSuccess";
+		}
+		else
+		{
+			msg = "삭제 작업을 실패하였습니다. 관리자에게 문의하세요";
+			loc ="/admin/adminReviewBoard.do";
+			status = "loginFailed";
+		}
+		
+		mv.addObject("status", status);
+		mv.addObject("msg",msg);
+		mv.addObject("loc", loc);
+		mv.setViewName("common/msg");
+		
+	
+		
+		return mv;	
+
+	}
+	
+	//주리가 한거 (9/13)
+		@RequestMapping(value="/admin/adminBoardSearch.do" ,produces = "application/text; charset=utf8")
+		@ResponseBody
+	     public String adminBoardSearch(@RequestParam(value="cPage",required=false,defaultValue="1") int cPage, String option, String keyword) throws Exception 
+		{
+				int numPerPage= 4;
+			
+				String searchType = null;
+				
+				if(option.equals("code")) searchType= "PNO";
+				if(option.equals("bNo")) searchType= "QNANO";
+				if(option.equals("writer")) searchType= "USERID";
+
+				 Map<String, Object> map = new HashMap<String, Object>();
+		         ObjectMapper mapper = new ObjectMapper();
+		         String jsonStr = null;
+		         
+		         map.put("searchType", searchType);
+		         map.put("keyword", keyword);
+		      
+		         
+		         List<QnA_board> list = service.selectQnaSearchList(cPage,numPerPage,map);   
+		           
+		         //문의게시판  글 갯수
+		         int qTotalCount = service.selectQnASearchCount(map);
+		         
+		         //페이지바
+		         String qnaPageBar = MallPageBar.getAdminPage(cPage, numPerPage, qTotalCount);
+		         
+		         map.put("list", list);
+		         map.put("qnaPageBar", qnaPageBar);
+
+		         jsonStr = mapper.writeValueAsString(map);
+		         return jsonStr;
+	  
+		}	
+//	=======================주리가 한 부분  끝=======================			
 }

@@ -10,5 +10,7 @@
 <script>
 	 alert("${msg}"); 
 	location.href="${path}${loc}"; 
+	
+	
 	 
 </script>

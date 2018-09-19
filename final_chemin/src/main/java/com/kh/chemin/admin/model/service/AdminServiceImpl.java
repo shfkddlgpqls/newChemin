@@ -119,6 +119,9 @@ public class AdminServiceImpl implements AdminService {
 		return dao.searchList(sqlSession,map);
 	}
 	
+//	=======================주리가 한 부분  시작=======================	
+
+	
 	//문의게시판 총 갯수 출력
 		@Override
 		public int selectQnACount() 
@@ -160,5 +163,34 @@ public class AdminServiceImpl implements AdminService {
 			return dao.selectReviewCount(sqlSession);
 		}
 
+		@Override
+		public int adminQNADel(String modal_qno) 
+		{
+			int result = dao.adminQNADel(sqlSession,modal_qno);
+			return result;
+		}
+
+		@Override
+		public int AdminReviewDel(String modal_rno) 
+		{
+			int result = dao.AdminReviewDel(sqlSession,modal_rno);
+			return result;
+		}
+
+		@Override
+		public List<QnA_board> selectQnaSearchList(int cPage, int numPerPage, Map<String, Object> map) 
+		{
+			return dao.selectQnaSearchList(sqlSession, map, cPage, numPerPage);
+		}
+
+		@Override
+		public int selectQnASearchCount(Map<String, Object> map) 
+		{
+			 return dao.selectQnASearchCount(sqlSession, map);
+		}
+
+		
+		
+//		=======================주리가 한 부분 끝=======================	
 
 }
