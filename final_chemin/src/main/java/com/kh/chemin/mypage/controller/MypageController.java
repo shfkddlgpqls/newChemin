@@ -293,6 +293,8 @@ public class MypageController
 		Member m = (Member)session.getAttribute("memberLoggedIn");
 		String userId = m.getUserId();
 		Map<String, Object> member = service.memberList(userId);
+		int warnNum=service.warnMsg(userId);
+		model.addAttribute("warnNum",warnNum);
 		model.addAttribute("member", member);
 		return "mypage/myMember";
 	}
@@ -312,6 +314,16 @@ public class MypageController
 		jsonStr=mapper.writeValueAsString(map);
 		return jsonStr;
 	}
+	
+	/*@RequestMapping("/mypage/warningMsg.do")
+	public ModelAndView warnMsg(HttpServletResponse response,HttpSession session,ModelAndView mv) 
+	{
+		String userId=(String)session.getAttribute("memberLoggedIn");
+		int warnNum=service.warnMsg(userId);
+		mv.addObject("warnNum",warnNum);
+		mv.setViewName("mypage/myMember");
+		return mv;
+	}*/
 	//리뷰 글 작성
 		@RequestMapping(value ="/mypage/review.do",method = RequestMethod.POST) 
 		public ModelAndView insertReview(Review review, MultipartFile review_file, HttpServletRequest request)

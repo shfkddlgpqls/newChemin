@@ -9,7 +9,9 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <c:set value="${pageContext.request.contextPath }" var="path"/>
 <script>
-
+<%
+	response.setContentType("text/html;charset=UTF-8");
+%>
 if('${status}'=="loginSuccess"){
    swal({
         text: "${msg}",
@@ -24,8 +26,8 @@ if('${status}'=="loginSuccess"){
         text: "${msg}",
         icon: "warning",
         button: "확인",
-      }).then((willDelete) => {
-           
+      }).then((willDelete) => {  
+    	  
          location.href="${path}${loc}";
              }); 
 }

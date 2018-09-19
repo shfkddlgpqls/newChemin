@@ -1,6 +1,7 @@
 package com.kh.chemin.admin.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -404,28 +405,20 @@ public class AdminController {
 	
 	/*신고3회이상 회원 제제*/
 	@RequestMapping("/admin/adminMemberDelete.do")
-	public ModelAndView adminMemberUpdate(String userId,ModelAndView mv)
+	public void adminMemberUpdate(String userId, HttpServletResponse response) throws IOException
 	{
 		int result=service.adminMemberUpdate(userId);
-		String msg="";
-		String loc="";
-		String status="";
-		if(result>0) {
-			msg="회원 제재 처리가 완료되었습니다.";
-			loc="/admin/adminMemberList.do";
-			status="loginSuccess";
-		}else {
-			msg="회원 제재 처리가 실패되었습니다.";
-			loc="/admin/adminMemberList.do";
-			status="loginFail";
-		}
-		
-		mv.addObject("msg", msg);
-		mv.addObject("loc", loc);
-		mv.addObject("status",status);
-		mv.setViewName("common/msg");
-		return mv;
-		
+		response.setContentType("application/json;charset=UTF-8");
+		response.getWriter().print(result);
+	}
+	
+	/*제제 당한 회원 취소*/
+	@RequestMapping("/admin/adminMemberCancel.do")
+	public void adminMemberCancel(String userId,HttpServletResponse response) throws IOException
+	{
+		int result=service.adminMemberCancel(userId);
+		response.setContentType("application/json;charset=UTF-8");
+		response.getWriter().print(result);
 	}
 	
 	/*블랙리스트만 분류*/
@@ -618,28 +611,6 @@ public class AdminController {
 		
 	}
 	
-	@RequestMapping("/admin/adminMemberCancel.do")
-	public ModelAndView adminMemberCancel(String userId,ModelAndView mv)
-	{
-		int result=service.adminMemberCancel(userId);
-		String msg="";
-		String loc="";
-		String status="";
-		if(result>0) {
-			msg="회원 제재 취소가 완료되었습니다.";
-			loc="/admin/adminMemberList.do";
-			status="loginSuccess";
-		}else {
-			msg="회원 제재 취소가 실패되었습니다.";
-			loc="/admin/adminMemberList.do";
-			status="loginFail";
-		}
-		
-		mv.addObject("msg", msg);
-		mv.addObject("loc", loc);
-		mv.addObject("status",status);
-		mv.setViewName("common/msg");
-		return mv;
-	}
+	
 	
 }
