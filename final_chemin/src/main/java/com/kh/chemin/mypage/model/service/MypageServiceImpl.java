@@ -12,6 +12,7 @@ import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.member.model.vo.Member;
 import com.kh.chemin.mypage.model.dao.MypageDao;
 
 @Service
@@ -147,6 +148,11 @@ public class MypageServiceImpl implements MypageService {
 		public int selectReviewCount(String userId) 
 		{
 			return dao.selectReviewCount(sqlSession,userId);
+		}
+
+		@Override
+		public Map<String, Object> memberList(String userId) {
+			return dao.memberList(sqlSession,userId);
 		}	
 
 }

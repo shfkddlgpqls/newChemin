@@ -87,7 +87,7 @@ color:#fff;
   <div class="category col-md-2">
   	
         <ul class="list-group">
-        	<li class="list-group-item" style="width:100%">
+        	<li class="list-group-item" style="width:100%;">
         		<span style="font-size:1.3em; width:30%;"><strong>지역선택</strong></span>        		
 				  <select class="form-control" name="plaArea" style="width:70%;margin-left:16%;margin-top:3%">
 				  	  <option value="전체">전체</option>
@@ -149,6 +149,7 @@ color:#fff;
             </div>
         </ul>
     
+				<input type="hidden" name="addr" value=""/>
     </div>
     <!-- 지도가 표시될 div -->
  		<div class="col-md-10" id="map" style="width:45%;height:100%;"></div>
@@ -173,7 +174,7 @@ var contentArray=[];
 $(function(){
 	fn_mapView();
 })
-var coordsIb="";
+
 function fn_mapView(){
 	address.splice(0,address.length);
 	categoryImg.splice(0,categoryImg.length);
@@ -248,8 +249,7 @@ function fn_mapView(){
 				    			data.plaList[i].plaName + 
 				    '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' + 
 				    '        </div>' + 
-				    '		<input type="hidden" name="coordsIb" value=""/>'+
-				    '		<input type="hidden" name="coordsJb" value=""/>'+	
+
 				    '        <div class="body">' + 
 				    '            <div class="img">' +
 				    '                <img src="${path}/resources/upload/place/main/'+data.plaList[i].reImg+'" width="73" height="70">' +
@@ -258,8 +258,9 @@ function fn_mapView(){
 				    '                <div class="ellipsis">'+addrStr[0]+'</div>' + 
 				    '                <div class="phone"><i class="fa fa-phone" style="font-size:1em;color:#989898"></i>'+data.plaList[i].plaPhone+'</div>' + 
 				    '                <div class="time"><i class="fa fa-clock-o" style="font-size:1em;color:#989898;"></i>'+' '+timeStr[0]+' '+timeStr[1]+'~'+timeStr[2]+'</div>'+
-				    '                <div><a href="${path}/map/placeInfo.do?plaNo='+data.plaList[i].plaNo+'&coordsIb='+coordsIb+'" class="link">'+data.plaList[i].plaName+'</a></div>' + 
-				    '            </div>' + 
+				 /*    '                <div><a href="${path}/map/placeInfo.do?plaNo='+data.plaList[i].plaNo+'&coordsIb='+coordsIb+'" class="link">'+data.plaList[i].plaName+'</a></div>' +  */
+				    ' <div><a onclick="fn_plaName('+data.plaList[i].plaNo+')" class="link">'+data.plaList[i].plaName+'</a></div>'+
+					'            </div>' + 
 				    '        </div>' + 
 				    '    </div>' +    
 				    '</div>';
@@ -281,6 +282,11 @@ function fn_mapView(){
 		
 }
 
+function fn_plaName(no){
+	 var addr =	$('[name=addr]').val();
+	 location.href="${path}/map/placeInfo.do?plaNo="+no+"&addr="+addr;
+}
+
 // 마커이미지의 주소와, 크기, 옵션으로 마커 이미지를 생성하여 리턴하는 함수입니다
 function createMarkerImage(src, size, options) {
     var markerImage = new daum.maps.MarkerImage(src, size, options);
@@ -289,6 +295,8 @@ function createMarkerImage(src, size, options) {
 
 var overlayArr=[];
 var coordsArr =[];
+
+
 
 
 function fn_drawMap(address,categoryImg,contentArray){
@@ -337,8 +345,6 @@ function fn_drawMap(address,categoryImg,contentArray){
 				    			 		overlayArr[j].setMap(null); 
 				    			 	}else{
 				    			 		overlayArr[j].setMap(map);
-				    			 		 $('[name=coordsIb]').val(marker.k.ib);
-				    			 		$('[name=coordsJb]').val(marker.k.jb);
 				    			 	}
 				    			}  
 				     });
@@ -465,6 +471,36 @@ function validate(){
 		}
 	
 	}
+
+//현위치를 알아낼 수 있는 함수
+var geocoder = new daum.maps.services.Geocoder();  
+if (navigator.geolocation) {
+    
+    // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+    navigator.geolocation.getCurrentPosition(function(position) {
+        
+        var lat = position.coords.latitude, // 위도
+            lon = position.coords.longitude; // 경도
+        
+        var locPosition = new daum.maps.LatLng(lat, lon); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+       
+         console.log(locPosition) 
+        
+        //현위치의 좌표값으로 주소명을 알 수 있는 함수 
+    searchDetailAddrFromCoords(locPosition, function(result, status) {
+    	console.log(result[0].address.address_name)
+    	 $('[name=addr]').val(result[0].address.address_name);
+    });         
+   });
+    
+} 
+
+
+function searchDetailAddrFromCoords(coords, callback) {
+
+    // 좌표로 법정동 상세 주소 정보를 요청합니다
+	geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+}
 </script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

@@ -18,8 +18,8 @@
  	<select id="selectOne" resultMap="memberMap" parameterType="string">
  		SELECT * FROM MEMBER_INFO WHERE USERID=#{userId} 	
  	</select>
- 	<update id="updateMember" parameterType="member">
- 		UPDATE MEMBER_INFO SET USERNAME=#{userName},gender=#{gender},age=#{age},email=#{email},address=#{address},hobby=#{hobby,typeHandler=strArr} where userid=#{userId}
+ 	<update id="memberInfoUpdate" parameterType="member">
+ 		UPDATE MEMBER_INFO SET ORIGINALIMG=#{originalImg},RENAMEIMAGE=#{originalImg}, USERPW=#{password},USERPHONE=#{phone} ,USEREMAIL=#{email},USERADDR=#{address},USERHOBBY=#{hobby,typeHandler=strArr} where USERID=#{userId}
  	</update>
 
  	<!-- <insert id="insertMember">
@@ -28,8 +28,15 @@
  	</insert> -->
  	
  	<insert id="insertMember" parameterType="member">
- 		INSERT INTO MEMBER_INFO VALUES(#{userId},#{password},#{userName},#{gender},#{birthDay},#{email},#{phone},#{address},#{hobby, typeHandler=strArr},#{originalImg},#{renameImage},default,default)
+ 		INSERT INTO MEMBER_INFO VALUES(#{userId},#{password},#{userName},#{gender},#{birthDay},#{email},#{phone},#{address},#{hobby, typeHandler=strArr, jdbcType=VARCHAR},#{originalImg, jdbcType=VARCHAR},#{renameImage, jdbcType=VARCHAR},default,default)
  	</insert>
-
+	
+	<select id="checkEmail" parameterType="string" resultType="member">
+		select*from member_info where USEREMAIL = #{email}
+	</select>
+	
+	<select id="checkphone" parameterType="string" resultType="member">
+		select*from member_info where USERPHONE = #{phone}
+	</select>
 
 </mapper>

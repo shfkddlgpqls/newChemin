@@ -404,6 +404,7 @@ public class CommunityController {
 		return mv;
 	}
 	
+
 	
 	/*카테고리 분류*/
 	@RequestMapping("/community/categoryFind.do")

@@ -1,4 +1,3 @@
-
 package com.kh.chemin.member.model.vo;
 
 import java.util.Arrays;
@@ -142,5 +141,4 @@ public class Member {
 				+ mgrade + "]";
 	}
 
- 
 }

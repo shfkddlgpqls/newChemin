@@ -293,5 +293,6 @@
 	<div class="text-center">
 		<div class="row justify-content-center" id="mPageBar"></div>
  	</div>
+>>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git
  </div> 	
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>  

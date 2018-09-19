@@ -201,14 +201,14 @@ padding:0;
     
 			   	</div>
 			   <div class="row" style="width:100%;margin-left:auto; margin-right:auto;">
-			   	<a href="http://map.daum.net/link/to/${place.plaName}" class="load" style="margin-left:auto; margin-right:auto;text-decoration:none">
+			    <a href="http://map.daum.net/?sName=${address}&eName=${place.plaName}" class="load" style="margin-left:auto; margin-right:auto;text-decoration:none"> 
 				 <div>
 				 	<i class="material-icons" style="font-size:2.5em;color:#FB6E9D">call_split</i>
 				 	<p style="color:black">길찾기</p>
 				 </div>
 				 </a>
 				 
-				 <a href="#load_box" class="load" style="margin-left:auto; margin-right:auto;text-decoration:none">
+				 <a href="#load_box" class="load js-scroll-trigger" style="margin-left:auto; margin-right:auto;text-decoration:none">
 			   	 <div>
 				   	 <i class = "material-icons" style="font-size:2.5em;color:#FB6E9D"> pin_drop</i> 
 				   	 <p style="color:black">위치</p>
@@ -385,6 +385,7 @@ padding:0;
 							"mapWidth" : "100%",
 							"mapHeight" : "300"
 						}).render();
+					
 					</script> 
 					
 				</c:if> 
@@ -421,6 +422,8 @@ padding:0;
 						        map.setCenter(coords);
 						    } 
 						});    
+						
+						
 						</script>  
 				</c:if>  
 					    
@@ -776,5 +779,6 @@ padding:0;
     	}
     } 
  
+    
     </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

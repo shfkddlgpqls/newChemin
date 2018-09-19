@@ -12,6 +12,7 @@ import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.member.model.vo.Member;
 
 @Repository
 public class MypageDaoImpl implements MypageDao {
@@ -128,5 +129,10 @@ public class MypageDaoImpl implements MypageDao {
       {
          return sqlSession.selectOne("mypage.selectReviewCount", userId);
       }
+
+	@Override
+	public Map<String, Object> memberList(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectOne("mypage.memberList", userId);
+	}
 
 }

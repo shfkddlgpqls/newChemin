@@ -409,6 +409,7 @@ input[type="radio"] {display:none;}
       </form>
     </div>
   </div>
+>>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git
 </section>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 

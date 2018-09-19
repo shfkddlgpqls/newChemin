@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,7 +55,10 @@ import net.sf.json.JSONArray;
 public class MypageController 
 {		
 	private Logger logger=LoggerFactory.getLogger(MypageController.class);
-
+	
+	 @Autowired
+	   BCryptPasswordEncoder bCryptPasswordEncoder;
+	 
 	@Autowired
 	private MypageService service;
 	
@@ -284,8 +288,12 @@ public class MypageController
 	
 	/*회원 정보*/
 	@RequestMapping("/mypage/myMember.do")
-	public String myMember()
-	{
+	public String myMember(Model model, HttpSession session)
+	{	
+		Member m = (Member)session.getAttribute("memberLoggedIn");
+		String userId = m.getUserId();
+		Map<String, Object> member = service.memberList(userId);
+		model.addAttribute("member", member);
 		return "mypage/myMember";
 	}
 	
