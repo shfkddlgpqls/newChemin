@@ -48,25 +48,38 @@ public class MemberController {
    public ModelAndView loginCheck(String userId, String password, Model model) {
 
       Member m = service.selectOne(userId);
-
+      System.out.println(m.getMgrade());
       ModelAndView mv = new ModelAndView();
-
+      
       String msg = "";
       String loc = "";
-
+      String status="";
       if (m == null) {
          msg = "존재하지 않는 아이디입니다.";
+         status="loginFail";
       } else {
-         if (bCryptPasswordEncoder.matches(password, m.getPassword())) {
+         if (bCryptPasswordEncoder.matches(password, m.getPassword()) && m.getMgrade() == 0) {
             msg = "로그인 성공!";
             mv.addObject("memberLoggedIn", m);
-         } else {
+            status="loginSuccess";
+         } 
+         else if (bCryptPasswordEncoder.matches(password, m.getPassword()) && m.getMgrade() == 1) {
+        	 msg="회원님의 아이디는 3번 이상의 신고 누적으로 정지당하셨습니다.";
+        	 status="loginFail";
+          } 
+         else if (bCryptPasswordEncoder.matches(password, m.getPassword()) && m.getMgrade() == 2) {
+        	 msg="존재하지 않은 아이디입니다.";
+        	 status="loginFail";
+          }
+         else {
             msg = "비밀번호가 일치하지 않습니다";
+            status="loginFail";
          }
       }
       loc = "/";
       mv.addObject("msg", msg);
       mv.addObject("loc", loc);
+      mv.addObject("status",status);
       mv.setViewName("common/msg");
       return mv;
    }

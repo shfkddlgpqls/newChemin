@@ -128,9 +128,9 @@ public class AdminDaoImpl implements AdminDao {
 
 
 	@Override
-	public int adminMemberDelete(SqlSessionTemplate sqlSession, String userId) {
-		System.out.println("::adminMemberDeleteDao::"+userId);
-		return sqlSession.delete("admin.adminMemberDelete",userId);
+	public int adminMemberUpdate(SqlSessionTemplate sqlSession, String userId) {
+		System.out.println("::adminMemberUpdateDao::"+userId);
+		return sqlSession.update("admin.adminMemberUpdate",userId);
 	}
 
 	@Override
@@ -183,6 +183,11 @@ public class AdminDaoImpl implements AdminDao {
 		public int selectReviewCount(SqlSessionTemplate sqlSession) 
 		{
 			return sqlSession.selectOne("admin.selectReviewCount");
+		}
+
+		@Override
+		public int adminMemberCancel(SqlSessionTemplate sqlSession, String userId) {
+			return sqlSession.update("admin.adminMemberCancel",userId);
 		}
 
 
