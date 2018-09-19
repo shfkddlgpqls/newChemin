@@ -1,15 +1,15 @@
 package com.kh.chemin.acbook.model.vo;
 
-public class Reply {
+public class AcReply {
 	private int rNo;
 	private int accNo;
 	private String userId;
 	private String rDate;
 	private String rContent;
 	
-	public Reply() {}
+	public AcReply() {}
 
-	public Reply(int rNo, int accNo, String userId, String rDate, String rContent) {
+	public AcReply(int rNo, int accNo, String userId, String rDate, String rContent) {
 		super();
 		this.rNo = rNo;
 		this.accNo = accNo;

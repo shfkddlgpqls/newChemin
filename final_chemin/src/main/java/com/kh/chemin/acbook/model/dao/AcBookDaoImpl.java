@@ -10,7 +10,8 @@ import org.springframework.ui.Model;
 
 import com.kh.chemin.acbook.model.vo.AcBook;
 import com.kh.chemin.acbook.model.vo.AcCom;
-import com.kh.chemin.acbook.model.vo.Reply;
+import com.kh.chemin.acbook.model.vo.AcReply;
+import com.kh.chemin.acbook.model.vo.PolaData;
 
 @Repository
 public class AcBookDaoImpl implements AcBookDao {
@@ -126,7 +127,7 @@ public class AcBookDaoImpl implements AcBookDao {
 	}
 
 	@Override
-	public int insertReply(SqlSessionTemplate sqlSession, Reply rp) {
+	public int insertReply(SqlSessionTemplate sqlSession, AcReply rp) {
 		return sqlSession.insert("ac.insertReply",rp);
 	}
 
@@ -134,6 +135,78 @@ public class AcBookDaoImpl implements AcBookDao {
 	public List<Model> selectReply(SqlSessionTemplate sqlSession, String accNo) {
 		return sqlSession.selectList("ac.selectReply",accNo);
 	}
+
+	@Override
+	public int updateReply(SqlSessionTemplate sqlSession, AcReply rp) {
+		return sqlSession.update("ac.updateReply",rp);
+	}
+
+	@Override
+	public int deleteReply(SqlSessionTemplate sqlSession, int rNo) {
+		return sqlSession.delete("ac.deleteReply",rNo);
+	}
+
+	@Override
+	public int updateAcCom(SqlSessionTemplate sqlSession, AcCom acc) {
+		return sqlSession.update("ac.updateAcCom",acc);
+	}
+
+	@Override
+	public int deleteBoard(SqlSessionTemplate sqlSession, int accNo) {
+		return sqlSession.delete("ac.deleteBoard",accNo);
+	}
+
+	@Override
+	public int deleteBoardReply(SqlSessionTemplate sqlSession, int accNo) {
+		return sqlSession.delete("ac.deleteBoardReply", accNo);
+	}
+
+	@Override
+	public int updateAcOne(SqlSessionTemplate sqlSession, AcBook ac) {
+		return sqlSession.update("ac.updateAcOne",ac);
+	}
+
+	@Override
+	public int deleteAcOne(SqlSessionTemplate sqlSession, AcBook ac) {
+		return sqlSession.delete("ac.deleteAcOne",ac);
+	}
+
+	@Override
+	public List<PolaData> selectPolaData(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.selectPolaData",userId);
+	}
+
+	@Override
+	public List<Model> selectMemoLank(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.selectMemoLank",userId);
+	}
+
+	@Override
+	public List<Model> thisMonthlyData(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.thisMonthlyData",userId);
+	}
+
+	@Override
+	public List<Model> monthlyMemoLank(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.monthlyMemoLank",userId);
+	}
+
+	@Override
+	public List<Model> selectMonTime(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.selectMonTime",userId);
+	}
+
+	@Override
+	public List<Model> selectMuchDay(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.selectMuchDay",userId);
+	}
+
+	@Override
+	public List<Model> selectSavingCost(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectList("ac.selectSavingCost", userId);
+	}
+	
+	
 	
 	
 	

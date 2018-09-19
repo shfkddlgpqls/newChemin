@@ -1,7 +1,6 @@
 package com.kh.chemin.member.model.vo;
 
 import java.util.Arrays;
-import java.util.Date;
 
 public class Member {
 	
@@ -9,7 +8,7 @@ public class Member {
 	private String password;
 	private String userName;
 	private String gender;
-	private Date birthDay;
+	private String birthDay;
 	private String email;
 	private String phone;
 	private String hobby;
@@ -18,8 +17,8 @@ public class Member {
 	
 	public Member() {}
 
-	public Member(String userId, String password, String userName, String gender, Date birthDay,
-			String email, String phone, String hobby, String originalImg, String renameImage) {
+	public Member(String userId, String password, String userName, String gender, String birthDay, String email,
+			String phone, String hobby, String originalImg, String renameImage) {
 		super();
 		this.userId = userId;
 		this.password = password;
@@ -33,7 +32,6 @@ public class Member {
 		this.renameImage = renameImage;
 	}
 
-	
 	public String getUserId() {
 		return userId;
 	}
@@ -66,11 +64,11 @@ public class Member {
 		this.gender = gender;
 	}
 
-	public Date getBirthDay() {
+	public String getBirthDay() {
 		return birthDay;
 	}
 
-	public void setBirthDay(Date birthDay) {
+	public void setBirthDay(String birthDay) {
 		this.birthDay = birthDay;
 	}
 
@@ -116,8 +114,10 @@ public class Member {
 
 	@Override
 	public String toString() {
-		return "Member [ userId=" + userId + ", password=" + password + ", userName=" + userName
-				+ ", gender=" + gender + ", birthDay=" + birthDay + ", email=" + email + ", phone=" + phone + ", hobby="
-				+ hobby + ", originalImg=" + originalImg + ", renameImage=" + renameImage + "]";
+		return "Member [userId=" + userId + ", password=" + password + ", userName=" + userName + ", gender=" + gender
+				+ ", birthDay=" + birthDay + ", email=" + email + ", phone=" + phone + ", hobby=" + hobby
+				+ ", originalImg=" + originalImg + ", renameImage=" + renameImage + "]";
 	}
+
+	
 }

@@ -13,36 +13,62 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
 <!-- Main Start -->
-<div class="col-md-10 col-sm-8 main-content justify-content-center"  id="newMain">
-	<div class="container-fluid justify-content-center">
+<div class="col-md-10 col-sm-8 main-content"  id="newMain">
+	<div class="container-fluid">
 <!-- 	여기서부터 내용 쓰면 됨 -->
 <!-- START: WHOLE TEMPLATE SECTION -->
 <br><br>
-<div class="container-fluid justify-content-center">
+<div class="container-fluid">
 <div class="row justify-content-center">
-<div class="col-md-10 justify-content-center">
-<div class="card justify-content-center" >
+<div class="col-md-10">
+<div class="card">
 <header class="card-header">
 	<h4 class="card-title mt-2">Share FluriBook, Write your finance!</h4>
 </header>
-<article class="card-body justify-content-center">
-<form action="acbook/insertBoard.do" method="post" id="insertBoardFrm" enctype="multipart/form-data">
+<article class="card-body">
+<form action="/chemin/acbook/updateBoard.do" method="post" id="updateBoardFrm" enctype="multipart/form-data">
 <input type="hidden" name="userId" value="${memberLoggedIn.userId }">
-<input type="hidden" name="birthDay" value="${memberLoggedIn.birthDay }">
+<input type="hidden" name="accNo" value="${acc.accNo }">
+	<!-- <div class="form-row">
+		<div class="form-group col-md-1">
+		  <label>Gen</label>
+		 </div>
+ 		<div class="col form-group col-md-5">
+		  <select id="inputState" class="form-control">
+		    <option>Female</option>
+		      <option>Male</option>
+		  </select>
+		</div> form-group end.//
+		<div class="form-group col-md-1">
+		  <label>Age</label>
+		</div>
+		<div class="col form-group col-md-5">
+		  <select id="inputState" class="form-control">
+		    <option>10's</option>
+		      <option>20's</option>
+		      <option>30's</option>
+		      <option>40's</option>
+		      <option>50's</option>
+		      <option>60's~</option>
+		  </select>
+		</div> form-group end.//
+	</div> <!-- form-row.// -->
 	<div class="form-row">
 	<div class="col form-group col-md-1">
 		<label>Title</label>
 	</div>
-	<div class="col form-group col-md-11 ">
-		<input type="text" class="form-control" name="accTitle" placeholder="20대 취준생의 9월 결산">
+	<div class="col form-group col-md-11">
+		<input type="text" class="form-control" name="accTitle" placeholder="20대 취준생의 9월 결산" value="${acc.accTitle }">
 	</div> <!-- form-group end.// -->
 	</div>
-	<div class="form-group justify-content-center">
-		<textarea name="editor" id="editor" style="width: 600px; height: 300px;object-fit:contain;word-wrap:break-word;text-align:center;"></textarea>
+	<div class="form-group">
+		<textarea name="editor" id="editor" style="width: 600px; height: 300px;object-fit:contain;word-wrap:break-word;text-align:center;">
+		${acc.editor }
+		</textarea>
 	</div> <!-- form-group end.// -->
 
     <div class="form-group">
- 		<button type="button" class="btn btn-info" id="insertBoard">Send</button>
+ 		<button type="button" class="btn btn-info" id="updateBoard">update</button>
     </div> <!-- form-group// -->      
     <small class="text-muted">moragoSsuyahalzi..<br>zol-lyu zookgetDDa!</small>                                          
 </form>
@@ -80,11 +106,11 @@ $(function(){
         }
     });
      
-    $("#insertBoard").click(function(){
+    $("#updateBoard").click(function(){
         //id가 smarteditor인 textarea에 에디터에서 대입
         obj.getById["editor"].exec("UPDATE_CONTENTS_FIELD", []);
         //폼 submit
-        $("#insertBoardFrm").submit();
+        $("#updateBoardFrm").submit();
     });
 })
 

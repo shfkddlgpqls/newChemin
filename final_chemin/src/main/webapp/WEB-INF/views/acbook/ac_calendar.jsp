@@ -31,11 +31,10 @@
 	          	</div>
           </div>
           <div class="col-md-4">
-				<div class="card-content" id="calendarDiv">			
+				<div class="card-content" id="calendarDiv" style="margin-top:6%;max-width:100%;height:auto;padding:3%;object-fit:contain;overflow:hidden;word-wrap:break-word;">			
 					<div id="monthly_table">
-						<table class="table table-hover" id="tbls" style="font-size:10px">
+						<table class="table table-hover" id="tbls" style="font-size:10px;max-width:100%;height:auto;padding:3%;">
 								<tr>
-									<th>No</th>
 									<th>날짜</th>
 									<th>구분</th>
 									<th>항목</th>
@@ -43,7 +42,7 @@
 									<th>수정</th>
 								</tr>
 						</table>
-						<table class="table table-hover" id="tbl-cal" style="font-size:10px">
+						<table class="table table-hover" id="tbl-cal" style="font-size:10px;max-width:100%;">
 						</table>
 							<div id="pageBar"></div>
 					</div>
@@ -68,15 +67,17 @@
 		<div class="modal-body">
 			
             <!-- content goes here -->
-			<form>
+			<form id= 'acBookMemFrm' action='/chemin/acbook/updateAcBook.do' method='get'>
               <div class="form-group">
               	<label>날짜</label>
+              		<input type="hidden" id="userId" name="userId" value="${memberLoggedIn.userId }">
+              	   <input type="hidden" id="acNo" name="acNo">
 			       <input type="text" id='acDate' name="acDate" readonly>
 				</div>
               <div class="form-group">              	
                 <label>구분</label>
-                <select id='typeNum' name='typeNum'>
-				  <option value="">선택</option>
+                <!-- <input type='text' id='typeNum' name='typeNum' readonly> -->
+                <select id='typeNum' name='typeNum' required>
 				  <option value="101">수입</option>
 				  <option value="201">지출</option>
                 </select>
@@ -85,61 +86,67 @@
               <label>항목</label>
                 <select id='cateNum1' name='cateNum'>
 				  <option value=''>선택</option>
-				  <option value="101_1">월급 </option>
-				  <option value="101_2">용돈</option>
-  				  <option value="101_3">기타</option>
+				  <option value="101_1" >월급 </option>
+				  <option value="101_2" >용돈</option>
+  				  <option value="101_3" >기타</option>
                 </select>
                 <select id='cateNum2' name='cateNum'>
 				  <option value=''>선택</option>
-				  <option value="201_1">식비</option>
-				  <option value="201_2">교통비</option>
-  				  <option value="201_3">문화생활</option>
-   				  <option value="201_4">생필품</option>
-   				  <option value="201_5">의류</option>
-   				  <option value="201_6">미용</option>
-				  <option value="201_7">의료건강</option>
-  				  <option value="201_8">교육</option>
-   				  <option value="201_9">전화요금</option>
-   				  <option value="201_10">경조사비</option>
-				  <option value="201_11">공과금</option>
-  				  <option value="201_12">카드대금</option>
-   				  <option value="201_13">저축</option>
-   				  <option value="201_14">기타</option>  				    				  
+				  <option value="201_1" >식비</option>
+				  <option value="201_2" >교통비</option>
+  				  <option value="201_3" >문화생활</option>
+   				  <option value="201_4" >생필품</option>
+   				  <option value="201_5" >의류</option>
+   				  <option value="201_6" >미용</option>
+				  <option value="201_7" >의료건강</option>
+  				  <option value="201_8" >교육</option>
+   				  <option value="201_9" >전화요금</option>
+   				  <option value="201_10" >경조사비</option>
+				  <option value="201_11" >공과금</option>
+  				  <option value="201_12" >카드대금</option>
+   				  <option value="201_13" >저축</option>
+   				  <option value="201_14" >기타</option>  				    				  
                 </select>
               </div>
               <div id='form-group'>
               <label>금액</label>
-              <input type='number' id='acCost' name='acCost'> 				
+              <input type='number' id='acCost' name='acCost' required> 				
  				<select id='exCode' name='exCode'>
 				  <option value=''>선택</option>
-				  <option value="M">현금</option>
-				  <option value="C">카드</option>
+				  <option value="M" >현금</option>
+				  <option value="C" >카드</option>
+				  <option value="-">해당없음</option>
 				</select>
               </div>
               <div id='form-group'>
               <label>메모</label>
               <textarea id='memo' name='memo' cols=30, rows=3></textarea>
               </div>
-            </form>
-		</div>
-		<div class="modal-footer">
-			<div class="btn-group btn-group-justified" role="group" aria-label="group button">
+              	<div class="btn-group" role="group">
+					<button type="submit" id="updateAcMem" class="btn btn-default btn-hover-red">Update</button>
+				</div>
+				<div class="btn-group" role="group">
+					<button type="submit" id="deleteAcMem" class="btn btn-default btn-hover-green">Delete</button>
+				</div>
 				<div class="btn-group" role="group">
 					<button type="button" class="btn btn-default" data-dismiss="modal"  role="button">Close</button>
 				</div>
-				<div class="btn-group btn-delete hidden" role="group">
-					<button type="button" id="updateAcMem" class="btn btn-default btn-hover-red" data-dismiss="modal"  role="button" onclick="updateAcMem();">Update</button>
-				</div>
-				<div class="btn-group" role="group">
-					<button type="button" id="saveImage" class="btn btn-default btn-hover-green" data-action="save" role="button">Delete</button>
-				</div>
-			</div>
+            </form>
+		</div>
+		<div class="modal-footer">
+
+		</div>
 		</div>
 	</div>
   </div>
 </div>
 <!-- 모달테스트 -->
 <!-- 날짜검색시 리스트 출력 -->
+<script>
+$('#deleteAcMem').click(function(){
+	$("#acBookMemFrm").attr("action", "${pageContext.request.contextPath}/acbook/deleteAcBook.do");
+})
+</script>
 <script>
 function modal_view(acNo){
 	$.ajax({
@@ -150,26 +157,28 @@ function modal_view(acNo){
 		success:function(data){
 			console.log("success (MemData) onload")
 			console.log(data);
-			
+			console.log(acNo+"acNo");
 			if(data!=null){
 			$('#acDate').val(data.ACDATE);
 			$('#typeNum').val(data.TYPENUM);
-	
+			$("#typeNum option").not(":selected").attr("disabled", "disabled");
+
 			$('#cateNum1').show();
 			$('#cateNum2').show();
 			$('#exCode').show();
 			
+			$('#acNo').val(acNo);
 
 			if(data.TYPENUM=='101'){
- 				$('#cateNum2').hide();
+ 				$('#cateNum2').remove();
  				$('#exCode').hide();
 				
 				$('#cateNum1').val(data.CATENUM);
-				
+				$('#exCode').val(data.EXCODE);
 				$('#acCost').val(data.ACCOST);
 				$('#memo').text(data.MEMO);
 			}else{
-				$('#cateNum1').hide();
+				$('#cateNum1').remove();
 				
 				$('#cateNum2').val(data.CATENUM);
 				$('#exCode').val(data.EXCODE);
@@ -224,8 +233,7 @@ function fn_list(cPage){
 					html7+="<td>"+((-i)+(totalCounts))+"</td>";
 				} */
 				for(var i=0;i<data.model.list.length;i++){
- 					html+="<tr><td>"+((-i)+(totalCounts))+"</td>";
- 					html+="<td>"+data.model.list[i].ACDATE+"</td>";
+ 					html+="<tr><td>"+data.model.list[i].ACDATE+"</td>";
 					html+="<td>"+data.model.list[i].TYPENAME+"</td>";
 					html+="<td>"+data.model.list[i].CATENAME+"</td>";
 					html+="<td>"+data.model.list[i].ACCOST+"</td>";
@@ -301,9 +309,6 @@ $('#calendar').fullCalendar({
 			}
 		});
 	},
- 	dayClick: function() {
-	    alert("this is event");
-	}
 });
 </script>
 <!-- acMain.js -->
