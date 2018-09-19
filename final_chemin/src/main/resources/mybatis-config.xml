@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
 <configuration>
+
+	<!--  <settings>
+ 			 <setting name="callSettersOnNulls" value="true"/>
+ 			 <setting name="jdbcTypeForNull" value="NULL" />
+ 		</settings>	 -->
+ 		
 <typeAliases>
 		<typeAlias type="com.kh.chemin.common.StringArrayType" alias="strArr"/>
 		
@@ -32,11 +38,15 @@
 		<typeAlias type="com.kh.chemin.mall.model.vo.OrderDetail" alias="orderDetail"/>
 		<typeAlias type="com.kh.chemin.mall.model.vo.QnA_board" alias="qna"/>
 			<typeAlias alias="review" type="com.kh.chemin.mall.model.vo.Review"/>
-		
 
-</typeAliases>
+</typeAliases> 
+ 		
  
+	
 
 </configuration>
+
+
+
 
 

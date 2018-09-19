@@ -466,12 +466,12 @@ $("#memberEnroll").submit(function(event)
         </div>  
          <div class="form-group">
 			<span style="padding: 10px">
-			취미1<input class="checkbox-inline" type="checkbox" name="hobby" id="hobby0" value="운동"></span>
-			취미2<input class="checkbox-inline" type="checkbox"name="hobby" id="hobby1" value="운동">
-			취미3<input class="checkbox-inline" type="checkbox" name="hobby" id="hobby2" value="운동">
-			취미4<input class="checkbox-inline" type="checkbox" name="hobby" id="hobby3" value="운동">
-			취미5<input class="checkbox-inline" type="checkbox" name="hobby" id="hobby4" value="운동">
-			취미6<input class="checkbox-inline" type="checkbox" name="hobby" id="hobby5" value="운동">
+			영화 <input class="checkbox-inline" type="checkbox" name="hobby" id="hobby0" value="영화"></span>
+			운동 <input class="checkbox-inline" type="checkbox"name="hobby" id="hobby1" value="운동">
+			등산 <input class="checkbox-inline" type="checkbox" name="hobby" id="hobby2" value="등산">
+			독서 <input class="checkbox-inline" type="checkbox" name="hobby" id="hobby3" value="독서">
+			쇼핑 <input class="checkbox-inline" type="checkbox" name="hobby" id="hobby4" value="쇼핑">
+			여행 <input class="checkbox-inline" type="checkbox" name="hobby" id="hobby5" value="여행">
 		</div>
 		  <div class="input-group mb-3" style="padding:0px;">
                 <div class="input-group-prepend" style="padding:0px;">

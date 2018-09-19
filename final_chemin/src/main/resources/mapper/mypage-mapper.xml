@@ -107,5 +107,10 @@
 	<select id="selectWishList" parameterType="string" resultMap="mallMap">
 		select * from wishList join product using(pno) where userId=#{userId}
 	</select>
-
+	
+<resultMap type="map" id="memberMap"></resultMap>
+	<select id="memberList" resultMap="memberMap" parameterType="hashMap">
+		select*from member_info where USERID =#{userId}
+	</select>
+	
 </mapper>

@@ -19,7 +19,17 @@ if('${status}'=="loginSuccess"){
            
          location.href="${path}${loc}";
              }); 
-}else{
+}else if('${status}=="endrollSuccess"'){
+	swal({
+        text: "${msg}",
+        icon: "success",
+        button: "확인",
+      }).then((willDelete) => {
+           
+         location.href="${path}${loc}";
+             }); 
+}
+else{
    swal({
         text: "${msg}",
         icon: "warning",

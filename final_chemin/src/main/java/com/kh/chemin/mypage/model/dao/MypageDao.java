@@ -10,6 +10,7 @@ import com.kh.chemin.mall.model.vo.Review;
 import com.kh.chemin.map.model.vo.Place;
 import com.kh.chemin.map.model.vo.PlaceAttachment;
 import com.kh.chemin.map.model.vo.PlaceMenu;
+import com.kh.chemin.member.model.vo.Member;
 
 public interface MypageDao {
 	List<Place> selectPlaceList(SqlSessionTemplate sqlSession, Map map, int cPage, int numPerPage);
@@ -36,5 +37,6 @@ public interface MypageDao {
 	int selectQnACount(SqlSessionTemplate sqlSession, String userId);
 	List<Review> selectReviewList(SqlSessionTemplate sqlSession, int cPage, int numPerPage, String userId);
 	int selectReviewCount(SqlSessionTemplate sqlSession, String userId);
+	Map<String, Object> memberList(SqlSessionTemplate sqlSession, String userId);
 
 }

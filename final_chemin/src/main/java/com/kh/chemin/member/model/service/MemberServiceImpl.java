@@ -35,4 +35,8 @@ public class MemberServiceImpl implements MemberService {
    public Member checkPhone(String phone) {
       return dao.checkPhone(sqlSession,phone);
    }
+@Override
+public int memberInfoUpdate(Member member) {
+	return dao.memberInfoUpdate(sqlSession, member);
+}
 }
