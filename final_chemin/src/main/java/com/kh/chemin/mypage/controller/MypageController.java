@@ -304,89 +304,90 @@ public class MypageController
 		jsonStr=mapper.writeValueAsString(map);
 		return jsonStr;
 	}
+	
 	//리뷰 글 작성
-		@RequestMapping(value ="/mypage/review.do",method = RequestMethod.POST) 
-		public ModelAndView insertReview(Review review, MultipartFile review_file, HttpServletRequest request)
-		{
-			//String userId, int pno, String reContent, String stars,
-			//코드, 아이디, 내용, 별, 파일
-			/*logger.debug("게시판 파일 : "+review_file);
-			logger.debug("아이디 : "+userId);
-			logger.debug("상품 번호 : "+pno);
-			logger.debug("글 내용 : "+reContent);
-			logger.debug("파일 사이즈 : "+stars);
-			*/
-			
-			logger.debug("review 객체 : "+review);
-			
-			String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload/review");
-			File dir = new File(saveDir);
-			if(dir.exists()==false) dir.mkdirs();
-			
-			if(!(review_file==null))
-			{
-				//f=review_file로 바꾸기
-				String originalFilename = review_file.getOriginalFilename();
-				
-				/*중복 이름 거르기							
-				 lastindexof : 뒤에서 부터 감				 
-				ex) bs.html : 구분자가 "."이라서 아래 변수에는 .뒤인 html만 담김
-				*/
-				String ext = originalFilename.substring(originalFilename.lastIndexOf(".")+1);
-				
-				//이름 재 부여 위해
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSS");
-				
-				int rndNum = (int)(Math.random()*1000);
-				
-				//현재 시간을 기준으로 포맷팅 함
-				String renamedFileName = sdf.format(new Date(System.currentTimeMillis()));
-				
-				//중복값이 있을 수 있으니 num으로 랜덤 값 부여
-				renamedFileName += "_"+rndNum+"."+ext;
-				
-				try
-				{
-					/* multipartFile = f       
-					 > 서버의 해당 경로에 파일을 저장하는 명령 */
-					review_file.transferTo(new File(saveDir+"/"+renamedFileName));		
-				}
-				catch(Exception e)
-				{
-					e.printStackTrace();
-				}
-				
-				review.setOrImg(originalFilename);
-				review.setReImg(renamedFileName);
+    @RequestMapping(value ="/mypage/review.do",method = RequestMethod.POST) 
+    public ModelAndView insertReview(Review review, MultipartFile review_file, HttpServletRequest request)
+    {
+       //String userId, int pno, String reContent, String stars,
+       //코드, 아이디, 내용, 별, 파일
+       /*logger.debug("게시판 파일 : "+review_file);
+       logger.debug("아이디 : "+userId);
+       logger.debug("상품 번호 : "+pno);
+       logger.debug("글 내용 : "+reContent);
+       logger.debug("파일 사이즈 : "+stars);
+       */
+       
+       logger.debug("review 객체 : "+review);
+       
+       String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload/review");
+       File dir = new File(saveDir);
+       if(dir.exists()==false) dir.mkdirs();
+       
+       if(!(review_file==null))
+       {
+          //f=review_file로 바꾸기
+          String originalFilename = review_file.getOriginalFilename();
+          
+          /*중복 이름 거르기                     
+           lastindexof : 뒤에서 부터 감             
+          ex) bs.html : 구분자가 "."이라서 아래 변수에는 .뒤인 html만 담김
+          */
+          String ext = originalFilename.substring(originalFilename.lastIndexOf(".")+1);
+          
+          //이름 재 부여 위해
+          SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSS");
+          
+          int rndNum = (int)(Math.random()*1000);
+          
+          //현재 시간을 기준으로 포맷팅 함
+          String renamedFileName = sdf.format(new Date(System.currentTimeMillis()));
+          
+          //중복값이 있을 수 있으니 num으로 랜덤 값 부여
+          renamedFileName += "_"+rndNum+"."+ext;
+          
+          try
+          {
+             /* multipartFile = f       
+              > 서버의 해당 경로에 파일을 저장하는 명령 */
+             review_file.transferTo(new File(saveDir+"/"+renamedFileName));      
+          }
+          catch(Exception e)
+          {
+             e.printStackTrace();
+          }
+          
+          review.setOrImg(originalFilename);
+          review.setReImg(renamedFileName);
 
-			}
-				
-			int result = service.insertReview(review);
-			
-			//서비스 갔다왔따
-			
-			String msg = "";
-			String loc = "";
-			
-			if(result>0)
-			{
-				msg = "성공적으로 등록하였습니다!";
-				loc = "/";
-			}
-			else
-			{
-				msg = "등록을 실패하였습니다 ㅠㅠㅠ";
-				loc ="/";
-			}
-			
-			ModelAndView mv = new ModelAndView();
-			
-			mv.addObject("msg",msg);
-			mv.addObject("loc", loc);
-			mv.setViewName("common/msg");
-			
-			return mv;
-		}
+       }
+          
+       int result = service.insertReview(review);
+       
+       //서비스 갔다왔따
+       
+       String msg = "";
+       String loc = "";
+       
+       if(result>0)
+       {
+          msg = "성공적으로 등록하였습니다!";
+          loc = "/mypage/myOrderList.do";
+       }
+       else
+       {
+          msg = "등록을 실패하였습니다 ㅠㅠㅠ";
+          loc ="/mypage/myOrderList.do";
+       }
+       
+       ModelAndView mv = new ModelAndView();
+       
+       mv.addObject("msg",msg);
+       mv.addObject("loc", loc);
+       mv.setViewName("common/msg");
+       
+       return mv;
+    }
 		
 		
 		//게시글 관리 페이지로 이동
@@ -485,6 +486,6 @@ public class MypageController
 		         jsonStr = mapper.writeValueAsString(map);
 		         return jsonStr;
 		}		
-	
+		
 	
 }

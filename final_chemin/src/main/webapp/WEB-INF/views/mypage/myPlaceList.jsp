@@ -310,12 +310,6 @@ function fn_update(){
 	var plaNo = $('[name=subNo]').val();
 	location.href = "${path}/mypage/myPlaceSelect.do?plaNo="+plaNo;
 }
-<<<<<<< HEAD
-</script>
-<!-- 마이페이지 css-->
-    <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/mypage.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-=======
 
 function fn_plaStatus(status){
 	$('#category').text("카테고리 선택▼");
@@ -400,7 +394,6 @@ function fn_status(cPage){
 	})
 }
 </script>
->>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git
 		
 		<section>
 		<div class="container">
