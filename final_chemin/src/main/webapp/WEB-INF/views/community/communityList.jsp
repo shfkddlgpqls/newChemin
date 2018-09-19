@@ -24,136 +24,6 @@ input[type="radio"] {display:none;}
 
 <script type="text/javascript">
 	
-	/*  function like(obj) {
-		var communityno=$(obj).data("no");
-		console.log("communityno:"+communityno);
-		var userId="${memberLoggedIn.userId}";
-		console.log(userId);
-		var likeImg=$('img#like_img');
-		 var likeCheck=likeImg.attr('alt'); 
-		var likeCheck=$(obj).children('.like_check').attr('alt');
-		console.log(likeCheck);
-		
-		
-		  이미지 바꿔주기  
-		if(likeCheck=='false')
-		{
-			 디비가서 데이터 올려줌  
-			  $.ajax({
-				type : 'POST',
-				url : "${path}/community/likeInsert.do",
-				data : {community_no:communityno,like_id:userId,like_check:likeCheck},
-				dataType : "json",
-				success : function(data) {
-					
-					console.log("추가 완료!");
-				
-					 디비communityList 카운트 업데이트 
-					$.ajax({
-						type : 'GET',
-						url : "${path}/community/likePlus.do",
-						data : {community_no:communityno},
-						dataType :"json",
-						success : function(data) {
-							
-							console.log("plus완료!");
-							
-							 $(obj).children('.like_check').attr('alt','true');
-							 $(obj).children('.like_check').attr('src','https://icongram.jgog.in/fontawesome/heart.svg?size=64&color=ff4848'); 
-							 좋아요 카운트 올리기  
-							 $(obj).next("p").find("span.like_cnt").append('<p>data.like_cnt</p>');  
-						}
-					});
-	
-				},
-				error : function(jpxhr,textStatus,error) {
-					console.log("추가ajax전송실패");
-					console.log(jpxhr);
-					console.log(textStatus);
-					console.log(error);
-				}
-				
-			});  
-		}
-		else {
-			$.ajax({
-					type : 'POST',
-					url : "${path}/community/likeUpdate.do",
-					data : {community_no:communityno,like_id:userId},
-					dataType : "json",
-					success : function(data) {
-						 디비 카운트 업데이트 
-						$.ajax({
-							type : 'GET',
-							url : "${path}/community/likeMinus.do",
-							data : {community_no:communityno},
-							dataType :"json",
-							success : function(data) {
-								
-								console.log("minus완료!");
-								
-								 $(obj).children('.like_check').attr('alt','false');
-								 $(obj).children('.like_check').attr('src','https://icongr.am/jam/heart.svg?size=30'); 
-								 좋아요 카운트 올리기  
-								  $(obj).next("p").find("span.like_cnt").append('<p>data.like_cnt</p>');  
-							}
-						});
-						
-						
-					},
-					error: function(jpxhr,textStatus,errormsg) {
-						console.log("삭제ajax전송실패");
-						console.log(jpxhr);
-						console.log(textStatus);
-						console.log(errormsg);
-					}
-				});
-		
-		}  
-	 } */
-	
-	 function fn_like(obj) {
-		 var communityno=$(obj).data("no");
-		 var userid="${memberLoggedIn.userId}";
-		 console.log("communityno , userid:"+communityno+","+userid);
-		 
-		 $.ajax ({
-			url : "${path}/community/like.do",
-			type : "POST",
-			dataType : "json",
-			data : {community_no:communityno,like_id:userid},
-			success : function(data) {
-				console.log(data);
-				console.log(data.like_cnt);
-				/* 클릭한 해당 게시물 번호만 보내서 그거에 해당되는 likecheck를 가져와 비교 */
-				if(data.like_check==0)
-				{
-					 $(obj).children('.like_img').attr('src','https://icongr.am/jam/heart.svg?size=30'); 
-					 
-				}
-				else
-				{
-					$(obj).children('.like_img').attr('src','https://icongram.jgog.in/fontawesome/heart.svg?size=64&color=ff4848'); 
-					
-				}
-				/* $(obj).next('p').children('span#like_cnt').append("<span>"+data.like_cnt+"</span>"); */
-				/* $('.like_check').html(data.like_check); */
-				
-			},
-			erro : function(request,status,error) {
-				console.log("ajax전송실패");
-				console.log(request);
-				console.log(status);
-				console.log(error);
-			}
-		 });
-	 }
-	 
-	
-	 
-		 
-	 
-	 
 	/* ajax 댓글 조회하기 */
 	var i;
 	function showComment(obj) {
@@ -249,7 +119,7 @@ input[type="radio"] {display:none;}
 		if(comCon==null||comCon=="") {
 			swal({
 				text :"내용을 입력하세요",
-				icon : "error",
+				icon : "warning",
 				button : "확인"
 			});
 			return false;
@@ -287,7 +157,7 @@ input[type="radio"] {display:none;}
 		{
 			swal({
 				text :"검색하실 해시태그를 입력하세요",
-				icon : "error",
+				icon : "warning",
 				button : "확인"
 			});
 			return false;
@@ -302,7 +172,7 @@ input[type="radio"] {display:none;}
 		{
 			swal({
 				text :"추가하실 댓글을 입력하세요",
-				icon : "error",
+				icon : "warning",
 				button : "확인"
 			});
 			return false;
@@ -312,17 +182,18 @@ input[type="radio"] {display:none;}
 	
 	/* 신고하기 유효성검사 */
 	function report_blank() {
-		var report=$('#comContent').val();
-		if(report==null||report=='')
+		var re=$('input[name="content"]').val();
+		console.log(re);
+		if(re==null||re=='')
 		{
 			swal({
 				text :"신고할 내용을 입력하세요",
-				icon : "error",
+				icon : "warning",
 				button : "확인"
 			});
 			return false;
 		}
-		
+		return true;
 	}
 	
 	
@@ -450,24 +321,7 @@ input[type="radio"] {display:none;}
 						<button type="button" id="showComment" class="showComment btn btn-outline-light" alt="false" data-no="${c.COMMUNITYNO }" onclick="showComment(this)">
 							<img class="post-img button" src="https://icongr.am/jam/message.svg" style="height:50px;width:50px;float:left;"/>
 						</button>
-						<%-- <c:set var="l" value="${like_check }"></c:set> --%>
-						
-						<a onclick="fn_like(this)" data-no="${c.COMMUNITYNO }">
-							<img style="height:50px;width:50px;" src="https://icongr.am/jam/heart.svg?size=30" class="like_img">
-						</a>
-						
-							<%-- <button type="button" class="btn btn-outline-light" data-no="${c.COMMUNITYNO }" onclick="like(this)">
-								<img class="post-img like_check" id="like_img" alt="false" value="false" style="height:50px;width:50px;"src="https://icongr.am/jam/heart.svg?size=30">
-							</button>
-							<c:forEach items="${likeList }" var="l">	
-								<c:if test="${c.COMMUNITYNO eq l.COMMUNITYNO  and l.LIKECHECK =='true'}">
-									<button type="button" class="btn btn-outline-light" >
-										<img class="post-img" style="height:50px;width:50px;" src="https://icongr.am/jam/heart.svg?size=30">
-									</button>
-								</c:if>
-							</c:forEach> --%>
-						<p class="post-likenumber" style="font-size:15px;float:right;">
-						좋아요 <span id="like_cnt">${c.LIKECNT}</span>개<br>
+						<p class="post-likenumber" style="font-size:20px;margin-top:2%;float:right;">
 						댓글 ${c.CCOUNT }개 </p>
 					</td>
 				</tr>
@@ -546,7 +400,8 @@ input[type="radio"] {display:none;}
 	        </div>
 	     	<br><br>
             <span class="modalPo">내용</span><br>
-	      <textarea type="text" row="2" class="modal_content modalPo" id="comContent" name="content" style="width:95%;"></textarea>
+	      <!-- <textarea type="text" row="2" class="modal_content modalPo" id="comContent" name="content" style="width:95%;"></textarea> -->
+	      <input type="text" class="modal_content modalPo" id="comContent" name="content" style="width:95%;height:50px;"/>
        	<div class="modal-footer">
           <button type="submit" class="btn btn-danger">신고하기</button>
         </div>
@@ -554,6 +409,7 @@ input[type="radio"] {display:none;}
       </form>
     </div>
   </div>
+>>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git
 </section>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 

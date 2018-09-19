@@ -48,26 +48,38 @@ public class MemberController {
    public ModelAndView loginCheck(String userId, String password, Model model) {
 
       Member m = service.selectOne(userId);
-
+      System.out.println(m.getMgrade());
       ModelAndView mv = new ModelAndView();
-
+      
       String msg = "";
       String loc = "";
-
+      String status="";
       if (m == null) {
          msg = "존재하지 않는 아이디입니다.";
+         status="loginFail";
       } else {
-         if (bCryptPasswordEncoder.matches(password, m.getPassword())) {
+         if (bCryptPasswordEncoder.matches(password, m.getPassword()) && m.getMgrade() == 0) {
             msg = "로그인 성공!";
             mv.addObject("memberLoggedIn", m);
-         } else {
+            status="loginSuccess";
+         } 
+         else if (bCryptPasswordEncoder.matches(password, m.getPassword()) && m.getMgrade() == 1) {
+        	 msg="회원님의 아이디는 3번 이상의 신고 누적으로 정지당하셨습니다.";
+        	 status="loginFail";
+          } 
+         else if (bCryptPasswordEncoder.matches(password, m.getPassword()) && m.getMgrade() == 2) {
+        	 msg="존재하지 않은 아이디입니다.";
+        	 status="loginFail";
+          }
+         else {
             msg = "비밀번호가 일치하지 않습니다";
+            status="loginFail";
          }
       }
       loc = "/";
       mv.addObject("msg", msg);
       mv.addObject("loc", loc);
-      mv.addObject("status", "loginSuccess");
+      mv.addObject("status",status);
       mv.setViewName("common/msg");
       return mv;
    }
@@ -86,7 +98,7 @@ public class MemberController {
    }
 
    @RequestMapping(value = "/member/memberEnrollEnd.do", method = { RequestMethod.POST })
-   public String memberEnrollEnd(HttpServletRequest request, HttpServletResponse response, MultipartFile originalImg, Model model)
+   public String memberEnrollEnd(HttpServletRequest request, HttpServletResponse response, MultipartFile originalImg)
          throws ServletException, IOException, ParseException {
 
       Member member = new Member();
@@ -100,7 +112,7 @@ public class MemberController {
       member.setBirthDay(sdf.parse(request.getParameter("birthDay").replaceAll("-", "/")));// 데이트는 어떻게 가져오지??
       member.setEmail(request.getParameter("email"));
       member.setPhone(request.getParameter("phone"));
-      member.setAddress(request.getParameter("address1") + "/" + request.getParameter("address2") + "/"
+      member.setAddress(request.getParameter("address1") + "," + request.getParameter("address2") + ","
             + request.getParameter("address3"));
       member.setHobby(request.getParameterValues("hobby"));// 배열은 어떻게 하지???
 
@@ -136,7 +148,7 @@ public class MemberController {
       int result = service.insertMember(member);
 
       String msg = "";
-      String loc = "";
+      String loc = "/";
       if (result > 0) {
          msg = "회원가입에 성공하였습니다.";
          loc = "/";
@@ -147,9 +159,6 @@ public class MemberController {
          loc = "/views/member/memberEndroll";
 
       }
-      model.addAttribute("msg", msg);
-      model.addAttribute("loc", loc);
-      model.addAttribute("status", "endrollSuccess");
       return "common/msg";
 
    }
@@ -177,64 +186,9 @@ public class MemberController {
    public String findId() {
       return "member/find_Id";
    }
-   
-  @RequestMapping("/member/memberInfoUpdate")
-   public String memberInfoUpdate(Member member, String address1, String address2, String address3, HttpServletRequest request,Model model){
-	  String address = address1+"/"+address2+"/"+address3;
-	  member.setAddress(address);
-	  
-	  SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd");
-	  String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload/member");
-
-      String enPw = bCryptPasswordEncoder.encode(request.getParameter("password"));
-      member.setPassword(enPw);
-      bCryptPasswordEncoder.encode(enPw);
-
-     /* File dir = new File(saveDir);
-
-      if (dir.exists() == false)
-         dir.mkdirs();
-
-      if (!orImg.isEmpty()) {
-         String originalFilename = orImg.getOriginalFilename();
-          bs.html 
-         String ext = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMdd_HHmmssSS");
-         int rndNum = (int) (Math.random() * 1000);
-         String renamedFileName = sdf1.format(new Date(System.currentTimeMillis()));
-         renamedFileName += "_" + rndNum + "." + ext;
-         try {
-             서버의 해당경로에 파일을 저장하는 명령 
-        	 orImg.transferTo(new File(saveDir + "/" + renamedFileName));
-            member.setOriginalImg(originalFilename);
-            member.setRenameImage(renamedFileName);
-         } catch (Exception e) {
-            e.printStackTrace();
-         }
-      }*/
-      
-	  int result = service.memberInfoUpdate(member);
-	  String msg = "";
-      String loc = "";
- 
-      if (result > 0) {
-         msg = "회원정보 수정이 완료되었습니다";
-         loc = "/mypage/myMember.do?userId="+member.getUserId();
-      }
-
-      else {
-         msg = "회원정보 수정이 되지 않았습니다";
-         loc = "/mypage/myMember.do?userId="+member.getUserId();
-
-      }
-      model.addAttribute("msg", msg);
-      model.addAttribute("loc", loc);
-
-      return "common/msg";
-  }
-   
 //   @RequestMapping("/member/findIdEnd.do")
 //   public void findIdEnd(HttpServletRequest request, HttpServletResponse response) throws ParseException {
 //
 //   }
+
 }

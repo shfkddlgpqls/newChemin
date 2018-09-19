@@ -402,27 +402,27 @@ public class AdminController {
 		return mv;
 	}
 	
-	/*회원 삭제*/
+	/*신고3회이상 회원 제제*/
 	@RequestMapping("/admin/adminMemberDelete.do")
-	public ModelAndView adminMemberDelete(String userId)
+	public ModelAndView adminMemberUpdate(String userId,ModelAndView mv)
 	{
-		logger.debug("::adminMemberDeleteController::"+userId);
-		int result=service.adminMemberDelete(userId);
+		int result=service.adminMemberUpdate(userId);
 		String msg="";
 		String loc="";
-
+		String status="";
 		if(result>0) {
-			msg="회원 삭제가 완료되었습니다.";
+			msg="회원 제재 처리가 완료되었습니다.";
+			loc="/admin/adminMemberList.do";
+			status="loginSuccess";
 		}else {
-			msg="회원 삭제가 실패되었습니다.";
+			msg="회원 제재 처리가 실패되었습니다.";
+			loc="/admin/adminMemberList.do";
+			status="loginFail";
 		}
 		
-		loc="/admin/adminMemberList.do";
-		
-		ModelAndView mv = new ModelAndView();
 		mv.addObject("msg", msg);
 		mv.addObject("loc", loc);
-		mv.addObject("result", result);
+		mv.addObject("status",status);
 		mv.setViewName("common/msg");
 		return mv;
 		
@@ -616,6 +616,30 @@ public class AdminController {
 		
 		return mv;
 		
+	}
+	
+	@RequestMapping("/admin/adminMemberCancel.do")
+	public ModelAndView adminMemberCancel(String userId,ModelAndView mv)
+	{
+		int result=service.adminMemberCancel(userId);
+		String msg="";
+		String loc="";
+		String status="";
+		if(result>0) {
+			msg="회원 제재 취소가 완료되었습니다.";
+			loc="/admin/adminMemberList.do";
+			status="loginSuccess";
+		}else {
+			msg="회원 제재 취소가 실패되었습니다.";
+			loc="/admin/adminMemberList.do";
+			status="loginFail";
+		}
+		
+		mv.addObject("msg", msg);
+		mv.addObject("loc", loc);
+		mv.addObject("status",status);
+		mv.setViewName("common/msg");
+		return mv;
 	}
 	
 }

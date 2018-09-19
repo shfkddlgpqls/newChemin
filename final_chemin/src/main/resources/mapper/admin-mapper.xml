@@ -135,9 +135,9 @@
 		select * from report where rwriter=#{rwriter}
 	</select>
 	
-	<delete id="adminMemberDelete" parameterType="string">
-		drop table member_info where userid=#{userId} cascade constraints
-	</delete>
+	<update id="adminMemberUpdate" parameterType="string">
+		UPDATE MEMBER_INFO SET MGRADE=1 WHERE USERID=#{userId}
+	</update>
 	
 	<select id="blackList" resultMap="reportMap">
 		select * from member_info where rgcount>=1
@@ -185,5 +185,9 @@
 	<select id="selectReviewCount" resultType="_int">
 		select count(*) from review
 	</select>
+	
+	<update id="adminMemberCancel" parameterType="String">
+		update member_info set mgrade = 0 where userid=#{userId}
+	</update>
 	
 </mapper>

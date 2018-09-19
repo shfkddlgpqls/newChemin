@@ -48,18 +48,27 @@
 						var fmDate=date.toISOString().slice(0,10);
 						var gender=data.list[i].GENDER=='F'?'여자':'남자';
 						var rgcount=data.list[i].RGCOUNT==0?'없음':data.list[i].RGCOUNT;
-						value+='<tr style="font-size:15px;height:100px;"><td><img class="mphoto" src="${path}/resources/admin/memberEX.jpg"></td><td>'+data.list[i].USERNAME+'</td>';
+						value+='<tr style="font-size:15px;height:120px;"><td><img class="mphoto" src="${path}/resources/admin/memberEX.jpg"></td><td>'+data.list[i].USERNAME+'</td>';
 						value+='<td>'+data.list[i].USERID+'</td><td>'+gender+'</td><td>'+fmDate+'</td>';
 						value+='<td>'+data.list[i].USEREMAIL+'</td><td>'+data.list[i].USERPHONE+'</td>';
-						value+='<td>'+data.list[i].USERADDR+'</td><td id="rgcount" name="rgcount" class="reportBtn" data-no="'+data.list[i].USERID+'" onclick="rpClick(this)">'+rgcount+'</td>';
+						value+='<td>'+data.list[i].USERADDR+'</td><td id="rgcount" name="rgcount" class="reportBtn" data-no="'+data.list[i].USERID+'" onclick="rpClick(this)">'+rgcount+'<input type="hidden" name="rg" id="rg" value="'+rgcount+'"/></td>';
 						
 						if(rgcount>=3)
 						{
-							value+='<td><button type="submit" data-no="'+data.list[i].USERID+'" onclick="adminMemberDelete(this)" class="btn btn-danger">탈퇴</button></td></tr>';
+							value+='<td><button type="submit" data-no="'+data.list[i].USERID+'" onclick="adminMemberDelete(this)" class="btn btn-danger">제재</button>';
+							if(data.list[i].MGRADE == 1)
+							{
+								value+='<button type="button" data-no="'+data.list[i].USERID+'" onclick="adminMemberCancel(this)" class="btn btn-default">취소</button></td></tr>';
+							}
+							else
+							{
+								value+='<button type="button" class="btn btn-default" disabled>취소</button></td></tr>';
+							}
 						}
 						else
 						{
-							value+='<td><button type="button" class="btn btn-danger" disabled>탈퇴</button></td></tr>';
+							value+='<td><button type="button" class="btn btn-danger" disabled>제재</button>';
+							value+='<button type="button" class="btn btn-default" disabled>취소</button></td></tr>';
 						}
 						value+='<div id="chkBox"></div>';
 					}
@@ -76,9 +85,10 @@
 	/* 회원별 신고 내용 보기 */
 	function rpClick(obj) {
 		var reportId=$(obj).data("no");
-		var rgcount=$(obj).find("td").eq(8).html();
-		console.log(rgcount);
-		if(rgcount>0)
+		console.log(reportId);
+		var rg=$(obj).children('input[name="rg"]').val();
+		console.log(rg);
+		if(rg>0)
 		{
 			location.href="${path}/admin/reportContent.do?userId="+reportId;
 
@@ -95,10 +105,16 @@
 	}
 	
 	
-	/* 관리자 권한으로 신고 3번이상 받은 회원 강제탈퇴 */
+	/* 관리자 권한으로 신고 3번이상 받은 회원 로그인 불가능 */
 	function adminMemberDelete(obj) {
 		var userId=$(obj).data("no");
 		location.href="${path}/admin/adminMemberDelete.do?userId="+userId;
+	}
+	
+	/* 아이디 정지 풀기 */
+	function adminMemberCancel(obj) {
+		var userId=$(obj).data("no");
+		location.href="${path}/admin/adminMemberCancel.do?userId="+userId;
 	}
 	
 	/* 블랙리스트 분류 */
@@ -121,16 +137,26 @@
 						value+='<tr style="font-size:15px;height:100px;"><td><img class="mphoto" src="${path}/resources/admin/memberEX.jpg"></td><td>'+data[0][i].USERNAME+'</td>';
 						value+='<td>'+data[0][i].USERID+'</td><td>'+gender+'</td><td>'+fmDate+'</td>';
 						value+='<td>'+data[0][i].USEREMAIL+'</td><td>'+data[0][i].USERPHONE+'</td>';
-						value+='<td>'+data[0][i].USERADDR+'</td><td id="rgcount" name="rgcount" class="reportBtn" data-no="'+data[0][i].USERID+'" onclick="rpClick(this)">'+rgcount+'</td>';
+						value+='<td>'+data[0][i].USERADDR+'</td><td id="rgcount" name="rgcount" class="reportBtn" data-no="{'+data[0][i].USERID+','+data[0][i].RGCOUNT+'}" onclick="rpClick(this)"><p id="rg">'+data[0][i].RGCOUNT+'</p></td>';
 						
 						if(rgcount>=3)
 						{
-							value+='<td><button type="button" data-no="'+data[0][i].USERID+'" onclick="adminMemberDelete(this)" class="btn btn-danger">탈퇴</button></td></tr>';
+							value+='<td><button type="button" data-no="'+data[0][i].USERID+'" onclick="adminMemberDelete(this)" class="btn btn-danger">제재</button>';
+							if(data[0][i].MGRADE == 1)
+							{
+								value+='<button type="button" data-no="'+data.list[i].USERID+'" onclick="adminMemberCancel(this)" class="btn btn-default">취소</button></td></tr>';
+							}
+							else
+							{
+								value+='<button type="button" class="btn btn-default" disabled>취소</button></td></tr>';
+							}
 						}
 						else
 						{
-							value+='<td><button type="button" class="btn btn-danger" disabled>탈퇴</button></td></tr>';
+							value+='<td><button type="button" class="btn btn-danger" disabled>제재</button>';
+							value+='<button type="button" class="btn btn-default" disabled>취소</button></td></tr>';
 						}
+						
 						value+='<div id="chkBox"></div>';
 					}
 					if(data.length==1){
@@ -185,11 +211,20 @@
 						
 						if(rgcount>=3)
 						{
-							value+='<td><button type="button" data-no="'+data.searchList[i].USERID+'" onclick="adminMemberDelete(this)" class="btn btn-danger">탈퇴</button></td></tr>';
+							value+='<td><button type="button" data-no="'+data.searchList[i].USERID+'" onclick="adminMemberDelete(this)" class="btn btn-danger">제재</button>';
+							if(data[0][i].MGRADE == 1)
+							{
+								value+='<button type="button" data-no="'+data.list[i].USERID+'" onclick="adminMemberCancel(this)" class="btn btn-default">취소</button></td></tr>';
+							}
+							else
+							{
+								value+='<button type="button" class="btn btn-default" disabled>취소</button></td></tr>';
+							}
 						}
 						else
 						{
-							value+='<td><button type="button" class="btn btn-danger" disabled>탈퇴</button></td></tr>';
+							value+='<td><button type="button" class="btn btn-danger" disabled>제재</button>';
+							value+='<button type="button" class="btn btn-default" disabled>취소</button></td></tr>';
 						}
 						value+='<div id="chkBox"></div>';
 					}
@@ -258,5 +293,6 @@
 	<div class="text-center">
 		<div class="row justify-content-center" id="mPageBar"></div>
  	</div>
+>>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git
  </div> 	
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>  
