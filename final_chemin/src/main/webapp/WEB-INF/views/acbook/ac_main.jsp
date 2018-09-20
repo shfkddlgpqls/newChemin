@@ -128,7 +128,7 @@ body { font-size: 1em;}
 					<!-- 타임라인 -->
 					  <div class="aclayout" id="acid" style="border-top-style:solid;border-width:30px;border-color:violet;">
 					       <div class="card-desc">
-							<h3 style="margin:0%;">too Much Expenditure</h3>
+							<h2 style="margin:0%;">Most</h2><h4 style="margin:0%;"> spend day is</h4>
 							<br><h1 class='monDay' style="font-size:100px;font-weight:bold;margin:0%;"></h1>
 						</div>
 					  </div>
@@ -190,38 +190,31 @@ function drawDoughnut() {
 			dataType : "json",
 			success : function(d) {
 				console.log("load (VSData) success");
-				var vsLabels = [];//TYPENUM
-				var vsData = [];//VSCOST
+
+				var vs1 = d[0]==null?0:d[0].VSCOST;
+				var vs2 = d[1]==null?0:d[1].VSCOST;
+				var vsL1= d[0]==null?0:d[0].TYPENUM;
+				var vsL2= d[0]==null?0:d[1].TYPENUM;
+
 				var acGrade = "";
 				var acCons="";
 				var acDetails = "";
-				$(d).each(function() {
-					vsLabels.push($(this).attr('TYPENUM'));
-					vsData.push($(this).attr('VSCOST'));
-					var clue = $(this).attr('TYPENUM');
-					switch (clue) {
-					case '101':
-						vsData.push($(this).attr('VSCOST'));
-						break;
-					case '201':
-						vsData.push($(this).attr('VSCOST'));
-						break;
-					};
-				});
 
-				if(vsData[0]/vsData[1]>1.5){
+
+
+				if(vs1/vs2>1.5){
 					acGrade = "1"
 					acCons = "최상"
 					acDetails = "훌륭한 소비습관입니다!"
-				}else if(vsData[0]/vsData[1]>1){
+				}else if(vs1/vs2>1){
 					acGrade = "2"
 					acCons = "안심"
 					acDetails = "1등급이 멀지 않았어요!"
-				}else if(vsData[0]/vsData[1]>0.5){
+				}else if(vs1/vs2>0.5){
 					acGrade = "3"
 					acCons = "걱정"
 					acDetails = "현명한 소비습관이 필요합니다."
-				}else if(vsData[0]/vsData[1]>=0){
+				}else if(vs1/vs2>=0){
 					acGrade = "4"
 					acCons = "심각"
 					acDetails = "더이상의 지출은 No!"
@@ -247,10 +240,10 @@ function drawDoughnut() {
 				data : {
 						labels: ["수입","지출"],	
 						datasets : [ {
-							data : vsData,
+							data : [vs1,vs2],
 							backgroundColor : [ 'rgba(75,192,192,1)',
 												'#e83e8c', ],
-							hoverBackgroundColor : "rgba(75,192,192,1)",
+							hoverBackgroundColor : ["skyblue","coral"],
 							borderWidth : 0.5,
 						} ]
 						},
@@ -474,7 +467,7 @@ function drawDoughnut2() {
 					cutoutPercentage: 70,
 					legend : {
 						display : true,
-						fontSize : 10,
+						fontSize : 8,
 						position : 'bottom',
 						usePointStyle : true,
 						labels: {

@@ -31,6 +31,7 @@
 								<button type="button" class="btn btn-primary btn-filter" data-target="d">40's</button>
 								<button type="button" class="btn btn-danger btn-filter" data-target="e">50's</button>
 								<button type="button" class="btn btn-info btn-filter" data-target="f">60's</button>
+								<button type="button" class="btn btn-success btn-filter" data-target="all">all</button>
 							</div>
 						</div>
 						<div class="table-container">
@@ -140,7 +141,6 @@ function fn_list(cPage){
 						ages="a";
 					}
 			
-
 					html+="<tbody>";
 					html+="<tr data-status="+ages+">";
 					html+="<td>";
@@ -165,14 +165,14 @@ function fn_list(cPage){
 					html+="<span class='media-meta pull-right'>"+data.model.list[i].ACCDATE+"</span>";
 					html+="<h4 class='title'>";
 					html+=data.model.list[i].USERID;
-					html+="<span class='pull-right pagado' id='accNo'>"+data.model.list[i].ACCNO+"</span>";
-					html+="<span class='media-meta pull-right' style='color:salmon'>2</span><span class='media-meta pull-right'>10</span>"
+					html+="<span class='pull-right pagado' id='accNo' style='color:white'>"+data.model.list[i].ACCNO+"</span>";
+					html+="<span class='media-meta pull-right' style='color:salmon'>2</span><span class='media-meta pull-right'></span>"
 					html+="</h4>";
 					html+="<p class='summary'>"+data.model.list[i].ACCTITLE+"</p>";
 					html+="</div>";
 					html+="</div>";
 					html+="</td>";					
-					html+="<td><h4 class='accmt' id='accmt'>0</h4>";
+					html+="<td><h4 class='accmt' id='accmt'>"+data.model.list[i].ACCCOUNT+"</h4>";
 					html+="</td>";
 					html+="</tr>";
 					html+="</tbody>";

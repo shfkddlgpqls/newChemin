@@ -385,10 +385,11 @@ body { font-size: 1em;}
 		      </tr>
 		    </tbody>
 		  </table>				
+</div>
 		</div>	   
 	</div>			 
    </div> 
-</div>
+
 </div>
 <div class="col-md-6">
 <!--***************** 	여기서부터 내용 쓰면 됨 -->
@@ -404,7 +405,7 @@ body { font-size: 1em;}
 		</div>
 	<hr style="margin:0;">
 		<div class='' id="graph2_2">
-			<div id='ex23' style="text-align:left;font-size:15px;">
+			<div id='ex23' style="text-align:left;font-size:12px;">
 				<div style="margin:0;background-color:Coral;text-align:center"><span style="font-size:20px;margin:0;color:white;">Monthly Expenditure Pattern,&nbsp;</span></div>
 				&nbsp;<span style="color:blue;">${memberLoggedIn.userId }</span>님의
 				이번 달 수입은  <span style="color:blue;">${inexCost[0].ALLCOST}원</span>이며,
@@ -589,8 +590,8 @@ $.ajax({
 			var monTime =d.model.monTime[0]==null?0:d.model.monTime[0].ACTIME;
 			var monTimeM = d.model.monTime[0]==null?0:d.model.monTime[0].ACSUM;
 			var lastDay = d.model.lastDay;
-			var cha= d.model.preAvg[0]==null?0:((d.model.monInEx[0].ALLCOST-d.model.monInEx[1].ALLCOST));
-			var nmg=d.model.preAvg[0]==null?0:(cha/d.model.lastDay);
+			var cha= d.model.monAvg[0]==null?0:((d.model.monInEx[0].ALLCOST-d.model.monInEx[1].ALLCOST));
+			var nmg=d.model.monAvg[0]==null?0:(cha/d.model.lastDay);
 
 			
 			var htmlG=$(".cha").html();

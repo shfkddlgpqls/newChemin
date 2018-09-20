@@ -67,6 +67,7 @@ public interface AcBookService {
 	List<Model> selectMonTime(String userId);
 	List<Model> selectMuchDay(String userId);
 	List<Model> selectSavingCost(String userId);
+	int updateCount(String accNo);
 	
 	
 	

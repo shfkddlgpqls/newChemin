@@ -48,7 +48,6 @@ public class MemberController {
    public ModelAndView loginCheck(String userId, String password, Model model) {
 
       Member m = service.selectOne(userId);
-      System.out.println(m.getMgrade());
       ModelAndView mv = new ModelAndView();
       
       String msg = "";

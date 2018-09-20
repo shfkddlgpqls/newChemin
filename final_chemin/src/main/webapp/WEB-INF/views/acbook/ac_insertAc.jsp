@@ -28,7 +28,7 @@
 				<h2 class="text-center">
 					한눈에 파악해보는 나의  재정 현황! 플레리북이 함께합니다.<br> 지금,만들어볼까요?
 				</h2>
-				<form id="msform" action="acbook/insertAc.do" method="post">
+				<form id="msform" method="post">
 				<!-- progressbar -->
 
 				<ul id="progressbar">
@@ -124,8 +124,8 @@
 					</fieldset>
 					<fieldset>
 						<h3>금액을 입력하세요</h3>
-							<input type="number" name="acCost" placeholder="금액 입력(숫자만 입력 가능합니다)" value="" required style="line-height:30px;margin:0px;padding:0px;text-align:center;width=20px;font-size:30px;"/>
-							<button type="button" class="next next-btn">Next</button>
+							<input type="number" id="acCost" name="acCost" placeholder="금액 입력(숫자만 입력 가능합니다)" value="" required style="line-height:30px;margin:0px;padding:0px;text-align:center;width=20px;font-size:30px;"/>
+							<button type="button" class="next next-btn" id="checkMoney">Next</button>
 					</fieldset>
 					<fieldset id='exCode2'>
 						<h3>결제수단을 입력하세요</h3>
@@ -149,7 +149,7 @@
 						<input type="hidden" name="exCode" value="">
 						<input type="hidden" name="typeNum" value="">
 						<input type="hidden" name="cateNum" value="">
-						<input type="submit" id="testtest" class="next next-btn" />
+						<input type="button" id="insertAcValues" class="next next-btn" /value="insert FluriBook">
 					</fieldset>
 					</div>
 				</form>
@@ -163,7 +163,27 @@
 </div>
 <!-- Side Bar Div End -->
 <!-- jQurery -->
+<script>
+$('#insertAcValues').click(function(){
+	swal({
+		  title: "Confirm",
+		  text: "등록완료! 캘린더 페이지로 이동합니다.",
+		  icon: "success",
+	});
+	$("#msform").attr("action", "${pageContext.request.contextPath}/acbook/insertAc.do");
+	$("#msform").submit();
+})
+</script>
 
+<script>
+$("#checkMoney").on("click",function(){
+	var b;
+	if($("#acCost").val().trim() === ""){
+		var input = prompt("금액을 입력해 주세요.","");
+			b = $('#acCost').val(input);
+	}
+})
+</script>
 <script type="text/javascript">
 
 $('#dtp').datetimepicker(
