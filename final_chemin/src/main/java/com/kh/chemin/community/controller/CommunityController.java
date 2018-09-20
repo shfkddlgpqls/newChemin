@@ -363,17 +363,19 @@ public class CommunityController {
 	public ModelAndView myCommunityList(ModelAndView mv,String userId)
 	{
 		List<Map<String,Object>> list=service.mycommunityList(userId);
-		List<Integer> cno=new ArrayList<Integer>();
-		int[] no = new int[list.size()];
-		for(int i=0;i<list.size();i++)
+		if(list.size() > 0)
 		{
-			no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
-			cno.add(no[i]);
+			List<Integer> cno=new ArrayList<Integer>();
+			int[] no = new int[list.size()];
+			for(int i=0;i<list.size();i++)
+			{
+				no[i]= (Integer.parseInt(list.get(i).get("COMMUNITYNO").toString()));
+				cno.add(no[i]);
+			}
+			List<Map<String,Object>> attList=service.myattachmentList(cno);
+			mv.addObject("attList",attList);
 		}
-		List<Map<String,Object>> attList=service.myattachmentList(cno);
-		
 		mv.addObject("list",list);
-		mv.addObject("attList",attList);
 		mv.setViewName("community/communityList");
 		return mv;
 	}

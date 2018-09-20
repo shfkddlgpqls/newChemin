@@ -616,7 +616,39 @@
  </script>
  
 
-<script type='text/javascript'>
+<!-- <script type='text/javascript'>
+    //<![CDATA[
+      // // 사용할 앱의 JavaScript 키를 설정해 주세요.
+      Kakao.init('fb1957973452653c04d55b57355b0da5');
+      // // 카카오링크 버튼을 생성합니다. 처음 한번만 호출하면 됩니다.
+      function sendLink() 
+      {
+        Kakao.Link.sendDefault({
+          objectType: 'feed',
+          content: {
+            title: '${product.pName }',
+            description: '${product.details }',
+            imageUrl: '${path}/resources/upload/productImg/${product.reImg }',
+            link: {
+              mobileWebUrl: 'http://localhost:9091/chemin/mall/detail.do?no=${product.pno }',
+              webUrl: 'http://localhost:9091/chemin/mall/detail.do?no=${product.pno }'
+            }
+          },
+          
+          buttons: [
+            {
+              title: '웹으로 보기',
+              link: {
+                mobileWebUrl: 'http://localhost:9091/chemin/mall/detail.do?no=${product.pno }',
+                webUrl: 'http://localhost:9091/chemin/mall/detail.do?no=${product.pno }'
+              }
+            }
+          ]
+        });
+      }
+    //]]>
+  </script> -->
+ <script type='text/javascript'>
     //<![CDATA[
       // // 사용할 앱의 JavaScript 키를 설정해 주세요.
       Kakao.init('fb1957973452653c04d55b57355b0da5');
@@ -648,7 +680,6 @@
       }
     //]]>
   </script>
- 
  
 
 

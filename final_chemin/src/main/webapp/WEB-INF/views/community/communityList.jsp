@@ -131,7 +131,7 @@ input[type="radio"] {display:none;}
 	/* 내 글만 보기 */
 	function myPage(obj) {
 		var userId=$(obj).data("no");
-
+		
 		location.href="${path}/community/myCommunityList.do?userId="+userId;
 	}
 	
@@ -249,8 +249,8 @@ input[type="radio"] {display:none;}
 		</div>
 		<div class="container" style="font-family: 'Poor Story', cursive;">
 		<c:if test="${list.size() eq 0}">
-				<div class="text-center">
-					<p style="font-size:25px;font-family: 'Noto Sans KR', sans-serif;"> 해당되는 게시물이 존재하지않습니다.</p>
+				<div class="text-center" style="width:100%;margin-top:6%;">
+					<span style="font-size:25px;font-family: 'Noto Sans KR', sans-serif;"> 해당되는 게시물이 존재하지않습니다.</span>
 				</div>
 		</c:if>
 			<c:forEach items="${list}" var="c"> 
@@ -294,7 +294,7 @@ input[type="radio"] {display:none;}
 						<c:if test="${memberLoggedIn.userId == 'admin'}">
 							<img src="${path }/resources/community/image/close.png" style="float:right;width:20px;height:20px;" data-no="${c.COMMUNITYNO }" onclick="adminDelete(this)">
 						</c:if>
-						<div style="float:left;margin-right:1%;"><img class="cphoto" src="${path}/resources/admin/memberEX.jpg"></div>
+						<div style="float:left;margin-right:1%;"><img class="cphoto" src="${path}/resources/upload/member/${memberLoggedIn.renameImage}"></div>
 						<p id="writer" name="writer" style="float:left;right:1%;color:white;font-size:22px;">
 							<span name="writer_1"> ${c.WRITER }<span><br>
 							<fmt:formatDate value="${c.COMMUNITYDATE}" pattern="yyyy-MM-dd HH:mm:ss"/>

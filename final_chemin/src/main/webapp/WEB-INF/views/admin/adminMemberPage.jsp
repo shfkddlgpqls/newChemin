@@ -48,7 +48,7 @@
 						var fmDate=date.toISOString().slice(0,10);
 						var gender=data.list[i].GENDER=='F'?'여자':'남자';
 						var rgcount=data.list[i].RGCOUNT==0?'없음':data.list[i].RGCOUNT;
-						value+='<tr style="font-size:15px;height:120px;"><td><img class="mphoto" src="${path}/resources/admin/memberEX.jpg"></td><td>'+data.list[i].USERNAME+'</td>';
+						value+='<tr style="font-size:15px;height:120px;"><td><img class="mphoto" src="${path}/resources/upload/member/'+data.list[i].RENAMEIMAGE+'"></td><td>'+data.list[i].USERNAME+'</td>';
 						value+='<td>'+data.list[i].USERID+'</td><td>'+gender+'</td><td>'+fmDate+'</td>';
 						value+='<td>'+data.list[i].USEREMAIL+'</td><td>'+data.list[i].USERPHONE+'</td>';
 						value+='<td>'+data.list[i].USERADDR+'</td><td id="rgcount" name="rgcount" class="reportBtn" data-no="'+data.list[i].USERID+'" onclick="rpClick(this)">'+rgcount+'<input type="hidden" name="rg" id="rg" value="'+rgcount+'"/></td>';
@@ -59,17 +59,17 @@
 							
 							if(data.list[i].MGRADE == 1)
 							{
-								value+='<button type="button" data-no="'+data.list[i].USERID+'" onclick="adminMemberCancel(this)" class="btn btn-default">취소</button></td></tr>';
+								value+='<button type="button" data-no="'+data.list[i].USERID+'" onclick="adminMemberCancel(this)" class="btn btn-secondary">취소</button></td></tr>';
 							}
 							else
 							{
-								value+='<button type="button" class="btn btn-default" disabled>취소</button></td></tr>';
+								value+='<button type="button" class="btn btn-secondary" disabled>취소</button></td></tr>';
 							}
 						}
 						else
 						{
 							value+='<td><button type="button" class="btn btn-danger" disabled>제재</button>';
-							value+='<button type="button" class="btn btn-default" disabled>취소</button></td></tr>';
+							value+='<button type="button" class="btn btn-secondary" disabled>취소</button></td></tr>';
 						}
 						value+='<div id="chkBox"></div>';
 					}
@@ -176,6 +176,7 @@
 			dataType : "json",
 			type : "GET",
 			url : "${path }/admin/blackList.do",
+			/* data : {cPage:cPage}, */
 			success : function(data) {
 				console.log(data[0]);
 				var value='';
@@ -187,27 +188,27 @@
 						var fmDate=date.toISOString().slice(0,10);
 						var gender=data[0][i].GENDER=='F'?'여자':'남자';
 						var rgcount=data[0][i].RGCOUNT==0?'없음':data[0][i].RGCOUNT;
-						value+='<tr style="font-size:15px;height:100px;"><td><img class="mphoto" src="${path}/resources/admin/memberEX.jpg"></td><td>'+data[0][i].USERNAME+'</td>';
+						value+='<tr style="font-size:15px;height:100px;"><td><img class="mphoto" src="${path}/resources/upload/member/'+data[0][i].RENAMEIMAGE+'"></td><td>'+data[0][i].USERNAME+'</td>';
 						value+='<td>'+data[0][i].USERID+'</td><td>'+gender+'</td><td>'+fmDate+'</td>';
 						value+='<td>'+data[0][i].USEREMAIL+'</td><td>'+data[0][i].USERPHONE+'</td>';
-						value+='<td>'+data[0][i].USERADDR+'</td><td id="rgcount" name="rgcount" class="reportBtn" data-no="{'+data[0][i].USERID+','+data[0][i].RGCOUNT+'}" onclick="rpClick(this)"><p id="rg">'+data[0][i].RGCOUNT+'</p></td>';
+						value+='<td>'+data[0][i].USERADDR+'</td><td id="rgcount" name="rgcount" class="reportBtn" data-no="'+data[0][i].USERID+'" onclick="rpClick(this)">'+rgcount+'<input type="hidden" name="rg" id="rg" value="'+rgcount+'"/></td>';
 						
 						if(rgcount>=3)
 						{
 							value+='<td><button type="button" data-no="'+data[0][i].USERID+'" onclick="adminMemberDelete(this)" class="btn btn-danger">제재</button>';
 							if(data[0][i].MGRADE == 1)
 							{
-								value+='<button type="button" data-no="'+data.list[i].USERID+'" onclick="adminMemberCancel(this)" class="btn btn-default">취소</button></td></tr>';
+								value+='<button type="button" data-no="'+data[0][i].USERID+'" onclick="adminMemberCancel(this)" class="btn btn-secondary">취소</button></td></tr>';
 							}
 							else
 							{
-								value+='<button type="button" class="btn btn-default" disabled>취소</button></td></tr>';
+								value+='<button type="button" class="btn btn-secondary" disabled>취소</button></td></tr>';
 							}
 						}
 						else
 						{
 							value+='<td><button type="button" class="btn btn-danger" disabled>제재</button>';
-							value+='<button type="button" class="btn btn-default" disabled>취소</button></td></tr>';
+							value+='<button type="button" class="btn btn-secondary" disabled>취소</button></td></tr>';
 						}
 						
 						value+='<div id="chkBox"></div>';
@@ -257,27 +258,27 @@
 						var fmDate=date.toISOString().slice(0,10);
 						var gender=data.searchList[i].GENDER=='F'?'여자':'남자';
 						var rgcount=data.searchList[i].RGCOUNT==0?'없음':data.searchList[i].RGCOUNT;
-						value+='<tr style="font-size:15px;height:100px;"><td><img class="mphoto" src="${path}/resources/upload/member"'+data.searchList[i].RENAMEIMAGE+'"></td><td>'+data.searchList[i].USERNAME+'</td>';
+						value+='<tr style="font-size:15px;height:100px;"><td><img class="mphoto" src="${path}/resources/upload/member/'+data.searchList[i].RENAMEIMAGE+'"></td><td>'+data.searchList[i].USERNAME+'</td>';
 						value+='<td>'+data.searchList[i].USERID+'</td><td>'+gender+'</td><td>'+fmDate+'</td>';
 						value+='<td>'+data.searchList[i].USEREMAIL+'</td><td>'+data.searchList[i].USERPHONE+'</td>';
-						value+='<td>'+data.searchList[i].USERADDR+'</td><td id="rgcount" name="rgcount" class="reportBtn" data-no="'+data.searchList[i].USERID+'" onclick="rpClick(this)">'+rgcount+'</td>';
+						value+='<td>'+data.searchList[i].USERADDR+'</td><td id="rgcount" name="rgcount" class="reportBtn" data-no="'+data.searchList[i].USERID+'" onclick="rpClick(this)">'+rgcount+'<input type="hidden" name="rg" id="rg" value="'+rgcount+'"/></td>';
 						
 						if(rgcount>=3)
 						{
 							value+='<td><button type="button" data-no="'+data.searchList[i].USERID+'" onclick="adminMemberDelete(this)" class="btn btn-danger">제재</button>';
 							if(data[0][i].MGRADE == 1)
 							{
-								value+='<button type="button" data-no="'+data.list[i].USERID+'" onclick="adminMemberCancel(this)" class="btn btn-default">취소</button></td></tr>';
+								value+='<button type="button" data-no="'+data.searchList[i].USERID+'" onclick="adminMemberCancel(this)" class="btn btn-secondary">취소</button></td></tr>';
 							}
 							else
 							{
-								value+='<button type="button" class="btn btn-default" disabled>취소</button></td></tr>';
+								value+='<button type="button" class="btn btn-secondary" disabled>취소</button></td></tr>';
 							}
 						}
 						else
 						{
 							value+='<td><button type="button" class="btn btn-danger" disabled>제재</button>';
-							value+='<button type="button" class="btn btn-default" disabled>취소</button></td></tr>';
+							value+='<button type="button" class="btn btn-secondary" disabled>취소</button></td></tr>';
 						}
 						value+='<div id="chkBox"></div>';
 					}
@@ -325,7 +326,7 @@
     </div>
    <div>
    <p style="margin-left:5%;font-family: 'Noto Sans KR', sans-serif;"><img src="${path }/resources/admin/right-chevron.png">회원의 신고내용을 보려면 신고 갯수를 누르세요.</p>
-    <table class="table table-hover" style="width:700px;">
+    <table class="table table-hover" >
     	<thead>
     		<tr>
     			<th class="column1"></th>
