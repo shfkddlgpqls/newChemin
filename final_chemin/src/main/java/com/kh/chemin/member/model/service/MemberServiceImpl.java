@@ -59,4 +59,10 @@ public class MemberServiceImpl implements MemberService {
 	public int memberInfoUpdate(Member member) {
 		return dao.memberInfoUpdate(sqlSession, member);
 	}
+
+
+	@Override
+	public int memberWithdraw(Map map) {
+		return dao.memberWithdraw(sqlSession, map);
+	}
 }

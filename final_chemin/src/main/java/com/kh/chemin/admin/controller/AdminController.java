@@ -134,9 +134,10 @@ public class AdminController {
 				
 		String msg="";
 		String loc="";
-		
+		String status="";
 		if(result>0) {
 			msg="장소가 삭제되었습니다.";
+			status="loginSuccess";
 		}else {
 			msg="장소가 삭제 되지 않았습니다.";
 		}
@@ -145,7 +146,7 @@ public class AdminController {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("msg", msg);
 		mv.addObject("loc", loc);
-		mv.addObject("result", result);
+		mv.addObject("status", status);
 		mv.setViewName("common/msg");
 		return mv;
 	}
@@ -161,16 +162,18 @@ public class AdminController {
 		
 		String msg="";
 		String loc="";
-		
+		String status="";
 		if(plaStatus=='Y') {
 			if(result>0) {
 				msg="승인되었습니다.";
+				status="loginSuccess";
 			}else {
 				msg="승인이 되지 않았습니다.";
 			}
 		}else if(plaStatus=='N') {
 			if(result>0) {
 				msg="취소되었습니다.";
+				status="loginSuccess";
 			}else {
 				msg="취소 되지 않았습니다.";
 			}
@@ -181,14 +184,14 @@ public class AdminController {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("msg", msg);
 		mv.addObject("loc", loc);
-		mv.addObject("result", result);
+		mv.addObject("status", status);
 		mv.setViewName("common/msg");
 		return mv;
 	}
 	
 	//승인 거절메세지
 	@RequestMapping("/admin/adminReMsg.do")
-	public ModelAndView adminReMsg(int plaNo, String plaReMsg, char plaStatus) 
+	public ModelAndView adminReMsg(@RequestParam(value="plaNo")int plaNo, String plaReMsg, char plaStatus) 
 	{
 		Map<String, Object> map = new HashMap<>();
 		map.put("plaNo", plaNo);
@@ -198,9 +201,10 @@ public class AdminController {
 		
 		String msg="";
 		String loc="";
-
+		String status="";
 			if(result>0) {
 				msg="승인 거절되었습니다.";
+				status="loginSuccess";
 			}else {
 				msg="승인 거절되지 않았습니다.";
 		}
@@ -210,7 +214,7 @@ public class AdminController {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("msg", msg);
 		mv.addObject("loc", loc);
-		mv.addObject("result", result);
+		mv.addObject("status", status);
 		mv.setViewName("common/msg");
 
 		return mv;
@@ -578,7 +582,7 @@ public class AdminController {
 		//서비스 다녀왔어요
 		String msg = "";
 		String loc = "";
-		
+		String status = "";
 		if(result>0) //insert가 성공적으로 잘 되면
 		{
 			//update를 서비스로 보내기 
@@ -589,6 +593,7 @@ public class AdminController {
 			{
 				msg = "답변 글이 등록되었습니다.";
 				loc = "/admin/adminBoardManage.do";
+				status="loginSuccess";
 			}
 			else
 			{
@@ -606,6 +611,7 @@ public class AdminController {
 		
 		mv.addObject("msg", msg);
 		mv.addObject("loc", loc);
+		mv.addObject("status", status);
 		mv.setViewName("common/msg");
 		
 		return mv;
@@ -623,11 +629,12 @@ public class AdminController {
 		
 		String msg = "";
 		String loc = "";
-		
+		String status = "";
 		if(result>0)
 		{
 			msg = "선택하신 문의글이 성공적으로 삭제 되었습니다.";
 			loc = "/admin/adminBoardManage.do";
+			status="loginSuccess";
 		}
 		else
 		{
@@ -637,6 +644,7 @@ public class AdminController {
 		
 		mv.addObject("msg",msg);
 		mv.addObject("loc", loc);
+		mv.addObject("status", status);
 		mv.setViewName("common/msg");
 		
 		return mv;	

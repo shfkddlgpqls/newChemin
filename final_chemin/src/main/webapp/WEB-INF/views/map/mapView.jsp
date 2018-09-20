@@ -87,8 +87,8 @@ color:#fff;
   <div class="category col-md-2">
   	
         <ul class="list-group">
-        	<li class="list-group-item" style="width:100%;">
-        		<span style="font-size:1.3em; width:30%;"><strong>지역선택</strong></span>        		
+        	<li class="list-group-item" style="width:100%;margin-top:2%">
+        		<span style="font-size:1.6em; width:30%;"><strong>지역선택</strong></span>        		
 				  <select class="form-control" name="plaArea" style="width:70%;margin-left:16%;margin-top:3%">
 				  	  <option value="전체">전체</option>
 					  <option value="마포구">마포구</option>
@@ -97,7 +97,7 @@ color:#fff;
 			   		  <option value="송파구">송파구</option>
 				</select>
         	</li>
-        	<div class="row">
+        	<div class="row" style="margin-top:5%;">
 	            <li class="list-group-item"  id="foodMenu"  onclick="changeMarker('food')">
 	            	<input type="hidden" name="plaCategory"/>
 	               <div>
@@ -112,7 +112,7 @@ color:#fff;
 	               	<span style="font-size:1.3em; width:30%; text-align: center;"><strong>술</strong></span> 
 	            </li>
             </div>
-            <div class="row">
+            <div class="row" style="margin-top:10%;">
 	            <li class="list-group-item " id="micMenu" onclick="changeMarker('mic')">
 	               	<div>
 	               		<img style="width:35%;height:65%" src="${path}/resources/map/img/mic1.png"/>
@@ -126,7 +126,7 @@ color:#fff;
 	               	<span style="font-size:1.3em; width:30%; text-align: center;"><strong>운동</strong></span> 
 	            </li>
             </div>
-            <div class="row">
+            <div class="row" style="margin-top:10%;">
 	             <li class="list-group-item " id="movieMenu" onclick="changeMarker('movie')"> 
 	             		<div>
 	               		<img style="width:35%;height:65%" src="${path}/resources/map/img/movie1.png"/>
@@ -141,7 +141,7 @@ color:#fff;
 	            </li>
             </div>
             
-            <div class="row" >
+            <div class="row" style="margin-top:5%;">
             	 <li class="list-group-item "style="width:100%"> 
              		<input type="submit" class="btn btn-primary" style="width:80%;height:75%" onclick="validate()" value="검색">
            		</li>

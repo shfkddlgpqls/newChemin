@@ -113,7 +113,6 @@ star-input>.input.focus{outline:1px dotted #ddd;}
                }
            );    
        });
-
        $(function() {
           
            // Create the close button

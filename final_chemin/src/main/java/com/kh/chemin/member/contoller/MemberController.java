@@ -8,6 +8,8 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -88,6 +90,8 @@ public class MemberController {
             status="loginFail";
          }
       }
+      
+     System.out.println("status================= +" + status);
       loc = "/";
       mv.addObject("msg", msg);
       mv.addObject("loc", loc);
@@ -314,47 +318,48 @@ public class MemberController {
    
    @RequestMapping("/member/memberInfoUpdate")
    public String memberInfoUpdate(Member member,MultipartFile file, String address1, String address2, String address3, HttpServletRequest request,Model model){
-    
       String address = address1+"/"+address2+"/"+address3;
      member.setAddress(address);
-     
-     SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd");
      String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload/member");
-
-      String enPw = bCryptPasswordEncoder.encode(request.getParameter("password"));
-      member.setPassword(enPw);
-      bCryptPasswordEncoder.encode(enPw);
-
-     /* File dir = new File(saveDir);
-
-      if (dir.exists() == false)
-         dir.mkdirs();
-
-      if (!orImg.isEmpty()) {
-         String originalFilename = orImg.getOriginalFilename();
-          bs.html 
+     
+     String enPw = bCryptPasswordEncoder.encode(member.getPassword());
+     member.setPassword(enPw);
+     bCryptPasswordEncoder.encode(enPw);
+     
+     if(!file.isEmpty()) {
+    	 String image = request.getSession().getServletContext().getRealPath("/resources/upload/member/"+member.getRenameImage());
+    	 File file1 = new File(image);
+    	 if(file1.exists() == true) {
+    		 file1.delete();
+    	 }
+    	 
+    	 String originalFilename = file.getOriginalFilename();
+         /* bs.html */
          String ext = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
          SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMdd_HHmmssSS");
          int rndNum = (int) (Math.random() * 1000);
          String renamedFileName = sdf1.format(new Date(System.currentTimeMillis()));
          renamedFileName += "_" + rndNum + "." + ext;
          try {
-             서버의 해당경로에 파일을 저장하는 명령 
-            orImg.transferTo(new File(saveDir + "/" + renamedFileName));
+            /* 서버의 해당경로에 파일을 저장하는 명령 */
+        	 file.transferTo(new File(saveDir + "/" + renamedFileName));
             member.setOriginalImg(originalFilename);
             member.setRenameImage(renamedFileName);
          } catch (Exception e) {
             e.printStackTrace();
          }
-      }*/
-      
-     int result = service.memberInfoUpdate(member);
+    	 
+     }
+    
+    int result = service.memberInfoUpdate(member);
+ 
      String msg = "";
       String loc = "";
- 
+      String status="";
       if (result > 0) {
          msg = "회원정보 수정이 완료되었습니다";
          loc = "/mypage/myMember.do?userId="+member.getUserId();
+         status="loginSuccess";
       }
 
       else {
@@ -364,9 +369,34 @@ public class MemberController {
       }
       model.addAttribute("msg", msg);
       model.addAttribute("loc", loc);
-
+      model.addAttribute("status", status);
       return "common/msg";
   }
+   
+   @RequestMapping("/member/memberWithdraw")
+   public String memberWithdraw(String userId, int mgrade, Model model,SessionStatus ss) {
+	   Map<String, Object> map = new HashMap<>();
+	   map.put("userId", userId);
+	   map.put("mgrade", mgrade);
+	   int result = service.memberWithdraw(map);
+	   
+	    String msg = "";
+	    String loc = "/";
+	    String status="";
+	   if(result>0) {
+		   msg = "회원 탈퇴가 되었습니다";
+	         status="loginSuccess";
+	         if (!ss.isComplete()) {
+	             ss.setComplete();
+	          }
+	   }else {
+		   msg = "회원탈퇴가 되지 않았습니다";
+	   }
+	   model.addAttribute("msg", msg);
+	      model.addAttribute("loc", loc);
+	      model.addAttribute("status", status);
+	      return "common/msg";
+   }
    
 //   @RequestMapping("/member/findIdEnd.do")
 //   public void findIdEnd(HttpServletRequest request, HttpServletResponse response) throws ParseException {

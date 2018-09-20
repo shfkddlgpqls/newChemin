@@ -20,4 +20,5 @@ public interface MemberDao {
    Member checkEmail(SqlSessionTemplate sqlSession,String email);
    Member checkPhone(SqlSessionTemplate sqlSession, String phone);
   int memberInfoUpdate(SqlSessionTemplate sqlSession, Member member); 
+  int memberWithdraw(SqlSessionTemplate sqlSession, Map map);
 }

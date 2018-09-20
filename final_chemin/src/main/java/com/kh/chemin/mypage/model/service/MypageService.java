@@ -44,6 +44,7 @@ public interface MypageService {
 
 	Map<String, Object> memberList(String userId);
 
+
 }
 
 

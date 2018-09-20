@@ -17,4 +17,6 @@ public interface MemberService {
    Member checkEmail(String email);
    Member checkPhone(String phone);
    int memberInfoUpdate(Member mebmer);
+   int memberWithdraw(Map map);
 }
+

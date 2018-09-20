@@ -331,7 +331,7 @@
           		<p class="text-center">리뷰 글을 삭제하시겠습니까? <br>삭제한 글은 복구되지 않습니다. </p> 
           		
           		<form action="${path }/admin/AdminreviewDel.do" id="adminReviewDelFrm" name="adminReviewDelFrm">  
-          		<input type="text" name="modal_rno" id="modal_rno" value=""/> 
+          		<input type="hidden" name="modal_rno" id="modal_rno" value=""/> 
           		</form>
           		  
               </div>

@@ -44,8 +44,14 @@ public class MemberDaoImpl implements MemberDao {
    public Member checkPhone(SqlSessionTemplate sqlSession, String phone) {
       return sqlSession.selectOne("member.checkphone", phone);
    }
-	@Override
+
 	public int memberInfoUpdate(SqlSessionTemplate sqlSession, Member member) {
 		return sqlSession.update("member.memberInfoUpdate", member);
 	}
+
+	@Override
+	public int memberWithdraw(SqlSessionTemplate sqlSession, Map map) {
+		return sqlSession.update("member.memberWithdraw", map);
+	}
+
 }
