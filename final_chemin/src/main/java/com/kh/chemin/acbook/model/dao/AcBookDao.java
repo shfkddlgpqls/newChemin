@@ -88,6 +88,8 @@ public interface AcBookDao {
 	List<Model> selectMuchDay(SqlSessionTemplate sqlSession, String userId);
 
 	List<Model> selectSavingCost(SqlSessionTemplate sqlSession, String userId);
+
+	int updateCount(SqlSessionTemplate sqlSession, String accNo);
 	
 	
 }

@@ -8,7 +8,7 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
+/*import static org.hamcrest.CoreMatchers.instanceOf;*/
 
 import java.io.File;
 import java.io.IOException;
@@ -402,5 +402,6 @@ public class MemberController {
 //   public void findIdEnd(HttpServletRequest request, HttpServletResponse response) throws ParseException {
 //
 //   }
+
 
 }

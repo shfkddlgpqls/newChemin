@@ -63,7 +63,7 @@ public class AcBookController extends HttpServlet{
 		mv.addObject("lastDay",lastDay);
 		mv.addObject("monAvg",monAvg);
 		mv.addObject("savCost",savCost);
-		logger.debug("savCost세브코스트응으으으"+savCost);
+		logger.debug("savCost"+savCost);
 		mv.setViewName("acbook/ac_main");
 		return mv;
 	}
@@ -99,7 +99,7 @@ public class AcBookController extends HttpServlet{
 		return "acbook/ac_comBoard";
 	}
 	
-	
+
 	//ac_insertAc
 	@RequestMapping("acbook/insertAc.do")
 	public String insertExpenditure(AcBook ac){
@@ -367,7 +367,7 @@ public class AcBookController extends HttpServlet{
 		return "acbook/ac_calendar";
 	}
 	//가계부 정보 수정
-	@RequestMapping("/acbook/updateAcBook.do")
+	@RequestMapping("acbook/updateAcBook.do")
 	public String updateAcOne(@RequestParam(value="acNo")int acNo, AcBook ac,HttpServletRequest request, HttpServletResponse response)throws ServletException,IOException {
 		ModelAndView mv = new ModelAndView();
 		logger.debug("Acbook: "+ac);
@@ -408,6 +408,7 @@ public class AcBookController extends HttpServlet{
 	public ModelAndView selectReadOne(HttpServletRequest request, ModelAndView mv) {
 		String accNo = request.getParameter("accNo");
 		logger.debug(accNo + "accNo");
+		int accCount = service.updateCount(accNo);
 		AcCom acc = service.selectReadOne(accNo);
 		logger.debug("return db acc data: "+acc);
 		mv.addObject("acc",acc);

@@ -2,7 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ac">
 	<resultMap type="map" id="acmap"></resultMap>
-	
+
+	<!-- 조회수 증가 -->
+	<update id="updateCount" parameterType="string">
+		UPDATE ACCOM SET ACCCOUNT = ACCCOUNT + 1
+		WHERE ACCNO = #{accNo}
+	</update>
 	<!-- 가계부 정보 수정 -->
 	<update id="updateAcOne" parameterType="acbook">
 		UPDATE ACBOOK SET TYPENUM = #{typeNum}, CATENUM = #{cateNum}, EXCODE = #{exCode}, ACCOST = #{acCost}, MEMO = #{memo}
@@ -161,6 +166,7 @@
 		OVER(PARTITION BY TYPENUM)VSCOST
 		FROM ACBOOK
 		WHERE USERID= #{userId}
+        ORDER BY TYPENUM
 	</select>
 	
 	<!-- 이번달 총 지출 합계, 일평균 지출액 -->

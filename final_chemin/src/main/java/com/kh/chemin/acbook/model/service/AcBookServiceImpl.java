@@ -212,6 +212,11 @@ public class AcBookServiceImpl implements AcBookService {
 	public List<Model> selectSavingCost(String userId) {
 		return dao.selectSavingCost(sqlSession,userId);
 	}
+
+	@Override
+	public int updateCount(String accNo) {
+		return dao.updateCount(sqlSession,accNo);
+	}
 	
 	
 	

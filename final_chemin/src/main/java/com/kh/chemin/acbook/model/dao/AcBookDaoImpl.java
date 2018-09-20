@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
+import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
@@ -204,6 +205,11 @@ public class AcBookDaoImpl implements AcBookDao {
 	@Override
 	public List<Model> selectSavingCost(SqlSessionTemplate sqlSession, String userId) {
 		return sqlSession.selectList("ac.selectSavingCost", userId);
+	}
+
+	@Override
+	public int updateCount(SqlSessionTemplate sqlSession, String accNo) {
+		return sqlSession.update("ac.updateCount", accNo);
 	}
 	
 	

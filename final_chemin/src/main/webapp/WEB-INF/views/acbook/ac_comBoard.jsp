@@ -34,7 +34,7 @@
 		<label>Title</label>
 	</div>
 	<div class="col form-group col-md-11 ">
-		<input type="text" class="form-control" name="accTitle" placeholder="20대 취준생의 9월 결산">
+		<input type="text" class="form-control" id="accTitle" name="accTitle" placeholder="20대 취준생의 9월 결산" required>
 	</div> <!-- form-group end.// -->
 	</div>
 	<div class="form-group justify-content-center">
@@ -60,7 +60,6 @@
 </div>
 </div>
 <!-- Side Bar Div End -->
-
 <script>
 $(function(){
     //전역변수선언
@@ -81,10 +80,24 @@ $(function(){
     });
      
     $("#insertBoard").click(function(){
-        //id가 smarteditor인 textarea에 에디터에서 대입
+    	
+    	if($("#accTitle").val().trim() === ""){
+    		swal({
+    			  title: "No message",
+    			  text: "제목을 입력해주세요",
+    			  icon: "warning",
+    			});
+    	}else{
+
         obj.getById["editor"].exec("UPDATE_CONTENTS_FIELD", []);
-        //폼 submit
+
+				swal({
+    			  title: "Check",
+    			  text: "등록되었습니다.",
+    			  icon: "success",
+    			});
         $("#insertBoardFrm").submit();
+    	}
     });
 })
 

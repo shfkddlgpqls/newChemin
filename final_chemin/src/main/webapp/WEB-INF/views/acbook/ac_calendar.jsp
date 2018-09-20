@@ -17,19 +17,24 @@
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
 <!-- Main Start -->
 <div class="col-md-10 col-sm-8 main-content"  id="newMain">
+<form name="imgForm" id="imgForm" action="acbook/download.do" method="post">
+    <input type="hidden" id="imgData" name="imgData">
+</form>
 <!-- 여기서부터입력 -->
 <!------ Include the above in your HEAD tag ---------->
 <!-- details card section starts from here -->
 	<input type="hidden" id="userId" name="userId" value="${memberLoggedIn.userId }">
       	<div class="row">
-           <div class="col-md-8">
-	          	<div class="card-content" id="calendarDiv">
-					<div id="monthly_calendar">
-						<br>
-						<div id='calendar'></div>
+	           <div class="col-md-8">
+	           	<div class="printDiv">
+		          	<div class="card-content" id="calendarDiv">
+						<div id="monthly_calendar" style="margin:3%;">
+							<br>
+							<div id='calendar'></div>
+						</div>
 					</div>
-	          	</div>
-          </div>
+		          </div>
+	          </div>
           <div class="col-md-4">
 				<div class="card-content" id="calendarDiv" style="margin-top:6%;max-width:100%;height:auto;padding:3%;object-fit:contain;overflow:hidden;word-wrap:break-word;">			
 					<div id="monthly_table">
@@ -46,6 +51,10 @@
 						</table>
 							<div id="pageBar"></div>
 					</div>
+				</div>
+					<div class="printBtnZone" align="center" >
+				        <a id="btnDown"><br><img src="${path}/resources/acbook/images/piggy.png"><h1 style="font-weight:bold">Save Money!</h1></a>
+				    </div>
 				</div>
 			</div>
     	</div>			          
@@ -64,33 +73,33 @@
 		<h3 class="modal-title" id="lineModalLabel">Free Fluri Account Profile</h3>
 			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
 		</div>
-		<div class="modal-body">
+		<div class="modal-body" style="text-align:left;align:center">
 			
             <!-- content goes here -->
-			<form id= 'acBookMemFrm' action='/chemin/acbook/updateAcBook.do' method='get'>
+			<form id= 'acBookMemFrm' method='post' class="justify-content-center">
               <div class="form-group">
               	<label>날짜</label>
               		<input type="hidden" id="userId" name="userId" value="${memberLoggedIn.userId }">
               	   <input type="hidden" id="acNo" name="acNo">
-			       <input type="text" id='acDate' name="acDate" readonly>
+			       <input type="text" id='acDate' name="acDate" readonly style="width:300px;">
 				</div>
               <div class="form-group">              	
                 <label>구분</label>
                 <!-- <input type='text' id='typeNum' name='typeNum' readonly> -->
-                <select id='typeNum' name='typeNum' required>
+                <select id='typeNum' name='typeNum' required style="width:300px;">
 				  <option value="101">수입</option>
 				  <option value="201">지출</option>
                 </select>
               </div>
               <div class="form-group">
               <label>항목</label>
-                <select id='cateNum1' name='cateNum'>
+                <select id='cateNum1' name='cateNum' style="width:300px;">
 				  <option value=''>선택</option>
 				  <option value="101_1" >월급 </option>
 				  <option value="101_2" >용돈</option>
   				  <option value="101_3" >기타</option>
                 </select>
-                <select id='cateNum2' name='cateNum'>
+                <select id='cateNum2' name='cateNum' style="width:300px;">
 				  <option value=''>선택</option>
 				  <option value="201_1" >식비</option>
 				  <option value="201_2" >교통비</option>
@@ -110,7 +119,7 @@
               </div>
               <div id='form-group'>
               <label>금액</label>
-              <input type='number' id='acCost' name='acCost' required> 				
+              <input type='number' id='acCost' name='acCost' required > 				
  				<select id='exCode' name='exCode'>
 				  <option value=''>선택</option>
 				  <option value="M" >현금</option>
@@ -120,16 +129,12 @@
               </div>
               <div id='form-group'>
               <label>메모</label>
-              <textarea id='memo' name='memo' cols=30, rows=3></textarea>
+              <textarea id='memo' name='memo' cols=30, rows=3 style="width:300px;"></textarea>
               </div>
-              	<div class="btn-group" role="group">
-					<button type="submit" id="updateAcMem" class="btn btn-default btn-hover-red">Update</button>
-				</div>
-				<div class="btn-group" role="group">
-					<button type="submit" id="deleteAcMem" class="btn btn-default btn-hover-green">Delete</button>
-				</div>
-				<div class="btn-group" role="group">
-					<button type="button" class="btn btn-default" data-dismiss="modal"  role="button">Close</button>
+              	<div class="btn-group" role="group" style="margin-left:50px;">
+					<button type="button" id="updateAcMem" class="btn btn-success">Update</button>
+					<button type="button" id="deleteAcMem" class="btn btn-warning">Delete</button>
+					<button type="button" class="btn btn-info" data-dismiss="modal"  role="button">Close</button>
 				</div>
             </form>
 		</div>
@@ -140,11 +145,43 @@
 	</div>
   </div>
 </div>
-<!-- 모달테스트 -->
-<!-- 날짜검색시 리스트 출력 -->
+<script>
+    $(function(){
+        /** btnDown 버튼 클릭 **/
+        $('#btnDown').click(function() {
+            html2canvas($('.printDiv'), {
+                onrendered: function(canvas) {
+                    if (typeof FlashCanvas != "undefined") {
+                        FlashCanvas.initElement(canvas);
+                    }
+                    var image = canvas.toDataURL("image/png"); 
+                    $("#imgData").val(image);
+                    $("#imgForm").submit();
+                }
+            });
+        });
+    });
+</script>
+<script>
+$('#updateAcMem').click(function(){
+	$("#acBookMemFrm").attr("action", "${pageContext.request.contextPath}/acbook/updateAcBook.do");
+	$("#acBookMemFrm").submit();
+	swal({
+		  title: "Confirm",
+		  text: "데이터가 수정되었어요",
+		  icon: "success",
+	});
+})
+</script>
 <script>
 $('#deleteAcMem').click(function(){
 	$("#acBookMemFrm").attr("action", "${pageContext.request.contextPath}/acbook/deleteAcBook.do");
+	$("#acBookMemFrm").submit();
+	swal({
+		  title: "Confirm",
+		  text: "데이터가 삭제되었어요",
+		  icon: "success",
+	});
 })
 </script>
 <script>
@@ -317,5 +354,7 @@ $('#calendar').fullCalendar({
 <script src="<c:url value="/resources/acbook/fullcalendar/fullcalendar.js" />"></script>
 <!-- FullCalendar -->
 <script src="<c:url value="/resources/acbook/js/jquery-ui.min.js" />"></script>
+<!-- jpg modify -->
+<script src="<c:url value="/resources/acbook/js/html2canvas.js" />"></script>
 <!-- footer -->
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

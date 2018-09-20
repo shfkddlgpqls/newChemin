@@ -130,11 +130,12 @@
 <br><br>
 <div class="row justify-content-center">
     <div class="col-sm-12">
-        <div class="panel panel-white post panel-shadow" style="background-color:white;">
-		    	<div class='pull-right'>
-		    	<button class='btn btn-primary' id='updateWrite'>글수정</button>
-		    	<button class='btn btn-primary' id='deleteWrite'>글삭제</button>
+    		    	<div class='pull-right' style="margin:2px;">
+		    	<button class='btn btn-success' id='updateWrite'>글수정</button>
+		    	<button class='btn btn-danger' id='deleteWrite'>글삭제</button>
 		    	</div>
+        <div class="panel panel-white post panel-shadow" style="background-color:white;">
+		    	
             <div class="post-heading">
                 <div class="pull-left image">
                     <img src="https://image.flaticon.com/icons/svg/138/138283.svg" class="img-circle avatar" alt="user profile image">
@@ -151,12 +152,7 @@
             <div class="post-description"> 
                 <div>${acc.editor}</div>
                 <div class="stats">
-                    <a href="#" class="btn btn-default stat-item">
-                        <i class="fa fa-thumbs-up icon"></i>2
-                    </a>
-                    <a href="#" class="btn btn-default stat-item">
-                        <i class="fa fa-share icon"></i>12
-                    </a>
+                    
                 </div>
             </div>
             <div class="post-footer">
@@ -168,7 +164,7 @@
                 	<input type="hidden" id="userId" name="userId" value="${memberLoggedIn.userId }"> 
                     <input class="form-control" placeholder="댓글 입력" type="text" id="rContent" name="rContent">
                     <span class="input-group-addon">
-                        <button class="btn btn-info" type="button" id="callAjax">*</button>  
+                        <button class="btn btn-info" type="button" id="callAjax">&nbsp;<i class="fa fa-cloud"></i></button>  
                     </span>
                 </div>
                 </form>
@@ -192,7 +188,11 @@ $('#updateWrite').on('click',function(){
 		location.href="${pageContext.request.contextPath}/acbook/updateWrite?accNo="+${acc.accNo};
 		
 	}else{
-		swal("작성자만 수정이 가능해요.");
+		swal({
+			  title: "Sorry",
+			  text: "작성자만 수정이 가능해요",
+			  icon: "warning",
+			});
 	}
 })
 </script>
@@ -201,7 +201,11 @@ $('#deleteWrite').on('click',function(){
 	if('${acc.userId}'=='${memberLoggedIn.userId}'){
 		location.href="${pageContext.request.contextPath}/acbook/deleteWrite?accNo="+${acc.accNo};
 	}else{
-		swal("작성자만 삭제가 가능해요.");
+		swal({
+			  title: "Sorry",
+			  text: "작성자만 삭제가 가능해요",
+			  icon: "warning",
+			});
 	}
 })
 </script>
@@ -209,7 +213,11 @@ $('#deleteWrite').on('click',function(){
 
 $("#callAjax").click(function(){
 	if($("#rContent").val().trim() === ""){
-		swal("댓글을 입력하세요.");
+		swal({
+			  title: "No message",
+			  text: "댓글을 입력하세요",
+			  icon: "warning",
+			});
 		$("#rContent").val("").focus();
 	}else{
 		$.ajax({
@@ -223,7 +231,11 @@ $("#callAjax").click(function(){
             	rNo : $("#rNo").val()
             },
             success: function () {
-            	swal("댓글이 등록되었습니다.");
+        		swal({
+      			  title: "Confirm",
+      			  text: "댓글이 등록되었어요!",
+      			  icon: "success",
+      			});
             	$("#rContent").val("");
              	getReply();
             },
@@ -323,16 +335,28 @@ function upup(event){
 		if(user=='${memberLoggedIn.userId}'){	
 			
 			if($("#rContents").val().trim() === ""){
-				swal("댓글을 입력하세요.");
+				swal({
+					  title: "No message",
+					  text: "내용을 입력해주세요",
+					  icon: "warning",
+					});
 				$("#rContents").val("").focus();
 				return false;
 			}
 			else{				
+				swal({
+					  title: "Check",
+					  text: "입력되었습니다!",
+					  icon: "success",
+					});
 				$("#replyAc").submit();
-				swal("수정되었습니다!");  				  
 			}
 		}else{
-			swal("작성자만 수정이 가능해요.");
+			swal({
+				  title: "Sorry",
+				  text: "작성자만 수정이 가능해요",
+				  icon: "warning",
+				});
 		}
 	}	
 	
@@ -342,10 +366,18 @@ function upup(event){
 function fnfn(rNo){
 	var user=$(event.target).parent().parent().prev().find('.user').html();
 	if(user=='${memberLoggedIn.userId}'){		
+		swal({
+			  title: "Check",
+			  text: "삭제되었습니다!",
+			  icon: "success",
+			});
 		location.href="${path}/acbook/deleteRP?rNo="+rNo;
-		swal("삭제되었습니다!")
 	}else{
-		swal("작성자만 삭제가 가능해요.");
+		swal({
+			  title: "Sorry",
+			  text: "작성자만  삭제가 가능해요",
+			  icon: "warning",
+			});
 	}
 }
 </script>
