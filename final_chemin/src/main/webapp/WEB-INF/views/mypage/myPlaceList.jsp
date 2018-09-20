@@ -215,7 +215,7 @@ function fn_modal(obj){
 			    		subattachOne.innerHTML=	
 						 					'<div class="col-md-3">'+
 					 						'<a href="#x" class="thumbnail">'+
-					 						"<img src="+"${pageContext.request.contextPath }/resources/upload/place/attach/"+data.attachList[i].reImg + " class='img-thumbnail'>"+
+					 						"<img style='width:150px;height:140px' src="+"${pageContext.request.contextPath }/resources/upload/place/attach/"+data.attachList[i].reImg + " class='img-thumbnail'>"+
 					 						'</a>'+
 					 						'</div>';
 					 						
@@ -223,7 +223,7 @@ function fn_modal(obj){
 			    		subattachOne.innerHTML+=
 			    			 '<div class="col-md-3">'+
 	 						'<a href="#x" class="thumbnail">'+
-	 						"<img src="+"${pageContext.request.contextPath }/resources/upload/place/attach/"+data.attachList[i].reImg + " class='img-thumbnail'>"+
+	 						"<img style='width:150px;height:140px' src="+"${pageContext.request.contextPath }/resources/upload/place/attach/"+data.attachList[i].reImg + " class='img-thumbnail'>"+
 	 						'</a>'+
 	 						'</div>';
 			    		}else if(i>3){
@@ -232,7 +232,7 @@ function fn_modal(obj){
 			    			subattachTwo.innerHTML=	
 			 					'<div class="col-md-3">'+
 		 						'<a href="#x" class="thumbnail">'+
-		 						"<img src="+"${pageContext.request.contextPath }/resources/upload/place/attach/"+data.attachList[i].reImg + " class='img-thumbnail'>"+
+		 						"<img style='width:150px;height:140px' src="+"${pageContext.request.contextPath }/resources/upload/place/attach/"+data.attachList[i].reImg + " class='img-thumbnail'>"+
 		 						'</a>'+
 		 						'</div>';
 			    		}

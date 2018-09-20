@@ -48,8 +48,4 @@
 
 
 
-
-
-
->>>>>>> branch 'master' of https://github.com/shfkddlgpqls/newChemin.git
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>  

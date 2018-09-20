@@ -63,6 +63,7 @@ public class MypageServiceImpl implements MypageService {
 		
 		
 		if(menuList.size()>0) {
+			System.out.println("여기는 메뉴야");
 			result = dao.removeMenu(sqlSession,plaNo);
 			if(result>0) {
 			for(PlaceMenu m : menuList) {
@@ -72,6 +73,7 @@ public class MypageServiceImpl implements MypageService {
 			}
 		}
 		if(attList.size()>0) {
+			System.out.println("여기는 사진야");
 			result = dao.removeAttach(sqlSession,plaNo);
 			if(result>0) {
 			for(PlaceAttachment a : attList) {

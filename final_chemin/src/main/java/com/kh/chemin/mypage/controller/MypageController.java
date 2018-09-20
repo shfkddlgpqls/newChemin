@@ -176,9 +176,10 @@ public class MypageController
 				
 		String msg="";
 		String loc="";
-		
+		String status="";
 		if(result>0) {
 			msg="장소가 삭제되었습니다.";
+			status="loginSuccess";
 		}else {
 			msg="장소가 삭제 되지 않았습니다.";
 		}
@@ -187,7 +188,7 @@ public class MypageController
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("msg", msg);
 		mv.addObject("loc", loc);
-		mv.addObject("result", result);
+		mv.addObject("status", status);
 		mv.setViewName("common/msg");
 		return mv;
 	}
@@ -211,8 +212,13 @@ public class MypageController
 			  String day, String startTime, String endTime,String subContent,String keyword1,String keyword2, String keyword3, String keyword4, String keyword5) {
 			
 			Member m = (Member)session.getAttribute("memberLoggedIn");
+			String phone=phoneFirst;
+			if(phoneMiddle!=null && phoneMiddle!="") {
+				phone+="-"+phoneMiddle;
+			}if(phoneEnd!=null && phoneEnd!="") {
+				phone+=phoneEnd;
+			}
 			String userId = m.getUserId();
-			String phone=phoneFirst+"-"+phoneMiddle+"-"+phoneEnd;
 			String address=roadAddr+"/"+postCode+"/"+jibunAddr;
 			String time=day+"/"+startTime+"/"+endTime+"/"+subContent;
 			String keyword = keyword1+" "+keyword2+" "+keyword3+" "+keyword4+" "+keyword5;
@@ -266,14 +272,15 @@ public class MypageController
 			attList.add(attach);
 			}
 			}
-			
+		
 			
 			int result = service.placeUpdate(place,menuList,attList);
 			String msg="";
 			String loc="";
-			
+			String status="";
 			if(result>0) {
 			msg="장소 수정이 완료되었습니다.";
+			status="loginSuccess";
 			}else {
 			msg="장소 수정이 완료 되지 않았습니다.";
 			}
@@ -282,7 +289,7 @@ public class MypageController
 			ModelAndView mv = new ModelAndView();
 			mv.addObject("msg", msg);
 			mv.addObject("loc", loc);
-			mv.addObject("result", result);
+			mv.addObject("status", status);
 			mv.setViewName("common/msg");
 			return mv;
 	}
@@ -294,6 +301,10 @@ public class MypageController
 		Member m = (Member)session.getAttribute("memberLoggedIn");
 		String userId = m.getUserId();
 		Map<String, Object> member = service.memberList(userId);
+
+		int warnNum=service.warnMsg(userId);
+		model.addAttribute("warnNum",warnNum);
+
 		model.addAttribute("member", member);
 		return "mypage/myMember";
 	}
@@ -314,10 +325,7 @@ public class MypageController
 		return jsonStr;
 	}
 	
-	
-//	=======================주리가 한 부분 =======================	
-	
-		//리뷰 글 작성
+
 		@RequestMapping(value ="/mypage/review.do",method = RequestMethod.POST) 
 		public ModelAndView insertReview(Review review, MultipartFile review_file, HttpServletRequest request)
 		{
@@ -371,36 +379,34 @@ public class MypageController
 				
 				review.setOrImg(originalFilename);
 				review.setReImg(renamedFileName);
-
-			}
-				
-			int result = service.insertReview(review);
-			
-			//서비스 갔다왔따
-			
-			String msg = "";
-			String loc = "";
-			
-			if(result>0)
-			{
-				msg = "성공적으로 등록하였습니다!";
-				loc = "/mypage/myOrderList.do";
-			}
-			else
-			{
-				msg = "등록을 실패하였습니다 ㅠㅠㅠ";
-				loc ="/mypage/myOrderList.do";
-			}
-			
-			ModelAndView mv = new ModelAndView();
-			
-			mv.addObject("msg",msg);
-			mv.addObject("loc", loc);
-			mv.setViewName("common/msg");
-			
-			return mv;
-		}
-		
+       }
+          
+       int result = service.insertReview(review);
+       
+       //서비스 갔다왔따
+       
+       String msg = "";
+       String loc = "";
+       
+       if(result>0)
+       {
+          msg = "성공적으로 등록하였습니다!";
+          loc = "/mypage/myOrderList.do";
+       }
+       else
+       {
+          msg = "등록을 실패하였습니다 ㅠㅠㅠ";
+          loc ="/mypage/myOrderList.do";
+       }
+       
+       ModelAndView mv = new ModelAndView();
+       
+       mv.addObject("msg",msg);
+       mv.addObject("loc", loc);
+       mv.setViewName("common/msg");
+       
+       return mv;
+    }
 		
 		//게시글 관리 페이지로 이동
 		@RequestMapping("/mypage/myBoardList.do")
@@ -527,11 +533,12 @@ public class MypageController
 			//메시지 출력
 			String msg = "";
 			String loc = "";
-			
+			String status="";
 			if(result>0)
 			{
 				msg="문의 글이 성공적으로 수정되었습니다.";
 				loc="/mypage/myBoardList.do";
+				status="loginSuccess";
 			}
 			else
 			{
@@ -541,6 +548,7 @@ public class MypageController
 						
 			mv.addObject("msg", msg);
 			mv.addObject("loc", loc);
+			mv.addObject("status", status);
 			mv.setViewName("common/msg");
 						
 	  	return mv;
@@ -555,11 +563,12 @@ public class MypageController
 			
 			String msg = "";
 			String loc = "";
-			
+			String status="";
 			if(result>0)
 			{
 				msg = "선택하신 문의글이 성공적으로 삭제 되었습니다.";
 				loc = "/mypage/myBoardList.do";
+				status="loginSuccess";
 			}
 			else
 			{
@@ -569,6 +578,7 @@ public class MypageController
 			
 			mv.addObject("msg",msg);
 			mv.addObject("loc", loc);
+			mv.addObject("status", status);
 			mv.setViewName("common/msg");
 			
 			return mv;	
@@ -637,11 +647,12 @@ public class MypageController
 					
 					String msg = "";
 					String loc = "";
-					
+					String status = "";
 					if(result>0)
 					{
 						msg = "성공적으로 등록하였습니다!";
 						loc = "/mypage/myBoardList.do";
+						status="loginSuccess";
 					}
 					else
 					{
@@ -653,6 +664,7 @@ public class MypageController
 					
 					mv.addObject("msg",msg);
 					mv.addObject("loc", loc);
+					mv.addObject("status", status);
 					mv.setViewName("common/msg");
 					
 					return mv;
@@ -668,11 +680,12 @@ public class MypageController
 		
 		String msg = "";
 		String loc = "";
-		
+		String status="";
 		if(result>0)
 		{
 			msg = "리뷰가 성공적으로 삭제 되었습니다.";
 			loc = "/mypage/myBoardList.do";
+			status="loginSuccess";
 		}
 		else
 		{
@@ -682,15 +695,11 @@ public class MypageController
 		
 		mv.addObject("msg",msg);
 		mv.addObject("loc", loc);
+		mv.addObject("status", status);
 		mv.setViewName("common/msg");
 		
 		return mv;	
 
 	}
-	
-	
-		
-		
-//		=======================주리가 한 부분  끝=======================		
 	
 }

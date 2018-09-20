@@ -39,6 +39,15 @@ star-input>.input.focus{outline:1px dotted #ddd;}
 }
    
    #orderNo {
+	outline: none !important;
+	border: none;
+	background: transparent;
+	}
+	
+	#orderNo:hover {
+		text-decoration: none;
+		color: #F05F40 !important;
+	}
    outline: none !important;
    border: none;
    background: transparent;
@@ -49,12 +58,12 @@ star-input>.input.focus{outline:1px dotted #ddd;}
       color: #F05F40 !important;
    }
    
-   
 </style>
 
 <!-- 마이페이지 css-->
     <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/mypage.css">
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>   
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>	
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>  
 
    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
 
@@ -104,7 +113,6 @@ star-input>.input.focus{outline:1px dotted #ddd;}
                }
            );    
        });
-
        $(function() {
           
            // Create the close button
@@ -162,7 +170,7 @@ star-input>.input.focus{outline:1px dotted #ddd;}
         var content = $("#reContent").val().trim();
         var star =  $('input[name="star-input"]:checked').val();
         //별점을 input에다가 넣기
-        $('#stars').val(별); 
+        $('#stars').val(star); 
         
        
        //리뷰 내용에 아무것도 안 적었을 때

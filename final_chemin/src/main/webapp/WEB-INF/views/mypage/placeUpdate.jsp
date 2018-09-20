@@ -8,9 +8,7 @@
 <c:set value="${pageContext.request.contextPath }" var="path"/>
   <jsp:include page="/WEB-INF/views/common/header1.jsp"/>
   <style>
-  	.container{
-  		width:50%;
-  	}
+  
 	.box {
         min-height: 150px;
          margin-left:auto;
@@ -31,10 +29,10 @@
 	.col-md-2 {
 		 text-align: left;
 	}
-	span{
+	 .subText{
 		margin-left:10%;
 		font-size:16px;
-	}
+	} 
 	 .frist{
 		margin-top:4%;
 		margin-bottom:5%
@@ -316,7 +314,7 @@ function validate(){
 		    	<div class="info col-md-12">
 		    		<div class="row frist">
 			    		<div class="col-md-2">
-			    			<span>지역선택</span>
+			    			<span class="subText">지역선택</span>
 			    		</div>
 			    		<div class="col-md-10">
 			    			 <select class="form-control smallSzie"  name="plaArea">
@@ -331,7 +329,7 @@ function validate(){
 		    		
 		    		<div class="row margin-bottom">
 		    			<div class="col-md-2">
-			    			<span>업종</span>
+			    			<span class="subText">업종</span>
 			    		</div>
 			    		<div class="col-md-10">
 			    			 <select class="form-control smallSzie"  name="plaCategory">
@@ -347,7 +345,7 @@ function validate(){
 	
 		    		<div class="row margin-bottom">
 			    		<div class="col-md-2">
-			    			<span>업체명</span>
+			    			<span class="subText">업체명</span>
 			    		</div>
 			    		<div class="col-md-10">	    		
 							<input class="form-control" style="width:50%" name="plaName" value="${place.plaName }"  type="text"  placeholder="업체명을 입력해주세요 ">
@@ -357,7 +355,7 @@ function validate(){
 		    		
 		    		<div class="row margin-bottom">
 			    		<div class="col-md-2">
-			    			<span>대표이미지</span>
+			    			<span class="subText">대표이미지</span>
 			    		</div>
 			    		<div class="col-md-10">
 			    				<div class="filebox bs3-primary">
@@ -377,7 +375,7 @@ function validate(){
 
 		    		<div class="row margin-bottom">
 			    		<div class="col-md-2">
-			    			<span>전화번호</span>
+			    			<span class="subText">전화번호</span>
 			    		</div>
 			    		<div class="col-md-10">
 			    			<div class="form-inline">	
@@ -400,7 +398,7 @@ function validate(){
 		    		
 		    		<div class="row margin-bottom">
 			    		<div class="col-md-2">
-			    			<span>주소</span>
+			    			<span class="subText">주소</span>
 			    		</div>
 			    		<div class="col-md-10">
 			    			<div class="form-inline">	
@@ -417,7 +415,7 @@ function validate(){
 		    		
 		    		<div class="row margin-bottom">
 			    		<div class="col-md-2">
-			    			<span>이용시간</span>
+			    			<span class="subText">이용시간</span>
 			    		</div>
 			    		<div class="col-md-10 form-inline" >
 				    			 <select class="form-control time" id="time"  name="day">
@@ -489,7 +487,7 @@ function validate(){
 		    		
 		    		<div class="row margin-bottom-sub">
 			    		<div class="col-md-2">
-			    			<span>가격정보</span>
+			    			<span class="subText">가격정보</span>
 			    		</div>
 			    		<div class="col-md-10 form-inline" >
 			   					<input class="form-control addr menuName" id="meNameOne"  name="menuName" type="text" placeholder="ex)아메리카노"/>
@@ -518,7 +516,7 @@ function validate(){
 			  
 			     	<div class="row margin-bottom margin-top">
 			    		<div class="col-md-2">
-			    			<span>소개글</span>
+			    			<span class="subText">소개글</span>
 			    		</div>
 			    		<div class="col-md-10 " >
 			    			<div class="middleSize">
@@ -531,7 +529,7 @@ function validate(){
 		    		
 		    		 <div class="row margin-bottom">
 			    		<div class="col-md-2">
-			    			<span>사진등록</span>
+			    			<span class="subText">사진등록</span>
 			    		</div>
 			    		<div class="col-md-10">
 			    			 <div class="form-group middleSize">
@@ -543,7 +541,7 @@ function validate(){
 		    		
 		    		 <div class="row margin-bottom">
 			    		<div class="col-md-2">
-			    			<span>대표키워드</span>
+			    			<span class="subText">대표키워드</span>
 			    		</div>
 			    		<div class="col-md-10 form-inline">
 			    			<input class="form-control" id="time" name="keyword1" type="text" placeholder="ex)홍대맛집"/>

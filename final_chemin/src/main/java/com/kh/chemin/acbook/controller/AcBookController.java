@@ -63,7 +63,7 @@ public class AcBookController extends HttpServlet{
 		mv.addObject("lastDay",lastDay);
 		mv.addObject("monAvg",monAvg);
 		mv.addObject("savCost",savCost);
-		logger.debug("savCost세브코스트응으으으"+savCost);
+		logger.debug("savCost"+savCost);
 		mv.setViewName("acbook/ac_main");
 		return mv;
 	}

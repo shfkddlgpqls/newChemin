@@ -42,13 +42,13 @@
 		PLACONTENT=#{plaContent}, PLAKEYWORD=#{plaKeyword}, PLADATE=default, PLASTATUS='N' where PLANO=#{plaNo} 
 	</update>
 	
-		<update id="updateMenu" parameterType="placeMenu">
+		<insert id="updateMenu" parameterType="placeMenu">
 		insert into pla_menu(MENUNO,PLANO,MENUNAME,MENUPRICE) values(seq_placemenu_no.nextval,#{plaNo},#{menuName},#{menuPrice})
-	</update>
+	</insert>
 	
-	<update id="updateAttach" parameterType="placeAttach">
+	<insert id="updateAttach" parameterType="placeAttach">
 		insert into PLA_ATTACHMENT(ATTACHMENTNO,PLANO,ORIMG,REIMG) values(SEQ_PLAATTACH_NO.nextval,#{plaNo},#{orImg},#{reImg})
-	</update>
+	</insert>
 	
 	<delete id="removeMenu" parameterType="_int">
 		delete pla_menu where PLANO=#{plaNo}

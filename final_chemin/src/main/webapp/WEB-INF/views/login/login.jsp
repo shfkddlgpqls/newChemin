@@ -94,7 +94,7 @@
 
 <!-- Modal HTML -->
    <!-- <div id="myModal" class="modal fade" > -->
-   <div class="modal-dialog modal-login">
+   <div class="modal-dialog modal-login" style="margin-top:5%">
       <div class="modal-content">
          <div class="modal-header">
                 <div class="avatar"><i class="material-icons">&#xE7FD;</i></div>
@@ -112,13 +112,23 @@
                   <input type="submit" class="btn btn-primary btn-block btn-lg" value="Login!">
                </div>
             </form>            
-            <!-- <div class="hint-text small"><a href="#">Forgot Your Password?</a></div> -->
-            <input type="checkbox" class="remember" checked>Remember
+            <div class="hint-text small"><a href="#" onclick="show_findId()">ID가 생각나지 않는다면? Click Here</a></div>
+            <div class="hint-text small"><a href="#" onclick="show_findPw()">비밀번호가 생각나지 않는다면? Click Here</a></div>
          </div>
       </div>
     </div>
-<!-- </div> --> 
 </body>
 </html>           
+
+<script>
+	var showView1;
+	var showView2;
+	function show_findId(){
+		showView1 = window.open("${path}/login/findId.do", "ID 찾기", "width=500, height=400, left=500, top=150");
+	}
+	function show_findPw(){
+		showView2 = window.open("${path}/login/findPw.do", "PW 찾기", "width=500, height=400, left=500, top=150");
+	}
+</script>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

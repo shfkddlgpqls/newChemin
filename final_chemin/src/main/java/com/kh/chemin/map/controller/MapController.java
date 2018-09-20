@@ -76,8 +76,13 @@ public class MapController {
 	@RequestMapping(value="/map/placeInsert.do", method = RequestMethod.POST)
 	public ModelAndView placeInsert(Place place ,@RequestParam("mainImg")MultipartFile mainImg,@RequestParam("file")MultipartFile[] file,HttpServletRequest request,String[] menuName,String[] menuPrice,String[] menuCheck, String phoneFirst, String phoneMiddle, String phoneEnd,String postCode, String roadAddr, String jibunAddr,
 							  String day, String startTime, String endTime,String subContent,String keyword1,String keyword2, String keyword3, String keyword4, String keyword5) {
+		String phone=phoneFirst;
+		if(phoneMiddle!=null && phoneMiddle!="") {
+			phone+="-"+phoneMiddle;
+		}if(phoneEnd!=null && phoneEnd!="") {
+			phone+=phoneEnd;
+		}
 		
-		String phone=phoneFirst+"-"+phoneMiddle+"-"+phoneEnd;
 		String address=roadAddr+"/"+postCode+"/"+jibunAddr;
 		String time=day+"/"+startTime+"/"+endTime+"/"+subContent;
 		String keyword = keyword1+" "+keyword2+" "+keyword3+" "+keyword4+" "+keyword5;
