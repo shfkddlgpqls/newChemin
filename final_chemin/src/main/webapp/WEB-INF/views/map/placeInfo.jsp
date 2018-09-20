@@ -201,7 +201,11 @@ padding:0;
     
 			   	</div>
 			   <div class="row" style="width:100%;margin-left:auto; margin-right:auto;">
-			    <a href="http://map.daum.net/?sName=${address}&eName=${place.plaName}" class="load" style="margin-left:auto; margin-right:auto;text-decoration:none"> 
+			   <c:forTokens items="${place.plaAddr}" delims="/" var="roadAddr" varStatus="status">
+      		  <c:if test="${status.index == 0}">
+			    <a href="http://map.daum.net/?sName=${address}&eName=${roadAddr}" class="load" style="margin-left:auto; margin-right:auto;text-decoration:none"> 
+				 </c:if>
+				 </c:forTokens>
 				 <div>
 				 	<i class="material-icons" style="font-size:2.5em;color:#FB6E9D">call_split</i>
 				 	<p style="color:black">길찾기</p>
@@ -323,7 +327,7 @@ padding:0;
 			  	  <input type="hidden" name="plaNo" value="${place.plaNo }"/>
 			  	  <c:forEach items="${attachList}" var="attach" varStatus="status">
 			  	     <c:if test="${status.index <4}">
-			          <div class="col-md-3"><a href="#x" class="thumbnail"><img src="${path}/resources/upload/place/attach/${attach.reImg}" alt="Image" class=" img-thumbnail"></a>
+			          <div class="col-md-3"><a href="#x" class="thumbnail"><img style="width:200px; height:150px" src="${path}/resources/upload/place/attach/${attach.reImg}" alt="Image" class=" img-thumbnail"></a>
 			          </div>
 			         </c:if> 
 			         </c:forEach> 

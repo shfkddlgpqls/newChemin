@@ -9,7 +9,7 @@
 <!-- 마이페이지 css-->
 <link rel="stylesheet" type="text/css" href="${path}/resources/base/css/mypage.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <style>   
 .alert {
     padding: 20px;
@@ -75,6 +75,10 @@ margin-right:2%
 
 
 <script>
+var pw1Flag=0;
+var pw2Flag=0;
+var emailFlag=0;
+var phoneFlag=0;
 //수정하기 버튼
 function  fn_infoChange(){
 	 swal({
@@ -146,7 +150,8 @@ function  fn_infoChange(){
                }
        
                reader.readAsDataURL(input.files[0]);
-               $('[name=orImg]').val(input.files[0].name);
+               var file=input.files[0].name;
+               $('#file').val(file);
            }
           
        }
@@ -158,19 +163,16 @@ function  fn_infoChange(){
    });   
    $(function(){
 		
-		var pw1Flag=0;
-		var pw2Flag=0;
-		var emailFlag=0;
-		var phoneFlag=0;
+		
 		var passwordRules = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
 		var emailRules = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-		$("#phone").keyup(function(event)
+	 	$("#phone").keyup(function(event)
 				{	
 					event = event || window.event;
 			        var _val = this.value.trim();
 			        this.value = autoHypenPhone(_val) ;
 					
-					$.ajax({
+				/* 	$.ajax({
 						url:"${pageContext.request.contextPath}/member/checkPhone.do",
 						type:"post",
 						data:{"phone":$("#phone").val().trim()},
@@ -192,9 +194,9 @@ function  fn_infoChange(){
 								}
 							
 						}
-					});
+					}); */
 				});
-		$("#email").keyup(function()
+	/*	$("#email").keyup(function()
 				{	
 					
 					$.ajax({
@@ -221,7 +223,7 @@ function  fn_infoChange(){
 							} 
 						}
 					});
-				});
+				}); */
 		$("#password").keyup(function(){
 			if(passwordRules.test($("#password").val()))
 			{
@@ -249,36 +251,7 @@ function  fn_infoChange(){
           pw2Flag=1;
       }
     });
-$("#memberUpdateFrm").submit(function(event){
-  		
-  		
-  		if(!(pwFlag==1&&phoneFlag==1&&emailFlag==1))
-  		{
-  			
-	  		if(pw1Flag==0)
-	  		{
-	  			event.preventDefault();
-	  			alert("비밀번호를 확인해주세요.");
-	  			$("#userPw").focus();
-	  			return;
-	  		}
-	  		else if(emailFlag==0)
-	  		{
-	  			event.preventDefault();
-	  			alert("사용가능한 E-mail을 입력해주세요");
-	  			$("#userEmail").focus();
-	  			return;
-	  		}
-	  		else if(phoneFlag==0)
-	  		{
-	  			event.preventDefault();
-	  			alert("사용가능한 핸드폰번호를 입력해주세요");
-	  			$("#phone").focus();
-	  			return;
-	  		}
-  		}
-  		return true;
-  	});
+
    });
 
    function autoHypenPhone(str){
@@ -310,12 +283,10 @@ $("#memberUpdateFrm").submit(function(event){
    }
 
  
- </script> 
-<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 
-<script>
 
-			    function address() {
+
+ function address() {
               new daum.Postcode({
                   oncomplete: function(data) {
                      
@@ -353,6 +324,69 @@ $("#memberUpdateFrm").submit(function(event){
                   }
               }).open();
           }
+			    
+   function fn_confirm(){
+	 console.log($('#file').val());
+	   var phone = $('[name=phone]').val();
+	   
+	   if(pw1Flag==0)
+ 		{
+ 			event.preventDefault();
+ 			swal({
+				  text: "비밀번호를 확인해주세요",
+				  icon: "warning",
+				  button: "확인",
+				});
+ 			
+ 			$("#password").focus();
+ 			return false;
+ 		}else if(phone.length!=13){
+ 			console.log(length)
+ 			swal({
+				  text: "전화번호 13자리 모두 입력해주세요",
+				  icon: "warning",
+				  button: "확인",
+				});
+			
+			$("#phone").focus();
+			return false;
+ 		}else {
+ 			return true;
+ 		}
+	
+ 			
+ 		   /* else if(emailFlag==0)
+ 	 		{
+ 	 			event.preventDefault();
+ 	 			alert("사용가능한 E-mail을 입력해주세요");
+ 	 			$("#email").focus();
+ 	 			return false;
+ 	 		}else if(phoneFlag==0)
+ 	 		{
+ 	 			event.preventDefault();
+ 	 			alert("사용가능한 핸드폰번호를 입력해주세요");
+ 	 			$("#phone").focus();
+ 	 			return false;
+ 	 		} */
+ 	 		
+   }
+   
+   function fn_withdraw(userId){
+	   swal({
+			  text: "회원 탈퇴를 하시겠습니까?",
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((willDelete) => {
+			  if (willDelete) {
+				  location.href = "${path}/member/memberWithdraw?userId="+userId+"&mgrade="+2;
+			  } else {
+			    
+			  }
+			});   
+   }
+			   
 </script>   
 
 		<!-- 신고 제재 메시지 -->
@@ -361,18 +395,18 @@ $("#memberUpdateFrm").submit(function(event){
 		<div>
 		<!-- 회원정보 수정 폼란 -->
 <section>
-<div class="container bootstrap snippet">
+<div class="container bootstrap snippet" >
   
-  		<div>
+  		<div style="width:70%;margin-left:auto; margin-right:auto;">
 		  	<h3>회원정보</h3>
 		  	<br>
 		  </div>	
     	
 
-      <div class="text-center" style="margin-left:auto; margin-right:auto; width:70%">
-        <form class="form" action="${path}/member/memberInfoUpdate" method="post" id="registrationForm">
+      <div class="text-center" style="margin-left:auto; margin-right:auto; width:70%;margin-top:1%">
+        <form class="form" action="${path}/member/memberInfoUpdate" method="post" onsubmit="return fn_confirm()" enctype="multipart/form-data">
        <img src="${path}/resources/upload/member/${member.RENAMEIMAGE}" class="avatar img-circle img-thumbnail" alt="avatar" style="border-radius: 100px;width:205px;height:205px">
-        <h6>${member.USERId}</h6>
+        <h5>${member.USERID}님</h5>
         <div class="input--file " style="width:5%;margin-left:auto; margin-right:auto;">
 			  <span>
 			    <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -381,11 +415,10 @@ $("#memberUpdateFrm").submit(function(event){
 			      <path d="M0 0h24v24h-24z" fill="none"/>
 			    </svg>
 			  </span>
-			  <input type="file" class="text-center center-block file-upload" id="file" name="file" value="" disabled="ture"/>
-				<input type="text" class="upload-name" name="orImg" value="" >
+			  <input type="file" class="text-center center-block file-upload" id="file" name="file" disabled="true"/>
+				<input type="hidden" name="renameImage" value="${member.RENAMEIMAGE}">
 			</div>
       </div></hr><br>
-
 
     	<div style="margin-left:auto; margin-right:auto; width:70%">
           <div class="tab-content">
@@ -467,14 +500,15 @@ $("#memberUpdateFrm").submit(function(event){
                            <div class="col-xs-12">
               
                               	<button class="btn btn-success" type="submit" id="perfect"  style="display:none"><i class="glyphicon glyphicon-ok-sign"></i> 수정완료</button>
-                              	<button class="btn"><i class="glyphicon glyphicon-repeat"></i> 탈퇴하기</button>
+                              	
                             </div>
                       </div>
                        <input type="hidden" name="userId" value="${memberLoggedIn.userId}">
               	</form>
               		<div style="float:right">
+              		
               			<button class="btn btn-primary" onclick="fn_infoChange()" id="update">수정하기</button>
-                      
+                      <button class="btn" onclick="fn_withdraw('${memberLoggedIn.userId}')"><i class="glyphicon glyphicon-repeat"></i> 탈퇴하기</button>
            		</div>
  
                

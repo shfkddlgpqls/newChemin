@@ -11,14 +11,10 @@ import com.kh.chemin.map.model.vo.PlaceMenu;
 import com.kh.chemin.member.model.vo.Member;
 
 public interface MypageService {
-
-	int insertReview(Review review);
-	List<QnA_board> selectQnaBoardList(int cPage, int numPerPage, String userId);
-	int selectQnACount(String userId);
-	List<Review> selectReviewList(int cPage, int numPerPage, String userId);
-	int selectReviewCount(String userId);
+;
 	int warnMsg(String userId);
 	
+
 	List<Place> selectPlaceList(Map map, int cPage, int numPerPage);
 	List<PlaceAttachment> selectAttachList(int plaNo);
 	List<PlaceMenu> selectMenuList(int plaNo);
@@ -32,7 +28,23 @@ public interface MypageService {
 	List<Map<String, Object>> selectWishList(String userId);
 
 	int selectPlaceCount(Map map);
+
+//	=======================주리가 한 부분  시작=======================	
+	int insertReview(Review review);
+	List<QnA_board> selectQnaBoardList(int cPage, int numPerPage, String userId);
+	int selectQnACount(String userId);
+	List<Review> selectReviewList(int cPage, int numPerPage, String userId);
+	int selectReviewCount(String userId);
+	int UpdateQna(Map<String, String> map);
+	int myQnaDel(String modal_qno);
+	int insertReviewEdit(Review review);
+	int myReviewDel(String modal_rno);
+	
+//	=======================주리가 한 부분  끝=======================	
+
 	Map<String, Object> memberList(String userId);
+
+
 }
 
 

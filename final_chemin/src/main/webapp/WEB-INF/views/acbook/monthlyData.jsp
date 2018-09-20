@@ -1,404 +1,440 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"	import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"   import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set value="${pageContext.request.contextPath}" var="path" />
 <!-- chart -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
-<script	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+<script   src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 <!-- jQurery -->
 <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
 <!-- BootStrap -->
-<link rel="stylesheet"	href="<c:url value= "/resources/vendor/bootstrap/css/bootstrap.css"/>">
-<link rel="stylesheet"	href="<c:url value= "/resources/acbook/css/monthlyData.css?var9"/>">
+<link rel="stylesheet"   href="<c:url value= "/resources/vendor/bootstrap/css/bootstrap.css"/>">
+<link rel="stylesheet"   href="<c:url value= "/resources/acbook/css/monthlyData.css?var9"/>">
 <!-- header -->
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <!-- sideBar -->
 <jsp:include page="/WEB-INF/views/acbook/sideBar.jsp" />
 <!-- Main Start -->
 <div class="col-md-10 col-sm-8 main-content"  id="newMain">
-	<div class="container-fluid">
-<!-- 	여기서부터 내용 쓰면 됨 -->
+<br><br>
+   <div class="container-fluid">
+<!--    여기서부터 내용 쓰면 됨 -->
 <!-- START: WHOLE TEMPLATE SECTION -->
 <!------ Include the above in your HEAD tag ---------->
 <!-- <div class="container-fluid"><span style="font-size:60px;margin-top:0;">Monthly Expenditure Pattern</span></div> -->
+<style>
+html { font-size: 60.5%; } 
+body { font-size: 1em;} 
+
+@media (max-width: 300px) { 
+    html { font-size: 70%; } 
+} 
+
+@media (min-width: 500px) { 
+    html { font-size: 80%; } 
+} 
+
+@media (min-width: 700px) { 
+    html { font-size: 80%; } 
+} 
+
+@media (min-width: 1200px) { 
+    html { font-size: 100%; } 
+}
+</style>
 <form name="imgForm" id="imgForm" action="acbook/download.do" method="post">
     <input type="hidden" id="imgData" name="imgData">
 </form>
 <div class="row">
 <div class="col-md-6">
 <div class="printDiv">
-	<div class="content" id="newMain">             
-       	<div class="about-content-box">
-		 <div class="comparison">
-		  <table>
-		    <thead>
-		      <tr>
-		        <th class="product" style="background:#69C7F1; border-top-left-radius: 5px; border-left:0px;">2018</th>
-		        <th class="product" style="background:#69C7F1; border-top-left-radius: 5px; border-left:0px;">Jul.</th>
-		        <th class="product" style="background:#69C7F1;">Aug.</th>
-		        <th class="product" style="border-top-right-radius: 5px; border-right:0px; background:#69C7F1;">Sept.</th>
-		      </tr>
-		      <tr>
-		        <th>
-		        	<div class="printBtnZone" align="right" >
-				        <a id="btnDown"><img src="${path}/resources/acbook/images/201_13.png" style="width:80px;text-align:left">.</a>
-				    </div>
-		        </th>
-		        <th class="price-info">
-		          <div class="price-now"><span>${prePreMonthlySumAvg[0].ALLCOST}</span><br>
-		            <p>${prePreMonthlySumAvg[0].AVGCOST}원/ day</p>
-		          </div>
-		        </th>
-		        <th class="price-info">
-		          <div class="price-now"><span>${preMonthlySumAvg[0].ALLCOST}</span><br>
-		            <p>${preMonthlySumAvg[0].AVGCOST}원/ day</p>
-		          </div>
-		        </th>
-		        <th class="price-info">
-		          <div class="price-now"><span>${monthlySumAvg[0].ALLCOST}</span><br>
-		            <p>${monthlySumAvg[0].AVGCOST}원/ day</p>
-		          </div>
-		        </th>
-		      </tr>
-		    </thead>
-		    <tbody>
-		      <tr>
-		        <td></td>
-		        <td colspan="3">item_1</td>
-		      </tr>
-		      <tr class="compare-row">
-		        <td style="width:50px">식비</td>
-		        <td>
-					<c:forEach items="${prePreMonthlyData}" var ="pp">
-		        		<c:if test="${pp.CATENAME eq '식비'}">${pp.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-		        	<c:forEach items="${preMonthlyData}" var ="p">
-		        		<c:if test="${p.CATENAME eq '식비'}">${p.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-			        <c:forEach items="${monthlyExpenditure}" var="m">        		
-				        <c:if test="${m.CATENAME eq '식비'}">${m.CATESUM }</c:if>			        
-			        </c:forEach>
-		        </td>
-		      </tr>
-		      <tr>
-		        <td></td>
-		      </tr>
-		      <tr>
-		        <td>교통비</td>
-		        <td>
-					<c:forEach items="${prePreMonthlyData}" var ="pp">
-		        		<c:if test="${pp.CATENAME eq '교통비'}">${pp.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-		        	<c:forEach items="${preMonthlyData}" var ="p">
-		        		<c:if test="${p.CATENAME eq '교통비' }">${p.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-			        <c:forEach items="${monthlyExpenditure}" var="m" varStatus="status">        		
-				        <c:if test="${m.CATENAME eq '교통비'}">${m.CATESUM }</c:if>			        
-			        </c:forEach>
-		        </td>
-		      </tr>
-		      <tr>
-		        <td></td>
-		      </tr>
-		      <tr class="compare-row">
-		        <td>문화생활</td>
-		        <td>
-					<c:forEach items="${prePreMonthlyData}" var ="pp">
-		        		<c:if test="${pp.CATENAME eq '문화생활'}">${pp.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-		        	<c:forEach items="${preMonthlyData}" var ="p">
-		        		<c:if test="${p.CATENAME eq '문화생활'}">${p.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-		        	<c:forEach items="${monthlyExpenditure}" var="m" varStatus="status">        		
-				        <c:if test="${m.CATENAME eq '문화생활'}">${m.CATESUM }</c:if>			        
-			        </c:forEach>
-		        </td>
-		      </tr>
-		      <tr>
-		        <td></td>
-		      </tr>
-		      <tr>
-		        <td>생필품</td>
-		        <td>
-					<c:forEach items="${prePreMonthlyData}" var ="pp">
-		        		<c:if test="${pp.CATENAME eq '생필품'}">${pp.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-		        	<c:forEach items="${preMonthlyData}" var ="p">
-		        		<c:if test="${p.CATENAME eq '생필품'}">${p.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-			        <c:forEach items="${monthlyExpenditure}" var="m" varStatus="status">        		
-				        <c:if test="${m.CATENAME eq '생필품'}">${m.CATESUM }</c:if>			        
-			        </c:forEach>
-		        </td>
-		      </tr>
-		      <tr>
-		        <td></td>
-		      </tr>
-		      <tr class="compare-row">
-		        <td>의류</td>
-		        <td>
-					<c:forEach items="${prePreMonthlyData}" var ="pp">
-		        		<c:if test="${pp.CATENAME eq '의류'}">${pp.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-		        	<c:forEach items="${preMonthlyData}" var ="p">
-		        		<c:if test="${p.CATENAME eq '의류'}">${p.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-			        <c:forEach items="${monthlyExpenditure}" var="m" varStatus="status">        		
-				        <c:if test="${m.CATENAME eq '의류'}">${m.CATESUM }</c:if>			        
-			        </c:forEach>
-		        </td>
-		      </tr>
-		      <tr>
-		        <td></td>
-		      </tr>
-		      <tr>
-		        <td>미용</td>
-	 	       <td>
-					<c:forEach items="${prePreMonthlyData}" var ="pp">
-		        		<c:if test="${pp.CATENAME eq '미용'}">${pp.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-		        	<c:forEach items="${preMonthlyData}" var ="p">
-		        		<c:if test="${p.CATENAME eq '미용'}">${p.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-			        <c:forEach items="${monthlyExpenditure}" var="m" varStatus="status">        		
-				        <c:if test="${m.CATENAME eq '미용'}">${m.CATESUM }</c:if>			        
-			        </c:forEach>
-		        </td>
-		      </tr>
-		      <tr>
-		        <td></td>
-		      </tr>
-		      <tr class="compare-row">
-		        <td>의료/건강</td>
-	 	       <td>
-					<c:forEach items="${prePreMonthlyData}" var ="pp">
-		        		<c:if test="${pp.CATENAME eq '의료/건강'}">${pp.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-		        	<c:forEach items="${preMonthlyData}" var ="p">
-		        		<c:if test="${p.CATENAME eq '의료/건강'}">${p.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-			        <c:forEach items="${monthlyExpenditure}" var="m" varStatus="status">        		
-				        <c:if test="${m.CATENAME eq '의료/건강'}">${m.CATESUM }</c:if>			        
-			        </c:forEach>
-		        </td>
-		      </tr>
-		      <tr>
-		        <td></td>
-		      </tr>
-		      <tr>
-		        <td>교육</td>
-	 	       <td>
-					<c:forEach items="${prePreMonthlyData}" var ="pp">
-		        		<c:if test="${pp.CATENAME eq '교육'}">${pp.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-		        	<c:forEach items="${preMonthlyData}" var ="p">
-		        		<c:if test="${p.CATENAME eq '교육'}">${p.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		       	<td>
-			       	<c:forEach items="${monthlyExpenditure}" var="m" varStatus="status">        		
-				        <c:if test="${m.CATENAME eq '교육'}">${m.CATESUM }</c:if>			        
-			        </c:forEach>
-		       	</td>
-		      </tr>
-		      <tr>
-		        <td></td>
-		      </tr>
-		      <tr class="compare-row">
-		        <td>전화요금</td>
-	 	        <td>
-					<c:forEach items="${prePreMonthlyData}" var ="pp">
-		        		<c:if test="${pp.CATENAME eq '휴대폰요금'}">${pp.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-		        	<c:forEach items="${preMonthlyData}" var ="p">
-		        		<c:if test="${p.CATENAME eq '휴대폰요금'}">${p.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-			        <c:forEach items="${monthlyExpenditure}" var="m" varStatus="status">        		
-				        <c:if test="${m.CATENAME eq '휴대폰요금'}">${m.CATESUM }</c:if>			        
-			        </c:forEach>
-		        </td>
-		      </tr>
-		      <tr>
-		        <td></td>
-		      </tr>
-		      <tr>
-		        <td>경조사</td>
-	 	        <td>
-					<c:forEach items="${prePreMonthlyData}" var ="pp">
-		        		<c:if test="${pp.CATENAME eq '경조사비'}">${pp.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-		        	<c:forEach items="${preMonthlyData}" var ="p">
-		        		<c:if test="${p.CATENAME eq '경조사비'}">${p.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-			        <c:forEach items="${monthlyExpenditure}" var="m" varStatus="status">        		
-				        <c:if test="${m.CATENAME eq '경조사비'}">${m.CATESUM }</c:if>			        
-			        </c:forEach>
-		        </td>
-		      </tr>
-		      <tr>
-		        <td></td>
-		      </tr>
-		      <tr class="compare-row">
-		        <td>공과금</td>
-	 	        <td>
-					<c:forEach items="${prePreMonthlyData}" var ="pp">
-		        		<c:if test="${pp.CATENAME eq '공과금'}">${pp.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-		        	<c:forEach items="${preMonthlyData}" var ="p">
-		        		<c:if test="${p.CATENAME eq '공과금'}">${p.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-			        <c:forEach items="${monthlyExpenditure}" var="m" varStatus="status">        		
-				        <c:if test="${m.CATENAME eq '공과금'}">${m.CATESUM }</c:if>			        
-			        </c:forEach>
-		        </td>
-		      </tr>
-		      <tr>
-		        <td></td>
-		      </tr>
-		      <tr>
-		        <td>카드대금</td>
-	 	        <td>
-					<c:forEach items="${prePreMonthlyData}" var ="pp">
-		        		<c:if test="${pp.CATENAME eq '카드대금'}">${pp.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-		        	<c:forEach items="${preMonthlyData}" var ="p">
-		        		<c:if test="${p.CATENAME eq '카드대금'}">${p.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-			        <c:forEach items="${monthlyExpenditure}" var="m" varStatus="status">        		
-				        <c:if test="${m.CATENAME eq '카드대금'}">${m.CATESUM }</c:if>			        
-			        </c:forEach>
-		        </td>
-		      </tr>
-		      <tr>
-		        <td></td>
-		      </tr>
-		      <tr class="compare-row">
-		        <td>저축</td>
-	 	        <td>
-					<c:forEach items="${prePreMonthlyData}" var ="pp">
-		        		<c:if test="${pp.CATENAME eq '카드대금'}">${pp.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-		        	<c:forEach items="${preMonthlyData}" var ="p">
-		        		<c:if test="${p.CATENAME eq '카드대금'}">${p.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-			        <c:forEach items="${monthlyExpenditure}" var="m" varStatus="status">        		
-				        <c:if test="${m.CATENAME eq '저축'}">${m.CATESUM }</c:if>			        
-			        </c:forEach>
-		        </td>
-		      </tr>
-		      <tr>
-		        <td></td>
-		      </tr>
-		      <tr>
-		        <td>기타</td>
-	 	        <td>
-					<c:forEach items="${prePreMonthlyData}" var ="pp">
-		        		<c:if test="${pp.CATENAME eq '기타'}">${pp.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		        <td>
-		        	<c:forEach items="${preMonthlyData}" var ="p">
-		        		<c:if test="${p.CATENAME eq '기타'}">${p.CATESUM }</c:if>
-		        	</c:forEach>
-		        </td>
-		       	<td>
-			       	<c:forEach items="${monthlyExpenditure}" var="m" varStatus="status">        		
-				        <c:if test="${m.CATENAME eq '기타'}">${m.CATESUM }</c:if>			        
-			        </c:forEach>
-		       	</td>
-		      </tr>
-		      <tr>
-		        <td></td>
-		      </tr>
-		    </tbody>
-		  </table>				
-		</div>	   
-	</div>			 
-   </div> 
+   <div class="content" id="newMain">             
+          <div class="about-content-box">
+       <div class="comparison">
+        <table>
+          <thead>
+            <tr>
+              <th class="product" style="background:#69C7F1; border-top-left-radius: 5px; border-left:0px;">2018</th>
+              <th class="product" style="background:#69C7F1; border-top-left-radius: 5px; border-left:0px;">Jul.</th>
+              <th class="product" style="background:#69C7F1;">Aug.</th>
+              <th class="product" style="border-top-right-radius: 5px; border-right:0px; background:#69C7F1;">Sept.</th>
+            </tr>
+            <tr>
+              <th>
+                 <div class="printBtnZone" align="right" >
+                    <a id="btnDown"><img src="${path}/resources/acbook/images/201_13.png" style="width:80px;text-align:left">.</a>
+                </div>
+              </th>
+              <th class="price-info">
+                <div class="price-now"><span>${prePreMonthlySumAvg[0].ALLCOST}</span><br>
+                  <p>${prePreMonthlySumAvg[0].AVGCOST}원/ day</p>
+                </div>
+              </th>
+              <th class="price-info">
+                <div class="price-now"><span>${preMonthlySumAvg[0].ALLCOST}</span><br>
+                  <p>${preMonthlySumAvg[0].AVGCOST}원/ day</p>
+                </div>
+              </th>
+              <th class="price-info">
+                <div class="price-now"><span>${monthlySumAvg[0].ALLCOST}</span><br>
+                  <p>${monthlySumAvg[0].AVGCOST}원/ day</p>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td colspan="3">item_1</td>
+            </tr>
+            <tr class="compare-row">
+              <td style="width:50px">식비</td>
+              <td>
+               <c:forEach items="${prePreMonthlyData}" var ="pp">
+                    <c:if test="${pp.CATENAME eq '식비'}">${pp.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${preMonthlyData}" var ="p">
+                    <c:if test="${p.CATENAME eq '식비'}">${p.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>              
+                 <c:forEach items="${thisMonthlyData}" var="m">              
+                    <c:if test="${m.CATENAME eq '식비'}">${m.CATESUM }</c:if>                 
+                 </c:forEach>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            <tr>
+              <td>교통비</td>
+              <td>
+               <c:forEach items="${prePreMonthlyData}" var ="pp">
+                    <c:if test="${pp.CATENAME eq '교통비'}">${pp.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${preMonthlyData}" var ="p">
+                    <c:if test="${p.CATENAME eq '교통비' }">${p.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${thisMonthlyData}" var="m" varStatus="status">              
+                    <c:if test="${m.CATENAME eq '교통비'}">${m.CATESUM }</c:if>                 
+                 </c:forEach>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            <tr class="compare-row">
+              <td>문화생활</td>
+              <td>
+               <c:forEach items="${prePreMonthlyData}" var ="pp">
+                    <c:if test="${pp.CATENAME eq '문화생활'}">${pp.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${preMonthlyData}" var ="p">
+                    <c:if test="${p.CATENAME eq '문화생활'}">${p.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${thisMonthlyData}" var="m" varStatus="status">              
+                    <c:if test="${m.CATENAME eq '문화생활'}">${m.CATESUM }</c:if>                 
+                 </c:forEach>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            <tr>
+              <td>생필품</td>
+              <td>
+               <c:forEach items="${prePreMonthlyData}" var ="pp">
+                    <c:if test="${pp.CATENAME eq '생필품'}">${pp.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${preMonthlyData}" var ="p">
+                    <c:if test="${p.CATENAME eq '생필품'}">${p.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${thisMonthlyData}" var="m" varStatus="status">              
+                    <c:if test="${m.CATENAME eq '생필품'}">${m.CATESUM }</c:if>                 
+                 </c:forEach>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            <tr class="compare-row">
+              <td>의류</td>
+              <td>
+               <c:forEach items="${prePreMonthlyData}" var ="pp">
+                    <c:if test="${pp.CATENAME eq '의류'}">${pp.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${preMonthlyData}" var ="p">
+                    <c:if test="${p.CATENAME eq '의류'}">${p.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${thisMonthlyData}" var="m" varStatus="status">              
+                    <c:if test="${m.CATENAME eq '의류'}">${m.CATESUM }</c:if>                 
+                 </c:forEach>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            <tr>
+              <td>미용</td>
+              <td>
+               <c:forEach items="${prePreMonthlyData}" var ="pp">
+                    <c:if test="${pp.CATENAME eq '미용'}">${pp.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${preMonthlyData}" var ="p">
+                    <c:if test="${p.CATENAME eq '미용'}">${p.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${thisMonthlyData}" var="m" varStatus="status">              
+                    <c:if test="${m.CATENAME eq '미용'}">${m.CATESUM }</c:if>                 
+                 </c:forEach>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            <tr class="compare-row">
+              <td>의료/건강</td>
+              <td>
+               <c:forEach items="${prePreMonthlyData}" var ="pp">
+                    <c:if test="${pp.CATENAME eq '의료/건강'}">${pp.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${preMonthlyData}" var ="p">
+                    <c:if test="${p.CATENAME eq '의료/건강'}">${p.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${thisMonthlyData}" var="m" varStatus="status">              
+                    <c:if test="${m.CATENAME eq '의료/건강'}">${m.CATESUM }</c:if>                 
+                 </c:forEach>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            <tr>
+              <td>교육</td>
+              <td>
+               <c:forEach items="${prePreMonthlyData}" var ="pp">
+                    <c:if test="${pp.CATENAME eq '교육'}">${pp.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${preMonthlyData}" var ="p">
+                    <c:if test="${p.CATENAME eq '교육'}">${p.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+                <td>
+                   <c:forEach items="${thisMonthlyData}" var="m" varStatus="status">              
+                    <c:if test="${m.CATENAME eq '교육'}">${m.CATESUM }</c:if>                 
+                 </c:forEach>
+                </td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            <tr class="compare-row">
+              <td>전화요금</td>
+               <td>
+               <c:forEach items="${prePreMonthlyData}" var ="pp">
+                    <c:if test="${pp.CATENAME eq '휴대폰요금'}">${pp.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${preMonthlyData}" var ="p">
+                    <c:if test="${p.CATENAME eq '휴대폰요금'}">${p.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${thisMonthlyData}" var="m" varStatus="status">              
+                    <c:if test="${m.CATENAME eq '휴대폰요금'}">${m.CATESUM }</c:if>                 
+                 </c:forEach>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            <tr>
+              <td>경조사</td>
+               <td>
+               <c:forEach items="${prePreMonthlyData}" var ="pp">
+                    <c:if test="${pp.CATENAME eq '경조사비'}">${pp.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${preMonthlyData}" var ="p">
+                    <c:if test="${p.CATENAME eq '경조사비'}">${p.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${thisMonthlyData}" var="m" varStatus="status">              
+                    <c:if test="${m.CATENAME eq '경조사비'}">${m.CATESUM }</c:if>                 
+                 </c:forEach>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            <tr class="compare-row">
+              <td>공과금</td>
+               <td>
+               <c:forEach items="${prePreMonthlyData}" var ="pp">
+                    <c:if test="${pp.CATENAME eq '공과금'}">${pp.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${preMonthlyData}" var ="p">
+                    <c:if test="${p.CATENAME eq '공과금'}">${p.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${thisMonthlyData}" var="m" varStatus="status">              
+                    <c:if test="${m.CATENAME eq '공과금'}">${m.CATESUM }</c:if>                 
+                 </c:forEach>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            <tr>
+              <td>카드대금</td>
+               <td>
+               <c:forEach items="${prePreMonthlyData}" var ="pp">
+                    <c:if test="${pp.CATENAME eq '카드대금'}">${pp.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${preMonthlyData}" var ="p">
+                    <c:if test="${p.CATENAME eq '카드대금'}">${p.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${thisMonthlyData}" var="m" varStatus="status">              
+                    <c:if test="${m.CATENAME eq '카드대금'}">${m.CATESUM }</c:if>                 
+                 </c:forEach>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            <tr class="compare-row">
+              <td>저축</td>
+               <td>
+               <c:forEach items="${prePreMonthlyData}" var ="pp">
+                    <c:if test="${pp.CATENAME eq '저축'}">${pp.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${preMonthlyData}" var ="p">
+                    <c:if test="${p.CATENAME eq '저축'}">${p.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${thisMonthlyData}" var="m" varStatus="status">              
+                    <c:if test="${m.CATENAME eq '저축'}">${m.CATESUM }</c:if>                 
+                 </c:forEach>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            <tr>
+              <td>기타</td>
+               <td>
+               <c:forEach items="${prePreMonthlyData}" var ="pp">
+                    <c:if test="${pp.CATENAME eq '기타'}">${pp.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+              <td>
+                 <c:forEach items="${preMonthlyData}" var ="p">
+                    <c:if test="${p.CATENAME eq '기타'}">${p.CATESUM }</c:if>
+                 </c:forEach>
+              </td>
+                <td>
+                   <c:forEach items="${thisMonthlyData}" var="m" varStatus="status">              
+                    <c:if test="${m.CATENAME eq '기타'}">${m.CATESUM }</c:if>                 
+                 </c:forEach>
+                </td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>            
 </div>
+      </div>      
+   </div>          
+   </div> 
+
 </div>
 <div class="col-md-6">
-<!--***************** 	여기서부터 내용 쓰면 됨 -->
-		<div class='' id="graph1">
-			<%-- <div id='ex2'>
-				<canvas id="myChart_in"></canvas>
-			</div> --%>
-			<div id="graph" style="max-width: 100%;margin:0%;padding:0;">
-				<div>
-					<canvas id="myChart_save"></canvas>
-				</div>
-			</div>
-		</div>
-	<hr style="margin:0;">
-		<div class='' id="graph2_2">
-			<div id='ex23' style="text-align:left">
-				<div><span style="font-size:40px;margin:0;background-color:Coral;color:white;">Monthly Expenditure Pattern,&nbsp;</span></div>
-				&nbsp;&nbsp;<p>${memberLoggedIn.userId }님 의 이번달 지출은 현재까지 ${monthlySumAvg[0].ALLCOST}원 입니다.<br>
-				수입은 ""원 이며, "이미 지출한계를 초과했습니다." 앞으로  매일 "0"원씩 사용해야 지출임계점을 넘지 않을 수 있습니다.<br>
-				"그러나", 지출비율중 "저축"의 비율이 "60%"로 "매우 높은 편입니다." 저축하는 좋은 습관을 기르고 있습니다.<br>
-				저번달 대비 "35,800"원을 더 지출하였으며 일평균 지출은 "3,560"원 더 높습니다.<br></p>
-				"21~24"시 사이에 가장 빈번한 지출이 이루어 지고 있습니다. 이 시간대는 주로 "식비"로 많이 지출합니다.<br>
-				혹시 "노랑통닭"을 주문하시나요? 오늘은 한 번 쉬어가는것을 권유드립니다.<br>
-				이번달은 "13"일에 가장 많은 지출이 이루어졌습니다. 지출한 항목은 "저축"입니다.<br>
-				현재 플레리북의 소비등급은 "2"등급입니다. 전달대비 "1"등급 순위 "상승"이 있었습니다. "대단합니다. 룰륭한 소비습관으로 나아가고 있습니다."<br>
-				도표 왼쪽 상단의 꿀이를 눌러주세요. 지표가 저장됩니다. 저장된 파일을 결산커뮤니티에 올려 친구들과 공유해보세요.<br>
-				
-			</div>
-		</div>
-	</div>
-	<!--**************Caution*********************** 이 아래 Div 건드리지말것 -->
+<!--*****************    여기서부터 내용 쓰면 됨 -->
+      <div class='' id="graph1">
+         <%-- <div id='ex2'>
+            <canvas id="myChart_in"></canvas>
+         </div> --%>
+         <div id="graph" style="max-width: 100%;margin:0%;padding:0;">
+            <div>
+               <canvas id="myChart_save"></canvas>
+            </div>
+         </div>
+      </div>
+   <hr style="margin:0;">
+      <div class='' id="graph2_2">
+         <div id='ex23' style="text-align:left;font-size:12px;">
+            <div style="margin:0;background-color:Coral;text-align:center"><span style="font-size:20px;margin:0;color:white;">Monthly Expenditure Pattern,&nbsp;</span></div>
+            &nbsp;<span style="color:blue;">${memberLoggedIn.userId }</span>님의
+            이번 달 수입은  <span style="color:blue;">${inexCost[0].ALLCOST}원</span>이며,
+            지출은 <span style="color:blue;">${inexCost[1].ALLCOST }원</span>입니다.
+            이전 달의 일 평균 지출 비용은<span style="color:blue;" class="preSum"></span>원 이었으며,
+            이번 달 일 평균 지출 비용은<span style="color:blue;" class="daySum"></span>원 입니다.
+            이번 달 일수는<span style="color:blue;">${lastDay }</span>일 까지 있으므로,
+            매일 <span style="color:blue;"class='nmg'></span>원 씩 사용해야 수입 대비 지출임계점을 넘지 않을 수 있겠죠?<br>
+            &nbsp;이번달 지출비용 1순위는 <span style="color:blue;">${thisMonthlyData[0].CATENAME}</span>(이)가 차지했어요.
+            현재 총 <span style="color:blue;">${thisMonthlyData[0].CATESUM }원</span>을 
+            <span style="color:blue;">${thisMonthlyData[0].CATENAME}</span>에 소비했습니다.<br>
+            &nbsp;두 번째로 많이 소비한 항목은 <span style="color:blue;">${thisMonthlyData[1].CATENAME}</span>입니다. 현재 총
+            <span style="color:blue;">${thisMonthlyData[1].CATESUM }원</span>을 
+            <span style="color:blue;">${thisMonthlyData[1].CATENAME}</span>에 소비했군요.<br>
+            &nbsp;이번 달의 수입에서 현재 지출을 제하고 나면 <span style="color:blue;" class="cha"></span>원이 남습니다.<br>
+            &nbsp;지출을 많이 한 시간대를 찾아볼까요? <span style="color:blue;" class="monTime"></span>시 입니다! 해당 전후 한 시간동안 사용한 금액은 총
+            <span style="color:blue;" class="monTimeM"></span>원 입니다..대단해요..!<br>
+            혹시 <span style="color:blue;" class="memo1"></span>에 소비하셨나요?
+            아니면.. 혹시 <span style="color:blue;" class="memo2"></span>에 소비하셨나요? 해당 시간대를 참고하시어 지출을 줄여봅시다.<br>
+            &nbsp;가장 많은 금액을 소비한 날짜는 <span style="color:blue;" class="monDay"></span>일 입니다.
+            이 날 하루동안 소비한 금액은<span style="color:blue;" class="monDayC"></span>원 입니다. 이 날 무슨 일이 일어났던걸까요? 많이 소비하는 시간과 날짜를 체크해보면,
+            나의 소비 패턴을 더 확실히 잡아줄 수 있을지 몰라요!<br>
+            꾸준한 플레리북 사용은 합리적인 소비를 도와줄 수 있습니다. 매일 매일의 사소한 체크습관이 <span style="color:blue;"> ${memberLoggedIn.userId }</span>님의 소비등급을 올립니다.<br>
+            도표 왼쪽 상단의 꿀이를 눌러주세요. 지표가 저장됩니다. 안심하세요! 민감한 수입은 제외된 지표가 저장된답니다:) 저장된 파일을 결산커뮤니티에 올려 친구들과 공유해보세요.<br>
+            
+         </div>
+      </div>
+   </div>
+   <!--**************Caution*********************** 이 아래 Div 건드리지말것 -->
 </div>
 </div>
 <!-- END: WHOLE TEMPLATE SECTION -->
@@ -428,288 +464,170 @@
 <script>
 var ctx = $("#myChart_save");
 function drawLine(){
-	$.ajax({
-		url : "${pageContext.request.contextPath}/ajax/selectSaving.do",
-		type : "get",
-		dataType : "json",
-		success : function(d) {
-			console.log("load (ChartData_Saving) success");
-			console.log(d);
-			var addlabels=[];
-			var addData1=[];
-			$(d.model.list1).each(function(){
-				addlabels.push($(this).attr('ACDATE'));
-				addData1.push($(this).attr('CUMAL_SUM'));
-			});	
-			var addData2=[];
-			$(d.model.list2).each(function(){
-				addlabels.push($(this).attr('ACDATE'));
-				addData2.push($(this).attr('CUMAL_SUM'));
-			});
-			var addData3=[];
-			$(d.model.list3).each(function(){
-				addlabels.push($(this).attr('ACDATE'));
-				addData3.push($(this).attr('CUMAL_SUM'));
-			});	
-			var addlabels= addlabels;
-			var addData1 = addData1;
-			var addData2 = addData2;
-			var addData3 = addData3;
-			var myColors = ["rgba(220,220,220,0.2)"]
-			var myLine = new Chart(ctx,{
-				type : 'line',
-				data :{
-					labels : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
-					 datasets: [
-					        {
-					            label: "My First dataset",
-					            fillColor: "rgba(220,220,220,0.2)",
-					            borderColor: myColors,
-					            strokeColor: "rgba(220,220,220,0.2)",
-					            pointColor: "rgba(220,220,220,0.2)",
-					            pointStrokeColor: "rgba(220,220,220,0.2)",
-					            pointHighlightFill: "rgba(220,220,220,0.2)",
-					            pointHighlightStroke: "rgba(220,220,220,0.2)",
-					            data: addData1
-					        },
-					        {
-					            label: "My Second dataset",
-					            fillColor: "rgba(151,187,205,0.2)",
-					            strokeColor: "rgba(151,187,205,1)",
-					            pointColor: "rgba(151,187,205,1)",
-					            pointStrokeColor: "#fff",
-					            pointHighlightFill: "#fff",
-					            pointHighlightStroke: "rgba(151,187,205,1)",
-					            data: addData2
-					        },
-					        {
-					            label: "My Second dataset",
-					            fillColor: "rgba(220,220,220,0.2)",
-					            strokeColor: "rgba(220,220,220,0.2)",
-					            pointColor: "rgba(220,220,220,0.2)",
-					            pointStrokeColor: "#fff",
-					            pointHighlightFill: "#fff",
-					            pointHighlightStroke: "rgba(220,220,220,0.2)",
-					            data: addData3
-					        }
-					    ]
-				},
-				options: {
-					responsive:true,
-			        legend: {
-			            display: false,
-			            fontSize: 10,
-		            	position: 'bottom',
-			            usePointStyle: true,
-			            labels: {
-			            	boxWidth: 10,
-			            }
-			        },
-			        tooltips: {
-	                    yAlign: 'bottom',
-	                    callbacks: {
-	                        labelColor: function(tooltipItem, chart) {
-	                            return {
-	                                backgroundColor: 'rgb(255, 0, 0)'
-	                            }
-	                        },
-	                    },
-	            backgroundColor: '#227799'
-	                }
+   $.ajax({
+      url : "${pageContext.request.contextPath}/ajax/selectSaving.do",
+      type : "get",
+      dataType : "json",
+      success : function(d) {
+         console.log("load (ChartData_Saving) success");
 
-				}
-			});
-		},
-		error : function(jqxhr, textStatus, errorThrown){
-			console.log("error");
-			console.log(jqxhr);
-			console.log(textStatus);
-			console.log(errorThrown);
-		}	
-	});
+         var addlabels=[];
+         var addData1=[];
+         $(d.model.list1).each(function(){
+            addlabels.push($(this).attr('ACDATE'));
+            addData1.push($(this).attr('CUMAL_SUM'));
+         });   
+         var addData2=[];
+         $(d.model.list2).each(function(){
+            addlabels.push($(this).attr('ACDATE'));
+            addData2.push($(this).attr('CUMAL_SUM'));
+         });
+         var addData3=[];
+         $(d.model.list3).each(function(){
+            addlabels.push($(this).attr('ACDATE'));
+            addData3.push($(this).attr('CUMAL_SUM'));
+         });
+         
+         var addlabels= addlabels;
+         var addData1 = addData1;
+         var addData2 = addData2;
+         var addData3 = addData3;         
+         
+         
+         
+         var myColors = ["rgba(220,220,220,0.2)"]
+         var myLine = new Chart(ctx,{
+            type : 'line',
+            title : '누적건수',
+            data :{
+                labels : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50],
+                datasets: [
+                       {
+                           label: "이번달",
+                           fillColor: "rgba(220,220,220,0.2)",
+                           borderColor: myColors,
+                           strokeColor: "rgba(220,220,220,0.2)",
+                           pointColor: "rgba(220,220,220,0.2)",
+                           pointStrokeColor: "rgba(220,220,220,0.2)",
+                           pointHighlightFill: "rgba(220,220,220,0.2)",
+                           pointHighlightStroke: "rgba(220,220,220,0.2)",
+                           data: addData1
+                       },
+                       {
+                           label: "전달",
+                           fillColor: "rgba(151,187,205,0.2)",
+                           strokeColor: "rgba(151,187,205,1)",
+                           pointColor: "rgba(151,187,205,1)",
+                           pointStrokeColor: "#fff",
+                           pointHighlightFill: "#fff",
+                           pointHighlightStroke: "rgba(151,187,205,1)",
+                           data: addData2
+                       },
+                       {
+                           label: "전전달",
+                           fillColor: "rgba(220,220,220,0.2)",
+                           strokeColor: "rgba(220,220,220,0.2)",
+                           pointColor: "rgba(220,220,220,0.2)",
+                           pointStrokeColor: "#fff",
+                           pointHighlightFill: "#fff",
+                           pointHighlightStroke: "rgba(220,220,220,0.2)",
+                           data: addData3
+                       }
+                   ]
+            },
+            options: {
+               responsive:true,
+                 legend: {
+                     display: false,
+                     fontSize: 10,
+                     position: 'bottom',
+                     usePointStyle: true,
+                     labels: {
+                        boxWidth: 10,
+                     }
+                 },
+                 tooltips: {
+                       yAlign: 'bottom',
+                       callbacks: {
+                           labelColor: function(tooltipItem, chart) {
+                               return {
+                                   backgroundColor: 'rgb(255, 0, 0)'
+                               }
+                           },
+                       },
+               backgroundColor: '#227799'
+                   }
+
+            }
+         });
+      },
+      error : function(jqxhr, textStatus, errorThrown){
+         console.log("error");
+         console.log(jqxhr);
+         console.log(textStatus);
+         console.log(errorThrown);
+      }   
+   });
 };
 $(document).ready(function(){
-	drawLine();
+   drawLine();
 });
 </script>
-<!-- <script>
-Chart.plugins.register({
-	  beforeDraw: function (chart) {
-	    if (chart.config.options.elements.center) {
-	       
-	        var ctx = chart.chart.ctx;
+<script>
+$.ajax({
 
-	        var centerConfig = chart.config.options.elements.center;
-	        var fontSize = centerConfig.fontSize || '50';
-	        var fontStyle = centerConfig.fontStyle || 'Arial';
-	        var txt = centerConfig.text;
-	        var color = centerConfig.color || '#000';
-	        var sidePadding = centerConfig.sidePadding || 20;
-	        var sidePaddingCalculated = (sidePadding/100) * (chart.innerRadius * 2)
+      url : "${pageContext.request.contextPath}/acbook/selectFullData.do",
+      type : "get",
+      dataType : "json",
+      success : function(d) {
+         
+         var daySum= d.model.monAvg[0]==null?0:d.model.monAvg[0].AVGCOST;
+         var preSum= d.model.preAvg[0]==null?0:d.model.preAvg[0].AVGCOST;
+         var memo1= d.model.monMemo[0]==null?0:d.model.monMemo[0].MEMO;
+         var memo2= d.model.monMemo[1]==null?0:d.model.monMemo[1].MEMO;
+         var monDay = d.model.monDay[0]==null?0:d.model.monDay[0].ACDAY;
+         var monDayC = d.model.monDay[0]==null?0:d.model.monDay[0].ACSUM;
+         var monTime =d.model.monTime[0]==null?0:d.model.monTime[0].ACTIME;
+         var monTimeM = d.model.monTime[0]==null?0:d.model.monTime[0].ACSUM;
+         var lastDay = d.model.lastDay;
+         var cha= d.model.monAvg[0]==null?0:((d.model.monInEx[0].ALLCOST-d.model.monInEx[1].ALLCOST));
+         var nmg=d.model.monAvg[0]==null?0:(cha/d.model.lastDay);
 
-	        ctx.font = fontSize + "px " + fontStyle;
+         
+         var htmlG=$(".cha").html();
+         $(".cha").html(htmlG+cha).show();
+         
+         var htmlC=$(".memo1").html();
+         $(".memo1").html(htmlC+memo1).show();         
 
-	        var stringWidth = ctx.measureText(txt).width;
-	        var elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated;
-
-	        var widthRatio = elementWidth / stringWidth;
-	        var newFontSize = Math.floor(30 * widthRatio);
-	        var elementHeight = (chart.innerRadius * 0.7);
-	 
-	        var fontSizeToUse = Math.min(newFontSize, elementHeight);
-	        
-	        ctx.textAlign = 'center';
-	        ctx.textBaseline = 'middle';
-	        var centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
-	        var centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
-	        ctx.font = fontSizeToUse+"px " + fontStyle;
-	        ctx.fillStyle = color;
-
-	        ctx.fillText(txt, centerX, centerY);
-	      }
-	  }
-	});
-	
-var ctx = $("#myChart_ex");
-
-function drawDoughnut2() {
-	$.ajax({
-		url :  "${pageContext.request.contextPath}/ajax/monthlyExpenditure",
-		type : "get",
-		dataType : "json",
-		success : function(data){
-			console.log("load Success Chart data");
-			console.log(data);
-			var vsLabels = [];
-			var vsData = [];
-			$(data).each(function(){
-				vsLabels.push($(this).attr('CATENAME'));
-				var clue = $(this).attr('CATENAME');
-				switch(clue){
-				case '식비':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '교통비':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '문화생활':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '생필품':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '의류':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '미용':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '의료건강':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '교육':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '전화요금':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '경조사비':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '공과금':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '카드대금':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '저축':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				case '기타':
-				vsData.push($(this).attr('CATESUM'));
-				break;
-				
-				};
-				
-			});
-	var myDoughnut12 = new Chart(
-			ctx,
-			{
-				type : 'doughnut',
-				data : {
-						labels: vsLabels,	
-					datasets : [ {
-						data : vsData,
-						backgroundColor : [ "#F94C45",
-											"rgb(252,217,32)",
-											"rgb(171,209,26)",
-											"rgb(160,171,188)",
-											"rgba(75,192,192,1)",
-											"#F94C45",
-											"rgb(252,217,32)",
-											"rgb(171,209,26)",
-											"rgb(160,171,188)",
-											"rgba(75,192,192,1)",
-											"#F94C45",
-											"rgb(252,217,32)",
-											"rgb(171,209,26)",
-											"rgb(160,171,188)",
-											],
-						hoverBackgroundColor : "rgba(75,192,192,1)",
-						/* 						borderColor: "rgba(75,192,192,1)", */
-						borderWidth : 2
-					} ]
-				},
-				options : {
-					title:{
-						display: false,
-						text:'Monthly Dispenditure Lanking',
-						fontSize: 15,
-						position:'top'
-						},
-					responsive : true,
-					cutoutPercentage: 70,
-					legend : {
-						display : true,
-						fontSize : 10,
-						position : 'bottom',
-						usePointStyle : true,
-						labels: {
-			            	boxWidth: 10,
-			            }
-					},
-					elements: {
-						position:'center',
-						center: {
-							text: vsLabels[0] ,
-					      	color: '#FF6384', 
-					     	fontStyle: 'Arial', 
-					      	sidePadding:5,
-							}
-					},
-					animation: {
-			            duration: 3000,
-			        },
-			        hover: {
-			            animationDuration: 1000,
-			        },
-			        responsiveAnimationDuration: 2000,
-				}
-			});
-		},
-		error : function(jqxhr, textStatus, errorThrown) {
-			console.log("error");
-			console.log(jqxhr);
-			console.log(textStatus);
-			console.log(errorThrown);
-		}
-	});
-
-};
-$(document).ready(function() {
-	drawDoughnut2();
-});
-</script> -->
+         var htmlD=$(".memo2").html();
+         $(".memo2").html(htmlD+memo2).show();
+         
+         var htmlA=$(".monTime").html();
+         $(".monTime").html(htmlA+monTime).show();
+         
+         var htmlB=$(".monTimeM").html();
+         $(".monTimeM").html(htmlB+monTimeM).show();
+         
+         var htmlE=$(".monDay").html();
+         $(".monDay").html(htmlE+monDay).show();
+         
+         var htmlF=$(".monDayC").html();
+         $(".monDayC").html(htmlF+monDayC).show();
+         
+         var htmlH=$(".nmg").html();
+         $(".nmg").html(htmlH+nmg).show();
+      
+         var htmlI=$(".daySum").html();
+         $(".daySum").html(htmlI+daySum).show();
+         
+         var htmlJ=$(".preSum").html();
+         $(".preSum").html(htmlJ+preSum).show();
+      }
+      
+   
+})
+</script>
 <!-- jpg modify -->
 <script src="<c:url value="/resources/acbook/js/html2canvas.js" />"></script>
 <!-- footer -->

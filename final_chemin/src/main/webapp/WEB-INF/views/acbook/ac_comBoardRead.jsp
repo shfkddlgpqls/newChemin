@@ -129,11 +129,15 @@
 <!-- test2 -->
 <br><br>
 <div class="row justify-content-center">
-    <div class="col-sm-8">
+    <div class="col-sm-12">
         <div class="panel panel-white post panel-shadow" style="background-color:white;">
+		    	<div class='pull-right'>
+		    	<button class='btn btn-primary' id='updateWrite'>글수정</button>
+		    	<button class='btn btn-primary' id='deleteWrite'>글삭제</button>
+		    	</div>
             <div class="post-heading">
                 <div class="pull-left image">
-                    <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar" alt="user profile image">
+                    <img src="https://image.flaticon.com/icons/svg/138/138283.svg" class="img-circle avatar" alt="user profile image">
                 </div>
                 <div class="pull-left meta">
                     <div class="title h5">
@@ -182,10 +186,30 @@
 </div>
 <!-- Side Bar Div End -->
 <script>
+$('#updateWrite').on('click',function(){
+	if('${acc.userId}'=='${memberLoggedIn.userId}'){
+
+		location.href="${pageContext.request.contextPath}/acbook/updateWrite?accNo="+${acc.accNo};
+		
+	}else{
+		swal("작성자만 수정이 가능해요.");
+	}
+})
+</script>
+<script>
+$('#deleteWrite').on('click',function(){
+	if('${acc.userId}'=='${memberLoggedIn.userId}'){
+		location.href="${pageContext.request.contextPath}/acbook/deleteWrite?accNo="+${acc.accNo};
+	}else{
+		swal("작성자만 삭제가 가능해요.");
+	}
+})
+</script>
+<script>
 
 $("#callAjax").click(function(){
 	if($("#rContent").val().trim() === ""){
-		alert("댓글을 입력하세요.");
+		swal("댓글을 입력하세요.");
 		$("#rContent").val("").focus();
 	}else{
 		$.ajax({
@@ -199,7 +223,7 @@ $("#callAjax").click(function(){
             	rNo : $("#rNo").val()
             },
             success: function () {
-            	alert("댓글 등록 완료");
+            	swal("댓글이 등록되었습니다.");
             	$("#rContent").val("");
              	getReply();
             },
@@ -211,10 +235,8 @@ $("#callAjax").click(function(){
 $.ajax({
 	url: "${path}/acbook/GetReply.do",
     type: "POST",
-    data: {	accNo : ${acc.accNo } },
-    success: function(data){
-    	console.log(data);
-    	
+    data: {	accNo : ${acc.accNo} },
+    success: function(data){    	
    		if(data!=null){
    			var html1=$("#tbl-reply").html();
    			var html;
@@ -222,7 +244,7 @@ $.ajax({
    				html+="<tr class='comments-list'>";
                 html+="<td class='comment'>";
                 html+="<a class='pull-left' href='#'>";
-                html+="<img class='avatar' src='http://bootdey.com/img/Content/user_1.jpg' alt='avatar'>";
+                html+="<img class='avatar' src='https://image.flaticon.com/icons/svg/138/138283.svg' alt='avatar'>";
                 html+="</a>";
                 html+="<div class='comment-body'>";
                 html+="<div class='comment-heading'>";
@@ -240,10 +262,10 @@ $.ajax({
    		}else{
 			html="<tr><td>댓글이 없습니다.</td></tr>";
 			$("#tbl-reply").html(html).show();
-		};
-   		}
+		}
+   	}
    		
-    })
+});
 </script>
 <script>
 function getReply(){
@@ -252,7 +274,6 @@ function getReply(){
         type: "POST",
         data: {	accNo : ${acc.accNo } },
         success: function(data){
-        	console.log(data);
         	
        		if(data!=null){
        			var html1=$("#tbl-reply").html();
@@ -261,11 +282,11 @@ function getReply(){
        				html+="<tr class='comments-list'>";
                     html+="<td class='comment'>";
                     html+="<a class='pull-left' href='#'>";
-                    html+="<img class='avatar' src='http://bootdey.com/img/Content/user_1.jpg' alt='avatar'>";
+                    html+="<img class='avatar' src='https://image.flaticon.com/icons/svg/138/138283.svg' alt='avatar'>";
                     html+="</a>";
                     html+="<div class='comment-body'>";
                     html+="<div class='comment-heading'>";
-                    html+="<h4 class='user'>"+data.model.rpList[i].USERID+"</h4>";
+                    html+="<h4 class='user' id='rpUserId'>"+data.model.rpList[i].USERID+"</h4>";
                     html+="<h5 class='time'>"+data.model.rpList[i].RDATE+"</h5>";
                     html+="</div>";
                     html+="<div class='changeRP' id="+data.model.rpList[i].RNO+">"+data.model.rpList[i].RCONTENT+"</div>";
@@ -289,29 +310,43 @@ function getReply(){
 <script>
 function updateR(no){
 	$("button").hide();
-	console.log($("#"+no));
+	/* console.log($("#"+no)); */
 	var value=$("#"+no).html();
-	$("#"+no).html("<input type='text' value="+value+"><input type='button' class='btn btn-info' onclick='updateAcR("+value+");'/><input type='button' class='btn btn-danger' onclick='deleteAcR();'>");
-	
-	
-/* 	alert(rNo); */
- 	
- //	console.log(event.target.parentElement.previousSibling.childNodes);
- //	console.log(event);
- 	/* $().prev().children('.changeRP').html("<input type='text' placeholder='hi'>"); */
-	/* $().html("<input type='text' placeholder='hi'>"); */
-/* 	$.ajax({
-		url:"${path}/acbook/updateReply.do",
-		data:{rNo:rNo},
-		type:"POST",
-		dataType:"json",
-		success:function(data){
-			console.log(data);
-			if(data!=null){
-				
+	$("#"+no).html("<form id='replyAc' action='/chemin/acbook/updateReply.do' method='post'><input type='hidden' name='rNo' value="+no+"><input type='text' id='rContents' name='rContent' value='' placeholder="+value+"><input type='button' value='upd'class='btn btn-info upup' onclick='upup(event);'/><button type='button' id='delRP' class='btn btn-danger' onclick=fnfn("+no+")>del</button></form>");	
+
+}
+</script>
+<script>
+function upup(event){
+		/* console.log($(event.target).parent().parent().prev().find('.user').html()); */
+		var user=$(event.target).parent().parent().prev().find('.user').html();
+		if(user=='${memberLoggedIn.userId}'){	
+			
+			if($("#rContents").val().trim() === ""){
+				swal("댓글을 입력하세요.");
+				$("#rContents").val("").focus();
+				return false;
 			}
+			else{				
+				$("#replyAc").submit();
+				swal("수정되었습니다!");  				  
+			}
+		}else{
+			swal("작성자만 수정이 가능해요.");
 		}
-	}) */
+	}	
+	
+
+</script>
+<script>
+function fnfn(rNo){
+	var user=$(event.target).parent().parent().prev().find('.user').html();
+	if(user=='${memberLoggedIn.userId}'){		
+		location.href="${path}/acbook/deleteRP?rNo="+rNo;
+		swal("삭제되었습니다!")
+	}else{
+		swal("작성자만 삭제가 가능해요.");
+	}
 }
 </script>
 <!-- footer -->

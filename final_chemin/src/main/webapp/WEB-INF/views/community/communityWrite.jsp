@@ -10,7 +10,11 @@ var length=($('#upFile')[0].files.length);
 
 function fn_file() {
 		if(length>=3) {
-			alert("사진은 2개까지 등록가능합니다.");
+			swal({
+				text : "파일은 2개까지 가능합니다.",
+				icon : "warning",
+				button : "확인"
+			});
 			return false;
 		}
 		
@@ -22,8 +26,33 @@ function fn_file() {
 			alert("png/jpg/mp4 파일만 올릴 수 있습니다.");
 			return false;
 		}
+		var title=$('input[name=community_title]').val().trim();
+		alert(title);
+		alert(title.length);
+		if(title.length > 200)
+		{
+			swal({
+				text : "200자 이하로 작성해주세요.",
+				icon : "warning",
+				button : "확인"
+			});
+			return false;
+		}
+		var content=$('#community_content').val().trim();
+		alert(content);
+		alert(content.length);
+		if(content.length > 2000)
+		{
+			swal({
+				text : "2000자 이하로 작성해주세요.",
+				icon : "warning",
+				button : "확인"
+			});
+			return false;
+		}
 		return true;
 }
+
 
 </script>
 <section>
@@ -44,7 +73,7 @@ function fn_file() {
                    <div class="col-md-3">
                        <select class="form-control smallSzie"  name="community_category">
                               <option value="인테리어">인테리어</option>
-                              <option value="집수리">집수리</option>
+                              <option value="청소">청소</option>
                               <option value="보안">보안</option>
                               <option value="1인레시피">1인레시피</option>
                            </select> 
@@ -65,7 +94,7 @@ function fn_file() {
                       <span>제목</span>
                    </div>
                    <div class="col-md-10">             
-                     <input class="form-control middleSize"  name="community_title" type="text"  placeholder="제목을 입력해주세요 " required>
+                     <input class="form-control middleSize"  id="community_title" name="community_title" type="text"  placeholder="제목을 입력해주세요 " maxlength="200" required>
                    </div>
                 </div>
                 <br>

@@ -132,29 +132,36 @@ $("#email").keyup(function()
 		}
 	});
 });
-$("#phone").keyup(function()
-		{
-			var inputPhone=$(this).val().trim();
+$("#phone").keyup(function(event)
+		{	
+			event = event || window.event;
+	        var _val = this.value.trim();
+	        this.value = autoHypenPhone(_val) ;
+			
 			$.ajax({
 				url:"${pageContext.request.contextPath}/member/checkPhone.do",
-				data:{phone:inputPhone},
-				dataType:"json",
+				type:"post",
+				data:{"phone":$("#phone").val().trim()},
 				success:function(data)
 				{
-						if(data>0)
+					console.log(data);
+					
+				
+						if(data.trim()=='true')
 						{
-							$("#phoneResult").html("이미 존재하는 핸드폰번호").css("color","red");
+							$("#phoneResult").html("*이미 존재하는 번호입니다").css("color","red");
 							phoneFlag=0;
 						}
 						else
+						
 						{
-							$("#phoneResult").html("사용가능한 핸드폰번호").css("color","green");
+							$("#phoneResult").html("*사용 가능한 번호입니다").css("color","green");
 							phoneFlag=1;
 						}
 					
 				}
+			});
 		});
-	});
 $("#memberEnroll").submit(function(event)
 		{
 	  		
@@ -193,6 +200,35 @@ $("#memberEnroll").submit(function(event)
 	  		
 	  	});
 }); 
+
+
+function autoHypenPhone(str){
+    str = str.replace(/[^0-9]/g, '');
+    var tmp = '';
+    if( str.length < 4){
+        return str;
+    }else if(str.length < 7){
+        tmp += str.substr(0, 3);
+        tmp += '-';
+        tmp += str.substr(3);
+        return tmp;
+    }else if(str.length < 11){
+        tmp += str.substr(0, 3);
+        tmp += '-';
+        tmp += str.substr(3, 3);
+        tmp += '-';
+        tmp += str.substr(6);
+        return tmp;
+    }else{              
+        tmp += str.substr(0, 3);
+        tmp += '-';
+        tmp += str.substr(3, 4);
+        tmp += '-';
+        tmp += str.substr(7);
+        return tmp;
+    }
+    return str;
+}
 
 
 
@@ -451,7 +487,7 @@ $("#memberEnroll").submit(function(event)
         </div> -->
         <div class="form-group">
 	            <label for="phone" class="mb-0">Phone</label><span> *</span><label id="phoneResult" class="float-right"></label>
-		        <input type="tel" class="form-control" id="phone" name="phone" maxlength="11" required>
+		        <input type="tel" class="form-control" id="phone" name="phone" maxlength="13" required>
 	          </div>
         <div>
             <div class="form-group"> 

@@ -21,10 +21,10 @@
 		
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcBook" alias="acbook"/>	
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcCategory" alias="accategory"/>
-		<typeAlias type="com.kh.chemin.acbook.model.vo.AcExType" alias="acextype"/>
+		<typeAlias type="com.kh.chemin.acbook.model.vo.PolaData" alias="poladata"/>
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcType" alias="actype"/>
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcCom" alias="accom"/>
-		<typeAlias type="com.kh.chemin.acbook.model.vo.Reply" alias="reply"/>
+		<typeAlias type="com.kh.chemin.acbook.model.vo.AcReply" alias="reply"/>
 		
 		<typeAlias type="com.kh.chemin.map.model.vo.Place" alias="place"/>
 		<typeAlias type="com.kh.chemin.map.model.vo.PlaceAttachment" alias="placeAttach"/>

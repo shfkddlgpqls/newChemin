@@ -10,7 +10,12 @@
 <c:set value="${pageContext.request.contextPath }" var="path"/>
 <script>
 
+<%
+	response.setContentType("text/html;charset=UTF-8");
+%>
+
 if('${status}'=="loginSuccess"){
+
    swal({
         text: "${msg}",
         icon: "success",
@@ -19,7 +24,7 @@ if('${status}'=="loginSuccess"){
            
          location.href="${path}${loc}";
              }); 
-}else if('${status}=="endrollSuccess"'){
+}else if('${status}'=="endrollSuccess"){
 	swal({
         text: "${msg}",
         icon: "success",
@@ -34,8 +39,8 @@ else{
         text: "${msg}",
         icon: "warning",
         button: "확인",
-      }).then((willDelete) => {
-           
+      }).then((willDelete) => {  
+    	  
          location.href="${path}${loc}";
              }); 
 }

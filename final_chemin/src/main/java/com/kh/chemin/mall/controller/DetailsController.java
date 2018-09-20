@@ -96,7 +96,7 @@ public class DetailsController
 				msg = "문의 글 등록에 실패하였습니다. <br> 관리자에게 문의해보세요.";
 			}
 			
-			loc="/";
+			loc="/mall/detail.do?no="+goods_code;
 			
 			model.addAttribute("msg", msg);
 			model.addAttribute("loc", loc);
