@@ -40,8 +40,8 @@
  	</insert> -->
  	
  	<insert id="insertMember" parameterType="member">
- 		INSERT INTO MEMBER_INFO VALUES(#{userId},#{password},#{userName},#{gender},#{birthDay},#{email},#{phone},#{address},#{hobby, typeHandler=strArr, jdbcType=VARCHAR},#{originalImg, jdbcType=VARCHAR},#{renameImage, jdbcType=VARCHAR},default,default)
- 	</insert>
+       INSERT INTO MEMBER_INFO VALUES(#{userId},#{password},#{userName},#{gender},#{birthDay},#{email},#{phone},#{address},#{hobby, typeHandler=strArr, jdbcType=VARCHAR},#{originalImg, jdbcType=VARCHAR},#{renameImage, jdbcType=VARCHAR},default,default)
+    </insert>
 	
 	<select id="checkEmail" parameterType="string" resultType="member">
 		select*from member_info where USEREMAIL = #{email}
