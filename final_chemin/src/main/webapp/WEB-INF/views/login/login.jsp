@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set value="${pageContext.request.contextPath}" var="path"/>
    
-<jsp:include page="/WEB-INF/views/common/header1.jsp">
+<jsp:include page="/WEB-INF/views/common/header.jsp">
    <jsp:param value="회원등록" name="pageTitle"/>
 </jsp:include>   
 <title>Bootstrap Classic Modal Login Modal Form with Avatar Icon</title>
@@ -94,7 +94,7 @@
 
 <!-- Modal HTML -->
    <!-- <div id="myModal" class="modal fade" > -->
-   <div class="modal-dialog modal-login">
+   <div class="modal-dialog modal-login" style="margin-top:5%">
       <div class="modal-content">
          <div class="modal-header">
                 <div class="avatar"><i class="material-icons">&#xE7FD;</i></div>

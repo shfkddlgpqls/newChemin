@@ -47,10 +47,10 @@ margin-right:2%
 
 </style>
 <script>
- 	$(document).ready(function(){
+/* 	$(window).load(function(){
 		fn_warningMsg();
 	});
- 	/* function fn_warningMsg() {
+	function fn_warningMsg() {
 		var userid="${memberLoggedIn.userId}";
 		console.log(userid);
 		$.ajax({
@@ -70,7 +70,7 @@ margin-right:2%
 				$('#warningMsg').html(value);  
 			}
 		});
-	}   */
+	} */
 </script> 
 
 
@@ -150,7 +150,8 @@ function  fn_infoChange(){
                }
        
                reader.readAsDataURL(input.files[0]);
-               $('[name=orImg]').val(input.files[0].name);
+               var file=input.files[0].name;
+               $('#file').val(file);
            }
           
        }
@@ -193,7 +194,7 @@ function  fn_infoChange(){
 								}
 							
 						}
-					}); 
+					}); */
 				});
 	/*	$("#email").keyup(function()
 				{	
@@ -325,6 +326,7 @@ function  fn_infoChange(){
           }
 			    
    function fn_confirm(){
+	 console.log($('#file').val());
 	   var phone = $('[name=phone]').val();
 	   
 	   if(pw1Flag==0)
@@ -370,31 +372,39 @@ function  fn_infoChange(){
    }
    
    function fn_withdraw(userId){
-	   location.href = "${path}/member/memberWithdraw?userId="+userId;
+	   swal({
+			  text: "회원 탈퇴를 하시겠습니까?",
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((willDelete) => {
+			  if (willDelete) {
+				  location.href = "${path}/member/memberWithdraw?userId="+userId+"&mgrade="+2;
+			  } else {
+			    
+			  }
+			});   
    }
 			   
 </script>   
 
 		<!-- 신고 제재 메시지 -->
-	<c:if test="${warnNum eq 1}">
-		<div id="warningMsg" style="width:100%;font-size:15px;">
-			<div class='alert alert-danger alert-dismissible'>
-			<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>
-			<strong>Warning!</strong> &nbsp 꿀팁 커뮤니티에서 올리신 글로 신고 당하셨습니다.<br>3번이상 신고당하실 경우, 관리자의 권한으로 강제 탈퇴되실 수 있습니다.</div>
+		<div id="warningMsg">
+		
 		<div>
-	</c:if>
 		<!-- 회원정보 수정 폼란 -->
 <section>
-<div class="container bootstrap snippet">
+<div class="container bootstrap snippet" >
   
-  		<div>
+  		<div style="width:70%;margin-left:auto; margin-right:auto;">
 		  	<h3>회원정보</h3>
 		  	<br>
 		  </div>	
     	
 
-      <div class="text-center" style="margin-left:auto; margin-right:auto; width:70%">
-        <form class="form" action="${path}/member/memberInfoUpdate" method="post" onsubmit="return fn_confirm()">
+      <div class="text-center" style="margin-left:auto; margin-right:auto; width:70%;margin-top:1%">
+        <form class="form" action="${path}/member/memberInfoUpdate" method="post" onsubmit="return fn_confirm()" enctype="multipart/form-data">
        <img src="${path}/resources/upload/member/${member.RENAMEIMAGE}" class="avatar img-circle img-thumbnail" alt="avatar" style="border-radius: 100px;width:205px;height:205px">
         <h5>${member.USERID}님</h5>
         <div class="input--file " style="width:5%;margin-left:auto; margin-right:auto;">
@@ -405,11 +415,10 @@ function  fn_infoChange(){
 			      <path d="M0 0h24v24h-24z" fill="none"/>
 			    </svg>
 			  </span>
-			  <input type="file" class="text-center center-block file-upload" id="file" name="file" value="" disabled="true"/>
-				<input type="hidden" class="upload-name" name="originalImg" value="" >
+			  <input type="file" class="text-center center-block file-upload" id="file" name="file" disabled="true"/>
+				<input type="hidden" name="renameImage" value="${member.RENAMEIMAGE}">
 			</div>
       </div></hr><br>
-
 
     	<div style="margin-left:auto; margin-right:auto; width:70%">
           <div class="tab-content">
@@ -491,14 +500,15 @@ function  fn_infoChange(){
                            <div class="col-xs-12">
               
                               	<button class="btn btn-success" type="submit" id="perfect"  style="display:none"><i class="glyphicon glyphicon-ok-sign"></i> 수정완료</button>
-                              	<button class="btn" onclick="fn_ withdraw(${memberLoggedIn.userId})"><i class="glyphicon glyphicon-repeat"></i> 탈퇴하기</button>
+                              	
                             </div>
                       </div>
                        <input type="hidden" name="userId" value="${memberLoggedIn.userId}">
               	</form>
               		<div style="float:right">
+              		
               			<button class="btn btn-primary" onclick="fn_infoChange()" id="update">수정하기</button>
-                      
+                      <button class="btn" onclick="fn_withdraw('${memberLoggedIn.userId}')"><i class="glyphicon glyphicon-repeat"></i> 탈퇴하기</button>
            		</div>
  
                
