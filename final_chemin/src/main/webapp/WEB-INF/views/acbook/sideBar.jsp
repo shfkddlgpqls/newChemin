@@ -39,6 +39,7 @@
                     <h5><strong>Menu</strong></h5>
                     <li><a class="a_tags" href="${path}/ac_monthlyData.do">MontlyData</a></li>
                     <li><a class="a_tags" href="${path}/ac_community.do">ShareFluriBook</a></li>
+                     <li><a class="a_tags" href="${path}/testhyebeen.do">테스트혜빈</a></li>
                 </ul>
             </div>
         </div>

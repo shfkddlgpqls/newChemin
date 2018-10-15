@@ -108,7 +108,7 @@
              <a class="nav-link js-scroll-trigger" href="${path}/community/communityList.do">Good Tip</a>
             </li>
             <li class="nav-item">
-             <a class="nav-link js-scroll-trigger" href="${path}/ac_main.do">Acbook</a>
+             <a class="nav-link js-scroll-trigger" href="${path}/ac_main.do">Fluri Book</a>
             </li>
             
             

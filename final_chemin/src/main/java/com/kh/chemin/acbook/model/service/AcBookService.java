@@ -1,5 +1,6 @@
 package com.kh.chemin.acbook.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import org.springframework.ui.Model;
 
 import com.kh.chemin.acbook.model.vo.AcBook;
 import com.kh.chemin.acbook.model.vo.AcCom;
+import com.kh.chemin.acbook.model.vo.AcLike;
 import com.kh.chemin.acbook.model.vo.AcReply;
 import com.kh.chemin.acbook.model.vo.PolaData;
 
@@ -68,7 +70,8 @@ public interface AcBookService {
 	List<Model> selectMuchDay(String userId);
 	List<Model> selectSavingCost(String userId);
 	int updateCount(String accNo);
-	
+	AcLike selectCompareLike(HashMap<String, Object> hashMap);
+
 	
 	
 	//타입별 소비-지출 패턴

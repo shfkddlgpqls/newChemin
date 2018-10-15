@@ -1,5 +1,6 @@
 package com.kh.chemin.acbook.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import com.kh.chemin.acbook.model.dao.AcBookDao;
 import com.kh.chemin.acbook.model.vo.AcBook;
 import com.kh.chemin.acbook.model.vo.AcCom;
+import com.kh.chemin.acbook.model.vo.AcLike;
 import com.kh.chemin.acbook.model.vo.AcReply;
 import com.kh.chemin.acbook.model.vo.PolaData;
 
@@ -217,7 +219,15 @@ public class AcBookServiceImpl implements AcBookService {
 	public int updateCount(String accNo) {
 		return dao.updateCount(sqlSession,accNo);
 	}
-	
+
+	@Override
+	public AcLike selectCompareLike(HashMap<String, Object> hashMap) {
+		return dao.selectCompareLike(sqlSession, hashMap);
+	}
+
+
+
+
 	
 	
 	

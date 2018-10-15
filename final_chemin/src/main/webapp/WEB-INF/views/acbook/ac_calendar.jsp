@@ -71,7 +71,6 @@
 	<div class="modal-content">
 		<div class="modal-header">
 		<h3 class="modal-title" id="lineModalLabel">Free Fluri Account Profile</h3>
-			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
 		</div>
 		<div class="modal-body" style="text-align:left;align:center">
 			
@@ -134,17 +133,17 @@
               	<div class="btn-group" role="group" style="margin-left:50px;">
 					<button type="button" id="updateAcMem" class="btn btn-success">Update</button>
 					<button type="button" id="deleteAcMem" class="btn btn-warning">Delete</button>
-					<button type="button" class="btn btn-info" data-dismiss="modal"  role="button">Close</button>
+					<button type="button" class="btn btn-info" id="closeAcMem">Close</button>
 				</div>
             </form>
 		</div>
 		<div class="modal-footer">
-
 		</div>
 		</div>
 	</div>
   </div>
 </div>
+
 <script>
     $(function(){
         /** btnDown 버튼 클릭 **/
@@ -185,7 +184,16 @@ $('#deleteAcMem').click(function(){
 })
 </script>
 <script>
+$('#closeAcMem').click(function(){
+	$("#acBookMemFrm").attr("action", "${pageContext.request.contextPath}/ac_calendar.do");
+	$("#acBookMemFrm").submit();
+})
+</script>
+<script>
 function modal_view(acNo){
+	$('#squarespaceModal').on('hidden.bs.modal', function () {
+        $(this).removeData('bs.modal');
+});
 	$.ajax({
 		url:"${pageContext.request.contextPath}/acbook/acSelectOne.do",
 		data:{acNo:acNo},
@@ -195,18 +203,18 @@ function modal_view(acNo){
 			console.log("success (MemData) onload")
 			console.log(data);
 			console.log(acNo+"acNo");
-			if(data!=null){
+			if(data!=null){			
+				$('#cateNum1').show();
+				$('#cateNum2').show();
+				$('#exCode').show();
 			$('#acDate').val(data.ACDATE);
 			$('#typeNum').val(data.TYPENUM);
 			$("#typeNum option").not(":selected").attr("disabled", "disabled");
-
-			$('#cateNum1').show();
-			$('#cateNum2').show();
-			$('#exCode').show();
 			
 			$('#acNo').val(acNo);
 
 			if(data.TYPENUM=='101'){
+				
  				$('#cateNum2').remove();
  				$('#exCode').hide();
 				
@@ -222,8 +230,9 @@ function modal_view(acNo){
 				$('#acCost').val(data.ACCOST);
 				$('#memo').text(data.MEMO);	
 			}
-		}
-			
+
+		}	
+	
 		}
 	})
 }

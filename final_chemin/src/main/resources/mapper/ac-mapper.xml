@@ -2,7 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ac">
 	<resultMap type="map" id="acmap"></resultMap>
-
+	
+	<!-- 좋아요 테이블 있는지 찾기 -->
+ 	<select id="ac.selectCompareLike" parameterType="hashMap" resultType="aclike">
+		SELECT * FROM AC_LIKE
+		WHERE RNO = #{rNo} AND USERID= #{userId}
+	</select>
 	<!-- 조회수 증가 -->
 	<update id="updateCount" parameterType="string">
 		UPDATE ACCOM SET ACCCOUNT = ACCCOUNT + 1
@@ -45,7 +50,7 @@
 	</insert>
 	<!-- 커뮤니티 댓글 등록 -->
 	<insert id="insertReply" parameterType="reply">
-		INSERT INTO ACREPLY VALUES(SEQ_R_NO.NEXTVAL,#{accNo},#{userId},sysdate,#{rContent})
+		INSERT INTO ACREPLY VALUES(SEQ_R_NO.NEXTVAL,#{accNo},#{userId},sysdate,#{rContent},#{likeCnt})
 	</insert>
 	
 	<!-- 저축 총 합 가져오기 -->

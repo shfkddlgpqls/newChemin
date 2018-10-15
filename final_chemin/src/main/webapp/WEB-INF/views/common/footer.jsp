@@ -26,8 +26,31 @@
      <script src="<c:url value="/resources/vendor/jquery-easing/jquery.easing.min.js" />"></script>
     <script src="<c:url value="/resources/vendor/scrollreveal/scrollreveal.min.js" />"></script>
 
-    <!-- Custom scripts for this template -->
-    <script src="<c:url value="/resources/base/js/main.js" />"></script>
+   <!-- jQurery -->
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+<!-- acMain.js -->
+<script src="<c:url value="/resources/acbook/js/acMain.js" />"></script>
+<!-- FullCalendar -->
+<script src="<c:url value="/resources/acbook/js/moment.js" />"></script>
+<!-- acMain.js -->
+<script src="<c:url value="/resources/acbook/js/bootstrap-datetimepicker.js" />"></script>
+<!-- acMain.js -->
+<script src="<c:url value="/resources/acbook/js/collapse.js" />"></script>
+<!-- acMain.js -->
+<script src="<c:url value="/resources/acbook/js/counter.js" />"></script>
+<!-- TimePicker -->
+<script src="<c:url value="/resources/acbook/js/transition.js" />"></script>
+
+<!-- chart -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+<script	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+<!-- acMain.js -->
+<script src="<c:url value="/resources/acbook/js/fullcalendar.min.js" />"></script>
+<!-- FullCalendar -->
+<script src="<c:url value="/resources/acbook/js/jquery-ui.min.js" />"></script>
+<!-- TimePicker -->
+<script src="<c:url value="/resources/acbook/js/bootstrap-datetimepicker.min.js" />"></script>           
 
   </body>
 

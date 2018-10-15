@@ -20,7 +20,7 @@
 <br><br>
 <div class="container-fluid justify-content-center">
 <div class="row justify-content-center">
-<div class="col-md-10 justify-content-center">
+<div class="col-md-7 justify-content-center">
 <div class="card justify-content-center" >
 <header class="card-header">
 	<h4 class="card-title mt-2">Share FluriBook, Write your finance!</h4>
@@ -37,8 +37,8 @@
 		<input type="text" class="form-control" id="accTitle" name="accTitle" placeholder="20대 취준생의 9월 결산" required>
 	</div> <!-- form-group end.// -->
 	</div>
-	<div class="form-group justify-content-center">
-		<textarea name="editor" id="editor" style="width: 600px; height: 300px;object-fit:contain;word-wrap:break-word;text-align:center;"></textarea>
+	<div class="form-group justify-content-center" style="margin-left:1%;">
+		<textarea name="editor" id="editor" style="width: 620px; height: 300px;object-fit:contain;word-wrap:break-word;text-align:center;"></textarea>
 	</div> <!-- form-group end.// -->
 
     <div class="form-group">

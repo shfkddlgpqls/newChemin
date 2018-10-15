@@ -50,8 +50,9 @@
    <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
    
    <!-- Sweet alert -->
-   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-   
+<!--    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.5/sweetalert2.min.js"></script>
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.5/sweetalert2.min.css" rel="stylesheet"/>
 
   </head>
 
@@ -108,7 +109,7 @@
              <a class="nav-link js-scroll-trigger" href="${path}/community/communityList.do">Good Tip</a>
             </li>
             <li class="nav-item">
-             <a class="nav-link js-scroll-trigger" href="${path}/ac_main.do">Acbook</a>
+             <a class="nav-link js-scroll-trigger" href="${path}/ac_main.do">Fluri Book</a>
             </li>
             
             

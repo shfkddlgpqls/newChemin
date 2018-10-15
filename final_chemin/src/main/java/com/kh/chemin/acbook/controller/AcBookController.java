@@ -38,6 +38,7 @@ import com.kh.chemin.acbook.common.Page;
 import com.kh.chemin.acbook.model.service.AcBookService;
 import com.kh.chemin.acbook.model.vo.AcBook;
 import com.kh.chemin.acbook.model.vo.AcCom;
+import com.kh.chemin.acbook.model.vo.AcLike;
 import com.kh.chemin.acbook.model.vo.AcReply;
 import com.kh.chemin.acbook.model.vo.PolaData;
 import com.kh.chemin.member.model.vo.Member;
@@ -88,18 +89,17 @@ public class AcBookController extends HttpServlet{
 		return "acbook/ac_community";
 	}
 	
-/*	@RequestMapping("/ac_monthlyData.do")
+	@RequestMapping("testhyebeen.do")
 	public String ac_monthlyData() {
-		return "acbook/monthlyData";
+		return "acbook/testhyebeen";
 	}
-*/	
+	
 	//writeJsp
 	@RequestMapping("/ac_comBoard.do")
 	public String form() {
 		return "acbook/ac_comBoard";
 	}
 	
-
 	//ac_insertAc
 	@RequestMapping("acbook/insertAc.do")
 	public String insertExpenditure(AcBook ac){
@@ -366,6 +366,7 @@ public class AcBookController extends HttpServlet{
 		}
 		return "acbook/ac_calendar";
 	}
+	
 	//가계부 정보 수정
 	@RequestMapping("acbook/updateAcBook.do")
 	public String updateAcOne(@RequestParam(value="acNo")int acNo, AcBook ac,HttpServletRequest request, HttpServletResponse response)throws ServletException,IOException {
@@ -427,11 +428,23 @@ public class AcBookController extends HttpServlet{
 		return mv;
 	}
 	
+	//좋아요
+	@RequestMapping(value="acbook/accLike.do", method= RequestMethod.POST)
+	public void likeCheck(@RequestParam(value="rNo")int rNo, HttpServletRequest request, HttpServletResponse response, HttpSession session)throws ServletException, IOException {
+		Member m = (Member)session.getAttribute("memberLoggedIn");
+		String userId = m.getUserId();
+		HashMap<String,Object> hashMap = new HashMap<String,Object>();
+		hashMap.put("rNo", rNo);
+		hashMap.put("userId",userId);
+		AcLike al = service.selectCompareLike(hashMap);
+		logger.debug("al 나와랑: "+al);
+	}
+	
 	//댓글등록
 	@RequestMapping(value="acbook/ReplyWrite.do",method = RequestMethod.POST)
-	public void insertReply(@RequestParam(value="rDate")String rDate,@RequestParam(value="accNo")int accNo,@RequestParam(value="rNo")int rNo,@RequestParam(value="userId")String userId,@RequestParam(value="rContent")String rContent, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+	public void insertReply(@RequestParam(value="rDate")String rDate,@RequestParam(value="accNo")int accNo,@RequestParam(value="rNo")int rNo,@RequestParam(value="userId")String userId,@RequestParam(value="rContent")String rContent,@RequestParam(value="likeCnt")int likeCnt, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		ModelAndView mv = new ModelAndView();
-		AcReply rp = new AcReply(rNo,accNo,userId,rDate,rContent);
+		AcReply rp = new AcReply(rNo,accNo,userId,rDate,rContent,likeCnt);
 		logger.debug("rp"+rp);
 		int result=service.insertReply(rp);
 		mv.addObject("rp",rp);

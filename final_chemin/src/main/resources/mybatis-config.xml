@@ -25,6 +25,7 @@
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcType" alias="actype"/>
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcCom" alias="accom"/>
 		<typeAlias type="com.kh.chemin.acbook.model.vo.AcReply" alias="reply"/>
+		<typeAlias type="com.kh.chemin.acbook.model.vo.AcLike" alias="aclike"/>
 		
 		<typeAlias type="com.kh.chemin.map.model.vo.Place" alias="place"/>
 		<typeAlias type="com.kh.chemin.map.model.vo.PlaceAttachment" alias="placeAttach"/>
