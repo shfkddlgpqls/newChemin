@@ -161,7 +161,6 @@
 `                	<input type="hidden" id="rNo" name="rNo" value="0">
                 	<input type="hidden" id="accNo" name="accNo" value="${acc.accNo }">
                 	<input type="hidden" id="userId" name="userId" value="${memberLoggedIn.userId }">
-                	<input type="hidden" id="likeCnt" name="likeCnt" value="0">
                     <input class="form-control" placeholder="댓글 입력" type="text" id="rContent" name="rContent">
                     <span class="input-group-addon">
                         <button class="btn btn-info" type="button" id="callAjax">&nbsp;<i class="fa fa-cloud"></i></button>  
@@ -181,28 +180,6 @@
 </div>
 </div>
 <!-- Side Bar Div End -->
-
-
-<!-- 좋아요 -->
-<script>
-function like_func(rNo){
-
-	$.ajax({
-		url: "${pageContext.request.contextPath}/acbook/accLike.do?rNo="+rNo,
-		type: "POST",
-		dataType: "json",
-		success: function(data){
-			var like_img ="";
-			if(data.like_check==0){
-				like_img="/resources/acbook/images/nonlike.png";
-			}else{
-				like_img="/resources/acbook/images/like.png";
-			}
-			
-		}
-	})
-}
-</script>
 <script>
 $('#updateWrite').on('click',function(){
 	if('${acc.userId}'=='${memberLoggedIn.userId}'){
@@ -290,7 +267,6 @@ $.ajax({
                 html+="</div>";                
                 html+="</td>";
                 html+="<td>";
-                html+="<c:choose><c:when test='${memberLoggedIn.userId ne null}'><a href='javascript: like_func("+data.model.rpList[i].RNO+");'><img src='${path}/resources/acbook/images/nonlike.png' id='like_img'></a></c:when></c:choose>";
                 html+="</td>";
             	html+="<td class='pull right'><button type='button' class='btn btn-warning btnComment' onclick=updateR("+data.model.rpList[i].RNO+")>수정</td>"
             	html+="</tr>";

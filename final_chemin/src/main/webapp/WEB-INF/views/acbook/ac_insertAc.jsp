@@ -42,6 +42,7 @@
 					<li>메모</li>
 				</ul>
 				<!-- fieldsets -->
+				
 				<div class="clearfix" style="width:100%;height:100%;display:block;object-fit:contain;">
 					<fieldset>
 						<h3>가계 타입을 선택하세요</h3>

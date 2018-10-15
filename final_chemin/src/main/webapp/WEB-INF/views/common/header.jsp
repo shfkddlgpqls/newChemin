@@ -50,9 +50,8 @@
    <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
    
    <!-- Sweet alert -->
-<!--    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.5/sweetalert2.min.js"></script>
- <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.5/sweetalert2.min.css" rel="stylesheet"/>
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+   
 
   </head>
 
@@ -109,7 +108,7 @@
              <a class="nav-link js-scroll-trigger" href="${path}/community/communityList.do">Good Tip</a>
             </li>
             <li class="nav-item">
-             <a class="nav-link js-scroll-trigger" href="${path}/ac_main.do">Fluri Book</a>
+             <a class="nav-link js-scroll-trigger" href="${path}/ac_main.do">Acbook</a>
             </li>
             
             
@@ -125,7 +124,7 @@
             
              <c:if test="${memberLoggedIn!=null&&memberLoggedIn.userId!='admin' }"> 
                <li class="nav-item">
-                   <a class="nav-link js-scroll-trigger" href="${path}/mypage/myMember.do?userId=${memberLoggedIn.userId}" style="float:left;">MyPage
+                   <a class="nav-link js-scroll-trigger" href="${path}/mypage/myMember.do" style="float:left;">MyPage
                    		<span id="mp_label"></span>
                    </a>
                    
@@ -150,7 +149,7 @@
             			var view='';
             			if(data.warnNum==1)
             			{
-            				view+='<img style="height:15px;width:15px;" src="${path }/resources/base/img/exclamation-mark.png">';
+            				view+='<img style="height:15px;width:15px;" src="${path }/resources/base/img/new (1).png">';
             			}
             			$('#mp_label').html(view);
             		}

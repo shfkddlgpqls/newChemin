@@ -19,13 +19,12 @@
 		<typeAlias type="com.kh.chemin.community.model.vo.Report" alias="report"/>
 
 		
-		<typeAlias type="com.kh.chemin.acbook.model.vo.AcBook" alias="acbook"/>	
-		<typeAlias type="com.kh.chemin.acbook.model.vo.AcCategory" alias="accategory"/>
-		<typeAlias type="com.kh.chemin.acbook.model.vo.PolaData" alias="poladata"/>
-		<typeAlias type="com.kh.chemin.acbook.model.vo.AcType" alias="actype"/>
-		<typeAlias type="com.kh.chemin.acbook.model.vo.AcCom" alias="accom"/>
-		<typeAlias type="com.kh.chemin.acbook.model.vo.AcReply" alias="reply"/>
-		<typeAlias type="com.kh.chemin.acbook.model.vo.AcLike" alias="aclike"/>
+		<typeAlias alias="acbook" type="com.kh.chemin.acbook.model.vo.AcBook"/>
+		<typeAlias alias="accategory" type="com.kh.chemin.acbook.model.vo.AcCategory"/>
+		<typeAlias alias="poladata" type="com.kh.chemin.acbook.model.vo.PolaData"/>
+		<typeAlias alias="actype" type="com.kh.chemin.acbook.model.vo.AcType"/>
+		<typeAlias alias="accom" type="com.kh.chemin.acbook.model.vo.AcCom"/>
+		<typeAlias alias="reply" type="com.kh.chemin.acbook.model.vo.AcReply"/>
 		
 		<typeAlias type="com.kh.chemin.map.model.vo.Place" alias="place"/>
 		<typeAlias type="com.kh.chemin.map.model.vo.PlaceAttachment" alias="placeAttach"/>

@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 
 import com.kh.chemin.acbook.model.vo.AcBook;
 import com.kh.chemin.acbook.model.vo.AcCom;
-import com.kh.chemin.acbook.model.vo.AcLike;
 import com.kh.chemin.acbook.model.vo.AcReply;
 import com.kh.chemin.acbook.model.vo.PolaData;
 
@@ -92,11 +91,6 @@ public interface AcBookDao {
 	List<Model> selectSavingCost(SqlSessionTemplate sqlSession, String userId);
 
 	int updateCount(SqlSessionTemplate sqlSession, String accNo);
-
-	AcLike selectCompareLike(SqlSessionTemplate sqlSession, HashMap<String, Object> hashMap);
-
-
-
 
 	
 	

@@ -6,18 +6,16 @@ public class AcReply {
 	private String userId;
 	private String rDate;
 	private String rContent;
-	private int likeCnt;
 	
 	public AcReply() {}
 
-	public AcReply(int rNo, int accNo, String userId, String rDate, String rContent, int likeCnt) {
+	public AcReply(int rNo, int accNo, String userId, String rDate, String rContent) {
 		super();
 		this.rNo = rNo;
 		this.accNo = accNo;
 		this.userId = userId;
 		this.rDate = rDate;
 		this.rContent = rContent;
-		this.likeCnt = likeCnt;
 	}
 
 	public int getrNo() {
@@ -60,14 +58,11 @@ public class AcReply {
 		this.rContent = rContent;
 	}
 
-	public int getLikeCnt() {
-		return likeCnt;
+	@Override
+	public String toString() {
+		return "AcReply [rNo=" + rNo + ", accNo=" + accNo + ", userId=" + userId + ", rDate=" + rDate + ", rContent="
+				+ rContent + "]";
 	}
-
-	public void setLikeCnt(int likeCnt) {
-		this.likeCnt = likeCnt;
-	}
-
 	
 	
 }

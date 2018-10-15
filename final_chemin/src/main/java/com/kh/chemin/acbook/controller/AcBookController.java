@@ -38,7 +38,6 @@ import com.kh.chemin.acbook.common.Page;
 import com.kh.chemin.acbook.model.service.AcBookService;
 import com.kh.chemin.acbook.model.vo.AcBook;
 import com.kh.chemin.acbook.model.vo.AcCom;
-import com.kh.chemin.acbook.model.vo.AcLike;
 import com.kh.chemin.acbook.model.vo.AcReply;
 import com.kh.chemin.acbook.model.vo.PolaData;
 import com.kh.chemin.member.model.vo.Member;
@@ -89,11 +88,11 @@ public class AcBookController extends HttpServlet{
 		return "acbook/ac_community";
 	}
 	
-	@RequestMapping("testhyebeen.do")
+/*	@RequestMapping("/ac_monthlyData.do")
 	public String ac_monthlyData() {
-		return "acbook/testhyebeen";
+		return "acbook/monthlyData";
 	}
-	
+*/	
 	//writeJsp
 	@RequestMapping("/ac_comBoard.do")
 	public String form() {
@@ -428,29 +427,52 @@ public class AcBookController extends HttpServlet{
 		return mv;
 	}
 	
-	//좋아요
+	/*//좋아요
 	@RequestMapping(value="acbook/accLike.do", method= RequestMethod.POST)
 	public void likeCheck(@RequestParam(value="rNo")int rNo, HttpServletRequest request, HttpServletResponse response, HttpSession session)throws ServletException, IOException {
 		Member m = (Member)session.getAttribute("memberLoggedIn");
 		String userId = m.getUserId();
-		HashMap<String,Object> hashMap = new HashMap<String,Object>();
-		hashMap.put("rNo", rNo);
-		hashMap.put("userId",userId);
-		AcLike al = service.selectCompareLike(hashMap);
-		logger.debug("al 나와랑: "+al);
-	}
+		
+		int resultRnoLive = service.selectRno(rNo);
+
+		AcLike aLike = new AcLike(0,rNo,userId,1);
+		
+		//rNo에 해당하는 좋아요 컬럼 없을경우 -> insert/ 있을경우 -> update 
+		if(resultRnoLive == 0) {
+			//컬럼 삽입
+			
+			int resultLikeChk = service.likeChk(aLike);
+			//좋아요 카운팅
+			int resultAcReply = service.likeCnt(rNo);
+		}else {
+			//좋아요 체크가 0일경우
+			if(service.selectLikeChk(aLike.getLikeCheck()) == 0) {
+				//update chk +1, 
+				int resultlike = service.updateLike(rNo);
+				//좋아요 카운팅 증가
+				int resultAcReply = service.likeCnt(rNo);
+			//좋아요 체크가 1일경우
+			}else {
+				int resultlikeminus = service.updateLikeminus(rNo);
+				//좋아요 카운팅 감소
+				int resultAcReplys = service.likeCntMinus(rNo);
+			}
+			 
+		}
+	}*/
 	
 	//댓글등록
 	@RequestMapping(value="acbook/ReplyWrite.do",method = RequestMethod.POST)
-	public void insertReply(@RequestParam(value="rDate")String rDate,@RequestParam(value="accNo")int accNo,@RequestParam(value="rNo")int rNo,@RequestParam(value="userId")String userId,@RequestParam(value="rContent")String rContent,@RequestParam(value="likeCnt")int likeCnt, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+	public void insertReply(@RequestParam(value="rDate")String rDate,@RequestParam(value="accNo")int accNo,@RequestParam(value="rNo")int rNo,@RequestParam(value="userId")String userId,@RequestParam(value="rContent")String rContent, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		ModelAndView mv = new ModelAndView();
-		AcReply rp = new AcReply(rNo,accNo,userId,rDate,rContent,likeCnt);
+		AcReply rp = new AcReply(rNo,accNo,userId,rDate,rContent);
 		logger.debug("rp"+rp);
 		int result=service.insertReply(rp);
 		mv.addObject("rp",rp);
 		response.setContentType("application/json; charset=UTF-8");
 		new Gson().toJson(mv,response.getWriter());
 	}
+	
 	//댓글 가져오기
 	@RequestMapping(value="acbook/GetReply.do", method=RequestMethod.POST)
 	public void selectReplyList(@RequestParam(value="accNo")String accNo, HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException {

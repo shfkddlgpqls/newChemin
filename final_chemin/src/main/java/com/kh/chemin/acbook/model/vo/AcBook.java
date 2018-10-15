@@ -1,9 +1,5 @@
 package com.kh.chemin.acbook.model.vo;
 
-
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 public class AcBook {
 	
 	private int acNo;

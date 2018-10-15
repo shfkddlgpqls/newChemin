@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 
 import com.kh.chemin.acbook.model.vo.AcBook;
 import com.kh.chemin.acbook.model.vo.AcCom;
-import com.kh.chemin.acbook.model.vo.AcLike;
 import com.kh.chemin.acbook.model.vo.AcReply;
 import com.kh.chemin.acbook.model.vo.PolaData;
 
@@ -70,7 +69,6 @@ public interface AcBookService {
 	List<Model> selectMuchDay(String userId);
 	List<Model> selectSavingCost(String userId);
 	int updateCount(String accNo);
-	AcLike selectCompareLike(HashMap<String, Object> hashMap);
 
 	
 	
