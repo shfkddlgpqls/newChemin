@@ -124,7 +124,7 @@
             
              <c:if test="${memberLoggedIn!=null&&memberLoggedIn.userId!='admin' }"> 
                <li class="nav-item">
-                   <a class="nav-link js-scroll-trigger" href="${path}/mypage/myMember.do?userId=${memberLoggedIn.userId}" style="float:left;">MyPage
+                   <a class="nav-link js-scroll-trigger" href="${path}/mypage/myMember.do" style="float:left;">MyPage
                    		<span id="mp_label"></span>
                    </a>
                    
@@ -149,7 +149,7 @@
             			var view='';
             			if(data.warnNum==1)
             			{
-            				view+='<img style="height:15px;width:15px;" src="${path }/resources/base/img/exclamation-mark.png">';
+            				view+='<img style="height:15px;width:15px;" src="${path }/resources/base/img/new (1).png">';
             			}
             			$('#mp_label').html(view);
             		}

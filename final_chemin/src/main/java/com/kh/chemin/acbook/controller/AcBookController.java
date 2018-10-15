@@ -99,7 +99,6 @@ public class AcBookController extends HttpServlet{
 		return "acbook/ac_comBoard";
 	}
 	
-
 	//ac_insertAc
 	@RequestMapping("acbook/insertAc.do")
 	public String insertExpenditure(AcBook ac){
@@ -366,6 +365,7 @@ public class AcBookController extends HttpServlet{
 		}
 		return "acbook/ac_calendar";
 	}
+	
 	//가계부 정보 수정
 	@RequestMapping("acbook/updateAcBook.do")
 	public String updateAcOne(@RequestParam(value="acNo")int acNo, AcBook ac,HttpServletRequest request, HttpServletResponse response)throws ServletException,IOException {
@@ -427,6 +427,40 @@ public class AcBookController extends HttpServlet{
 		return mv;
 	}
 	
+	/*//좋아요
+	@RequestMapping(value="acbook/accLike.do", method= RequestMethod.POST)
+	public void likeCheck(@RequestParam(value="rNo")int rNo, HttpServletRequest request, HttpServletResponse response, HttpSession session)throws ServletException, IOException {
+		Member m = (Member)session.getAttribute("memberLoggedIn");
+		String userId = m.getUserId();
+		
+		int resultRnoLive = service.selectRno(rNo);
+
+		AcLike aLike = new AcLike(0,rNo,userId,1);
+		
+		//rNo에 해당하는 좋아요 컬럼 없을경우 -> insert/ 있을경우 -> update 
+		if(resultRnoLive == 0) {
+			//컬럼 삽입
+			
+			int resultLikeChk = service.likeChk(aLike);
+			//좋아요 카운팅
+			int resultAcReply = service.likeCnt(rNo);
+		}else {
+			//좋아요 체크가 0일경우
+			if(service.selectLikeChk(aLike.getLikeCheck()) == 0) {
+				//update chk +1, 
+				int resultlike = service.updateLike(rNo);
+				//좋아요 카운팅 증가
+				int resultAcReply = service.likeCnt(rNo);
+			//좋아요 체크가 1일경우
+			}else {
+				int resultlikeminus = service.updateLikeminus(rNo);
+				//좋아요 카운팅 감소
+				int resultAcReplys = service.likeCntMinus(rNo);
+			}
+			 
+		}
+	}*/
+	
 	//댓글등록
 	@RequestMapping(value="acbook/ReplyWrite.do",method = RequestMethod.POST)
 	public void insertReply(@RequestParam(value="rDate")String rDate,@RequestParam(value="accNo")int accNo,@RequestParam(value="rNo")int rNo,@RequestParam(value="userId")String userId,@RequestParam(value="rContent")String rContent, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
@@ -438,6 +472,7 @@ public class AcBookController extends HttpServlet{
 		response.setContentType("application/json; charset=UTF-8");
 		new Gson().toJson(mv,response.getWriter());
 	}
+	
 	//댓글 가져오기
 	@RequestMapping(value="acbook/GetReply.do", method=RequestMethod.POST)
 	public void selectReplyList(@RequestParam(value="accNo")String accNo, HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException {

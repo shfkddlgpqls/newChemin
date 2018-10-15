@@ -20,7 +20,7 @@
 <br><br>
 <div class="container-fluid">
 <div class="row justify-content-center">
-<div class="col-md-10">
+<div class="col-md-7">
 <div class="card">
 <header class="card-header">
 	<h4 class="card-title mt-2">Share FluriBook, Write your finance!</h4>
@@ -61,8 +61,8 @@
 		<input type="text" class="form-control" name="accTitle" placeholder="20대 취준생의 9월 결산" value="${acc.accTitle }">
 	</div> <!-- form-group end.// -->
 	</div>
-	<div class="form-group">
-		<textarea name="editor" id="editor" style="width: 600px; height: 300px;object-fit:contain;word-wrap:break-word;text-align:center;">
+	<div class="form-group" style="margin-left:1%;">
+		<textarea name="editor" id="editor" style="width: 620px; height: 300px;object-fit:contain;word-wrap:break-word;text-align:center;">
 		${acc.editor }
 		</textarea>
 	</div> <!-- form-group end.// -->

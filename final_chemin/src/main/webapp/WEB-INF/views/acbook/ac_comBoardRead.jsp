@@ -129,7 +129,7 @@
 <!-- test2 -->
 <br><br>
 <div class="row justify-content-center">
-    <div class="col-sm-12">
+    <div class="col-md-7 justify-content-center">
     		    	<div class='pull-right' style="margin:2px;">
 		    	<button class='btn btn-success' id='updateWrite'>글수정</button>
 		    	<button class='btn btn-danger' id='deleteWrite'>글삭제</button>
@@ -151,8 +151,7 @@
             <hr>
             <div class="post-description"> 
                 <div>${acc.editor}</div>
-                <div class="stats">
-                    
+                <div class="stats">여기여기
                 </div>
             </div>
             <div class="post-footer">
@@ -161,7 +160,7 @@
                  	<input type="hidden" id="rDate" name="rDate">
 `                	<input type="hidden" id="rNo" name="rNo" value="0">
                 	<input type="hidden" id="accNo" name="accNo" value="${acc.accNo }">
-                	<input type="hidden" id="userId" name="userId" value="${memberLoggedIn.userId }"> 
+                	<input type="hidden" id="userId" name="userId" value="${memberLoggedIn.userId }">
                     <input class="form-control" placeholder="댓글 입력" type="text" id="rContent" name="rContent">
                     <span class="input-group-addon">
                         <button class="btn btn-info" type="button" id="callAjax">&nbsp;<i class="fa fa-cloud"></i></button>  
@@ -228,7 +227,8 @@ $("#callAjax").click(function(){
                 userId : $("#userId").val(),
                 rContent : $("#rContent").val(),
             	rDate :$("#rDate").val(),
-            	rNo : $("#rNo").val()
+            	rNo : $("#rNo").val(),
+            	likeCnt : $("#likeCnt").val()
             },
             success: function () {
         		swal({
@@ -265,6 +265,8 @@ $.ajax({
                 html+="</div>";
                 html+="<p id="+data.model.rpList[i].RNO+" class='changeRP'>"+data.model.rpList[i].RCONTENT+"</p>";
                 html+="</div>";                
+                html+="</td>";
+                html+="<td>";
                 html+="</td>";
             	html+="<td class='pull right'><button type='button' class='btn btn-warning btnComment' onclick=updateR("+data.model.rpList[i].RNO+")>수정</td>"
             	html+="</tr>";

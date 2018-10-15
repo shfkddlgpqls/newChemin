@@ -109,28 +109,27 @@ public class MemberController {
    }
 
    @RequestMapping(value = "/member/memberEnrollEnd.do", method = { RequestMethod.POST })
-   public String memberEnrollEnd(HttpServletRequest request, HttpServletResponse response, MultipartFile originalImg)
+   public String memberEnrollEnd(String userId, String password, String userName, String gender, String birthDay, String email, String phone, String address1, String address2, String address3, HttpServletRequest request, HttpServletResponse response, @RequestParam("originalImg") MultipartFile originalImg, Model model)
          throws ServletException, IOException, ParseException {
 
       Member member = new Member();
+
       SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd");
 
-      member.setUserId(request.getParameter("userId"));
-      member.setPassword(request.getParameter("password"));
-      member.setUserName(request.getParameter("userName"));
-      member.setGender(request.getParameter("gender"));
-      member.setBirthDay((request.getParameter("birthDay").replaceAll("-", "/")));
-      member.setEmail(request.getParameter("email"));
-      member.setPhone(request.getParameter("phone"));
-      member.setAddress(request.getParameter("address1") + "," + request.getParameter("address2") + ","
-            + request.getParameter("address3"));
-      member.setHobby(request.getParameterValues("hobby"));// 배열은 어떻게 하지???
-
+      member.setUserId(userId);
+      member.setUserName(userName);
+      member.setGender(gender);
+      member.setBirthDay(birthDay);// 데이트는 어떻게 가져오지??
+      member.setEmail(email);
+      member.setPhone(phone);
+      member.setAddress(address1+","+address2+","+address3);
+      member.setHobby(null);
+      /*member.setHobby(request.getParameterValues("hobby"));// 배열은 어떻게 하지???
+*/
       String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload/member");
 
-      String enPw = bCryptPasswordEncoder.encode(request.getParameter("password"));
+      String enPw = bCryptPasswordEncoder.encode(password);
       member.setPassword(enPw);
-      bCryptPasswordEncoder.encode(enPw);
 
       File dir = new File(saveDir);
 
@@ -166,13 +165,15 @@ public class MemberController {
 
       else {
          msg = "회원가입에 실패하였습니다.";
-         loc = "/views/member/memberEndroll";
+         loc = "/member/memberEnroll.do";
 
       }
+      model.addAttribute("msg", msg);
+      model.addAttribute("loc", loc);
+      
       return "common/msg";
 
    }
-
 	@RequestMapping("/member/memberEnroll.do")
 	public String memberEnroll() {
 		return "member/memberEnroll";

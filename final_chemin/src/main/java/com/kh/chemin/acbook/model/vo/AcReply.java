@@ -60,7 +60,7 @@ public class AcReply {
 
 	@Override
 	public String toString() {
-		return "Reply [rNo=" + rNo + ", accNo=" + accNo + ", userId=" + userId + ", rDate=" + rDate + ", rContent="
+		return "AcReply [rNo=" + rNo + ", accNo=" + accNo + ", userId=" + userId + ", rDate=" + rDate + ", rContent="
 				+ rContent + "]";
 	}
 	
